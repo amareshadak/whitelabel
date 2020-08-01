@@ -1,0 +1,214 @@
+﻿@model WHITELABEL.Data.Models.TBL_RAIL_ID_ALLOCATION
+@{
+    ViewBag.Title = "Sell Rail Id To Merchant";
+    Layout = "~/Areas/Distributor/Views/Shared/_LayoutDistributor.cshtml";
+}
+
+@using (Ajax.BeginForm("POSTMerchantSellRailId", "DistributorRailIdAllocation", new AjaxOptions { Confirm = "Do you want to add Sell Rail Id", OnSuccess = "OnSuccessRailIdMerchant", OnFailure = "OnFailureRailidMerchant", LoadingElementId = "progressRailIdMerchant" }, new { area = "Distributor", @id = "ADDRailIdMerchant" }))
+{
+    <div class="form-horizontal">
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.ID)
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="clearfix">
+            <div class="col-md-12">
+                <div class="col-md-12 row headcolor">
+                    <div class="col-md-4" style="text-align:left; padding-top:3px;"><i class="fa fa-subway fa-3x"></i> </div>
+                    <div class="col-md-8" style="text-align:right; padding-top:10px;">
+                        <h3>
+                            Sell Rail Id
+                        </h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row ">
+                            <div class="col-md-3"></div>
+                            <div class="col-md-6">
+                                <div class="col-md-12">
+                                    <div class="form-group row">
+                                        <label class="control-label col-md-4" style="text-align:left;">Available Rail Id QTY</label>
+                                        <div class="col-md-8">
+                                            <div class="inputer">
+                                                <div class="input-wrapper" >
+                                                    <h5 style="color:#000;"> @ViewBag.RailIDQty</h5>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group row">
+                                        <label class="control-label col-md-4" style="text-align:left;">Enter Rail Id Quantity</label>
+                                        <div class="col-md-8">
+                                            <div class="inputer">
+                                                <div class="input-wrapper">
+                                                    @Html.EditorFor(model => model.RAIL_ID_QUANTITY, new { htmlAttributes = new { @class = "form-control", @placeholder = "Rail Id Quantity", @id = "txtRailIdQty" } })
+                                                </div>
+                                                <span class="help-block"><small>@Html.ValidationMessageFor(model => model.RAIL_ID_QUANTITY, "", new { @class = "text-danger" })</small></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group row">
+                                        <label class="control-label col-md-4" style="text-align:left;">Enter Selling Amount</label>
+                                        <div class="col-md-8">
+                                            <div class="inputer">
+                                                <div class="input-wrapper">
+                                                    @Html.EditorFor(model => model.RAIL_ID_SELLING_RATE, new { htmlAttributes = new { @class = "form-control", @placeholder = "Selling Amount", @id = "txtrailIdSellingAmt" } })
+                                                </div>
+                                                <span class="help-block"><small>@Html.ValidationMessageFor(model => model.RAIL_ID_SELLING_RATE, "", new { @class = "text-danger" })</small></span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group row">
+                                        <label class="control-label col-md-4" style="text-align:left;">Select Merchant</label>
+                                        <div class="col-md-8">
+                                            <div class="inputer">
+                                                <div class="input-wrapper">
+                                                    @*@Html.DropDownListFor(model => model.BUYER_ID, new SelectList((ViewBag.DistributorList) as SelectList, "Value", "Text"), "--Select White Label--", new { id = "DistributorDis", @class = "form-control" })*@
+                                                    @*@Html.DropDownList("MemberService", new SelectList((ViewBag.MemberName) as SelectList, "Value", "Text"), "--Select Whitelevel--", new { id = "WhitelevelList", @class = "form-control" })*@
+                                                    @Html.EditorFor(m => m.WLPUserName, new { htmlAttributes = new { @id = "txtMemberaName", style = " width:100%; padding:5px;", placeholder = "Merchant Name", @class = "form-control" } })
+                                                    @Html.HiddenFor(model => model.BUYER_ID, new { id = "hfOperator" })
+                                                </div>
+                                                <span class="help-block"><small>@Html.ValidationMessageFor(model => model.BUYER_ID, "", new { @class = "text-danger" })</small></span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group row">
+                                        <label class="control-label col-md-4" style="text-align:left;">Gross Amount</label>
+                                        <div class="col-md-8">
+                                            <div class="inputer">
+                                                <div class="input-wrapper">
+                                                    @Html.EditorFor(model => model.GROSS_AMOUNT, new { htmlAttributes = new { @class = "form-control", @placeholder = "Gross Amount", @readonly = "readonly", @id = "txtGrossAmount" } })
+                                                </div>
+                                                <span class="help-block"><small>@Html.ValidationMessageFor(model => model.GROSS_AMOUNT, "", new { @class = "text-danger" })</small></span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group row">
+                                        <label class="control-label col-md-4" style="text-align:left;">Is GST APPLY</label>
+                                        <div class="col-md-8">
+                                            <div class="inputer">
+                                                <div class="input-wrapper">
+                                                    @Html.DropDownListFor(m => m.GSTApplied, new List<SelectListItem>
+                                                                            {  new SelectListItem{Text="No", Value="No"},
+                                                                            new SelectListItem{Text="Yes", Value="Yes"}},
+                                                                                new { id = "TDSMethod", @class = "form-control" })
+
+                                                    <span>@Html.ValidationMessageFor(model => model.GSTApplied, "", new { @class = "text-danger" })</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="text-center">
+                            <input type="submit" value="Sell Rail Id" class="btn btn-primary" id="btnsubmitMer" />
+
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+
+                </div><!--.panel-->
+            </div><!--.col-md-12-->
+        </div>
+    </div>
+}
+<div class="preloader hidden" id="progressRailIdMerchant" style="display:none;">
+    <div id="loading"></div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#progressRailIdMerchant').removeClass("hidden");
+        $('#progressRailIdMerchant').hide();
+    })
+    function OnSuccessRailIdMerchant(response) {
+        var message = response;
+        $("#ADDRailIdMerchant").trigger("reset");
+        bootbox.alert({
+            message: message,
+            size: 'small',
+            callback: function () {
+                console.log(message);
+                var url = "/Distributor/DistributorRailIdAllocation/MerchantRailIDAllocationList";
+                window.location.href = url;
+
+            }
+        })
+    }
+    function OnFailureRailidMerchant(response) {
+        alert("Error occured.");
+    }
+</script>
+<script>
+    $(document).ready(function () {
+        $("#txtMemberaName").autocomplete({
+            source: function (request, response) {
+                var MEm_Type = $('#txtRoleDetails').val();
+                $.ajax({
+                    url: '/Distributor/DistributorRailIdAllocation/GetMemberName',
+                    data: "{ 'prefix': '" + request.term + "'}",
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return item;
+                        }))
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            },
+            focus: function (event, ui) {
+                $('#txtMemberaName').val(ui.item.label);
+                return true;
+            },
+            select: function (e, i) {
+                $("#hfOperator").val(i.item.val);
+                return true;
+            },
+            minLength: 1
+        });
+    });
+    $('#txtrailIdSellingAmt').on('input blur change keyup', function () {
+
+
+        var RailIDQty = $('#txtRailIdQty').val();
+        var RailIDSellingAmt = $('#txtrailIdSellingAmt').val();
+        //var RailIDGrossAmt = $('#txtGrossAmount').val();
+        var GrossAmt = 0;
+        if (RailIDQty > 0) {
+            GrossAmt = (RailIDSellingAmt * RailIDQty);
+        }
+        else {
+            GrossAmt = (RailIDSellingAmt * RailIDQty);
+        }
+        $('#txtGrossAmount').val(GrossAmt);
+    });
+</script>
+
+
+

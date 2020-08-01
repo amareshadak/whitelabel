@@ -1,0 +1,187 @@
+﻿@model WHITELABEL.Data.Models.TBL_TRANSXT_DMR_TRANSACTION_LIST
+@using WHITELABEL.Web.Helper;
+@using NonFactors.Mvc.Grid;
+@{
+    ViewBag.Title = "DMR Transaction List";
+    Layout = "~/Areas/Merchant/Views/Shared/_RetailerLayout.cshtml";
+    //Layout = "~/Areas/Merchant/Views/Shared/_RetailerLayout.cshtml";
+}
+
+@*@using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()*@
+<script src="~/Areas/Merchant/MerchantHelperJS/TransXTAPI/Index.js"></script>
+<script src="~/Scripts/dirPagination.js"></script>
+<div class="display-animation" ng-app="TransXTDMRAPIAPP" ng-controller="TransXTApiCallController" ng-init="getTransactionList()">
+    <div class="row">
+        <div class="col-md-12 padding-top-20">
+            <div class="card">
+                <div class="card-body">
+                    <div class="panel-heading text-right">
+                        <div class="panel-title row pt-3 mb-2">
+                            <div class="col-md-6  row">
+                                <div class="col-md-3">Transection ID</div>
+                                <div class="col-md-9 row">
+                                    <div class="col-md-10">
+                                        <div class="inputer">
+                                            <div class="input-wrapper">
+                                                <input class="form-control" type="text" placeholder="Search.." ng-model="TransactionID.txnId" name="search">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <a href="#"><i class="fa fa-search"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6  row mb-2">
+                                <div class="col-md-3">Beneficiary ID </div>
+                                <div class="col-md-9 row">
+
+                                    <div class="col-md-10">
+                                        <div class="inputer">
+                                            <div class="input-wrapper">
+                                                <input class="form-control" type="text" placeholder="Search.." name="search" ng-model="Beneficiary.RecipientID">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <a href="#"><i class="fa fa-search"></i></a>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-md-6 row mb-2">
+                                <div class="col-md-3">Customer ID </div>
+                                <div class="col-md-9 row">
+                                    <div class="col-md-10">
+                                        <div class="inputer">
+                                            <div class="input-wrapper">
+                                                <input class="form-control" type="text" placeholder="Search.." name="search" ng-model="Beneficiary.CustomerID">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <a href="#"><i class="fa fa-search"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row example-row">
+                            <div class="mvc-grid">
+                                <table border="1" id="testTable">
+                                    <thead class="mvc-grid-headers ">
+                                        <tr>
+                                            <td ng-click="sortData('txnId')">
+                                                TransID <i class="fa fa-sort-down" style="float:right"></i><div ng-class="getSortClass('txnId')"></div>
+                                            </td>
+                                            <td ng-click="sortData('clientRefId')">Reference ID <i class="fa fa-sort-down" style="float:right"></i><div ng-class="getSortClass('clientRefId')"></div></td>
+                                            <td ng-click="sortData('RecipientID')">Recipient Id <i class="fa fa-sort-down" style="float:right"></i><div ng-class="getSortClass('RecipientID')"></div></td>
+                                            <td ng-click="sortData('name')">Name <i class="fa fa-sort-down" style="float:right"></i><div ng-class="getSortClass('name')"></div></td>
+                                            <td ng-click="sortData('TransferAmount')">Trans. Amt. <i class="fa fa-sort-down" style="float:right"></i><div ng-class="getSortClass('TransferAmount')"></div></td>
+                                            <td ng-click="sortData('accountNumber')">Accnt. No. <i class="fa fa-sort-down" style="float:right"></i><div ng-class="getSortClass('accountNumber')"></div></td>
+                                            <td ng-click="sortData('ifscCode')">IFSC Code <i class="fa fa-sort-down" style="float:right"></i><div ng-class="getSortClass('ifscCode')"></div></td>
+                                            <td ng-click="sortData('SenderName')">Sender Name <i class="fa fa-sort-down" style="float:right"></i><div ng-class="getSortClass('SenderName')"></div></td>
+                                            <td ng-click="sortData('SenderMobile')">Sender Mobile <i class="fa fa-sort-down" style="float:right"></i><div ng-class="getSortClass('SenderMobile')"></div></td>
+                                            <td>Trans Date </td>
+                                            <td>Print Invoice</td>
+                                        </tr>
+                                    </thead>
+                                    @*<tbody ng-repeat="m in AllTransactionList | filter:{txnId: TransactionID.txnId, RecipientID: Beneficiary.RecipientID}|  orderBy:sortColumn:reverseSort| offset: currentPage*itemsPerPage | limitTo: itemsPerPage">*@
+                                    @*<tbody ng-repeat="m in AllTransactionList | filter:{txnId: TransactionID.txnId, RecipientID: Beneficiary.RecipientID}|  orderBy:sortColumn:reverseSort ">*@
+                                    @*// For paging code*@
+                                    <tbody dir-paginate="m in AllTransactionList | filter:{txnId: TransactionID.txnId, RecipientID: Beneficiary.RecipientID, CustomerID: Beneficiary.CustomerID}|  orderBy:sortColumn:reverseSort|itemsPerPage:5 ">
+                                        <tr>
+                                            <td>
+                                                <span>{{m.txnId}}</span>
+                                            </td>
+                                            <td>
+                                                <span>{{m.clientRefId}}</span>
+                                            </td>
+                                            <td>
+                                                <span>{{m.RecipientID}}</span>
+                                            </td>
+                                            <td>
+                                                <span>{{m.name}}</span>
+                                            </td>
+                                            <td>
+                                                <span>{{m.TransferAmount}}</span>
+                                            </td>
+                                            <td>
+                                                <span>{{m.accountNumber}}</span>
+                                            </td>
+                                            <td>
+                                                <span>{{m.ifscCode}}</span>
+                                            </td>
+                                            <td>
+                                                <span>{{m.SenderName}}</span>
+                                            </td>
+                                            <td>
+                                                <span>{{m.SenderMobile}}</span>
+                                            </td>
+                                            <td>
+                                                <span>{{m.timestamp | date:"dd/MM/yyyy" }}</span>
+                                            </td>
+                                            <td>
+                                                <a href="javascript:void(0);" ng-click="PrintInvoice(m.txnId,m.clientRefId)">{{m.txnId}}</a>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    @*<pagination page="currentPage" max-size="noOfPages" total-items="totalItems" items-per-page="entryLimit"></pagination>*@
+                                </table>
+
+                                @*@Html.AjaxGrid(Url.Action("GetAllTransactionLIst", "MerchantDMRSection", new { area = "Merchant", id = "my-TransactionList" }))*@
+                                <div style="text-align:center">
+                                    <dir-pagination-controls max-size="5"
+                                                             direction-links="true"
+                                                             boundary-links="true">
+                                    </dir-pagination-controls>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel-footer" style="text-align:right">
+                        <button id="btnExport" class="btn btn-info btn-xs" onclick="tableToExcel('testTable', 'Transaction List')" value="Export to Excel"><span class="ion-forward"></span> EXPORT</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@*@Scripts.Render("~/bundles/MemberApilevel")*@
+@*@Scripts.Render("~/bundles/MerchantDMRAPIAngularjsFiles")*@
+@Scripts.Render("~/bundles/MerchantDMRAPIJsFiles")
+
+
+<script>
+    $(document).ready(function () {
+
+        window.setTimeout(function () {
+            $("#informationMessage").fadeOut('slow');
+        }, 2000);
+    });
+
+</script>
+
+<script type="text/javascript">
+    var tableToExcel = (function () {
+        var uri = 'data:application/vnd.ms-excel;base64,'
+            , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+            , base64 = function (s) { return window.btoa(unescape(encodeURIComponent(s))) }
+            , format = function (s, c) { return s.replace(/{(\w+)}/g, function (m, p) { return c[p]; }) }
+        return function (table, name) {
+            if (!table.nodeType) table = document.getElementById(table)
+            var ctx = { worksheet: name || 'Worksheet', table: table.innerHTML }
+            window.location.href = uri + base64(format(template, ctx))
+        }
+    })()
+</script>
+
+@*}*@
+

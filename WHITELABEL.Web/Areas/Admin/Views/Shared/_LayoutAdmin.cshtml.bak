@@ -1,0 +1,742 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>White Label</title>
+    <link href="https://fonts.googleapis.com/css?family=Nunito:300,400,400i,600,700,800,900" rel="stylesheet">
+    <link href="~/newpanel/assets/styles/css/themes/lite-purple.min.css" rel="stylesheet" />
+    <link href="~/newpanel/assets/styles/vendor/perfect-scrollbar.css" rel="stylesheet" />
+    <link href="~/Content/MvcGrid/mvc-grid.css" rel="stylesheet">
+    <link href="~/Content/typeahead.css" rel="stylesheet" />
+    <link href="~/Content/angucomplete-alt.css" rel="stylesheet" />
+
+    <link href="~/newpanel/assets/styles/vendor/nuslider.min.css" rel="stylesheet" />
+
+    <link href="~/newpanel/assets/styles/css/t-datepicker.min.css" rel="stylesheet" />
+    <link href="~/newpanel/assets/styles/css/t-datepicker-blue.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    @*<link href="http://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">*@
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/owl-carousel/1.3.3/owl.carousel.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/owl-carousel/1.3.3/owl.theme.min.css">
+
+    @*<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">*@
+    @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>*@
+    <script src="~/newpanel/assets/js/vendor/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.11/jquery.validate.unobtrusive.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/Scripts/angular.min.js"></script>
+    <script src="~/Scripts/angular-route.min.js"></script>
+    <script src="~/Scripts/angucomplete-alt.js"></script>
+    
+    <style>
+        .headcolor {
+            text-align: center;
+            background-color: #d8d8d8;
+            margin-bottom: 40px;
+            padding: 5px 0px;
+            border-radius: 10px;
+        }
+    </style>
+
+    <script src="~/Scripts/typeahead.mvc.model.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+</head>
+<body class="text-left">
+    <div class="app-admin-wrap layout-sidebar-large clearfix">
+        <div class="main-header">
+            <div class="logo">
+                @if (@Session["LogoPath"] != "")
+                {
+                    <img src="@Session["LogoPath"]" alt="" style="width:70px !important;" />
+                }
+                @*<img src="~/newpanel/assets/images/logo.png" alt="">*@
+            </div>
+
+            <div class="menu-toggle">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+
+            @*<div class="d-flex align-items-center">
+                    <!-- Mega menu -->
+                    <div class="dropdown mega-menu d-none d-md-block">
+                        <a href="#" class="btn text-muted dropdown-toggle mr-3" id="dropdownMegaMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Mega Menu</a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <div class="row m-0">
+                                <div class="col-md-4 p-4 text-left bg-img">
+                                    <h2 class="title">Mega Menu <br> Sidebar</h2>
+                                    <p>
+                                        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Asperiores natus laboriosam fugit, consequatur.
+                                    </p>
+                                    <p class="mb-4">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Exercitationem odio amet eos dolore suscipit placeat.</p>
+                                    <button class="btn btn-lg btn-rounded btn-outline-warning">Learn More</button>
+                                </div>
+                                <div class="col-md-4 p-4 text-left">
+                                    <p class="text-primary text--cap border-bottom-primary d-inline-block">Features</p>
+                                    <div class="menu-icon-grid w-auto p-0">
+                                        <a href="#"><i class="i-Shop-4"></i> Home</a>
+                                        <a href="#"><i class="i-Library"></i> UI Kits</a>
+                                        <a href="#"><i class="i-Drop"></i> Apps</a>
+                                        <a href="#"><i class="i-File-Clipboard-File--Text"></i> Forms</a>
+                                        <a href="#"><i class="i-Checked-User"></i> Sessions</a>
+                                        <a href="#"><i class="i-Ambulance"></i> Support</a>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 p-4 text-left">
+                                    <p class="text-primary text--cap border-bottom-primary d-inline-block">Components</p>
+                                    <ul class="links">
+                                        <li><a href="accordion.html">Accordion</a></li>
+                                        <li><a href="alerts.html">Alerts</a></li>
+                                        <li><a href="buttons.html">Buttons</a></li>
+                                        <li><a href="badges.html">Badges</a></li>
+                                        <li><a href="carousel.html">Carousels</a></li>
+                                        <li><a href="lists.html">Lists</a></li>
+                                        <li><a href="popover.html">Popover</a></li>
+                                        <li><a href="tables.html">Tables</a></li>
+                                        <li><a href="datatables.html">Datatables</a></li>
+                                        <li><a href="modals.html">Modals</a></li>
+                                        <li><a href="nouislider.html">Sliders</a></li>
+                                        <li><a href="tabs.html">Tabs</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- / Mega menu -->
+                    <div class="search-bar">
+                        <input type="text" placeholder="Search">
+                        <i class="search-icon text-muted fa fa-search"></i>
+                    </div>
+                </div>*@
+
+            <div style="margin: auto"></div>
+            <div class="header-part-right">
+                <div style="padding-top:10px;"><span style="color:black; font-weight:bold;">Available Balance: <label id="txtAvailableBal"></label> </span>   <a href="#" onclick="CheckAdminAvailableBalance()" style="margin-left:10px;margin-right:20px;"><i class="fa fa-redo"></i></a></div>
+
+                <div class="dropdown">
+                </div>
+                <!-- Notificaiton End -->
+                <!-- User avatar dropdown -->
+                <div class="dropdown">
+                    <div class="user col align-self-end">
+                        @*<img src="~/newpanel/assets/images/logo.png" id="userDropdown" alt="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">*@
+                        @if (@Session["LogoPath"] != "")
+                        {
+                            <img src="@Session["LogoPath"]" id="userDropdown" alt="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fas fa-sort-down"></i>
+                        }
+                        else
+                        {
+                            <img src="~/newpanel/assets/images/logo.png" id="userDropdown" alt="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-sort-down"></i>
+                        }
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                            <div class="dropdown-header">
+                                <i class="i-Lock-User mr-1"></i> <b> @Session["WhiteLevelUserName"]</b>
+                            </div>
+                            <a class="dropdown-item" href="@Url.Action("Logout","AdminLogin",new {area ="Admin"})">Sign out</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="side-content-wrap">
+            <div class="sidebar-left open rtl-ps-none" data-perfect-scrollbar data-suppress-scroll-x="true">
+                <ul class="navigation-left">
+                    <li class="nav-item" data-item="Channel">
+                        <a class="nav-item-hold" href="#">
+                            <i class="fa fa-user-circle nav-icon"></i>
+                            <span class="nav-text">Channel Member</span>
+                        </a>
+                        <div class="triangle"></div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-item-hold" href="@Url.Action("Index","MemberBankDetails", new {area="Admin" })">
+                            <i class="fa fa-university nav-icon"></i>
+                            <span class="nav-text">Bank Details</span>
+                        </a>
+                        <div class="triangle"></div>
+                    </li>
+                    @*<li class="nav-item">
+                            <a class="nav-item-hold" href="@Url.Action("Index","MemberCommissionSlab",new {area="Admin" })">
+                                <i class="fa fa-hand-holding-usd nav-icon"></i>
+                                <span class="nav-text">White level commission slab </span>
+                            </a>
+                            <div class="triangle"></div>
+                        </li>*@
+
+                    <li class="nav-item" data-item="DistCommission">
+                        <a class="nav-item-hold" href="#">
+                            <i class="fa fa-hand-holding-usd nav-icon"></i>
+                            <span class="nav-text">Commission Managment</span>
+                        </a>
+                        <div class="triangle"></div>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-item-hold" href="@Url.Action("Index","AdminCommissionList", new {area= "Admin" })">
+                            <i class="fa fa-coins nav-icon"></i>
+                            <span class="nav-text">Admin Commission List </span>
+                        </a>
+                        <div class="triangle"></div>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-item-hold" href="@Url.Action("Index","MemberKYCVerification", new {area="Admin" })">
+                            <i class="fa fa-search-plus nav-icon"></i>
+                            <span class="nav-text">KYC Verification</span>
+                        </a>
+                        <div class="triangle"></div>
+                    </li>
+                    <li class="nav-item" data-item="CreditManagment">
+                        <a class="nav-item-hold" href="#">
+                            <i class="fa fa-wallet nav-icon"></i>
+                            <span class="nav-text">Credit Balance Managment </span>
+                        </a>
+                        <div class="triangle"></div>
+                    </li>
+
+                    <li class="nav-item" data-item="Wallets">
+                        <a class="nav-item-hold" href="#">
+                            <i class="fa fa-wallet nav-icon"></i>
+                            <span class="nav-text">Wallets</span>
+                        </a>
+                        <div class="triangle"></div>
+                    </li>
+
+                    <li class="nav-item" data-item="Accounts">
+                        <a class="nav-item-hold" href="#">
+                            <i class="fa fa-user nav-icon"></i>
+                            <span class="nav-text">Accounts</span>
+                        </a>
+                        <div class="triangle"></div>
+                    </li>
+                    <li class="nav-item" data-item="RDSReport">
+                        <a class="nav-item-hold" href="#">
+                            <i class="fa fa-user nav-icon"></i>
+                            <span class="nav-text">RDS Report</span>
+                        </a>
+                        <div class="triangle"></div>
+                    </li>
+                    <li class="nav-item" data-item="manage">
+                        <a class="nav-item-hold" href="#">
+                            <i class="fa fa-user-circle nav-icon"></i>
+                            <span class="nav-text">Manage Profile</span>
+                        </a>
+                        <div class="triangle"></div>
+                    </li>
+
+
+                </ul>
+            </div>
+
+            <div class="sidebar-left-secondary rtl-ps-none" data-perfect-scrollbar data-suppress-scroll-x="true">
+                <!-- Submenu Dashboards -->
+
+                <ul class="childNav" data-parent="DistCommission">
+                    <li class="nav-item">
+                        <a class="nav-item-hold" href="@Url.Action("Index","MemberCommissionSlab",new {area="Admin" })">
+                            <i class="fa fa-hand-holding-usd nav-icon"></i>
+                            <span class="nav-text">Create Commission</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-item-hold" href="@Url.Action("Index","MemberCommissiontag",new {area="Admin" })">
+                            <i class="fa fa-hand-holding-usd nav-icon"></i>
+                            <span class="nav-text">Distributor Commission Tagging </span>
+                        </a>
+                    </li>
+                </ul>
+
+                <ul class="childNav" data-parent="CreditManagment">
+                    <li class="nav-item">
+                        <a href="@Url.Action("GetCreditNoteList","MemberCreditManagment", new {area="Admin" })">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name">Credit/Debit Note </span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("GetCreditLimitList","MemberCreditManagment", new {area="Admin" })">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name">Credit Balance </span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("DistributorCreditLimitReport","MemberCreditManagment", new {area="Admin" })">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name">Credit Balance Report</span>
+                        </a>
+                    </li>
+                </ul>
+
+                <ul class="childNav" data-parent="Wallets">
+                    <li class="nav-item">
+                        <a href="@Url.Action("Index","MemberRequisition", new {area="Admin" })" class="open">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name">List of Pending Requisition</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="@Url.Action("DisplayAccount", "MemberDebitCreditRequest", new {area="Admin" })">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name">Manual balance transfer</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("ApprovedRequisition", "MemberRequisition", new {area="Admin" })">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name">Approved Requisition</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("DeclinedRequisition", "MemberRequisition", new {area="Admin" })">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name">Decline Requisition</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("RequisitionDispay", "RequestRequisition", new {area="Admin" })">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name">Request Requisition List</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("Index", "RequestRequisition", new {area="Admin" })">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name">Request Requisition</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("Index","MemberRequisitionReport", new {area="Admin" })">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name">Admin Requisition Report</span>
+                        </a>
+                    </li>
+                    @*<li class="nav-item">
+                            <a href="@Url.Action("SuperRequisitionReport","MemberRequisitionReport", new {area="Admin" })">
+                                <i class="fa fa-location-arrow nav-icon"></i>
+                                <span class="item-name">Requisition Report</span>
+                            </a>
+                        </li>*@
+                    <li class="nav-item">
+                        <a href="@Url.Action("DistributorRequisitionReport","MemberRequisitionReport", new {area="Admin" })">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name">Distributor Requisition Report</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("MerchantRequisitionReport","MemberRequisitionReport", new {area="Admin" })">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name">Merchant Requisition Report</span>
+                        </a>
+                    </li>
+
+                </ul>
+                <ul class="childNav" data-parent="Accounts">
+                    @*<li class="nav-item">
+                            <a href="@Url.Action("Index", "MemberIssueDebitCreditNote",new {area="Admin" })">
+                                <i class="fa fa-location-arrow nav-icon"></i>
+                                <span class="item-name">Issue Credit/Debit Note</span>
+                            </a>
+                        </li>*@
+                    <li class="nav-item">
+                        <a href="@Url.Action("Index", "MemberTransactionReport",new {area="Admin" })">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name">Admin Commission Statement</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("DistributorCommissionReport", "MemberTransactionReport",new {area="Admin" })">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name">Distributor Commission Statement</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("MerchantCommission", "MemberTransactionReport",new {area="Admin" })">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name">Merchant Commission Statement</span>
+                        </a>
+                    </li>
+
+                </ul>
+
+                <ul class="childNav" data-parent="RDSReport">
+                    <li class="nav-item">
+                        <a href="@Url.Action("Index", "MemberRDSInformation",new {area="Admin" })">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name">Merchant RDS Booking List</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("MerchantRdsBooking", "MemberRDSInformation",new {area="Admin" })">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name">Individual Merchant RDS Booking </span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("RDSCancellationReport", "MemberRDSInformation",new {area="Admin" })">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name">Merchant RDS Cancellation List</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("MerchantRDSCancellationReport", "MemberRDSInformation",new {area="Admin" })">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name">Individual Merchant RDS Cancellation </span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("MemberRDSRefundReport", "MemberRDSInformation",new {area="Admin" })">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name"> Merchant RDS Refund </span>
+                        </a>
+                    </li>
+                </ul>
+
+
+                <ul class="childNav" data-parent="manage">
+                    <li class="nav-item">
+                        <a href="@Url.Action("UploadLogo", "MemberAPILabel",new {area="Admin" })">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name">Upload Logo</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("Index", "MemberProfileUpdate",new {area="Admin" })">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name">Update Profile</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("Index", "MemberChangePassword",new {area="Admin" })">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name">Change Password</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("Index", "MemberLoginDetails",new {area="Admin" })">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name">Distributor Login Details</span>
+                        </a>
+                    </li>
+                </ul>
+
+                <ul class="childNav" data-parent="Channel">
+                    <li class="nav-item">
+                        <a href="@Url.Action("Index", "MemberChannelRegistration",new {area="Admin" })">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name">Add Member</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("Index", "MemberChangeChannelLink",new {area="Admin" })">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name">Change Member Channel</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("Index","MemberAPILabel", new {area="Admin" })">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name">Distributor details</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("ServiceDetails","MemberService",new {area="Admin" })">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name">Distributor permission details</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("GetAllMerchantInformation","MemberAPILabel",new {area="Admin" })">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name">All Merchant List</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("DistributorRailIDAllocationList","MemberRailIdApplication",new {area="Admin" })">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name">Sell Rail Id to Distributor</span>
+                        </a>
+                    </li>
+
+                </ul>
+
+            </div>
+            <div class="sidebar-overlay"></div>
+        </div>
+        <!--=============== Left side End ================-->
+        <!-- ============ Body content start ============= -->
+        <div class="main-content-wrap sidenav-open d-flex flex-column">
+
+
+            @RenderBody()
+
+            <!-- Footer Start -->
+            <div class="flex-grow-1"></div>
+
+            <!-- fotter end -->
+        </div>
+        <!-- ============ Body content End ============= -->
+    </div>
+    <!--=============== End app-admin-wrap ================-->
+    <!-- ============ Search UI Start ============= -->
+    <div class="search-ui">
+        <div class="search-header o-hidden">
+            <img src="~/newpanel/assets/images/logo.png" alt="" class="logo float-left">
+            <button class="search-close btn btn-icon bg-transparent float-right mt-2">
+                <i class="i-Close-Window text-22 text-muted"></i>
+            </button>
+        </div>
+
+        <input type="text" placeholder="Type here" class="search-input" autofocus>
+
+        <div class="search-title">
+            <span class="text-muted">Search results</span>
+        </div>
+
+        <div class="search-results list-horizontal">
+            <div class="list-item col-md-12 p-0">
+                <div class="card o-hidden flex-row mb-4 d-flex">
+                    <div class="list-thumb d-flex">
+                        <!-- TUMBNAIL -->
+                        <img src="~/newpanel/assets/images/products/headphone-1.jpg" alt="">
+                    </div>
+                    <div class="flex-grow-1 pl-2 d-flex">
+                        <div class="card-body align-self-center d-flex flex-column justify-content-between align-items-lg-center flex-lg-row">
+                            <!-- OTHER DATA -->
+                            <a href="" class="w-40 w-sm-100">
+                                <div class="item-title">Headphone 1</div>
+                            </a>
+                            <p class="m-0 text-muted text-small w-15 w-sm-100">Gadget</p>
+                            <p class="m-0 text-muted text-small w-15 w-sm-100">
+                                $300
+                                <del class="text-secondary">$400</del>
+                            </p>
+                            <p class="m-0 text-muted text-small w-15 w-sm-100 d-none d-lg-block item-badges">
+                                <span class="badge badge-danger">Sale</span>
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="list-item col-md-12 p-0">
+                <div class="card o-hidden flex-row mb-4 d-flex">
+                    <div class="list-thumb d-flex">
+                        <!-- TUMBNAIL -->
+                        <img src="~/newpanel/assets/images/products/headphone-2.jpg" alt="">
+                    </div>
+                    <div class="flex-grow-1 pl-2 d-flex">
+                        <div class="card-body align-self-center d-flex flex-column justify-content-between align-items-lg-center flex-lg-row">
+                            <!-- OTHER DATA -->
+                            <a href="" class="w-40 w-sm-100">
+                                <div class="item-title">Headphone 1</div>
+                            </a>
+                            <p class="m-0 text-muted text-small w-15 w-sm-100">Gadget</p>
+                            <p class="m-0 text-muted text-small w-15 w-sm-100">
+                                $300
+                                <del class="text-secondary">$400</del>
+                            </p>
+                            <p class="m-0 text-muted text-small w-15 w-sm-100 d-none d-lg-block item-badges">
+                                <span class="badge badge-primary">New</span>
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="list-item col-md-12 p-0">
+                <div class="card o-hidden flex-row mb-4 d-flex">
+                    <div class="list-thumb d-flex">
+                        <!-- TUMBNAIL -->
+                        <img src="~/newpanel/assets/images/products/headphone-3.jpg" alt="">
+                    </div>
+                    <div class="flex-grow-1 pl-2 d-flex">
+                        <div class="card-body align-self-center d-flex flex-column justify-content-between align-items-lg-center flex-lg-row">
+                            <!-- OTHER DATA -->
+                            <a href="" class="w-40 w-sm-100">
+                                <div class="item-title">Headphone 1</div>
+                            </a>
+                            <p class="m-0 text-muted text-small w-15 w-sm-100">Gadget</p>
+                            <p class="m-0 text-muted text-small w-15 w-sm-100">
+                                $300
+                                <del class="text-secondary">$400</del>
+                            </p>
+                            <p class="m-0 text-muted text-small w-15 w-sm-100 d-none d-lg-block item-badges">
+                                <span class="badge badge-primary">New</span>
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="list-item col-md-12 p-0">
+                <div class="card o-hidden flex-row mb-4 d-flex">
+                    <div class="list-thumb d-flex">
+                        <!-- TUMBNAIL -->
+                        <img src="~/newpanel/assets/images/products/headphone-4.jpg" alt="">
+                    </div>
+                    <div class="flex-grow-1 pl-2 d-flex">
+                        <div class="card-body align-self-center d-flex flex-column justify-content-between align-items-lg-center flex-lg-row">
+                            <!-- OTHER DATA -->
+                            <a href="" class="w-40 w-sm-100">
+                                <div class="item-title">Headphone 1</div>
+                            </a>
+                            <p class="m-0 text-muted text-small w-15 w-sm-100">Gadget</p>
+                            <p class="m-0 text-muted text-small w-15 w-sm-100">
+                                $300
+                                <del class="text-secondary">$400</del>
+                            </p>
+                            <p class="m-0 text-muted text-small w-15 w-sm-100 d-none d-lg-block item-badges">
+                                <span class="badge badge-primary">New</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- PAGINATION CONTROL -->
+        <div class="col-md-12 mt-5 text-center">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination d-inline-flex">
+                    <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+
+    <!-- ============ Search UI End ============= -->
+    @*<script src="~/Scripts/jquery-1.10.2.min.js"></script>*@
+    @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>*@
+    @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>*@
+    @*<script src="~/newpanel/assets/js/vendor/jquery-3.3.1.min.js"></script>*@
+    <script src="~/newpanel/assets/js/vendor/jquery-3.3.1.min.js"></script>
+    <script src="~/newpanel/assets/js/vendor/bootstrap.bundle.min.js"></script>
+    <script src="~/newpanel/assets/js/vendor/perfect-scrollbar.min.js"></script>
+    <script src="~/newpanel/assets/js/vendor/echarts.min.js"></script>
+    <script src="~/newpanel/assets/js/es5/echart.options.min.js"></script>
+    <script src="~/newpanel/assets/js/es5/dashboard.v1.script.min.js"></script>
+    <script src="~/newpanel/assets/js/es5/script.min.js"></script>
+    <script src="~/newpanel/assets/js/es5/sidebar.large.script.min.js"></script>
+    <script src="~/Scripts/MvcGrid/mvc-grid.js"></script>
+    <script src="~/newpanel/assets/js/t-datepicker.min.js"></script>
+    <link href="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.12.1/themes/cupertino/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.12.1/jquery-ui.min.js"></script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+
+    <script src="~/Scripts/table2excel.js"></script>
+    @Scripts.Render("~/bundles/typeahead")
+    @*<script src="~/Scripts/typeahead.mvc.model.js"></script>*@
+    <script>
+        $('.mvc-grid').mvcgrid();
+        $('.mvc-grid table').addClass('table');
+    </script>
+    <div id="progress" class="loading hidden">Loading&#8230;</div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#progress').removeClass("hidden");
+            $('#progress').hide();
+        })
+
+        function OnSuccess(response) {
+            var message = response;
+            bootbox.alert({
+                message: message,
+                size: 'small',
+                callback: function () {
+                    console.log(message);
+                }
+            })
+            //alert(message);
+        }
+        function OnFailure(response) {
+            alert("Error occured.");
+        }
+
+        $(document).ready(function () {
+            //CheckAdminAvailableBalance();
+            $('#WL_progress').removeClass("hidden");
+            $('#WL_progress').hide();
+        })
+        function OnSuccess(response) {
+            var message = response;
+            bootbox.alert({
+                message: message,
+                size: 'small',
+                callback: function () {
+                    console.log(message);
+                }
+            })
+            //alert(message);
+        }
+        function OnFailure(response) {
+            alert("Error occured.");
+        }
+
+
+    </script>
+
+    @*<script src="assets/js/vendor/jquery-3.3.1.min.js"></script>
+        <script src="assets/js/vendor/bootstrap.bundle.min.js"></script>
+        <script src="assets/js/vendor/perfect-scrollbar.min.js"></script>
+        <script src="assets/js/vendor/echarts.min.js"></script>
+        <script src="assets/js/es5/echart.options.min.js"></script>
+        <script src="assets/js/es5/dashboard.v1.script.min.js"></script>
+        <script src="assets/js/es5/script.min.js"></script>
+        <script src="assets/js/es5/sidebar.large.script.min.js"></script>*@
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            CheckAdminAvailableBalance();
+        });
+
+        function CheckAdminAvailableBalance() {
+            $.ajax({
+                url: "/WhiteLevelAdmin/LoadAvailableBalance?area=Admin",
+                cache: false,
+                type: "post",
+                datatype: "json",
+                beforesend: function () {
+                },
+                success: function (data) {
+                    if (data == "0") {
+                        $('#txtAvailableBal').text("0");
+                    }
+                    else {
+                        //var AvailableBal = data.CLOSING;
+                        var AvailableBal = data.BALANCE;
+                        //$("#txtAvailableBal").val(AvailableBal);
+                        $('#txtAvailableBal').text(AvailableBal);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log(status);
+                }
+            });
+        }
+    </script>
+</body>
+</html>

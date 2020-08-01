@@ -1,0 +1,107 @@
+﻿@model WHITELABEL.Web.Areas.Merchant.Models.GetDMRCustomerInfo
+@{
+    ViewBag.Title = "Search Customer";
+    Layout = "~/Areas/Merchant/Views/Shared/_RetailerLayout.cshtml";
+}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+@using (Ajax.BeginForm("GetDMRCustomerInformation", "MerchantDMRSection", new AjaxOptions { OnSuccess = "OnSuccessGetDMRCustomerInfo", OnFailure = "OnFailureGetDMRCustomerInfo", LoadingElementId = "progressGetDMRCustomerInfo" }, new { area = "Merchant", @id = "SearchDMRCustomer" }))
+{
+    <div class="form-horizontal padding-top-20">
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body" style=" top:40%; position:fixed; width:80%; left:14%">
+                        <div class="col-md-12 clearfix">
+                            <div class="col-md-3" style="padding-top:10px; font-weight:bold;">Customer Mobile no. </div>
+                            <div class="col-md-9 ">
+
+                                <div class="col-md-11">
+                                    <div class="inputer">
+                                        <div class="input-wrapper">
+                                            @*<input class="form-control" type="text" placeholder="Search.." name="search" id="TransxtID" onblur="FetchCustomerDetails(this.value)">*@
+                                            @*<input class="form-control" type="text" placeholder="Search.." name="search" id="TransxtID">*@
+                                            @Html.EditorFor(m => m.CustomerMobileNo, new { htmlAttributes = new { @class = "form-control text-box single-line", @style = " width:100%; padding:5px;", @placeholder = "Customer Id", id = "TransxtID" } })
+                                        </div>
+                                        <span class="help-block"><small>@Html.ValidationMessageFor(model => model.CustomerMobileNo, "", new { @class = "text-danger" })</small></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    @*<button class="form-control" type="submit" onclick="FetchCustomerDetails($('#TransxtID').val())"><i class="fa fa-search"></i></button>*@
+                                    <button class="form-control" type="submit"><i class="fa fa-search"></i></button>
+                                    @*<input type="submit" value="Transfer Amount" class="btn btn-cyan" id="btnsubmit1" />*@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+@*<div id="progressGetDMRCustomerInfo" class="loading hidden">Loading&#8230;</div>*@
+<div class="preloader hidden" id="progressGetDMRCustomerInfo">
+    <div id="loading"></div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('#progressGetDMRCustomerInfo').removeClass("hidden");
+        $('#progressGetDMRCustomerInfo').hide();
+    })
+    function OnSuccessGetDMRCustomerInfo(response) {
+        $('#progressGetDMRCustomerInfo').show();
+        var message = response;
+        var CustId = $('#TransxtID').val();
+        $("#SearchDMRCustomer").trigger("reset");
+
+        if (response != 'Data not found in database') {
+            if (response == 'Please check mobile number length' || response == 'Mobile number should only be in digits' || response == 'Access has been restricted') {
+                bootbox.alert({
+                    size: "small",
+                    message: response,
+                    backdrop: true
+                });
+                //$(".overlaydiv").fadeOut("slow");
+            }
+            else {
+                //$(".overlaydiv").fadeOut("slow");
+                var url = "/Merchant/MerchantDMRSection/CustomerDetails";
+                window.location.href = url;
+            }
+            $('#progressGetDMRCustomerInfo').hide();
+        }
+        else {
+            //$(".overlaydiv").fadeOut("slow");
+            var url = "/Merchant/MerchantDMRSection/CreateCustomer";
+            window.location.href = url;
+        }
+
+
+        //bootbox.alert({
+        //    message: message,
+        //    size: 'small',
+        //    callback: function () {
+        //        console.log(message);
+        //        if (message != 'Your Google reCaptcha validation failed') {
+        //            var url = "/Merchant/MerchantDMRSection/MoneyTransferList";
+        //            window.location.href = url;
+        //        }
+        //        else {
+        //            $('#progressTransferAmt').removeClass("hidden");
+        //            $('#progressTransferAmt').hide();
+        //        }
+        //    }
+        //})
+
+        //alert(message);
+    }
+    function OnFailureGetDMRCustomerInfo(response) {
+        debugger;
+        alert("Error occured.");
+    }
+</script>

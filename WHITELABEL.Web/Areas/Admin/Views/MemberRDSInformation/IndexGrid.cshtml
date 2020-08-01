@@ -1,0 +1,43 @@
+﻿@using NonFactors.Mvc.Grid;
+@using WHITELABEL.Web.Helper;
+@model IEnumerable<WHITELABEL.Data.Models.TBL_FINAL_RDS_BOOKING>
+@{
+    ViewBag.Title = "IndexGrid";
+    Layout = null;
+    //Layout = null;
+    //Layout = "~/Areas/PowerAdmin/Views/Shared/_PowerAdminLayout.cshtml";
+}
+
+@(Html
+                                                .Grid(Model)
+                                                .Build(columns =>
+                                                {
+                                                    columns.Add(model => model.SLN).Titled("Sln").Filterable(true).Sortable(true);
+                                                    columns.Add(model => model.MERCHANT_NAME).Titled("User Name").Filterable(true).Sortable(true);
+                                                    columns.Add(model => model.BOOKING_GATEWAY).Titled("RDS Booking Gateway").Filterable(true).Sortable(true);
+                                                    columns.Add(model => model.TRAN_ID).Titled("Txn Id").Filterable(true).Sortable(true);
+                                                    columns.Add(model => model.PNR).Titled("Pnr").Filterable(true).Sortable(true);
+                                                    columns.Add(model => model.OPR_ID).Titled("Opr Id").Filterable(true).Sortable(true);
+                                                    columns.Add(model => model.BOOKING_AMT).Titled("Booking Amt ").Filterable(true).Sortable(true);
+                                                    columns.Add(model => model.TRAN_STATUS).Titled("Booking Status ").Filterable(true).Sortable(true);
+                                                    columns.Add(model => model.BOOKING_TRAN_STATUS).Titled("Booking Trn Status ").Filterable(true).Sortable(true);
+                                                    columns.Add(model => model.PAYMODE).Titled("Pay Mode ").Filterable(true).Sortable(true);
+                                                    columns.Add(model => model.PG_CHARGE).Titled("PG Charges").Filterable(true).Sortable(true);
+                                                    columns.Add(model => model.ADDN_CHARGE_MAX_VAL).Titled("Addn. Charges Apply").Filterable(true).Sortable(true);
+                                                    columns.Add(model => model.TOTAL_NET_PAYBLE_WITHOUT_GST).Titled("Total Netamt Without GST ").Filterable(true).Sortable(true);
+                                                    columns.Add(model => model.TOTAL_NET_PAYBLE_GST).Titled("Total Netamt With GST ").Filterable(true).Sortable(true);
+                                                    columns.Add(model => model.TOTAL_NET_PAYBLE).Titled("Total Netamt").Filterable(true).Sortable(true);
+                                                    columns.Add(model => model.TRAN_DATE).Titled("Tranx Date").Filterable(true).Sortable(true).Formatted("{0:yyyy-MM-dd}");
+                                                })
+                                                .Css("css-classes")
+                                        .AppendCss("table table-striped")
+                                                 .Empty("No data found")
+                                        .Id("my-ajax-grid")
+                                        .Pageable(pager =>
+                                        {
+                                            pager.PagesToDisplay = 15;
+                                            pager.RowsPerPage = 15;
+                                        })
+                                        .Filterable()
+                                        .Sortable()
+)

@@ -1,0 +1,875 @@
+﻿
+@{
+    ViewBag.Title = "ReturnFlightlist";
+    Layout = "~/Areas/Merchant/Views/Shared/_RetailerLayout.cshtml";
+}
+
+<style>
+    .fb {
+        font-weight: bold;
+        font-style: normal;
+    }
+
+    .brdrRd5 {
+        border-radius: 5px;
+    }
+
+    .fltHpySrt li {
+        width: 25%;
+        list-style: none;
+    }
+
+    .curPointFlt {
+        cursor: pointer;
+    }
+
+    .dF {
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: -ms-flex;
+        display: flex;
+    }
+
+    .clr {
+        clear: both;
+    }
+
+    .fltHpyRsltCard {
+        box-shadow: 0 2px 4px 0 rgba(0,0,0,0.13);
+    }
+
+    .flexCol {
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: -ms-flex;
+        display: flex;
+        -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+        flex-direction: column;
+    }
+
+    .fl {
+        float: left;
+    }
+
+    .alignItemsCenter {
+        -webkit-align-items: center;
+        -ms-align-items: center;
+        align-items: center;
+    }
+
+    .flightImagesNew {
+        max-height: 30px;
+    }
+
+    .flightImagesNew {
+        max-width: 100%;
+        max-height: 30px;
+        padding-right: 10px;
+    }
+
+    .padT10 {
+        padding-top: 10px;
+    }
+
+    .alignItemsEnd {
+        -webkit-align-items: flex-end;
+        -ms-align-items: flex-end;
+        align-items: flex-end;
+    }
+
+    .fGS0 {
+        flex-grow: 0;
+        flex-shrink: 0;
+    }
+
+    .db {
+        display: block;
+    }
+
+    .textOverflow {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .ico12 {
+        font-size: 12px;
+    }
+
+    .ico11 {
+        font-size: 11px;
+    }
+
+    .quicks {
+        font-family: "QuickSand",Helvetica,Arial,sans-serif;
+    }
+
+    .padT5 {
+        padding-top: 5px;
+    }
+
+    .ico18 {
+        font-size: 18px;
+    }
+
+    .fGS0 {
+        flex-grow: 0;
+        flex-shrink: 0;
+    }
+
+    .ico15 {
+        font-size: 15px;
+    }
+
+    .justifyBetween {
+        -webkit-justify-content: space-between;
+        -ms-justify-content: space-between;
+        justify-content: space-between;
+    }
+
+    .alignItemsCenter {
+        -webkit-align-items: center;
+        -ms-align-items: center;
+        align-items: center;
+    }
+
+    .ico20 {
+        font-size: 20px;
+    }
+
+    .button.fltbook {
+        border-radius: 5px;
+        padding: 7px 0;
+        background-color: #f37638;
+        border: solid 1px #f37638;
+    }
+
+    .fr {
+        float: right;
+    }
+
+    .widthF105 {
+        width: 80px;
+    }
+
+    .padB20 {
+        padding-bottom: 20px;
+    }
+
+    .justifyEnd {
+        -webkit-justify-content: flex-end;
+        -ms-justify-content: flex-end;
+        justify-content: flex-end;
+    }
+
+    .marginT10 {
+        margin-top: 10px;
+    }
+
+    .ico12 {
+        font-size: 12px;
+    }
+
+    .ico11 {
+        font-size: 11px;
+    }
+
+    .padTB10 {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    .alignItemsEnd {
+        -webkit-align-items: flex-end;
+        -ms-align-items: flex-end;
+        align-items: flex-end;
+    }
+
+    .justifyBetween {
+        -webkit-justify-content: space-between;
+        -ms-justify-content: space-between;
+        justify-content: space-between;
+    }
+
+    .width100 {
+        width: 100%;
+    }
+
+    .padL10 {
+        padding-left: 10px;
+    }
+
+    .dF {
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: -ms-flex;
+        display: flex;
+    }
+
+    .ico11 {
+        font-size: 11px;
+    }
+
+    .db {
+        display: block;
+    }
+
+    .fl {
+        float: left;
+    }
+
+    .width29 {
+        width: 29%;
+    }
+
+    .padLR0 {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .padB5 {
+        padding-bottom: 5px;
+    }
+
+    .ico12 {
+        font-size: 12px;
+    }
+
+    .ico12 {
+        font-size: 12px;
+    }
+
+    .fb {
+        font-weight: bold;
+        font-style: normal;
+    }
+
+    .alignSelfCenter {
+        -webkit-align-self: center;
+        -ms-align-self: center;
+        align-self: center;
+    }
+
+    .padB5 {
+        padding-bottom: 5px;
+    }
+
+    .ico12 {
+        font-size: 12px;
+    }
+
+    .pad0 {
+        padding: 0 !important;
+    }
+
+    .col-md-5 {
+        width: 41.66666667%;
+    }
+
+    .prgrsDot.dotVH:before {
+        visibility: hidden;
+    }
+
+    .prgrsDot:after {
+        width: 100%;
+        height: 1px;
+        content: '';
+        position: absolute;
+        background-color: #e7e7e7;
+        top: 1px;
+        z-index: 0;
+    }
+
+    .width70 {
+        width: 70%;
+    }
+
+    .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12 {
+        float: left;
+    }
+
+    .padB5 {
+        padding-bottom: 5px;
+    }
+
+    .padLR0 {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .widMd30 {
+        width: 30%;
+    }
+
+    .flexCol {
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: -ms-flex;
+        display: flex;
+        -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+        flex-direction: column;
+    }
+
+    .stickyHpy {
+        position: sticky;
+        top: 0;
+        z-index: 9;
+    }
+
+    .brdrRd10 {
+        border-radius: 10px;
+    }
+
+    .fltHpyRsltCard {
+        box-shadow: 0 2px 4px 0 rgba(0,0,0,0.13);
+    }
+
+    .marginT5 {
+        margin-top: 5px;
+    }
+
+    .pad10 {
+        padding: 10px;
+    }
+
+    .borderRight {
+        border-right: 1px solid #e6e6e6;
+    }
+
+    .width50 {
+        width: 50%;
+    }
+
+    .width30 {
+        width: 30%;
+    }
+
+    .fltHpySumryPrc {
+        border-left: 1px dashed #c2c2c2;
+    }
+
+    .padR15 {
+        padding-right: 15px;
+    }
+
+    .ico24 {
+        font-size: 24px;
+    }
+
+    .padTB15 {
+        padding-top: 15px;
+        padding-bottom: 15px;
+    }
+    .ico10 {
+        font-size: 10px;
+    }
+</style>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.css" rel="stylesheet" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
+<script src="~/HelperJS/AngularjsLinks/bootstrap.bundle.min.js"></script>
+<script src="~/HelperJS/AngularjsLinks/perfect-scrollbar.min.js"></script>
+<script src="~/HelperJS/AngularjsLinks/script.min.js"></script>
+<script src="~/HelperJS/AngularjsLinks/sidebar.large.script.min.js"></script>
+<script src="~/HelperJS/AngularjsLinks/nuslider.min.js"></script>
+<script src="~/Areas/Merchant/MerchantHelperJS/FlightBooking/app.js"></script>
+<script src="~/Areas/Merchant/MerchantHelperJS/FlightBooking/AirportAutocomplete.js"></script>
+
+<div class="display-animation" ng-app="AirportAutocompleteoduleApp" ng-controller="AirportAutocompleteController" ng-init="LoadFlightSearch('@ViewBag.Tripmode','@ViewBag.FromCityCode','@ViewBag.TOAirportCode','@ViewBag.FromDate','@ViewBag.ToDate','@ViewBag.TravelType','@ViewBag.Adult','@ViewBag.Child','@ViewBag.Infant')" id="AirportAutocompleteController">
+    <div class="content" style="margin-top:20px;">
+        <div class="display-animation">
+            <div class="full-content margin-bottom-40 bg-white" id="Bill_page">
+                <div class="row example-row" style="min-height:350px;">
+                    <div class="card" style="width:100%;">
+                        <div class="card-body">
+                            <div class="row">
+                                <!--.col-->
+                                <div class="row col-md-12" style="padding-bottom:40px;">
+                                    <div class="dropdown mega-menu d-none d-md-block">
+                                        <a href="#" class="btn text-muted dropdown-toggle mr-3" id="dropdownMegaMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Filter Result</a>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            <div class="row m-0 p-2">
+                                                <div class="col-md-4 p-2">
+                                                    <div class="control-group">
+                                                        <div class="controls">
+                                                            <label>Depart on</label>
+                                                            <div class="input-group">
+                                                                <span class="input-group-addon"><i class="ion-android-calendar"></i></span>
+                                                                <div class="inputer">
+                                                                    <div class="input-wrapper">
+                                                                        <input type="text" name="birthday" class="form-control bootstrap-daterangepicker-basic" value="03/18/2013" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 p-2">
+                                                    <div class="control-group">
+                                                        <div class="controls">
+                                                            <label>Return on</label>
+                                                            <div class="input-group">
+                                                                <span class="input-group-addon"><i class="ion-android-calendar"></i></span>
+                                                                <div class="inputer">
+                                                                    <div class="input-wrapper">
+                                                                        <input type="text" name="birthday" class="form-control bootstrap-daterangepicker-basic" value="03/18/2013" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-md-4 p-2">
+                                                    <div class="form-group">
+                                                        <label>Price range:</label>
+                                                        <div id="extra-small-slider-circle-filled" class="circle-filled slider-default slider-extra-small slider-custom noUi-target noUi-ltr noUi-horizontal" style="margin-top:10px;">
+
+                                                            <div class="noUi-base">
+                                                                <div class="noUi-origin" style="left: 14.2857%;">
+                                                                    <div class="noUi-handle noUi-handle-lower" data-handle="0" tabindex="0" role="slider" aria-orientation="horizontal" aria-valuemin="0.0" aria-valuemax="71.4" aria-valuenow="14.3" aria-valuetext="20.00" style="z-index: 5;"></div>
+                                                                </div>
+                                                                <div class="noUi-connect" style="left: 14.2857%; right: 28.5714%;"></div>
+
+                                                                <div class="noUi-origin" style="left: 71.4286%;">
+                                                                    <div class="noUi-handle noUi-handle-upper" data-handle="1" tabindex="0" role="slider" aria-orientation="horizontal" aria-valuemin="14.3" aria-valuemax="100.0" aria-valuenow="71.4" aria-valuetext="60.00" style="z-index: 4;"></div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 p-2">
+                                                    Stops
+                                                    <div class="clearfix"></div>
+                                                    <div class="btn-group btn-group-xs" data-toggle="buttons">
+
+                                                        <label class="btn btn-blue-grey">
+                                                            <input type="radio" name="options" id="option1" autocomplete="off" checked>
+                                                            1
+                                                        </label>
+                                                        <label class="btn btn-blue-grey">
+                                                            <input type="radio" name="options" id="option2" autocomplete="off">
+                                                            2
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 p-2 row">
+                                                    Preferred Airlines:
+
+                                                    <div id="news-slider2" class="owl-carousel">
+                                                        <div class="post-slide2">
+                                                            <div class="post-img">
+                                                                <input type="checkbox" value="" id="check6">
+                                                                <label for="check6"><img src="~/images/air_india.png" /></label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="post-slide2">
+                                                            <div class="post-img">
+                                                                <input type="checkbox" value="" id="check6">
+                                                                <label for="check6"><img src="~/images/go_air.png" /></label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="post-slide2">
+                                                            <div class="post-img">
+                                                                <input type="checkbox" value="" id="check6">
+                                                                <label for="check6"><img src="~/images/spicejet.png" /></label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="post-slide2">
+                                                            <div class="post-img">
+                                                                <input type="checkbox" value="" id="check6">
+                                                                <label for="check6"><img src="~/images/air_india.png" /></label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="post-slide2">
+                                                            <div class="post-img">
+                                                                <input type="checkbox" value="" id="check6">
+                                                                <label for="check6"><img src="~/images/go_air.png" /></label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="post-slide2">
+                                                            <div class="post-img">
+                                                                <input type="checkbox" value="" id="check6">
+                                                                <label for="check6"><img src="~/images/spicejet.png" /></label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!--.checkbox-->
+                                                </div>
+                                                <div class="col-md-4 p-2">
+                                                    <div class="form-group">
+                                                        <label>Trip duration:</label>
+
+                                                        <div id="extra-small-slider-circle-filled" class="circle-filled slider-default slider-extra-small slider-custom noUi-target noUi-ltr noUi-horizontal" style="margin-top:10px;">
+
+                                                            <div class="noUi-base">
+                                                                <div class="noUi-origin" style="left: 14.2857%;">
+                                                                    <div class="noUi-handle noUi-handle-lower" data-handle="0" tabindex="0" role="slider" aria-orientation="horizontal" aria-valuemin="0.0" aria-valuemax="71.4" aria-valuenow="14.3" aria-valuetext="20.00" style="z-index: 5;"></div>
+                                                                </div>
+                                                                <div class="noUi-connect" style="left: 14.2857%; right: 28.5714%;"></div>
+
+                                                                <div class="noUi-origin" style="left: 71.4286%;">
+                                                                    <div class="noUi-handle noUi-handle-upper" data-handle="1" tabindex="0" role="slider" aria-orientation="horizontal" aria-valuemin="14.3" aria-valuemax="100.0" aria-valuenow="71.4" aria-valuetext="60.00" style="z-index: 4;"></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flexCol fltHpyRsltCard whiteBg brdrRd10 pad10 stickyHpy marginT5 padB15 width100" style="z-index: 2;">
+                                    <div class="dF justifyBetween">
+                                        <div class="flexCol width70 justifyEnd">
+                                            <div class="ico12 fb padB10 quicks">Your Selection</div>
+                                            <div class="dF">
+                                                <div class="dF justifyBetween alignItemsEnd width50 padLR0 borderRight">
+                                                    <div class="col-md-3 col-sm-2 col-xs-2">
+                                                        <span class="dF justifyCenter">
+                                                            <img src="https://goibibo.ibcdn.com/images/v2/carrierImages/SG.gif" class="flightImagesNew" alt="flights">
+                                                        </span><span class="db txtCenter greyLt ico11 padT5">Spicejet-{{FlightTrackNo}}-{{OriginResultIndex}}- {{FlightNo}} </span>
+                                                    </div>
+                                                    <div class="col-md-9 col-sm-10 col-xs-10 padLR0">
+                                                        <div class="fl width100  alignItemsEnd dF">
+                                                            <div class="col-md-4 col-sm-4 col-xs-4">
+                                                                <span class="db ico11 nowrap padB5">{{DepartDate}}</span>
+                                                                <span class="db">
+                                                                    <span class="db ico12 greyLt padB5">{{OriginAirportCode}}</span>
+                                                                    <span class="fb ico16 quicks">{{Departtime}}</span>
+                                                                </span>
+                                                            </div>
+                                                            <div class="col-md-5 col-sm-5 padLR0 col-xs-5 alignSelfCenter">
+                                                                <div class="ico12 grey txtCenter padB5">{{ViaFromStopage}}-{{Duration}}</div>
+                                                                <span>
+                                                                    <span class="col-md-5 col-sm-3 col-xs-3 pad0 prgrsDot dotVH"></span>
+                                                                    <span class="col-md-5 col-sm-3 col-xs-3 pad0 prgrsDot"></span>
+                                                                    <span class="col-md-2 col-sm-3 col-xs-3 pad0 prgrsDot dotVH"></span>
+                                                                </span>
+                                                                <div class="ico12 grey txtCenter">{{FromStops}} Stop</div>
+                                                            </div>
+                                                            <div class="col-md-3 col-sm-3 col-xs-3 width29">
+                                                                <span class="db">
+                                                                    <span class="db ico12 greyLt padB5"><!-- react-text: 2065 -->{{DestinationAirportcode}}<!-- /react-text --></span>
+                                                                    <span class="fb ico16 quicks">{{Reachedtime}}</span>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="dF justifyBetween alignItemsEnd width50 padLR0 ">
+                                                    <div class="col-md-3 col-sm-2 col-xs-2">
+                                                        <span class="dF justifyCenter"><img src="https://goibibo.ibcdn.com/images/v2/carrierImages/I5.gif" class="flightImagesNew" alt="flights"></span>
+                                                        <span class="db txtCenter greyLt ico11 padT5">{{DesFlightTrackNo}} {{DesFlightNo}}</span>
+                                                    </div>
+                                                    <div class="col-md-9 col-sm-10 col-xs-10 padLR0">
+                                                        <div class="fl width100  alignItemsEnd dF">
+                                                            <div class="col-md-4 col-sm-4 col-xs-4">
+                                                                <span class="db ico11 nowrap padB5">{{DesDepartDate}}</span>
+                                                                <span class="db">
+                                                                    <span class="db ico12 greyLt padB5">{{DesOriginAirportCode}}</span>
+                                                                    <span class="fb ico16 quicks">{{DesDeparttime}}</span>
+                                                                </span>
+                                                            </div>
+                                                            <div class="col-md-5 col-sm-5 padLR0 col-xs-5 alignSelfCenter">
+                                                                <div class="ico12 grey txtCenter padB5">{{retvia}}-{{DesDuration}}</div>
+                                                                <div class="ico12 grey txtCenter">{{DesFromStops}}-Stop</div>
+                                                            </div>
+                                                            <div class="col-md-3 col-sm-3 col-xs-3 width29">
+                                                                <span class="db">
+                                                                    <span class="db ico12 greyLt padB5">{{DesDestinationAirportcode}}</span>
+                                                                    <span class="fb ico16 quicks">{{DesReachedtime}}</span>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="txtRight padT20"></div>
+                                        </div>
+                                        <div class="dF alignItemsEnd width30 padL5 padB3 justifyEnd fltHpySumryPrc">
+                                            <span class="padR15  alignItemsEnd  flexCol">
+                                                <span class="alignItemsCenter dF padT5">
+                                                    <i class="icon-rupee ico13"></i><span class="ico24 quicks fb">{{parseFloat(FlightPrice) + parseFloat(DesFlightPrice)}}</span>
+                                                </span>
+                                                <span class="reserveWrp padT5">
+                                                    <small class="ico12 dF alignItemsCenter quicks">
+                                                        <span class="padR2">No-cost EMI </span><i class="icon-rupee fb ico9"></i>
+                                                        <span class="fb">3,841</span>
+                                                    </small>
+                                                </span>
+                                            </span><span class="dF flexCol">
+                                                <span class="db clearfix padTB15">
+                                                    <input type="button" value="BOOK" class="button fr fltbook fb widthF105 quicks fb"  ng-click="RoundtripgetFlightDetails(AdultCount,ChildCount,InfantCount,(FlightTrackNo+','+DesFlightTrackNo),TripMode)">
+                                                </span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 material-animate">
+                                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"   infinite-scroll="loadMore()">
+                                        <div class="quicks">
+                                            <div class="fb padTB10 ico14">Sort By</div>
+                                            <ul class="fltHpySrt ico12 dF justifyAround whiteBg pad10 brdrRd5" style="background-color:#ccc; padding:5px;">
+                                                <li id="DEPARTURE" class="curPointFlt"><span class="dF alignItemsCenter justifyCenter"><span class="fb ico11 ">DEPARTURE</span></span></li>
+                                                <li id="DURATION" class="curPointFlt"><span class="dF alignItemsCenter justifyCenter"><span class="fb ico11 ">DURATION</span></span></li>
+                                                <li id="ARRIVAL" class="curPointFlt"><span class="dF alignItemsCenter justifyCenter"><span class="fb ico11 ">ARRIVAL</span></span></li>
+                                                <li id="PRICE" class="curPointFlt"><span class="dF alignItemsCenter justifyCenter"><span class="fb ico11  hpyBlueLt ">PRICE</span><i class="ico13 icon-arrow2-up hpyBlueLt "></i></span></li>
+                                            </ul>
+                                        </div>
+                                        <div data-cy="flightItem_CCUDEL20200710ESG:SG3281SG903:0">
+                                            <div class="fltHpyRsltCard flexCol whiteBg marginT10 brdrRd5" ng-repeat="(key, Deptitemval) in deptureFlight | groupBy: 'TrackNo' | limitTo:numberToDisplay">
+                                                <div class="fl width100 fltCrdTpRd cardOffer"></div>
+                                                <div class="dF justifyBetween alignItemsEnd padTB10">
+                                                    <div class="dF justifyBetween  alignItemsEnd width70 padLR0">
+                                                        <div class="width100">
+                                                            <div class="col-md-3 col-sm-2 col-xs-2 padL10">
+                                                                <span class="dF"><img src="https://goibibo.ibcdn.com/images/v2/carrierImages/SG.gif" class="flightImagesNew" alt="flights"></span>
+                                                                <span class="db greyLt ico11 padT3">
+                                                                    Spicejet
+                                                                    {{Deptitemval[0].TrackNo}}-
+                                                                </span>
+                                                            </div>
+                                                            <div class="col-md-9 col-sm-10 col-xs-10 padLR0">
+                                                                <div class="fl width100  alignItemsEnd dF">
+                                                                    <div class="col-md-3 col-sm-3 col-xs-3 width29">
+                                                                        <span class="db">
+                                                                            <span class="db ico12 greyLt padB5">{{Deptitemval[0].FromAirportCode}}-{{Deptitemval[0].FlightNo}}</span><span class="fb ico16 quicks">{{Deptitemval[0].DepTime}}</span><span style="display:none;">{{Deptitemval[0].DepDate}}{{Deptitemval[0].SrNo}}</span>
+                                                                        </span>
+                                                                    </div>
+                                                                    <div class="col-md-5 col-sm-5 padLR0 col-xs-5 alignSelfCenter">
+                                                                        <div class="ico12 grey txtCenter padB5">{{Deptitemval[0].Stops === "0" ? "" : Deptitemval[Deptitemval[0].Stops].FromAirportCode}}--> {{timeConvert(Deptitemval[0].Stops === "0" ? parseNumber(Deptitemval[0].FlightTime) : (parseNumber(Deptitemval[0].FlightTime)+parseNumber(Deptitemval[0].HoldDuration)+parseNumber(Deptitemval[Deptitemval[0].Stops].HoldDuration)))}} </div>
+                                                                        <span>
+                                                                            <span class="col-md-5 col-sm-3 col-xs-3 pad0 prgrsDot dotVH"></span>
+                                                                            <span class="col-md-5 col-sm-3 col-xs-3 pad0 prgrsDot"></span>
+                                                                            <span class="col-md-2 col-sm-3 col-xs-3 pad0 prgrsDot dotVH"></span>
+                                                                        </span>
+                                                                        <div class="ico12 grey txtCenter">{{Deptitemval[0].Stops === "0" ? 0 : Deptitemval[Deptitemval[0].Stops].Stops}} Stop</div>
+                                                                    </div>
+                                                                    <div class="col-md-3 col-sm-3 col-xs-3 width29">
+                                                                        <span class="db">
+                                                                            <span class="db ico12 greyLt padB5">{{Deptitemval[0].Stops === "0" ? Deptitemval[0].ToAirportCode : Deptitemval[Deptitemval[0].Stops].ToAirportCode}}</span>
+                                                                            <span class="fb dF alignItemsCenter ico18 quicks">
+                                                                                <span>{{Deptitemval[0].Stops === "0" ? Deptitemval[0].ArrTime : Deptitemval[Deptitemval[0].Stops].ArrTime}}</span>
+                                                                            </span>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="widMd30 padLR0 flexCol alignItemsEnd padB5">
+                                                        <div class="dF alignItemsEnd">
+                                                            <span class="padR5 alignItemsEnd flexCol">
+                                                                <span class="alignItemsCenter dF padT2 quicks fb">
+                                                                    <i class="icon-rupee ico11"></i>
+                                                                    <span class="ico20">{{Deptitemval[0].TotalAmount}}/-</span>
+                                                                </span>
+                                                            </span>
+                                                            <span class="custRad">
+                                                                <input type="radio" ng-model="RbtSourceDetails" id="rbtSourceId{{$index}}" name="Source"  ng-click="selectDestimationSource(Deptitemval[0].TrackNo,Deptitemval[0].FromAirportCode,Deptitemval[0].DepTime,(Deptitemval[0].Stops === '0' ? '' : Deptitemval[Deptitemval[0].Stops].FromAirportCode),(timeConvert(Deptitemval[0].Stops === '0' ? parseNumber(Deptitemval[0].FlightTime) : (parseNumber(Deptitemval[0].FlightTime)+parseNumber(Deptitemval[0].HoldDuration)+parseNumber(Deptitemval[Deptitemval[0].Stops].HoldDuration)))),(Deptitemval[0].Stops === '0' ? 0 : Deptitemval[Deptitemval[0].Stops].Stops),(Deptitemval[0].Stops === '0' ? Deptitemval[0].ToAirportCode : Deptitemval[Deptitemval[0].Stops].ToAirportCode),(Deptitemval[0].Stops === '0' ? Deptitemval[0].ArrTime : Deptitemval[Deptitemval[0].Stops].ArrTime),Deptitemval[0].DepDate,Deptitemval[0].TotalAmount,Deptitemval[0].SrNo,Deptitemval[0].FlightNo)"><label></label>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="accordion" id="accordionRightIcon">
+                                                    <div class="">
+                                                        <div class=" header-elements-inline">
+                                                            <div class="card-title ul-collapse__icon--size ul-collapse__right-icon mb-0" style="text-align:right;">
+                                                                <a class="text-default collapsed" data-toggle="collapse" href="#accordion-item-icons-1101{{$index}}" aria-expanded="false" style="font-size:12px;">Flight Details  ></a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="collapse" id="accordion-item-icons-1101{{$index}}" data-parent="#accordionRightIcon">
+                                                            <div class="card-body">
+                                                                <ul class="nav nav-pills" id="myPillTab" role="tablist">
+                                                                    <li class="nav-item"><a class="nav-link active" id="home-icon-pill" data-toggle="pill" href="#homePIll" role="tab" aria-controls="homePIll" aria-selected="true">Flight Information</a></li>
+                                                                    <li class="nav-item"><a class="nav-link" id="profile-icon-pill" data-toggle="pill" href="#profilePIll" role="tab" aria-controls="profilePIll" aria-selected="false"> Fare Details</a></li>
+                                                                    <li class="nav-item"><a class="nav-link" id="contact-icon-pill" data-toggle="pill" href="#contactPIll" role="tab" aria-controls="contactPIll" aria-selected="false"> Baggage Rules</a></li>
+                                                                    <li class="nav-item"><a class="nav-link" id="contact-icon-pill" data-toggle="pill" href="#contactPIll" role="tab" aria-controls="contactPIll" aria-selected="false"> Cancellation Rules</a></li>
+                                                                </ul>
+                                                                <div class="tab-content" id="myPillTabContent">
+                                                                    <div class="tab-pane fade show active" id="homePIll" role="tabpanel" aria-labelledby="home-icon-pill" ng-repeat="ReturnOneway in Deptitemval">
+
+                                                                        <div class="col-md-12 row" style="border:1px solid #ccc; border-radius:2px; padding:20px;">
+                                                                            <div class="col-md-2">
+                                                                                <img class="" src="images/indiGo_Logo.jpg" width="24" height="24"><br>
+                                                                                <span>
+                                                                                    Indigo-
+                                                                                    {{ReturnOneway.TrackNo}}
+                                                                                  
+                                                                                </span>
+                                                                            </div>
+                                                                            <div class="col-md-3">
+                                                                                {{ReturnOneway.DepTime}}<br>
+                                                                                <span class="label label-info"> {{ReturnOneway.FromAirportCode}} →  {{ReturnOneway.ToAirportCode}}</span>
+
+                                                                            </div>
+                                                                            <div class="col-md-3">
+
+                                                                                {{ReturnOneway.ArrTime}}<br>
+                                                                                <span class="label label-info">Duration: {{timeConvert(ReturnOneway.FlightTime )}} </span>
+
+                                                                            </div>
+                                                                            <div class="col-md-2">
+                                                                                <i class="fa fa-check text-amber"></i>*
+                                                                            </div>
+                                                                            <div class="col-md-2">
+                                                                                {{ReturnOneway.TotalAmount}}/-
+                                                                                <button class="btn btn-primary btn-xs "> Book</button>*
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="tab-pane fade" id="profilePIll" role="tabpanel" aria-labelledby="profile-icon-pill">
+                                                                        Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard locavore.
+
+                                                                    </div>
+                                                                    <div class="tab-pane fade" id="contactPIll" role="tabpanel" aria-labelledby="contact-icon-pill">Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard locavore.</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 material-animate">
+                                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" infinite-scroll="loadMore()">
+                                        <div class="quicks">
+                                            <div class="fb padTB10 ico14">Sort By</div>
+                                            <ul class="fltHpySrt ico12 dF justifyAround whiteBg pad10 brdrRd5" style="background-color:#ccc; padding:5px;">
+                                                <li id="DEPARTURE" class="curPointFlt"><span class="dF alignItemsCenter justifyCenter"><span class="fb ico11 ">DEPARTURE</span></span></li>
+                                                <li id="DURATION" class="curPointFlt"><span class="dF alignItemsCenter justifyCenter"><span class="fb ico11 ">DURATION</span></span></li>
+                                                <li id="ARRIVAL" class="curPointFlt"><span class="dF alignItemsCenter justifyCenter"><span class="fb ico11 ">ARRIVAL</span></span></li>
+                                                <li id="PRICE" class="curPointFlt"><span class="dF alignItemsCenter justifyCenter"><span class="fb ico11  hpyBlueLt ">PRICE</span><i class="ico13 icon-arrow2-up hpyBlueLt "></i></span></li>
+                                            </ul>
+                                        </div>
+                                        <div data-cy="flightItem_CCUDEL20200710ESG:SG3281SG903:0">
+                                            <div class="fltHpyRsltCard flexCol whiteBg marginT10 brdrRd5" ng-repeat="(key, Returnval) in returnFlight | groupBy: 'TrackNo' | limitTo:numberToDisplay">
+                                                <div class="fl width100 fltCrdTpRd cardOffer"></div>
+                                                <div class="dF justifyBetween alignItemsEnd padTB10" >
+                                                    <div class="dF justifyBetween  alignItemsEnd width70 padLR0">
+                                                        <div class="width100">
+                                                            <div class="col-md-3 col-sm-2 col-xs-2 padL10">
+                                                                <span class="dF"><img src="https://goibibo.ibcdn.com/images/v2/carrierImages/SG.gif" class="flightImagesNew" alt="flights"></span>
+                                                                <span class="db greyLt ico11 padT3">
+                                                                    {{$index}} --  Spicejet-
+                                                                    {{Returnval[0].TrackNo}}
+                                                                </span>
+                                                            </div>
+                                                            <div class="col-md-9 col-sm-10 col-xs-10 padLR0">
+                                                                <div class="fl width100  alignItemsEnd dF">
+                                                                    <div class="col-md-3 col-sm-3 col-xs-3 width29">
+                                                                        <span class="db">
+                                                                            <span class="db ico12 greyLt padB5">{{Returnval[0].FromAirportCode}} 111</span><span class="fb ico16 quicks">{{Returnval[0].DepTime}}</span><span style="display:none;">{{Returnval[0].DepDate}}{{Returnval[0].SrNo}}</span>
+                                                                        </span>
+                                                                    </div>
+                                                                    <div class="col-md-5 col-sm-5 padLR0 col-xs-5 alignSelfCenter">
+                                                                        <div class="ico12 grey txtCenter padB5">{{Returnval[0].Stops === "0" ? "" : Returnval[Returnval[0].Stops].FromAirportCode}}-- {{timeConvert(Returnval[0].Stops === "0" ? parseNumber(Returnval[0].FlightTime) : (parseNumber(Returnval[0].FlightTime)+parseNumber(Returnval[0].HoldDuration)+parseNumber(Returnval[Returnval[0].Stops].HoldDuration)))}}</div>
+                                                                        <span>
+                                                                            <span class="col-md-5 col-sm-3 col-xs-3 pad0 prgrsDot dotVH"></span>
+                                                                            <span class="col-md-5 col-sm-3 col-xs-3 pad0 prgrsDot"></span>
+                                                                            <span class="col-md-2 col-sm-3 col-xs-3 pad0 prgrsDot dotVH"></span>
+                                                                        </span>
+                                                                        <div class="ico12 grey txtCenter">{{Returnval[0].Stops === "0" ? 0 : Returnval[Returnval[0].Stops].Stops}} Stop</div>
+                                                                    </div>
+                                                                    <div class="col-md-3 col-sm-3 col-xs-3 width29">
+                                                                        <span class="db">
+                                                                            <span class="db ico12 greyLt padB5">{{Returnval[0].Stops === "0" ? Returnval[0].ToAirportCode : Returnval[Returnval[0].Stops].ToAirportCode}}</span>
+                                                                            <span class="fb dF alignItemsCenter ico18 quicks">
+                                                                                <span>{{Returnval[0].Stops === "0" ? Returnval[0].ArrTime : Returnval[Returnval[0].Stops].ArrTime}}</span>
+                                                                            </span>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="widMd30 padLR0 flexCol alignItemsEnd padB5">
+                                                        <div class="dF alignItemsEnd">
+                                                            <span class="padR5 alignItemsEnd flexCol">
+                                                                <span class="alignItemsCenter dF padT2 quicks fb">
+                                                                    <i class="icon-rupee ico11"></i>
+                                                                    <span class="ico20">
+                                                                        {{Returnval[0].TotalAmount}}/-
+                                                                    </span>
+                                                                </span>
+                                                            </span>
+                                                            <span class="custRad">
+                                                                @*<input  type="radio" ng-model="RbtDestinationDetails" name="destination" id="rbtDestinationId{{$index}}" ng-click="selectReturnFlightSource(Returnval[0].TrackNo,Returnval[0].FromAirportCode,Returnval[0].DepTime,(Returnval[0].Stops === '0' ? '' : Returnval[Returnval[0].Stops].FromAirportCode),(timeConvert(Returnval[0].Stops === '0' ? parseNumber(Returnval[0].FlightTime) : (parseNumber(Returnval[0].FlightTime)+parseNumber(Returnval[0].HoldDuration)+parseNumber(Returnval[Returnval[0].Stops].HoldDuration)))),(Returnval[0].Stops === '0' ? 0 : Returnval[Returnval[0].Stops].Stops),(Returnval[0].Stops === '0' ? Returnval[0].ToAirportCode : Returnval[Returnval[0].Stops].ToAirportCode),(Returnval[0].Stops === '0' ? Returnval[0].ArrTime : Returnval[Returnval[0].Stops].ArrTime),Returnval[0].DepDate,Returnval[0].TotalAmount,Returnval[0].SrNo,,Returnval[0].FlightNo)"><label></label>*@
+                                                            <input type="radio" ng-model="RbtDestinationDetails" id="rbtDestinationId{{$index}}" name="destination" ng-click="selectReturnFlightSource(Returnval[0].TrackNo,Returnval[0].FromAirportCode,Returnval[0].DepTime,(Returnval[0].Stops === '0' ? '' : Returnval[Returnval[0].Stops].FromAirportCode),(timeConvert(Returnval[0].Stops === '0' ? parseNumber(Returnval[0].FlightTime) : (parseNumber(Returnval[0].FlightTime)+parseNumber(Returnval[0].HoldDuration)+parseNumber(Returnval[Returnval[0].Stops].HoldDuration)))),(Returnval[0].Stops === '0' ? 0 : Returnval[Returnval[0].Stops].Stops),(Returnval[0].Stops === '0' ? Returnval[0].ToAirportCode : Returnval[Returnval[0].Stops].ToAirportCode),(Returnval[0].Stops === '0' ? Returnval[0].ArrTime : Returnval[Returnval[0].Stops].ArrTime),Returnval[0].DepDate,Returnval[0].TotalAmount,Returnval[0].SrNo,Returnval[0].FlightNo)"><label></label>
+
+
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="accordion" id="accordionRightIcon">
+                                                    <div class="">
+                                                        <div class=" header-elements-inline">
+                                                            <div class="card-title ul-collapse__icon--size ul-collapse__right-icon mb-0" style="text-align:right;">
+                                                                <a class="text-default collapsed" data-toggle="collapse" href="#accordion-item-icons-9901{{$index}}" aria-expanded="false" style="font-size:12px;">Flight Details  ></a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="collapse" id="accordion-item-icons-9901{{$index}}" data-parent="#accordionRightIcon">
+                                                            <div class="card-body">
+                                                                <ul class="nav nav-pills" id="myPillTab" role="tablist">
+                                                                    <li class="nav-item"><a class="nav-link active" id="home-icon-pill" data-toggle="pill" href="#homePIll" role="tab" aria-controls="homePIll" aria-selected="true">Flight Information</a></li>
+                                                                    <li class="nav-item"><a class="nav-link" id="profile-icon-pill" data-toggle="pill" href="#profilePIll" role="tab" aria-controls="profilePIll" aria-selected="false"> Fare Details</a></li>
+                                                                    <li class="nav-item"><a class="nav-link" id="contact-icon-pill" data-toggle="pill" href="#contactPIll" role="tab" aria-controls="contactPIll" aria-selected="false"> Baggage Rules</a></li>
+                                                                    <li class="nav-item"><a class="nav-link" id="contact-icon-pill" data-toggle="pill" href="#contactPIll" role="tab" aria-controls="contactPIll" aria-selected="false"> Cancellation Rules</a></li>
+                                                                </ul>
+                                                                <div class="tab-content" id="myPillTabContent">
+                                                                    <div class="tab-pane fade show active" id="homePIll" role="tabpanel" aria-labelledby="home-icon-pill" ng-repeat="ReturnOneway in Returnval">
+
+                                                                        <div class="col-md-12 row" style="border:1px solid #ccc; border-radius:2px; padding:20px;">
+                                                                            <div class="col-md-2">
+                                                                                <img class="" src="images/indiGo_Logo.jpg" width="24" height="24"><br>
+                                                                                <span>
+                                                                                    Indigo-
+                                                                                    {{ReturnOneway.TrackNo}}
+                                                                                </span>
+                                                                            </div>
+                                                                            <div class="col-md-3">
+                                                                                {{ReturnOneway.DepTime}}<br>
+                                                                                <span class="label label-info">{{ReturnOneway.FromAirportCode}} → {{ReturnOneway.ToAirportCode}}</span>
+                                                                            </div>
+                                                                            <div class="col-md-3">
+                                                                                {{ReturnOneway.ArrTime}}<br>
+                                                                                <span class="label label-info">Duration: 2h:30m</span>
+                                                                            </div>
+                                                                            <div class="col-md-2">
+                                                                                <i class="fa fa-check text-amber"></i>*
+                                                                            </div>
+                                                                            <div class="col-md-2">
+                                                                                {{ReturnOneway.TotalAmount}}/-
+                                                                                <button class="btn btn-primary btn-xs "> Book</button>*
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="tab-pane fade" id="profilePIll" role="tabpanel" aria-labelledby="profile-icon-pill">
+                                                                        Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard locavore.
+
+                                                                    </div>
+                                                                    <div class="tab-pane fade" id="contactPIll" role="tabpanel" aria-labelledby="contact-icon-pill">Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard locavore.</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--.col-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

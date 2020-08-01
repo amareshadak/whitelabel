@@ -1,0 +1,39 @@
+﻿@using NonFactors.Mvc.Grid;
+@using WHITELABEL.Web.Helper;
+@model IEnumerable<WHITELABEL.Data.Models.TBL_RAIL_ID_ALLOCATION>
+@{
+    ViewBag.Title = "IndexGrid";
+    //Layout = "~/Views/Shared/_LayoutPowerAdmin.cshtml";
+    Layout = null;
+}
+
+
+@(Html
+                                        .Grid(Model)
+                                        .Build(columns =>
+                                        {
+                                            columns.Add(model => model.ID).Titled("Sln").Filterable(true).Sortable(true);
+                                            columns.Add(model => model.WLPUserName).Titled("Merchant Name").Filterable(true).Sortable(true);
+                                            columns.Add(model => model.RAIL_ID_QUANTITY).Titled("Rail Id Qty").Filterable(true).Sortable(true);
+                                            columns.Add(model => model.RAIL_ID_SELLING_RATE).Titled("Sale Rate").Filterable(true).Sortable(true);
+                                            columns.Add(model => model.GST_RATE).Titled("Gst Rate").Filterable(true).Sortable(true);
+                                            columns.Add(model => model.GST_AMOUNT).Titled("Gst Amount").Filterable(true).Sortable(true);
+
+                                            columns.Add(model => model.GROSS_AMOUNT).Titled("Gross Amount").Filterable(true).Sortable(true);
+                                            columns.Add(model => model.SALE_DATE).Formatted("{0:yyyy-MM-dd}").Titled("Sale Date").Filterable(true).Sortable(true);
+                                        })
+                                        .Css("css-classes")
+                                        .AppendCss("table table-striped")
+                                        .Empty("No data found")
+                                        .Id("my-ajax-grid")
+                                        .Pageable(pager =>
+                                        {
+                                            pager.PagesToDisplay = 20;
+                                            pager.RowsPerPage = 20;
+                                        })
+                                        .Filterable()
+                                        .Sortable()
+)
+
+
+

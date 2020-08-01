@@ -1,0 +1,370 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Merchant/Views/Shared/_RetailerLayout.cshtml";
+}
+
+
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+<script src="~/Areas/Merchant/MerchantHelperJS/FlightBooking/app.js"></script>
+<script src="~/Areas/Merchant/MerchantHelperJS/FlightBooking/AirportAutocomplete.js"></script>
+<div class="content" style="margin-top:20px;">
+    <div class="display-animation" ng-app="AirportAutocompleteoduleApp" ng-controller="AirportAutocompleteController" id="AirportAutocompleteController">
+        <div class="full-content margin-bottom-40 bg-white" id="Bill_page">
+            <form role="form" ng-submit="SerachFlights()" ng-show="formdisplay">
+                <div class="row example-row" style="min-height:350px;">
+                    <div class="card" style="width:80%">
+                        <div class="card-body" style="padding:  20px;">
+                            @*<form id="loginform" class="form-horizontal row" role="form">*@
+                            <div class="col-md-12 row" style="margin-bottom:40px;">
+                                <div class="col-md-12 row">
+                                    <div class="col-md-2">
+                                        @*<a href="#" class="btn btn-gray-200 btn-lg" style="color:black;" id="rbOneWay" ng-model="Airport.Tripmode" ng-value="1">One way</a>*@
+                                        <a href="#"class="btn btn-gray-200 btn-lg" style="color:black;">One way </a> <input type="radio" class="btn btn-gray-200 btn-lg" style="color:black;" name="rbOneWay" id="rbOneWay" ng-model="Airport.Tripmode" ng-value="1"> 
+                                    </div>
+                                    <div class="col-md-2">                                        
+                                        <a href="#" class="btn btn-gray-200 btn-lg hfhufhf" style="color:black;" id="rbRoundTrip">Round Trips</a>
+                                        <input type="radio" class="btn btn-gray-200 btn-lg hfhufhf" name="rbRoundTrip" id="rbRoundTrip" ng-model="Airport.Tripmode" ng-value="2">
+                                    </div>
+                                    <div class="col-md-8"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 row">
+                                <div class="col-md-12 "><label>From</label></div>
+                                <div style="margin-bottom: 25px" class="input-group col-md-10">
+                                    <div angucomplete-alt id="txtAutocomplete" placeholder="Type airport name" pause="100"
+                                         selected-object="SelectedAirport" local-data="Airports" search-fields="CITYNAME" ng-model="Airport.AirportsName"
+                                         title-field="CITYNAME" minlength="1" input-class="form-control" match-class="highlight">
+                                    </div>
+                                    <input type="hidden" id="AirportCode" ng-model="SelectedAirport.CITYCODE" />
+                                    <div ng-hide="SelectedAirport">
+                                        {{SelectedAirport.CITYCODE}}
+                                    </div>
+                                    @*<input id="login-username" type="text" class="form-control" name="username" value="" placeholder="Kolkata">*@
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-send"></i></span>
+                                </div>
+                                <div class="col-md-2">
+                                    <span style="text-align:right">
+                                        <i class="fas fa-plane-departure fa-2x"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 row">
+                                <div class="col-md-12 " style="padding-left:74px;"><label>To</label></div>
+                                <div class="col-md-2 row">
+                                    <i class="fas fa-plane-arrival fa-2x"></i>
+                                </div>
+                                <div style="margin-bottom: 25px" class="input-group col-md-10">
+                                    <div angucomplete-alt id="txtTOAutocomplete" placeholder="Type airport name" pause="100"
+                                         selected-object="ToAirportName" local-data="Airports" search-fields="CITYNAME" ng-model="Airport.ToAirportsName"
+                                         title-field="CITYNAME" minlength="1" input-class="form-control" match-class="highlight">
+                                    </div>
+                                    <div ng-hide="ToAirportName">
+                                        {{ToAirportName.CITYCODE}}
+                                    </div>
+                                    @*<input id="login-password" type="password" class="form-control" name="text" placeholder="Delhi">*@
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-send"></i></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 row">
+                                <div><label>Departing</label></div>
+                                <div style="margin-bottom: 25px" class="input-group">
+                                    <input type="text"  name="FromDate" id="datepickerFromDate" class="form-control fromdateVal" placeholder="From Date" ng-model="FromDate" autocomplete="off" />
+                                    @*<input id="login-password" type="password" class="form-control" name="text" placeholder="Delhi">*@
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-send"></i></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 row">
+                                <div><label>Return</label></div>
+                                <div style="margin-bottom: 25px" class="input-group">
+                                    <input type="text"  name="ToDate" id="datepickerToDate" class="form-control ToDateVal" placeholder="To Date" ng-change="setToDate()" ng-model="ToDate" ng-disabled="Airport.Tripmode==1" autocomplete="off" />
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-send"></i></span>
+                                </div>
+                            </div>
+                            <div class="col-md-8 row">
+                                @*<div class="numoftraveller">
+                                    <label popoverpassengers class="homepopover hidden" data-container="body" data-placement="bottom" type="button" data-html="true" id="pophover-passengers" style="font-size:14px; width:100%; font-family: Helvetica Neue, Helvetica, Arial, sans-serif;line-height: 36px; color: #666 !important; border-bottom:1px solid #ccc;">
+                                        {{objListing.travels[0].AirTravellers.AirAdult + objListing.travels[0].AirTravellers.AirChildren + objListing.travels[0].AirTravellers.AirInfant}} {{(objListing.travels[0].AirTravellers.AirAdult + objListing.travels[0].AirTravellers.AirChildren + objListing.travels[0].AirTravellers.AirInfant )>1?'Travelers':'Traveler'}}
+                                        <span class="caret pull-right" style="margin-top:17px;"></span>
+                                    </label>
+                                </div>*@
+                                <div class="col-md-4 row">
+                                    <div><label>Adults</label></div>
+                                    <div style="margin-bottom: 25px" class="input-group">
+                                        <select id="ddlTravalAdultType" style="width:100%" class="form-control" ng-model="adultTypeTrv">
+                                            <option value="select class of travel"></option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                            <option value="6">6</option>
+                                        </select>
+
+                                        @*<input id="login-password" type="password" class="form-control" name="text" placeholder="Delhi">*@
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-send"></i></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 row">
+                                    <div><label>Children</label></div>
+                                    <div style="margin-bottom: 25px" class="input-group">
+                                        <select id="ddlTravalChildType" style="width:100%" class="form-control" ng-model="ChildTypeTrv">
+                                            <option value="select class of travel"></option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                            <option value="6">6</option>
+                                        </select>
+                                        @*<input id="login-password" type="password" class="form-control" name="text" placeholder="Delhi">*@
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-send"></i></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 row">
+                                    <div><label>Infants</label></div>
+                                    <div style="margin-bottom: 25px" class="input-group">
+                                        <select id="ddlTravalInfantType" style="width:100%" class="form-control" ng-model="InfantTypeTrv">
+                                            <option value="select class of travel"></option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                            <option value="6">6</option>
+                                        </select>
+                                        @*<input id="login-password" type="password" class="form-control" name="text" placeholder="Delhi">*@
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-send"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 row">
+                                <div><label>Class</label></div>
+                                <div style="margin-bottom: 25px" class="input-group">
+                                    <select id="ddlTravalType" style="width:100%" class="form-control" ng-model="TravellType">
+                                        <option value="select class of travel"></option>
+                                        <option value="Y">Economy</option>
+                                        <option value="C">Business</option>
+                                        <option value="W">Premium Economy</option>                                        
+                                        <option value="F">First Class</option>
+                                    </select>
+                                    @*<select class="form-control">
+                                        <option selected>Choose...</option>
+                                        <option>...</option>
+                                    </select>*@
+                                </div>
+                                <div>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input id="login-remember" type="checkbox" name="remember" value="1"> Show direct  flight only
+                                        </label>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-md-12 row">
+                                <div class="checkbox">
+                                    <label>
+                                        <input id="login-remember" type="checkbox" name="remember" value="1"><img src="~/images/air_india.png" />
+                                    </label>
+                                </div>
+                            </div>
+                            @*</form>*@
+                        </div>
+                        <div class="card-footer" style="padding:  20px; text-align:center;">
+                            @*<a href="#" class="btn btn-danger btn-lg" style="color:white;">Search Flight</a>*@
+                            <button type="submit" class="btn btn-danger btn-lg">Search Flight</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@*<div id="popover-content-popover-passengers" class="hide">
+    <div class="form-group">
+        <label class="col-lg-7">Adult(18-64)</label>
+        <div class="input-group col-lg-5">
+            <span class="input-group-btn">
+                <input type="button" class="btn btn-secondary" value=" - " ng-disabled="objListing.travels[0].AirTravellers.AirAdult==1" ng-click="objListing.travels[0].AirTravellers.AirAdult=objListing.travels[0].AirTravellers.AirAdult-1" />
+            </span>
+            <input type="text" class="form-control" ng-model="objListing.travels[0].AirTravellers.AirAdult" readonly placeholder="0">
+            <span class="input-group-btn">
+                <input type="button" class="btn btn-secondary" value=" + " ng-click="objListing.travels[0].AirTravellers.AirAdult=objListing.travels[0].AirTravellers.AirAdult+1" />
+            </span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-lg-7">Children(2-17)</label>
+        <div class="input-group col-lg-5">
+            <span class="input-group-btn">
+                <input type="button" class="btn btn-secondary" ng-disabled="objListing.travels[0].AirTravellers.AirChildren==0" value=" - " ng-click="objListing.travels[0].AirTravellers.AirChildren=objListing.travels[0].AirTravellers.AirChildren-1" />
+            </span>
+            <input type="text" class="form-control" ng-model="objListing.travels[0].AirTravellers.AirChildren" readonly placeholder="0">
+            <span class="input-group-btn">
+                <input type="button" class="btn btn-secondary" value=" + " ng-click="objListing.travels[0].AirTravellers.AirChildren=objListing.travels[0].AirTravellers.AirChildren+1" />
+            </span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-lg-7">Infant(under 2)</label>
+        <div class="input-group col-lg-5">
+            <span class="input-group-btn">
+                <input type="button" class="btn btn-secondary" value=" - " ng-disabled="objListing.travels[0].AirTravellers.AirInfant==0" ng-click="objListing.travels[0].AirTravellers.AirInfant=objListing.travels[0].AirTravellers.AirInfant-1" />
+            </span>
+            <input type="text" class="form-control" value="{{objListing.travels[0].AirTravellers.AirInfant}}" ng-model="objListing.travels[0].AirTravellers.AirInfant" readonly placeholder="0">
+            <span class="input-group-btn">
+                <input type="button" class="btn btn-secondary" value=" + " ng-click="objListing.travels[0].AirTravellers.AirInfant=objListing.travels[0].AirTravellers.AirInfant+1" />
+            </span>
+        </div>
+    </div>
+
+</div>*@
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+<script>
+    //$(function () {
+    //    $('#datepickerFromDate').datepicker({
+    //        format: "dd-MM-yyyy",
+    //        language: "es",
+    //        autoclose: true,
+    //        todayHighlight: true,
+    //        changeMonth: true,
+    //        changeYear: true
+    //    });
+    //    $('#datepickerToDate').datepicker({
+    //        format: "dd-MM-yyyy",
+    //        language: "es",
+    //        autoclose: true,
+    //        todayHighlight: true,
+    //        changeMonth: true,
+    //        changeYear: true
+    //    });
+    //});
+
+
+    //document.addEventListener('DOMContentLoaded', function () {
+    //    $('#pophover-passengers').removeClass('hidden');
+    //}, false);
+
+
+    //$(document).click(function (event) {
+    //    var travell = $(event.target).parents('.numoftraveller').length;
+
+    //    if ($('.numoftraveller').find('.popover').hasClass('in')) {
+    //        $('.trigger').trigger('click');
+    //    }
+
+
+
+    //});
+    //$('body').on('click', function (e) {
+    //    if ($(e.target).data('toggle') !== 'popover'
+    //        && $(e.target).parents('[data-toggle="popover"]').length === 0
+    //        && $(e.target).parents('.popover.in').length === 0) {
+    //        $('[data-toggle="popover"]').popover('hide');
+    //    }
+    //});
+    //$('body').on('click', function (e) {
+    //    $('.homepopover').each(function () {
+    //        if ($(this).attr('aria-describedby') != null) {
+    //            var id = $(this).attr('aria-describedby');
+    //            if (!$(e.target).closest(".popover-content").length && $(e.target).attr("aria-describedby") != id && !$(e.target).closest('[aria-describedby="' + id + '"').length) {  /* --------- Look if the click is a child of the popover box or if it's the button itself or a child of the button ---------- */
+    //                $('[aria-describedby="' + id + '"]').trigger("click");
+    //            }
+    //        }
+    //    });
+    //});
+
+    //$(window).on('load', function () {
+    //    $("[data-toggle*='dropdown']").each(function () {
+    //        var html = $(this).html();
+    //        $(this).html(html.replace(/&nbsp;/g, ''));
+    //    });
+    //});
+
+
+ 
+
+    //jQuery.noConflict();
+    //(function ($) {
+    //    $('.fromdate').datepicker({
+    //        startDate: new Date(),
+    //        //format: 'dd M, D',
+    //        format: 'yyyy-MM-dd',
+    //        autoclose: true
+    //    }).on('changeDate', function (e) {
+    //        $('.ToDate').val('');
+    //        var minDate = new Date(e.date);
+    //        $('.ToDate').datepicker('remove');
+    //        $('.ToDate').datepicker({
+    //            //format: 'dd M, D',
+    //            format: 'yyyy-MM-dd',
+    //            autoclose: true,
+    //            startDate: minDate
+    //        });
+    //    }); 
+    //    //$('.Multifromdate').datepicker({
+    //    //    startDate: new Date(),
+    //    //    format: 'yyyy-MM-dd',
+    //    //    autoclose: true
+    //    //});
+    //})(jQuery);
+    //jQuery.noConflict();
+    //(function ($) {
+    //    //$('.MulticityDate').datepicker({
+    //    //    startDate: new Date(),
+    //    //    format: 'dd M, D',
+    //    //    autoclose: true
+    //    //});
+    //})(jQuery);
+
+
+    jQuery.noConflict();
+    $(document).ready(function () {
+        (function ($) {            
+            $('.fromdateVal').datepicker({
+                startDate: new Date(),
+                //dateFormat: "yy-mm-dd",
+                //format: 'yyyy-MM-dd',
+                dateFormat: "yy-mm-dd",
+                uiLibrary: 'bootstrap4',
+                minDate: 0,
+                autoclose: true
+            }).on('changeDate', function (e) {
+                debugger;
+                $('.ToDateVal').val('');
+                var minDate = new Date(e.date);
+                $('.ToDateVal').datepicker('remove');                
+                $('.ToDateVal').datepicker({                    
+                    format: 'yyyy-MM-dd',                    
+                    //dateFormat: "yy-mm-dd",
+                    //format: 'yyyy-MM-dd',
+                    autoclose: true,
+                    startDate: minDate
+                });
+            });
+            $('.ToDateVal').datepicker({
+                //startDate: new Date(),
+                dateFormat: "yy-mm-dd",
+                uiLibrary: 'bootstrap4',
+                minDate: 0,
+                autoclose: true
+            });
+        })(jQuery);
+        jQuery.noConflict();
+        (function ($) {
+            //$('.MulticityDate').datepicker({
+            //    startDate: new Date(),
+            //    format: 'dd M, D',
+            //    autoclose: true
+            //});
+        })(jQuery);
+    });
+
+
+   
+</script>
+
