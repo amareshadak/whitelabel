@@ -1,0 +1,76 @@
+﻿@model WHITELABEL.Web.Areas.Distributor.Models.DistributorCommissionSlabTaggingModelView
+@{
+    ViewBag.Title = "Bulk Merchant Commission Tagging";
+    Layout = "~/Areas/Distributor/Views/Shared/_LayoutDistributor.cshtml";
+}
+
+@using (Html.BeginForm("BulkMerchantCommissionTagging", "DistributorCommissionTag", FormMethod.Post, new { area = "Distributor", enctype = "multipart/form-data" }))
+{
+
+    @Html.AntiForgeryToken()
+    <div class="full-content margin-top-20">
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="col-md-12 row headcolor">
+                    <div class="col-md-4" style="text-align:left; padding-top:3px;"><i class="fa fa-list fa-3x"></i></div>
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4" style="text-align:right; padding-top:10px;">
+                        <h3>Bulk Commission Tag</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="col-md-12 row">
+                            <div class="col-md-3 row"></div>
+                            <div class="col-md-3 row">@Html.DropDownListFor(model => model.RECHARGE_SLAB, new SelectList((ViewBag.MobileSlab) as SelectList, "Value", "Text"), "--Select Mobile Slab--", new { id = "ddlMobileSlabDetails", @class = "form-control" }) </div>
+                            <div class="col-md-3 row">@Html.DropDownListFor(model => model.BILLPAYMENT_SLAB, new SelectList((ViewBag.UtilitySlab) as SelectList, "Value", "Text"), "--Select Utility Slab--", new { id = "ddlMobileSlabDetails", @class = "form-control" })</div>
+                            <div class="col-md-3 row">@*@Html.DropDownListFor(model => model.DMR_SLAB, new SelectList((ViewBag.DMRSLAB) as SelectList, "Value", "Text"), "--Select Mobile Slab--", new { id = "ddlMobileSlabDetails", @class = "form-control" })*@</div>
+                        </div>
+                        <div class="col-md-12 row" style=" padding-top:20px;">
+                            <div class="col-md-3"></div>
+                            <div class="col-md-6 row">
+                                <div class="col-md-4">Upload Member ID List(csv file) </div>
+                                <div class="col-md-4">@Html.TextBox("file", "", new { type = "file" })</div>
+                                <div class="col-md-4"> <a href="#" style="color:red;"><b style="color:red!important">@Html.ActionLink("Sample csv file format for upload", "downloadfiles", "DistributorCommissionTag", new { area = "Distributor" }, new { }) </b></a>
+                                </div>
+                            </div>
+                            <div class="col-md-3">                               
+                            </div>
+                        </div>
+                        <div class="col"></div>
+
+                    </div>
+
+                    <div class="card-footer" style="text-align:center">
+                        <input type="submit" value="Upload File" class="btn btn-primary" />
+                        @if (TempData["msgVal"] != null)
+                        {
+                            <div id="informationMessage" class="text-center alert alert-success">
+                                <span style="width:100%;text-align:center;">@TempData["msgVal"].ToString() </span>
+                                @*@if (Session["msgVal"].ToString() == "File Uploaded Successfully!!" || Session["msgVal"].ToString() == "File upload failed!!")
+                                    {
+                                        Session.Remove("msgVal");
+                                        Session["msgVal"] = null;
+                                        Session["msgVal"] = "";
+                                    }*@
+                            </div>
+                        }
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            window.setTimeout(function () {
+                $("#informationMessage").fadeOut('slow');
+            }, 2000);
+        });
+
+    </script>
+}
+

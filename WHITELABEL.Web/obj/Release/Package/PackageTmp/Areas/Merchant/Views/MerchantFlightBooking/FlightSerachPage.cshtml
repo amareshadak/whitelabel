@@ -1,0 +1,253 @@
+﻿
+@{
+    ViewBag.Title = "Flight Search Details";
+    Layout = "~/Areas/Merchant/Views/Shared/_RetailerLayout.cshtml";
+}
+@*<link href="~/newpanel/assets/styles/css/t-datepicker.min.css" rel="stylesheet" />
+    <link href="~/newpanel/assets/styles/css/t-datepicker-blue.css" rel="stylesheet" />*@
+
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+<script src="~/Areas/Merchant/MerchantHelperJS/FlightBooking/AirportAutocomplete.js"></script>
+<div class="content" style="margin-top:20px;">
+    <div class="display-animation" ng-app="AirportAutocompleteApp" ng-controller="AirportAutocompleteController" id="AirportAutocompleteController">
+        <div class="full-content margin-bottom-40 bg-white" id="Bill_page">
+            <div class="row example-row" style="min-height:350px;">
+                @*<div class="card" style="width:100%;">
+                    <div class="card-body">
+                        <div class=" row" style="margin-bottom:40px;">
+                            <div class="col-md-12 row">
+                                <div class="col-md-1">
+                                    <a href="#" class="btn btn-gray-200 btn-lg" style="color:black;">One way</a>
+                                </div>
+                                <div class="col-md-1">
+                                    <a href="#" class="btn btn-gray-200 btn-lg" style="color:black;">Round Trips</a>
+                                </div>
+                                <div class="col-md-10"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <form>
+                                <div class="clearfix"></div>
+                                <div class="row">
+                                    <div class="col-md-6" style="margin-bottom:10px;">
+                                        <div class=" floating-label">
+                                            <div class="inputer">
+                                                <div class="input-wrapper">
+                                                    <label for="exampleInput1">From</label>
+                                                    @*<input type="text" class="form-control" placeholder="From City" />*@
+                @*<div angucomplete-alt id="txtAutocomplete" placeholder="Type country name" pause="100"
+                                                                 selected-object="SelectedCountry" local-data="Countries" search-fields="CountryName"
+                                                                 title-field="CountryName" minlength="1" input-class="form-control" match-class="highlight">
+                                                            </div>*
+                                                        <div angucomplete-alt id="txtAutocomplete" placeholder="Type airport name" pause="100"
+                                                             selected-object="SelectedAirport" local-data="Airports" search-fields="CITYNAME" ng-model="Airport.AirportsName"
+                                                             title-field="CITYNAME" minlength="1" input-class="form-control" match-class="highlight">
+                                                        </div>
+                                                        <input type="hidden" id="AirportCode" ng-model="SelectedAirport.CITYCODE" />
+                                                        <div ng-hide="SelectedAirport">
+                                                            {{SelectedAirport.CITYCODE}}
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6" style="margin-bottom:10px;">
+                                            <div class=" floating-label">
+                                                <div class="inputer">
+                                                    <div class="input-wrapper">
+                                                        <label for="exampleInput1">To</label>
+                                                        @*<input type="text" class="form-control" placeholder="To City" />*
+                                                        <div angucomplete-alt id="txtTOAutocomplete" placeholder="Type airport name" pause="100"
+                                                             selected-object="ToAirportName" local-data="Airports" search-fields="CITYNAME" ng-model="Airport.ToAirportsName"
+                                                             title-field="CITYNAME" minlength="1" input-class="form-control" match-class="highlight">
+                                                        </div>
+                                                        <div ng-hide="ToAirportName">
+                                                            {{ToAirportName.CITYCODE}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12" style="margin-bottom:10px;">
+                                            <div class="floating-label">
+                                                <div class="inputer">
+                                                    <div class="input-wrapper">
+                                                        <label>Departure <i class="fa fa-long-arrow-alt-right"></i> Return</label>
+                                                        <div class="t-datepicker" style="max-width:100%;">
+                                                            <div class="t-check-in"></div>
+                                                            <div class="t-check-out"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*<div class="col-md-3">
+                                                <div class="floating-label">
+                                                    <div class="inputer">
+                                                        <div class="input-wrapper">
+                                                            <label for="picker2">Return</label>
+                                                            <input id="picker2" class="form-control " placeholder="yyyy-mm-dd" name="dp">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>*
+                                        <div class="col-md-6" style="margin-bottom:10px;">
+                                            <label for="exampleInput1"> Travellers & Class</label>
+                                            <input class="form-control" />
+                                        </div>
+                                        <div class="col-md-6" style="margin-bottom:10px;">
+                                            <label for="picker1">Class Type</label>
+                                            <select class="form-control">
+                                                <option>Business</option>
+                                                <option>Economy</option>
+                                                <option>First</option>
+                                                <option>Premium Economy</option>
+                                            </select>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="card-footer" style="text-align:center;">
+                            <a href="#" class="btn btn-danger btn-lg" style="color:white;">Search Flight</a>
+                        </div>
+                    </div>*@
+                <div class="card" style="width:80%">
+                    <div class="card-body" style="padding:  20px;">
+                        <form id="loginform" class="form-horizontal row" role="form">
+                            <div class="col-md-12 row" style="margin-bottom:40px;" style="margin-bottom:40px;">
+                                <div class="col-md-12 row">
+                                    <div class="col-md-2">
+                                        <a href="#" class="btn btn-gray-200 btn-lg" style="color:black;">One way</a>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <a href="#" class="btn btn-gray-200 btn-lg hfhufhf" style="color:black;">Round Trips</a>
+                                    </div>
+                                    <div class="col-md-8"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 row">
+                                <div class="col-md-12 "><label>From</label></div>
+                                <div style="margin-bottom: 25px" class="input-group col-md-10">
+                                    <input id="login-username" type="text" class="form-control" name="username" value="" placeholder="Kolkata">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-send"></i></span>
+                                </div>
+                                <div class="col-md-2">
+                                    <span style="text-align:right">
+                                        <i class="fas fa-plane-departure fa-2x"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 row">
+                                <div class="col-md-12 " style="padding-left:74px;"><label>To</label></div>
+                                <div class="col-md-2 row">
+                                    <i class="fas fa-plane-arrival fa-2x"></i>
+                                </div>
+                                <div style="margin-bottom: 25px" class="input-group col-md-10">
+                                    <input id="login-password" type="password" class="form-control" name="text" placeholder="Delhi">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-send"></i></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 row">
+                                <div><label>Departing</label></div>
+                                <div style="margin-bottom: 25px" class="input-group">
+                                    @*<input id="login-password" type="password" class="form-control" name="text" placeholder="Delhi">*@
+                                    <input id="datetimeDepartingpicker4" class="form-control " placeholder="yyyy-mm-dd" name="dp">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-send"></i></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 row">
+                                <div><label>Return</label></div>
+                                <div style="margin-bottom: 25px" class="input-group">                                    
+                                    <input id="datetimepicker4" class="form-control " placeholder="yyyy-mm-dd" name="dp">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-send"></i></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 row"></div>
+                            <div class="col-md-8 row">
+                                <div class="col-md-4 row">
+                                    <div><label>Adults</label></div>
+                                    <div style="margin-bottom: 25px" class="input-group">
+                                        <input id="login-password" type="password" class="form-control" name="text" placeholder="Delhi">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-send"></i></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 row">
+                                    <div><label>Children</label></div>
+                                    <div style="margin-bottom: 25px" class="input-group">
+                                        <input id="login-password" type="password" class="form-control" name="text" placeholder="Delhi">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-send"></i></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 row">
+                                    <div><label>Infants</label></div>
+                                    <div style="margin-bottom: 25px" class="input-group">
+                                        <input id="login-password" type="password" class="form-control" name="text" placeholder="Delhi">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-send"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 row">
+                                <div><label>Class</label></div>
+                                <div style="margin-bottom: 25px" class="input-group">
+                                    <select class="form-control">
+                                        <option selected>Choose...</option>
+                                        <option>...</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input id="login-remember" type="checkbox" name="remember" value="1"> Show direct  flight only
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 row">
+                                <div class="checkbox">
+                                    <label>
+                                        <input id="login-remember" type="checkbox" name="remember" value="1"><img src="~/images/air_india.png" />
+                                    </label>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card-footer" style="padding:  20px; text-align:center;">
+                        <a href="#" class="btn btn-danger btn-lg" style="color:white;">Search Flight</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.css"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+
+
+@*<script type="text/javascript">
+        $(function () {
+            // Bootstrap DateTimePicker v4
+            $('#datetimepicker4').datetimepicker({
+                format: 'DD/MM/YYYY'
+            });
+        });
+    </script>*@
+<script>
+    $(document).ready(function () {
+        $('#datetimepicker4').datetimepicker({
+            format: 'DD/MM/YYYY'
+        });
+        // Call global the function
+        $('.t-datepicker').tDatePicker({
+            format: 'DD/MM/YYYY'
+            // options here
+        });
+    });
+</script>
+

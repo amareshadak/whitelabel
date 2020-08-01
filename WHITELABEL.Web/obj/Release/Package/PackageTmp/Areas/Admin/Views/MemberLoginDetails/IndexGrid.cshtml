@@ -1,0 +1,40 @@
+﻿@using NonFactors.Mvc.Grid;
+@using WHITELABEL.Web.Helper;
+@model IEnumerable<WHITELABEL.Data.Models.TBL_TRACE_MEMBER_LOGIN_DETAILS>
+@{
+    ViewBag.Title = "IndexGrid";
+    Layout = null;
+}
+
+
+
+
+@(Html
+                                        .Grid(Model)
+                                        .Build(columns =>
+                                        {
+                                            columns.Add(model => model.ID).Titled("Sln").Filterable(true).Sortable(true);
+                                            columns.Add(model => model.MEM_ID).Titled("Mem Id").Filterable(true).Sortable(true);
+                                            columns.Add(model => model.From_Member_Name).Titled("Member Name").Filterable(true).Sortable(true);
+                                            columns.Add(model => model.LOGINTIME).Titled("Login Time").Filterable(true).Sortable(true);
+                                            columns.Add(model => model.LOGOUTTIME).Titled("Logout Time").Filterable(true).Sortable(true);
+                                            columns.Add(model => model.IP_ADDRESS).Titled("Ip Address").Filterable(true).Sortable(true);
+                                        })
+                                        .Css("css-classes")
+                                        .AppendCss("table table-striped")
+                                        .Empty("No data found")
+                                        .Id("my-ajax-grid")
+                                        .Pageable(pager =>
+                                        {
+                                            pager.PagesToDisplay = 5;
+                                            pager.RowsPerPage = 5;
+                                        })
+                                        .Filterable()
+                                        .Sortable()
+)
+
+<style>
+    .RowColorchange {
+        background-color: sandybrown;
+    }
+</style>

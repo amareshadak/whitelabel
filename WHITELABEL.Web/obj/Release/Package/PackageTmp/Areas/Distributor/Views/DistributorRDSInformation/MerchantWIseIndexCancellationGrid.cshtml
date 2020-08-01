@@ -1,0 +1,48 @@
+﻿
+@using NonFactors.Mvc.Grid;
+@using WHITELABEL.Web.Helper;
+@model IEnumerable<WHITELABEL.Data.Models.TBL_FINAL_CANCELLATION>
+@{
+    ViewBag.Title = "MerchantCancellationIndexGrid";
+    //Layout = "~/Areas/Distributor/Views/Shared/_LayoutDistributor.cshtml";
+    Layout = null;
+}
+
+
+@(Html
+                                                .Grid(Model)
+                                                .Build(columns =>
+                                                {
+                                                    columns.Add(model => model.SLN).Titled("Sln").Filterable(true).Sortable(true);
+                                                    columns.Add(model => model.CANCELLATION_ID).Titled("Cancellation Id").Filterable(true).Sortable(true);
+                                                    columns.Add(model => model.CANCELLATION_TYPE).Titled("Cancellation Type").Filterable(true).Sortable(true);
+                                                    columns.Add(model => model.TRN_ID).Titled("Txn Id").Filterable(true).Sortable(true);
+                                                    columns.Add(model => model.PNR_NO).Titled("Pnr").Filterable(true).Sortable(true);
+                                                    columns.Add(model => model.OPR_ID).Titled("Opr Id").Filterable(true).Sortable(true);
+                                                    columns.Add(model => model.REFUND_AMT).Titled("Refund Amt ").Filterable(true).Sortable(true);
+                                                    columns.Add(model => model.TRN_DATE).Formatted("{0:yyyy-MM-dd}").Titled("Tranx Date").Filterable(true).Sortable(true);
+                                                    columns.Add(model => model.WT_AUTO_CAN).Titled("Wt Auto Can").Filterable(true).Sortable(true);
+                                                    columns.Add(model => model.TDR_CAN).Titled("TDR Can").Filterable(true).Sortable(true);
+                                                    columns.Add(model => model.ADDN_CHARGE_MAX_VAL).Titled("Addn. Charges Apply").Filterable(true).Sortable(true);
+                                                    columns.Add(model => model.TOTAL_NET_PAYBLE_WITHOUT_GST).Titled("Total Netamt Without GST ").Filterable(true).Sortable(true);
+                                                    columns.Add(model => model.TOTAL_NET_PAYBLE_GST).Titled("Total Netamt With GST ").Filterable(true).Sortable(true);
+                                                    columns.Add(model => model.TOTAL_NET_PAYBLE).Titled("Total Netamt").Filterable(true).Sortable(true);
+
+                                                })
+                                                .Css("css-classes")
+                                                .AppendCss("table table-striped")
+                                                .Empty("No data found")
+                                                .Id("my-ajax-grid")
+                                                .Pageable(pager =>
+                                                {
+                                                    pager.PagesToDisplay = 15;
+                                                    pager.RowsPerPage = 15;
+                                                })
+                                                .Filterable()
+                                                .Sortable()
+)
+
+
+
+
+

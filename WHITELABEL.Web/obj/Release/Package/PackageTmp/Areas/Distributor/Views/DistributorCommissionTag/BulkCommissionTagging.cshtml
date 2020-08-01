@@ -1,0 +1,126 @@
+﻿@model WHITELABEL.Data.Models.TBL_DETAILS_MEMBER_COMMISSION_SLAB
+@{
+    ViewBag.Title = "Bulk Commission Tagging";
+    Layout = "~/Areas/Distributor/Views/Shared/_LayoutDistributor.cshtml";
+}
+
+<script src="~/Areas/Distributor/DistributorHelperJS/DistributorCommissionTaggingJs/BulkCommissionTagging.js"></script>
+<script src="~/Scripts/dirPagination.js"></script>
+<div ng-app="BulkMerchantCommissionSlabTagging" ng-controller="DistributorTagCommissionSlab" ng-init="FetchAllMerchant()" class="form-horizontal padding-top-20">
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-12 row headcolor">
+                <div class="col-md-4" style="text-align:left; padding-top:3px;"><i class="fa fa-funnel-dollar fa-3x"></i></div>
+                <div class="col-md-4"></div>
+                <div class="col-md-4" style="text-align:right; padding-top:10px;">
+                    <h3>
+                        Merchant Commission Tagging
+                    </h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="card">
+                <div class="panel-heading">
+                    <div class="card-title row">
+                        <div class="col-md-4" style="padding-top:20px;">
+                            <select data-ng-model="MobileRechargeSlabdetails" class="form-control">
+                                <option ng-repeat="list in MobileRecharge" value="{{list.SLN}}">{{list.SLAB_NAME}}</option>
+                                <option value="">Select Mobile Slab </option>
+                            </select>
+                        </div>
+                        <div class="col-md-4" style="padding-top:20px;">
+                            <select data-ng-model="UtilityRechargeSlabdetails" class="form-control">
+                                <option ng-repeat="list in UtilityRecharge" value="{{list.SLN}}">{{list.SLAB_NAME}}</option>
+                                <option value="">Select Utility Slab </option>
+                            </select>
+                        </div>
+                        <div class="col-md-4" style="padding-top:20px;">
+                            <select data-ng-model="DMRRechargeSlabdetails" class="form-control">
+                                <option ng-repeat="list in DMRRecharge" value="{{list.SLN}}">{{list.SLAB_NAME}}</option>
+                                <option value="">Select DMR Slab </option>
+                            </select>
+                        </div>
+                        <div class="clearfix"> </div>
+                    </div>
+
+                </div>
+                <div class="card-body">
+                    <div id="exportMerchantdiv" class="display-animation">
+                        <table class="table table-hover" id="SalaryTable21">
+                            <thead style=" background-color:#4b5961; color:#fff;">
+                                <tr>
+                                    <th>
+                                        <input type="checkbox" id="checkAll" ng-click="ToggleSelectAll()" />
+                                    </th>
+                                    <th>
+                                        White Level ID
+                                    </th>
+                                    <th>
+                                        Recharge Slab
+                                    </th>
+                                    <th>
+                                        Bill Slab
+                                    </th>
+                                    <th>
+                                        DMR Slab
+                                    </th>
+                                    <th>
+                                        Air Slab
+                                    </th>
+                                    <th>
+                                        Bus Slab
+                                    </th>
+                                    <th>
+                                        Hotel Slab
+                                    </th>
+                                    <th>
+                                        Cash Card Slab
+                                    </th>
+                                    <th>
+                                        Edit
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody dir-paginate="m in ServiceInformation|itemsPerPage:35">
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" class="checkBox" ng-model="m.CheckId" ng-checked="selectAll" />
+
+                                    </td>
+                                    <td style="display:none;">
+                                        {{m.WHITE_LEVEL_ID}}
+                                    </td>
+                                    <td>
+                                        <input type="hidden" ng-model="m.SL_NO" ng-value="m.SL_NO" class="form-control">
+                                        <input type="hidden" ng-model="m.WHITE_LEVEL_ID" ng-value="m.WHITE_LEVEL_ID" class="form-control">
+                                        {{m.WHITELEVELNAME1}}
+                                    </td>
+                                    <td>{{m.RechargeName}}</td>
+                                    <td>{{m.BillName}}</td>
+                                    <td>{{m.DMR_SLAB_Name}}</td>
+                                    <td>{{m.AIR_SLAB_Name}}</td>
+                                    <td>{{m.BUS_SLAB_Name}}</td>
+                                    <td>{{m.HOTEL_SLAB_Name}}</td>
+                                    <td>{{m.CASHCARD_SLAB_Name}}</td>
+                                    <td> <a href="#" ng-model="m.SL_NO" ng-value="m.SL_NO" ng-click="EditValue($index)">Edit</a> </td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div style="text-align:center">
+                            <dir-pagination-controls max-size="35"
+                                                     direction-links="true"
+                                                     boundary-links="true">
+                            </dir-pagination-controls>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button id="btnExport" class="btn btn-info btn-xs"><span class="ion-forward"></span>EXPORT</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

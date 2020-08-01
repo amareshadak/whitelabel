@@ -1,0 +1,145 @@
+﻿@using NonFactors.Mvc.Grid;
+@model WHITELABEL.Data.Models.TBL_MASTER_MEMBER
+@{
+    ViewBag.Title = "Retailer List";
+    //Layout = "~/Areas/Distributor/Views/Shared/_DistributorLayout.cshtml";
+    Layout = "~/Areas/Distributor/Views/Shared/_LayoutDistributor.cshtml";
+}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal padding-top-20">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-12 row headcolor">
+                    <div class="col-md-4" style="text-align:left; padding-top:3px;"><i class="fa fa-list fa-3x"></i></div>
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4" style="text-align:right; padding-top:10px;">
+                        <h3>
+                            List of Merchant
+                        </h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+
+                <div class="card">
+
+                    <div class="card-body">
+                        <div class="card-heading" style="padding-bottom:10px;">
+                            @if (Session["msg"] != null)
+                            {
+                                <div id="informationMessage" class="text-center alert alert-success">
+                                    <span style="width:100%;text-align:center;">@Session["msg"].ToString() </span>
+                                    @if (Session["msg"].ToString() == "Data Saved Successfully" || Session["msg"].ToString() == "Data Updated Successfully")
+                                    {
+                                        Session.Remove("msg");
+                                    }
+                                </div>
+                            }
+                            <div class="card-title row ">
+                                <div class="col-md-6 text-left">
+                                    <a href="@(Url.Action("ExportIndex", "Retailer", new { area = "Distributor" }) + ViewContext.HttpContext.Request.QueryString)" class="btn btn-info btn-xs"><span class="ion-forward"></span> Export</a>
+                                </div>
+                                <div class="col-md-6 text-right"><a href="@Url.Action("CreateMember", "Retailer", new { area = "Distributor" }, null)" class="btn btn-info btn-xs text-color-white"><span class="ion-plus"></span> New Retailer</a></div>
+
+                            </div>
+                        </div><!--.panel-heading-->
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <div class="col-md-3"></div>
+                                <div class="col-md-6 row">
+                                    <div class="col-md-4"><label style="text-align:left;">Enter Search Details</label></div>
+                                    <div class="col-md-8">
+                                        <div class="inputer">
+                                            <div class="input-wrapper">
+                                                @Html.EditorFor(m => m.FromUser, new { htmlAttributes = new { @id = "txtMemberaNamedetails", style = " width:100%; padding:5px;", placeholder = "Enter Search Details", @class = "form-control" } })
+                                                @Html.HiddenFor(model => model.SUPER_ID, new { id = "hdfmemberList" })
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <a href="#" class="btn btn-primary" id="btnMerchantSearchList">Search</a>
+                                </div>
+                            </div>
+                            @*<div class="row example-row">
+                                <div class="col-md-3"></div>
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <label class="control-label col-md-3">Search Merchant</label>
+                                        <div class="col-md-9">
+                                            <div class="inputer">
+                                                <div class="input-wrapper">
+                                                    @Html.EditorFor(m => m.FromUser, new { htmlAttributes = new { @id = "txtMemberMerchant_MEM_Name", style = " width:100%; padding:5px;", placeholder = "Merchant User Name", @class = "form-control" } })
+                                                    @Html.HiddenFor(model => model.MEM_ID, new { id = "hfdMerchant_MEM_ID" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3"></div>
+                            </div>*@
+
+                            <div class="row example-row">
+                                @Html.AjaxGrid(Url.Action("IndexGrid", "Retailer", new { area = "Distributor" }))
+
+                            </div><!--.row-->
+                        </div><!--.panel-body-->
+                        <div class="panel-footer text-right">
+                        </div>
+                    </div>
+                </div><!--.panel-->
+            </div><!--.col-md-12-->
+        </div><!--.row-->
+    </div>
+    @Scripts.Render("~/bundles/RetailerAPILevel")
+
+    <script>
+        $(document).ready(function () {
+
+            window.setTimeout(function () {
+                $("#informationMessage").fadeOut('slow');
+            }, 2000);
+        });
+
+
+        $("#txtMemberMerchant_MEM_Name").change(function () {
+            var MerId = $('#txtMemberMerchant_MEM_Name').val();
+            if (MerId == '') {
+                $('#hfdMerchant_MEM_ID').val('');
+            }
+        });
+
+
+        $("#txtMemberMerchant_MEM_Name").change(function () {
+            var MerId = $('#hfdMerchant_MEM_ID').val();
+            
+            $('.mvc-grid').mvcgrid({
+                query: 'MerID=' + MerId,
+                reload: true,
+                reloadStarted: function () {
+                    $(".divFooterTotalComm").remove();
+                },
+            });
+        });
+
+
+        $("#btnMerchantSearchList").on("click", function () {
+            var MEm_Id = $("#txtMemberaNamedetails").val();
+            $('.mvc-grid').mvcgrid({
+                //query: 'MerID=' + MerId + '&DateFrom=' + Date_From + '&Date_To=' + Date_TO,
+                query: 'SearchVal=' + MEm_Id,
+                reload: true,
+                reloadStarted: function () {
+                    $(".divFooterTotalComm").remove();
+                },
+            });
+        });
+
+    </script>
+}
+
+
