@@ -265,7 +265,7 @@
                                         </div>
                                         <div class="clr marginT10" data-cy="flightItem_CCUDEL20200624ESG:SG130:0">
                                             <div class="flexCol whiteBg brdrRd5 fltHpyRsltCard brdrRd5 marginT10" infinite-scroll="loadMore()">
-                                                <div class="fl width100 flexCol" ng-repeat="itemval in flightsearchResult | filter:FilterByStopsNAN | limitTo:numberToDisplay">
+                                                <div class="fl width100 flexCol" ng-repeat="itemval in flightsearchResult | toArray:false  | filter:FilterByStopsNAN | limitTo:numberToDisplay">
                                                     <div class="fl width100 dF padLR20 padT10">
                                                         <div class="col-md-8 col-sm-8 col-xs-8 padLR0">
                                                             <div class="flexCol width100 padT5 ">
@@ -380,7 +380,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="fl width100 flexCol" ng-repeat="(key, itemval) in flightsearchResult | groupBy: 'TrackNo' | filter:FilterByStops | limitTo:numberToDisplay">
+                                                <div class="fl width100 flexCol" ng-repeat="(key, itemval) in flightsearchResult | toArray:false  | groupBy: 'TrackNo' | filter:FilterByStops | limitTo:numberToDisplay">
                                                     <div class="fl width100 dF padLR20 padT10">
                                                         <div class="col-md-8 col-sm-8 col-xs-8 padLR0">
                                                             <div class="flexCol width100 padT5 ">

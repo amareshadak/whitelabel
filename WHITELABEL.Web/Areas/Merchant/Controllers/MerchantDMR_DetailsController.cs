@@ -14,7 +14,6 @@ using System.Threading.Tasks;
 using static WHITELABEL.Web.Helper.InstantPayApi;
 using NonFactors.Mvc.Grid;
 using log4net;
-
 using com.mobileware.transxt;
 using Newtonsoft.Json;
 
@@ -159,7 +158,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
 
                 //string RESPONSE = Encryption.generateChecksum(PAYLOAD_URL_CREATE_CUST, SECRET.ToString());
                 String dmrPayload = "{\"customerId\":\"9999999999\",\"agentCode\":\"1\"}";
-                string Url = "@"+ "https://uat.transxtnow.com:8443/transxt/dev/api/1.1/dmr/fetchcustomer";
+                string Url = "@" + "https://uat.transxtnow.com:8443/transxt/dev/api/1.1/dmr/fetchcustomer";
 
                 string response = TransXTCommunicator.execute(dmrPayload, Url);
 
@@ -173,7 +172,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                     };
                 string OTPvalueparameter11 = JsonConvert.SerializeObject(GeneratingOtpParam11);
 
-                string ObjParam= OTPvalueparameter11.Replace(("\\"), String.Empty);
+                string ObjParam = OTPvalueparameter11.Replace(("\\"), String.Empty);
                 string ObjParam1 = "{'customerId':'6290665805','otpType':'1','txnId':'','agentCode':'1'}";
                 var perso = JsonConvert.DeserializeObject<dynamic>(OTPvalueparameter11);
                 string OTPdmrUrl11 = "https://uat.transxtnow.com:8443/api/1.1/dmr/otp";

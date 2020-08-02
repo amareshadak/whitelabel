@@ -53,7 +53,7 @@ app.controller('AirportAutocompleteController', function ($scope, $http, $window
     }
 
     //New Add For Traveler List
-    $scope.adultTypeTrv = '';
+    $scope.adultTypeTrv = '1';
     $scope.ChildTypeTrv = '';
     $scope.InfantTypeTrv = '';
     $scope.Tripmode = '1';
@@ -70,7 +70,7 @@ app.controller('AirportAutocompleteController', function ($scope, $http, $window
     $scope.ToAirportName = null;
     $scope.FromDate = '';
     $scope.ToDate = '';
-    $scope.TravellType = '1';
+    $scope.TravellType = 'Y';
     $scope.objListing =
         {
             travels:
@@ -113,7 +113,7 @@ app.controller('AirportAutocompleteController', function ($scope, $http, $window
         // alert('Error');
     })
     //Airport.TravellType
-
+    $scope.Airport = { Tripmode : 1 };
     $scope.SerachFlights = function () {
         debugger;
         var Tripmode = $scope.Airport.Tripmode;
@@ -296,8 +296,8 @@ app.controller('AirportAutocompleteController', function ($scope, $http, $window
             //$scope.AdultCount = Adult;
             //$scope.ChildCount = Child;
             //$scope.InfantCount = Infant;
-            var searchresponse = JSON.parse(response.data);            
-            var FlightResponse = JSON.parse(searchresponse);
+            // var searchresponse = JSON.parse(response.data);            
+            var FlightResponse = JSON.parse(response.data);
             var info = FlightResponse.GetFlightAvailibilityResponse;
             var FlightSearchDetails = FlightResponse.GetFlightAvailibilityResponse.FlightDetails;
 

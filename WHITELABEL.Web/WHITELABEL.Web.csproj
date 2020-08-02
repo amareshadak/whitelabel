@@ -439,6 +439,9 @@
     <Compile Include="Controllers\PopOverController.cs" />
     <Compile Include="Controllers\RequisitionController.cs" />
     <Compile Include="Controllers\ServiceController.cs" />
+    <Compile Include="DTO\FlightApi\AdditionalDetailsDTO.cs" />
+    <Compile Include="DTO\FlightApi\AuthenticateDTO.cs" />
+    <Compile Include="DTO\FlightApi\FlightBookingDTO.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -588,6 +591,7 @@
     <Content Include="HelperJS\AngularjsLinks\script.min.js" />
     <Content Include="HelperJS\AngularjsLinks\sidebar.large.script.min.js" />
     <Content Include="HelperJS\AngularjsLinks\ui-bootstrap-tpls-2.5.0.min.js" />
+    <Content Include="HelperJS\AngularjsLinks\ui-bootstrap-tpls-3.0.6.min.js" />
     <Content Include="HelperJS\ApiLevel\Index.js" />
     <Content Include="HelperJS\BankDetails\Index.js" />
     <Content Include="HelperJS\KYCVerification\Index.js" />

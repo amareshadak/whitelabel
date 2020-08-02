@@ -15,6 +15,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using WHITELABEL.Data;
 using WHITELABEL.Web.Areas.Merchant.Models;
+using WHITELABEL.Web.DTO.FlightApi;
 
 namespace WHITELABEL.Web.Helper
 {
@@ -22,7 +23,7 @@ namespace WHITELABEL.Web.Helper
     {
         private static string token = "AirticketOnlineWebSite";
         public static string root = "http://stagingv2.multilinkworld.com/";
-        
+
         public static string ApiIntegrationNew = "ApiIntegrationNew";
         public static string AgentCode = "MLD0000001";
         public static string AgentPass = "TEST1_";
@@ -59,14 +60,14 @@ namespace WHITELABEL.Web.Helper
             {
                 GetFlightAvailibilityRequest_Val.SpecialFare = "0";
             }
-            
+
             GetFlightAvailibilityRequest_Val.PreferedAirlines = objsearch.PreferredAirlines;
             GetFlightAvailibilityRequest_Val.AirlineType = "A";
             RequestXml_Val.GetFlightAvailibilityRequest = new JObject(GetFlightAvailibilityRequest_Val);
-            RequestXmlObj.RequestXml= new JObject(RequestXml_Val);
+            RequestXmlObj.RequestXml = new JObject(RequestXml_Val);
             string SearchparamValue = JsonConvert.SerializeObject(RequestXmlObj);
             var res = GetResponse(SearchparamValue, url);
-            if (res!=null)
+            if (res != null)
             {
                 return res;
             }
@@ -93,6 +94,52 @@ namespace WHITELABEL.Web.Helper
             RequestXmlObj.RequestXml = new JObject(RequestXml_Val);
             string SearchparamValue = JsonConvert.SerializeObject(RequestXmlObj);
             var res = GetResponse(SearchparamValue, url);
+            if (res != null)
+            {
+                return res;
+            }
+            else
+            {
+                return res;
+            }
+        }
+
+
+
+        public static dynamic GetAdditionalFlightDetails(string req)
+        {
+            string url = $"{root}API/AdditionalServices";
+            AdditionalDetailsDTO AdditionalDetails = JsonConvert.DeserializeObject<AdditionalDetailsDTO>(req);
+            AdditionalDetails.RequestXml.Authenticate.InterfaceCode = "1";
+            AdditionalDetails.RequestXml.Authenticate.InterfaceAuthKey = token;
+            AdditionalDetails.RequestXml.Authenticate.AgentCode = AgentCode;
+            AdditionalDetails.RequestXml.Authenticate.Password = AgentPass;
+
+            string requestObject = JsonConvert.SerializeObject(AdditionalDetails);
+
+            var res = GetResponse(requestObject, url);
+            if (res != null)
+            {
+                return res;
+            }
+            else
+            {
+                return res;
+            }
+        }
+
+        public static dynamic BookedFlightTicket(string req)
+        {
+            string url = $"{root}API/BookTicket";
+            AdditionalDetailsDTO AdditionalDetails = JsonConvert.DeserializeObject<AdditionalDetailsDTO>(req);
+            AdditionalDetails.RequestXml.Authenticate.InterfaceCode = "1";
+            AdditionalDetails.RequestXml.Authenticate.InterfaceAuthKey = token;
+            AdditionalDetails.RequestXml.Authenticate.AgentCode = AgentCode;
+            AdditionalDetails.RequestXml.Authenticate.Password = AgentPass;
+
+            string requestObject = JsonConvert.SerializeObject(AdditionalDetails);
+
+            var res = GetResponse(requestObject, url);
             if (res != null)
             {
                 return res;

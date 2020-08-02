@@ -21,6 +21,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Web.Security;
 using System.Globalization;
+using WHITELABEL.Web.DTO.FlightApi;
 
 namespace WHITELABEL.Web.Areas.Merchant.Controllers
 {
@@ -33,7 +34,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
         {
             _db = new DBContext();
         }
-       
+
 
         public void initpage()
         {
@@ -69,7 +70,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
         {
             if (Session["MerchantUserId"] != null)
             {
-                initpage();               
+                initpage();
                 return View();
             }
             else
@@ -117,7 +118,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
             ViewBag.TOAirportCode = TOAirportCode;
             //DateTime FromDtaeCheckFormat= Convert.ToDateTime(FromDate);
             //string DateFromValue = FromDtaeCheckFormat.ToString("dd/MM/yyyy");
-//            ViewBag.FromDate = DateFromValue;
+            //            ViewBag.FromDate = DateFromValue;
             ViewBag.FromDate = FromDate;
             //ViewBag.FromDate = "06/23/2020";
             ViewBag.ToDate = ToDate;
@@ -208,7 +209,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                 objflightsearch.Sources = "6E";
                 dynamic searchflight = MultiLinkAirAPI.SerachFlight(objflightsearch);
                 var data = JsonConvert.SerializeObject(searchflight);
-                  return Json(data, JsonRequestBehavior.AllowGet);
+                return Json(data, JsonRequestBehavior.AllowGet);
                 //return Json(DateDeparting, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
@@ -278,7 +279,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
             return View();
         }
 
-        public ActionResult FlightDetails(string TrackNo="", string PsgnAdult="",string PsgnChildren="",string PsgnInfant="",string TripMode="")
+        public ActionResult FlightDetails(string TrackNo = "", string PsgnAdult = "", string PsgnChildren = "", string PsgnInfant = "", string TripMode = "")
         {
             try
             {
@@ -298,7 +299,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
         {
             try
             {
-             
+
                 dynamic VerifyFlight = MultiLinkAirAPI.VerifyFlightDetails(TrackNo, TripMode);
                 var data = JsonConvert.SerializeObject(VerifyFlight);
                 return Json(data, JsonRequestBehavior.AllowGet);
@@ -322,6 +323,24 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
             {
 
                 throw ex;
+            }
+
+        }
+        #endregion
+
+        #region Flight Additional Services
+        [HttpPost]
+        public JsonResult GetFlightAdditionalDetails(string req)
+        {
+            try
+            {
+                dynamic VerifyFlight = MultiLinkAirAPI.GetAdditionalFlightDetails(req);
+                var data = JsonConvert.SerializeObject(VerifyFlight);
+                return Json(data, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
             }
 
         }

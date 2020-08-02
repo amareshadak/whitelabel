@@ -16,10 +16,10 @@
         "PassportExpDate": "",
         "PassportIssuingCountry": "IND",
         "NationalityCountry": "IND",
-        "label":""
+        "label": ""
     };
-    // reqObj.fl
-    $scope.reqObj = {
+
+    $scope.bookingRequestObj = {
         "RequestXml": {
             "Authenticate": {
                 "InterfaceCode": "1",
@@ -36,60 +36,60 @@
                 "ClientRequestID": "",
                 "Passengers": {
                     "Passenger": $scope.passengers
-                    
+
                 },
                 "Segments": {
                     "Segment": [
-                      {
-                          "TrackNo": "0$30882|16|1SCO",
-                          "SegmentSeqNo": "1",
-                          "AirlineCode": "SG",
-                          "FlightNo": "921",
-                          "FromAirportCode": "AMD",
-                          "ToAirportCode": "BLR",
-                          "DepDate": "15/05/2019",
-                          "DepTime": "05:50",
-                          "ArrDate": "15/05/2019",
-                          "ArrTime": "08:10",
-                          "FlightClass": "CLS",
-                          "MainClass": "Y"
-                      },
-                      {
-                          "TrackNo": "0$30882|16|1SCO",
-                          "SegmentSeqNo": "2",
-                          "AirlineCode": "SG",
-                          "FlightNo": "657",
-                          "FromAirportCode": "BLR",
-                          "ToAirportCode": "CCU",
-                          "DepDate": "15/05/2019",
-                          "DepTime": "10:40",
-                          "ArrDate": "15/05/2019",
-                          "ArrTime": "13:05",
-                          "FlightClass": "CLS",
-                          "MainClass": "Y"
-                      }
+                        {
+                            "TrackNo": "0$30882|16|1SCO",
+                            "SegmentSeqNo": "1",
+                            "AirlineCode": "SG",
+                            "FlightNo": "921",
+                            "FromAirportCode": "AMD",
+                            "ToAirportCode": "BLR",
+                            "DepDate": "15/05/2019",
+                            "DepTime": "05:50",
+                            "ArrDate": "15/05/2019",
+                            "ArrTime": "08:10",
+                            "FlightClass": "CLS",
+                            "MainClass": "Y"
+                        },
+                        {
+                            "TrackNo": "0$30882|16|1SCO",
+                            "SegmentSeqNo": "2",
+                            "AirlineCode": "SG",
+                            "FlightNo": "657",
+                            "FromAirportCode": "BLR",
+                            "ToAirportCode": "CCU",
+                            "DepDate": "15/05/2019",
+                            "DepTime": "10:40",
+                            "ArrDate": "15/05/2019",
+                            "ArrTime": "13:05",
+                            "FlightClass": "CLS",
+                            "MainClass": "Y"
+                        }
                     ]
                 },
                 "AdditionalServices": {
                     "AdditionalService": [
-                      {
-                          "PaxSeqNo": "1",
-                          "FromStationCode": "AMD",
-                          "ToStationCode": "BLR",
-                          "Type": "Meal",
-                          "Amount": "275.0000",
-                          "ServiceCode": "VGML",
-                          "ServiceFlightKey": "20190515-SG-921-AMDBLR"
-                      },
-                      {
-                          "PaxSeqNo": "2",
-                          "FromStationCode": "AMD",
-                          "ToStationCode": "BLR",
-                          "Type": "Meal",
-                          "Amount": "275.0000",
-                          "ServiceCode": "VGML",
-                          "ServiceFlightKey": "20190515-SG-921-AMDBLR"
-                      }
+                        {
+                            "PaxSeqNo": "1",
+                            "FromStationCode": "AMD",
+                            "ToStationCode": "BLR",
+                            "Type": "Meal",
+                            "Amount": "275.0000",
+                            "ServiceCode": "VGML",
+                            "ServiceFlightKey": "20190515-SG-921-AMDBLR"
+                        },
+                        {
+                            "PaxSeqNo": "2",
+                            "FromStationCode": "AMD",
+                            "ToStationCode": "BLR",
+                            "Type": "Meal",
+                            "Amount": "275.0000",
+                            "ServiceCode": "VGML",
+                            "ServiceFlightKey": "20190515-SG-921-AMDBLR"
+                        }
                     ]
                 },
                 "TotalAmount": "",
@@ -100,24 +100,45 @@
             }
         }
     };
-
     
+    $scope.additionaServicesObj = {
+        "RequestXml": {
+            "Authenticate": {
+                "InterfaceCode": "",
+                "InterfaceAuthKey": "",
+                "AgentCode": "",
+                "Password": ""
+            },
+            "GetAdditionalServicesRequest": {
+                "TrackNo": ''
+            }
+        }
+    };
+
     $scope.loadFlightDetails = function (trackNo, tripMode) {
         const data = { TrackNo: trackNo, TripMode: tripMode };
         const service = FlightServices.getFlightVerificationDetails(data);
         service.then(function (response) {
             const data = response.data;
-            const verifyFlightDetailResponse = JSON.parse(JSON.parse(data)).VerifyFlightDetailResponse;
+            const verifyFlightDetailResponse = JSON.parse(data).VerifyFlightDetailResponse;
             const flightDetails = verifyFlightDetailResponse.FlightDetails;
             const fareDetails = verifyFlightDetailResponse.FareDetails;
-
+            debugger
             $scope.flightDetails = flightDetails;
             $scope.fareDetails = fareDetails;
             $scope.detailsLoadingError = verifyFlightDetailResponse.Error;
-            $scope.trackNumber = $scope.flightDetails[0].TrackNo;
+            $scope.additionaServicesObj.RequestXml.GetAdditionalServicesRequest.TrackNo = $scope.flightDetails[0].TrackNo;
+            $scope.loadAdditionalServices();
 
-            console.log($scope.flightDetails)
-            console.log($scope.fareDetails)
+        });
+    }
+
+    $scope.loadAdditionalServices = function () {
+        const req = { req: JSON.stringify($scope.additionaServicesObj) };
+        const service = FlightServices.getAdditionalServices(req);
+        service.then(function (response) {
+            const data = response.data;
+            console.log(data);
         });
     }
 
@@ -126,8 +147,7 @@
         $scope.adult = adult ? parseInt(adult) : 0;
         debugger;
         if ($scope.adult > 0) {
-            for (let i=1; i <= $scope.adult; i++)
-            {
+            for (let i = 1; i <= $scope.adult; i++) {
                 let objCopy = Object.assign({}, pessengerObj);
                 objCopy.PaxSeqNo = i;
                 objCopy.PassengerType = "A";
@@ -137,7 +157,7 @@
         }
         $scope.child = child ? parseInt(child) : 0;
         if ($scope.child > 0) {
-            for (let i=1; i <= $scope.child; i++) {
+            for (let i = 1; i <= $scope.child; i++) {
                 let objCopy = Object.assign({}, pessengerObj);
                 objCopy.PaxSeqNo = $scope.passengers.length + i;
                 objCopy.PassengerType = "C";
@@ -147,7 +167,7 @@
         }
         $scope.infant = infant ? parseInt(infant) : 0;
         if ($scope.infant > 0) {
-            for (let i=1; i <= $scope.infant; i++) {
+            for (let i = 1; i <= $scope.infant; i++) {
                 let objCopy = Object.assign({}, pessengerObj);
                 objCopy.PaxSeqNo = $scope.passengers.length + i;
                 objCopy.PassengerType = "I";
@@ -155,18 +175,17 @@
                 $scope.passengers.push(objCopy)
             }
         }
-    
+
     }
 
     $scope.getAirDate = function (airDate) {
         if (!airDate) return new Date();
-        const dateMomentObject = moment(airDate, "DD/MM/YYYY"); 
+        const dateMomentObject = moment(airDate, "DD/MM/YYYY");
         const dateObject = dateMomentObject.toDate();
         return dateObject;
     }
 
-    $scope.calculateDurationTime = function(n)
-    {
+    $scope.calculateDurationTime = function (n) {
         var minutes = n % 60
         var hours = (n - minutes) / 60
         return hours + " hr " + minutes + " m";

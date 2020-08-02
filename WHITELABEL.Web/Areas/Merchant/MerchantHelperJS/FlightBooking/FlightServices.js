@@ -8,7 +8,15 @@
         });
         return request;
     };
-    
+
+    this.getAdditionalServices = function (data) {
+        var request = $http({
+            method: "POST",
+            data: data,
+            url: "/Merchant/MerchantFlightDetails/GetFlightAdditionalDetails"
+        });
+        return request;
+    }
 
 
 }]);
