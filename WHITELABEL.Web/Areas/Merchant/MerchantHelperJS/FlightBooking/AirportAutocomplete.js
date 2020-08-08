@@ -590,29 +590,7 @@ app.controller('AirportAutocompleteController', function ($scope, $http, $window
         alert(JSON.stringify($item));
     };
 
-    //$scope.getFlightDetails = function (item, Passenger, IsLCC, TripMode) {
-    $scope.getFlightDetails = function (Adult,Children,Infant, TrackNo,TripMode) {
-        debugger;
-        var Tracevalue =JSON.parse(window.localStorage.getItem("SearchTraceDetails"));
-        var timevalue = new Date(Tracevalue.Time);
-        var TraceId = Tracevalue.Token;
-        const currDate = new Date();
-        const oldDate = timevalue;
-
-        var list = (currDate - oldDate) / 60000;
-        if (list <= 15) {
-            //window.location.href = '/Merchant/MerchantFlightBooking/FlightBooking?BookingValue=' + item + '&token=' + TraceId + '&Passenger=' + Passenger + '&TripMode=' + TripMode + '&IsLCC=' + IsLCC;;
-            window.location.href = '/Merchant/MerchantFlightDetails/FlightBookingDetails?TrackNo=' + TrackNo + '&PsgnAdult=' + Adult + '&PsgnChildren=' + Children + '&PsgnInfant=' + Infant + '&TripMode=' + TripMode;
-        }
-        else {
-            bootbox.alert({
-                message: "Session is expired.Please search again",
-                backdrop: true
-            });
-        }
-    };
-
-
+    
     $scope.getMultiSearchDetailsOfFlight = function (ResultIndex, TripMode, Passenger) {
         debugger;
         var Tracevalue = JSON.parse(window.localStorage.getItem("SearchTraceDetails"));

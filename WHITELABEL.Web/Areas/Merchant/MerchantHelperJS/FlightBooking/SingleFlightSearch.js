@@ -165,8 +165,8 @@
 
             $scope.lower_price_bound = $scope.minAmount;
             $scope.upper_price_bound = $scope.maxAmount;
-            $scope.min = $scope.minAmount - 500;
-            $scope.max = $scope.maxAmount + 500;
+            $scope.min = $scope.minAmount;
+            $scope.max = $scope.maxAmount;
 
             const myObj = { Time: new Date(), Token: FlightSearchDetails };
             localStorage.setItem('searchResult', null);
@@ -222,4 +222,27 @@
     $scope.parseNumber = function (value) {
         return parseInt(value);
     }
+
+
+    $scope.getFlightDetails = function (Adult, Children, Infant, TrackNo, TripMode) {
+        var Tracevalue = JSON.parse(window.localStorage.getItem("SearchTraceDetails"));
+        var timevalue = new Date(Tracevalue.Time);
+        var TraceId = Tracevalue.Token;
+        const currDate = new Date();
+        const oldDate = timevalue;
+
+        var list = (currDate - oldDate) / 60000;
+        if (list <= 15) {
+            //window.location.href = '/Merchant/MerchantFlightBooking/FlightBooking?BookingValue=' + item + '&token=' + TraceId + '&Passenger=' + Passenger + '&TripMode=' + TripMode + '&IsLCC=' + IsLCC;;
+            window.location.href = '/Merchant/MerchantFlightDetails/FlightBookingDetails?TrackNo=' + TrackNo + '&PsgnAdult=' + Adult + '&PsgnChildren=' + Children + '&PsgnInfant=' + Infant + '&TripMode=' + TripMode;
+        }
+        else {
+            bootbox.alert({
+                message: "Session is expired.Please search again",
+                backdrop: true
+            });
+        }
+    };
+
+
 }]);
