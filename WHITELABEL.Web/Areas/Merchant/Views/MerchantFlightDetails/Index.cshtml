@@ -20,8 +20,8 @@
                                 <div class="row justify-content-md-center">
                                     <div class="col-md-auto">
                                         <div class="btn-group">
-                                            <label class="btn btn-primary" style="width:180px" ng-model="Airport.Tripmode" uib-btn-radio="'1'" uncheckable>One Way</label>
-                                            <label class="btn btn-primary" style="width:180px" ng-model="Airport.Tripmode" uib-btn-radio="'2'" uncheckable>Round Trip</label>
+                                            <label class="btn btn-primary active" style="width:180px" ng-model="Airport.Tripmode" uib-btn-radio="1" uncheckable>One Way</label>
+                                            <label class="btn btn-primary" style="width:180px" ng-model="Airport.Tripmode" uib-btn-radio="2" uncheckable>Round Trip</label>
                                             <label class="btn btn-primary" style="width:180px" ng-disabled="true" ng-model="Airport.Tripmode" uib-btn-radio="'3'" uncheckable>Multi City</label>
                                         </div>
                                     </div>
@@ -40,7 +40,7 @@
                                                  title-field="CITYNAME" minlength="1" input-class="form-control" match-class="highlight">
                                             </div>
                                             <input type="hidden" id="AirportCode" ng-model="SelectedAirport.CITYCODE" />
-                                            <div ng-hide="SelectedAirport">
+                                            <div ng-hide="SelectedAirport" ng-cloak>
                                                 {{SelectedAirport.CITYCODE}}
                                             </div>
                                         </div>
@@ -52,7 +52,7 @@
                                                  selected-object="ToAirportName" local-data="Airports" search-fields="CITYNAME" ng-model="Airport.ToAirportsName"
                                                  title-field="CITYNAME" minlength="1" input-class="form-control" match-class="highlight">
                                             </div>
-                                            <div ng-hide="ToAirportName">
+                                            <div ng-hide="ToAirportName" ng-cloak>
                                                 {{ToAirportName.CITYCODE}}
                                             </div>
                                         </div>

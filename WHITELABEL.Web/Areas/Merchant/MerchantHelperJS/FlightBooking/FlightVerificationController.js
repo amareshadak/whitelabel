@@ -113,7 +113,7 @@
                 "TrackNo": ''
             }
         }
-    };
+    };    $scope.ServicesMeals = [];    $scope.ServicesSeats = [];    $scope.ServicesBaggage = [];
 
     $scope.loadFlightDetails = function (trackNo, tripMode) {
         const data = { TrackNo: trackNo, TripMode: tripMode };
@@ -123,7 +123,7 @@
             const verifyFlightDetailResponse = JSON.parse(data).VerifyFlightDetailResponse;
             const flightDetails = verifyFlightDetailResponse.FlightDetails;
             const fareDetails = verifyFlightDetailResponse.FareDetails;
-            debugger
+            
             $scope.flightDetails = flightDetails;
             $scope.fareDetails = fareDetails;
             $scope.detailsLoadingError = verifyFlightDetailResponse.Error;
@@ -137,9 +137,10 @@
         const req = { req: JSON.stringify($scope.additionaServicesObj) };
         const service = FlightServices.getAdditionalServices(req);
         service.then(function (response) {
-            const data = response.data;
-            console.log(data);
-        });
+            const data = JSON.parse(response.data).GetAdditionalServicesResponse.SSRResponses[0].SSRResponse;
+
+            $scope.ServicesMeals = data.filter(x => { return x.Type == 'Meal'; });            $scope.ServicesSeats = data.filter(x => { return x.Type == 'Seat'; });;            $scope.ServicesBaggages = data.filter(x => { return x.Type == 'Baggage'; });;
+        })
     }
 
     $scope.populatePesengerList = function (adult, child, infant) {

@@ -1,5 +1,14 @@
 ﻿app.service("FlightServices", ['$http', function ($http) {
 
+    this.getFlightSingleSearchDetails = function (data) {
+        var request = $http({
+            method: "POST",
+            data: data,
+            url: "/Merchant/MerchantFlightDetails/SerachFlight"
+        });
+        return request;
+    };
+
     this.getFlightVerificationDetails = function (data) {
         var request = $http({
             method: "POST",
@@ -17,6 +26,5 @@
         });
         return request;
     }
-
 
 }]);

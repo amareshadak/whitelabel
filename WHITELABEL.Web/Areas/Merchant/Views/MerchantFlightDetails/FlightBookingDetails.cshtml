@@ -601,13 +601,13 @@
                                                         <div class="fl width100 padTB10">
                                                             <div class="fl width100 padLR10 padTB10">
                                                                 <i class="fl icon-flight_line1 ico18 mobdn blue "></i>
-                                                                <span class="fl mobdn ico18 padL10" ng-show="flightDetails[0].FromAirportName" ng-cloak>{{flightDetails[0].FromAirportName}} to {{flightDetails[flightDetails.length - 1].ToAirportName}} {{getAirDate(flightDetails[0].ArrDate) | date : 'EEEE, dd MMM yyyy'}}</span>
+                                                                <span class="fl mobdn ico18 padL10" ng-cloak>{{flightDetails[0].FromAirportName}} to {{flightDetails[flightDetails.length - 1].ToAirportName}} {{getAirDate(flightDetails[0].ArrDate) | date : 'EEEE, dd MMM yyyy'}}</span>
                                                                 <span class="fr txtTransUpper white ico11 brRadius2 pad5 greenBgLt">Partially Refundable</span>
                                                                 <a class="fr pad5 mobTxtRight ico12 txtUln">Baggage and Fare Rules</a>
                                                             </div>
                                                             <div class="borderAll posRel whiteBg brRadius5 fl width100 fl padTB10">
                                                                 <div class="bkHalfCircleTop mobdn bkHalfCirctop posAbs"></div>
-                                                                <div ng-repeat="item in flightDetails">
+                                                                <div ng-repeat="item in flightDetails" ng-cloak>
                                                                     <div class="fl width100 bkFlt padLR20 padTB10">
                                                                         <div class="col-md-2 padT10 col-sm-2 col-xs-3 bkAirlineLogo">
                                                                             <span class="db padB5"><img src="//goibibo.ibcdn.com/images/v2/carrierImages/6E.gif" class="flightImagesNew" alt="flights icon"></span>
@@ -616,7 +616,8 @@
                                                                         </div>
                                                                         <div class="col-md-3 col-sm-3 col-xs-4 padL20">
                                                                             <span class="co12 db grey">{{getAirDate(item.DepDate) | date: 'EEE MMM dd yyyy'}}</span>
-                                                                            <span class="ico20 db padT5 padB10">{{item.FromAirportCode}}
+                                                                            <span class="ico20 db padT5 padB10">
+                                                                                {{item.FromAirportCode}}
                                                                                 <span class="fb mobdb">{{item.DepTime}}</span>
                                                                             </span><span class="ico13 db greyLter lh1-2 mobdn">
                                                                                 <span class="db">{{item.FromAirportName}}</span>
@@ -649,19 +650,17 @@
                                                                             <!-- react-text: 228 --><!-- /react-text -->
                                                                             <span class="col-md-7 fl padLR10 mobdn">
                                                                                 <i class="fl iconflt-bagln ico11 padR5"></i>
-                                                                                <span>20 Kgs Check-In</span><!-- react-text: 989 -->, <!-- /react-text -->
-                                                                                <span>7 Kgs Cabin</span>
+                                                                                <span>{{item.Baggage}}</span>
                                                                             </span>
                                                                         </span><!-- react-text: 229 --><!-- /react-text -->
                                                                     </div>
                                                                 </div>
-                                                                
-                                                                <div class="bkHalfCircle bkHalfCircbot mobdn posAbs"></div>
+
                                                             </div>
                                                         </div>
                                                     </div>
 
-                                                    
+
                                                 </div>
                                             }
                                             else if (ViewBag.TripMode == "2")
@@ -854,7 +853,6 @@
 
 
 
-
                         <div class="card" style="margin-top:20px;">
                             <div class="card-body">
                                 <div class="row">
@@ -866,7 +864,7 @@
                                         </div>
                                         <form id="travellerForm" name="travellerForm" method="POST">
                                             <div class="fl width100 padLR20 mobpadLR5 bkTraveller padT10">
-                                                <div class="fl width100">
+                                                <div class="fl width100" style="display:none">
                                                     <div style="width: 210px; margin: 0px auto;">
                                                         <div class="gstTabs">
                                                             <a class="tabs active" id="gstPersonal"><span>Personal</span></a>
@@ -874,46 +872,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="dn" style="display:none">
-                                                    <div class="width100 fl greyBg pad10 marginB15" id="gst_form">
-                                                        <span class="width100 fl ico14 fmed greyDr">Business Profile</span>
-                                                        <span class="fl padT10 gst_error col-md-12 col-sm-12 col-xs-12 dn">
-                                                            <span class="alert_msg failure_msg fl">
-                                                                <b class="status_info fl">Warning: </b>
-                                                            </span>
-                                                        </span><div class="width100 fl ">
-                                                            <div class="col-md-4 col-sm-4 col-xs-12 padT10">
-                                                                <span class="width100 fl padB5 ico13 greyLt">GST Number</span>
-                                                                <input type="text" id="gstn" maxlength="15" class="form-control" placeholder="eg: 22AAAAA0000A1Z5" data-field="gstn" data-fieldname="GSTN" style="text-transform: uppercase;">
-                                                            </div><div class="col-md-4 col-sm-4 col-xs-12 padT10">
-                                                                <span class="width100 fl padB5 ico13 greyLt">Company Name</span>
-                                                                <input type="text" id="cname" name="pay_gst_company_name" class="form-control" placeholder="Company Name" data-field="cname" data-fieldname="Company Name">
-                                                            </div>
-                                                            <div class="col-md-4 col-sm-4 col-xs-12 padT10" id="pay_gst_business_email_div">
-                                                                <span class="width100 fl padB5 ico13 greyLt">Business Email ID</span>
-                                                                <input type="text" name="pay_gst_business_email" class="form-control" placeholder="Business Email ID" data-field="email" data-fieldname="Business Email">
-                                                            </div>
-                                                        </div>
-                                                        <div class="width100 fl padT10">
-                                                            <span class="width100 fl padB5 ico13 greyLt">Company Address</span>
-                                                            <input type="text" id="caddress" name="pay_gst_company_address" class="form-control" placeholder="Company Address" data-field="caddress" data-fieldname="Company Address">
-                                                        </div>
-                                                        <div class="width100 fl">
-                                                            <div class="col-md-4 padT10 col-sm-4 col-xs-12" id="pay_gst_phone_number_div">
-                                                                <span class="width100 fl padB5 ico13 greyLt">Phone Number</span>
-                                                                <input type="number" id="phone" name="pay_gst_phone_number" maxlength="10" class="form-control" placeholder="+91 " data-field="phone" data-fieldname="Phone Number">
-                                                            </div>
-                                                            <div class="col-md-4 col-sm-4 col-xs-12 padT10">
-                                                                <span class="width100 fl padB5 ico13 greyLt">Country</span>
-                                                                <input type="text" id="country" class="form-control width100 fl" data-field="country" data-fieldname="Country">
-                                                            </div>
-                                                            <div class="col-md-4 col-sm-4 col-xs-12 padT10">
-                                                                <span class="width100 fl padB5 ico13 greyLt">State</span>
-                                                                <input type="text" id="cstate" class="form-control width100 fl" data-field="cstate" data-fieldname="State">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                
                                                 <div class="alert_msg info_msg fl"><b class="status_info fl">Note: </b><span class="status_cont">Please make sure you enter the Name as per your govt. photo id.</span></div>
                                                 <div>
                                                     <div class="fl width100 padLR10 greyBg borderBtm marginB5" ng-repeat="psssenger in passengers">
@@ -923,11 +882,11 @@
                                                                 <i class="fl fltCirc bordBlac icon-tick-mark ico8 pad1 marginLN5"></i>
                                                             </span>
                                                             <span class="fl padLR20 ico14 padT5">{{psssenger.label}}</span>
-                                                        </div><div class="padL30 fl width100">
+                                                        </div><div class="padL30 fl width100" style="padding-bottom:20px;">
                                                             <div class="col-md-12 col-sm-12 col-xs-12 padL0">
-                                                               
+
                                                                 <div class="col-md-10 col-sm-9 col-xs-12 pad0">
-                                                                    <div class="fl padR10 marginB10">
+                                                                    <div class="fl padR10 marginB10" style="margin-right:5px;">
                                                                         <select ng-model="psssenger.Title" data-traveller="0" data-index="1" data-field="title" data-fieldname="Title" data-name="Adult" name="Adultchoose1" id="Adulttitle1" class="form-control inputMedium">
                                                                             <option value="">Title</option>
                                                                             <option ng-show="psssenger.PassengerType == 'A'" value="Mr">Mr</option>
@@ -935,16 +894,16 @@
                                                                             <option ng-show="psssenger.PassengerType == 'A'" value="Mrs">Mrs</option>
                                                                             <option value="Mrs">Mstr</option>
                                                                         </select>
-                                                                    </div><div class="col-md-3 col-sm-3 col-xs-12  pad0 marginB10">
+                                                                    </div><div class="col-md-3 col-sm-3 col-xs-12  pad0 marginB10" style="margin-right:5px;">
                                                                         <input ng-model="psssenger.FirstName" type="text" class="form-control inputMedium padLR5 placeholder" placeholder="First Name/Given Name" value="">
                                                                     </div>
-                                                                    <div class="col-md-3 col-sm-3 col-xs-12 pad0 marginB10">
+                                                                    <div class="col-md-3 col-sm-3 col-xs-12 pad0 marginB10" style="margin-right:5px;">
                                                                         <input ng-model="psssenger.LastName" type="text" class="form-control inputMedium padLR5 placeholder" placeholder="Last Name" value="">
                                                                     </div>
-                                                                    <div class="col-md-3 col-sm-3 col-xs-12 pad0 marginB10">
-                                                                    <input  ng-model="psssenger.DateOfBirth" type="text" class="form-control inputMedium padLR5 placeholder" placeholder="Date of birth" value="">
+                                                                    <div class="col-md-3 col-sm-3 col-xs-12 pad0 marginB10" style="margin-right:5px;">
+                                                                        <input ng-model="psssenger.DateOfBirth" type="text" class="form-control inputMedium padLR5 placeholder" placeholder="Date of birth" value="">
                                                                     </div>
-                                                                   <div class="col-md-1 col-sm-1 mobdn marginB10">
+                                                                    <div class="col-md-1 col-sm-1 mobdn marginB10" style="padding-bottom:10px;">
                                                                         <div class="fmtTooltip padB10">
                                                                             <i class="icon-question greyLter ico14"></i>
                                                                         </div>
@@ -953,7 +912,7 @@
                                                             </div>
                                                             <div class="col-md-12 col-sm-12 col-xs-12 pad0"><div></div></div>
                                                         </div>
-                                                    </div><div class="col-md-12 col-sm-12 col-xs-12" id="cont_email">
+                                                    </div><div class="col-md-12 col-sm-12 col-xs-12" id="cont_email" style="margin-top:10px;">
                                                         <div class="col-md-2 col-sm-3 col-xs-12 padT10 marginB5 stepLabel"><label class="ico14 grey">Email Address</label></div>
                                                         <div class="col-md-10 col-sm-9 col-xs-12 pad0">
                                                             <div class="col-md-6 col-sm-7 col-xs-12 marginB10 posRel"><input type="email" data-field="email" data-fieldname="Email" data-name="" id="email" name="email" class="form-control inputMedium iconImg" value=""><i class="icon-email iconEmailPos ico24 greyLt"></i></div><div class="col-md-6 col-sm-5 col-xs-12 mobdn padT10">
@@ -986,14 +945,143 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
 
+                        <div class="card" style="margin-top:20px;">
+                            <div class="card-header">
+                                <h2> Exclusive </h2>
+                            </div>
+
+                            <div class="card-body">
+
+
+                                <div class="accordion" id="accordionRightIcon">
+                                    <div class="card" ng-show="ServicesMeals.length > 0" ng-cloak>
+                                        <div class="card-header header-elements-inline">
+                                            <h6 class="card-title ul-collapse__icon--size ul-collapse__right-icon mb-0"><a class="text-default collapsed" data-toggle="collapse" href="#accordion-item-icons-1" aria-expanded="false">Meal</a></h6>
+                                        </div>
+                                        <div class="collapse" id="accordion-item-icons-1" data-parent="#accordionRightIcon" style="">
+                                            <div class="card-body">
+                                                <div class="table-responsive">
+                                                    <table class="table table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                <th scope="col">Services name</th>
+                                                                <th scope="col">Airport</th>
+                                                                <th scope="col">Amount</th>
+                                                                <th scope="col">Action</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr ng-repeat="item in ServicesMeals">
+                                                                <td>{{item.ServiceName}}</td>
+                                                                <td>
+                                                                    <span class="badge badge-primary">{{item.FromAirportCode}}</span>
+                                                                    -
+                                                                    <span class="badge badge-secondary">{{item.ToAirportCode}}</span>
+                                                                </td>
+                                                                <td>{{item.Amount}}</td>
+                                                                <td style="text-align:center;"><input class="form-check-input" id="gridCheck1" type="checkbox"></td>
+
+                                                            </tr>
+
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card" ng-show="ServicesSeats.length > 0" ng-cloak>
+                                        <div class="card-header header-elements-inline">
+                                            <h6 class="card-title ul-collapse__icon--size ul-collapse__right-icon mb-0"><a class="text-default collapsed" data-toggle="collapse" href="#accordion-item-icons-2"> Seat</a></h6>
+                                        </div>
+                                        <div class="collapse" id="accordion-item-icons-2" data-parent="#accordionRightIcon">
+                                            <div class="card-body">
+                                                <div class="table-responsive">
+                                                    <table class="table table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                <th scope="col">Services name</th>
+                                                                <th scope="col">Airport</th>
+                                                                <th scope="col">Amount</th>
+                                                                <th scope="col">Action</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr ng-repeat="item in ServicesSeats">
+                                                                <td>{{item.ServiceName}}</td>
+                                                                <td>
+                                                                    <span class="badge badge-primary">{{item.FromAirportCode}}</span>
+                                                                    -
+                                                                    <span class="badge badge-secondary">{{item.ToAirportCode}}</span>
+                                                                </td>
+                                                                <td>{{item.Amount}}</td>
+                                                                <td style="text-align:center;"><input class="form-check-input" id="gridCheck1" type="checkbox"></td>
+
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="card" ng-show="ServicesBaggages.length > 0" ng-cloak>
+                                        <div class="card-header header-elements-inline">
+                                            <h6 class="card-title ul-collapse__icon--size ul-collapse__right-icon mb-0"><a class="text-default collapsed" data-toggle="collapse" href="#accordion-item-icons-3"> Baggage</a></h6>
+                                        </div>
+                                        <div class="collapse" id="accordion-item-icons-3" data-parent="#accordionRightIcon">
+                                            <div class="card-body">
+                                                <div class="table-responsive">
+                                                    <table class="table table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                <th scope="col">Services name</th>
+                                                                <th scope="col">Airport</th>
+                                                                <th scope="col">Amount</th>
+                                                                <th scope="col">Action</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr ng-repeat="item in ServicesBaggages">
+                                                                <td>{{item.ServiceName}}</td>
+                                                                <td>
+                                                                    <span class="badge badge-primary">{{item.FromAirportCode}}</span>
+                                                                    -
+                                                                    <span class="badge badge-secondary">{{item.ToAirportCode}}</span>
+                                                                </td>
+                                                                <td>{{item.Amount}}</td>
+                                                                <td style="text-align:center;"><input class="form-check-input" id="gridCheck1" type="checkbox"></td>
+
+                                                            </tr>
+
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+
+                    </div>
 
                     @if (ViewBag.TripMode == "1")
                     {
                         <div class="col-md-3">
-                            <div class="card">
-                                <div class="card-body">
+                            <div class="card" style="padding:2px;">
+                                <div class="card-body" style="padding:2px;">
                                     <div class="row">
                                         <div class="borderAll posRel whiteBg crdShdw brRadius5 fl width100 padB10 bkFxdRt marginTB10">
                                             <div class="fl width100 padTB10 smlrBrdrDsh">
@@ -1009,7 +1097,54 @@
                                                 <div class="fl padB15 width100 smlrBrdrDsh">
                                                     <div class="col-md-8">
                                                         <span class="db ico14">Base Fare</span>
-                                                    </div><div class="fr ">
+                                                    </div>
+                                                    <div class="fr ">
+                                                        <i class="icon-rupee ico14 padT2 fl"></i>
+                                                        <span class="fl ico18"><span>{{fareDetails[0].TotalAmount}}</span></span><span class="fl fmtTooltip">
+                                                            <i class="icon-question op0-7 ico14 fl padT2 padL5 blueLt"></i>
+
+                                                            <div class="tip white tip_right txtLeft" id="farebreakupTooltip_Base Fare">
+                                                            </div>
+                                                        </span>
+                                                    </div>
+
+
+                                                    <div class="col-md-8">
+                                                        <span class="db ico14">Base Fare</span>
+                                                    </div>
+                                                    <div class="fr ">
+                                                        <i class="icon-rupee ico14 padT2 fl"></i>
+                                                        <span class="fl ico18"><span>{{fareDetails[0].TotalAmount}}</span></span><span class="fl fmtTooltip">
+                                                            <i class="icon-question op0-7 ico14 fl padT2 padL5 blueLt"></i>
+
+                                                            <div class="tip white tip_right txtLeft" id="farebreakupTooltip_Base Fare">
+                                                            </div>
+                                                        </span>
+                                                    </div>
+
+
+                                                    <div class="col-md-8">
+                                                        <span class="db ico14">Base Fare</span>
+                                                    </div>
+                                                    <div class="fr ">
+                                                        <i class="icon-rupee ico14 padT2 fl"></i>
+                                                        <span class="fl ico18"><span>{{fareDetails[0].TotalAmount}}</span></span><span class="fl fmtTooltip">
+                                                            <i class="icon-question op0-7 ico14 fl padT2 padL5 blueLt"></i>
+
+                                                            <div class="tip white tip_right txtLeft" id="farebreakupTooltip_Base Fare">
+                                                            </div>
+                                                        </span>
+                                                    </div>
+
+
+
+                                                </div>
+
+                                                <div class="fl padB15 width100 smlrBrdrDsh">
+                                                    <div class="col-md-8">
+                                                        <span class="db ico14">Base Fare</span>
+                                                    </div>
+                                                    <div class="fr ">
                                                         <i class="icon-rupee ico14 padT2 fl"></i>
                                                         <span class="fl ico18"><span>{{fareDetails[0].TotalAmount}}</span></span><span class="fl fmtTooltip">
                                                             <i class="icon-question op0-7 ico14 fl padT2 padL5 blueLt"></i>
@@ -1021,8 +1156,9 @@
                                                 </div>
                                                 <div class="fl padB15 width100">
                                                     <div class="col-md-8"><span class="db ico14">Fee &amp; Surcharge</span></div><div class="fr ">
-                                                        <i class="icon-rupee ico14 padT2 fl"></i><span class="fl ico18"><span>1,664</span></span><span class="fl fmtTooltip">
-                                                            <i class="icon-question op0-7 ico14 fl padT2 padL5 blueLt"></i>
+                                                        <span class="fl ico18"><span>1,664</span></span><span class="fl fmtTooltip">
+                                                            <button style="background:none; border:none;" data-html="true" type="button" data-toggle="tooltip" data-placement="left" title="" data-original-title="Tooltip With <em>html</em>" aria-describedby="tooltip927821"><i class="fa fa-question-circle"></i></button>
+
                                                         </span>
                                                     </div>
                                                 </div>
@@ -1034,9 +1170,7 @@
                                                     <div class="fr">
                                                         <i class="icon-rupee ico14 padT2 fl"></i><span>
                                                             <span class="fl ico18"><span>5</span></span>
-                                                            <span class="fl fmtTooltip">
-                                                                <i class="icon-question op0-7 ico14 fl padT2 padL5 blueLt"></i>
-                                                            </span>
+                                                            <button style="background:none; border:none;" data-html="true" type="button" data-toggle="tooltip" data-placement="left" title="" data-original-title="Tooltip With <em>html</em>" aria-describedby="tooltip927821"><i class="fa fa-question-circle"></i></button>
                                                         </span>
                                                     </div>
                                                 </div>
@@ -1065,17 +1199,18 @@
                     else if (ViewBag.TripMode == "2")
                     {
                         <div class="col-md-3">
-                            <div class="card">
-                                <div class="card-body">
+                            <div class="card" style="padding:2px;">
+                                <div class="card-body" style="padding:2px;">
                                     <div class="row">
                                         <div class="borderAll posRel whiteBg crdShdw brRadius5 fl width100 padB10 bkFxdRt marginTB10">
                                             <div class="fl width100 padTB10 smlrBrdrDsh">
                                                 <div class="ico18 padLR10"><span class="fb quicks ">Fare Summary</span></div>
-                                                <div class="ico12 padLR10 padT5 "><span>Travelers </span>
-                                                @if (true)
-                                                {
-                                                    <span class="grey">1 Adult</span>
-                                                }
+                                                <div class="ico12 padLR10 padT5 ">
+                                                    <span>Travelers </span>
+                                                    @if (true)
+                                                    {
+                                                        <span class="grey">1 Adult</span>
+                                                    }
                                                 </div>
                                             </div>
                                             <div class="fl width100 smlrBrdrDsh padT15 padL5 padR10">
@@ -1094,8 +1229,9 @@
                                                 </div>
                                                 <div class="fl padB15 width100">
                                                     <div class="col-md-8"><span class="db ico14">Fee &amp; Surcharge</span></div><div class="fr ">
-                                                        <i class="icon-rupee ico14 padT2 fl"></i><span class="fl ico18"><span>1,664</span></span><span class="fl fmtTooltip">
-                                                            <i class="icon-question op0-7 ico14 fl padT2 padL5 blueLt"></i>
+                                                        <span class="fl ico18"><span>1,664</span></span><span class="fl fmtTooltip">
+
+                                                            <i class="fa fa-question-circle"></i>
                                                         </span>
                                                     </div>
                                                 </div>
@@ -1135,8 +1271,11 @@
                             </div>
                         </div>
                     }
+
+
                 </div>
             </div>
         </div>
     </div>
-</div>
+
+    <script src="~/newpanel/assets/js/tooltip.script.js"></script>

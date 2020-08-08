@@ -43,8 +43,8 @@ namespace WHITELABEL.Web.Helper
             GetFlightAvailibilityRequest_Val.NoofAdult = objsearch.AdultCount;
             //GetFlightAvailibilityRequest_Val.NoofChild = objsearch.ChildCount;
             //GetFlightAvailibilityRequest_Val.NoofInfant = objsearch.InfantCount;
-            GetFlightAvailibilityRequest_Val.NoofChild = "0";
-            GetFlightAvailibilityRequest_Val.NoofInfant = "0";
+            GetFlightAvailibilityRequest_Val.NoofChild = objsearch.ChildCount;
+            GetFlightAvailibilityRequest_Val.NoofInfant = objsearch.InfantCount;
             GetFlightAvailibilityRequest_Val.FromAirportCode = objsearch.Origin;
             GetFlightAvailibilityRequest_Val.ToAirportCode = objsearch.Destination;
             GetFlightAvailibilityRequest_Val.DepartureDate = objsearch.PreferredDepartureTime;
