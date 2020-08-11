@@ -180,6 +180,323 @@
     }
 
 
+
+    .padB5 {
+        padding-bottom: 5px;
+    }
+
+    .fl {
+        float: left;
+    }
+    .width100 {
+        width: 100%;
+    }
+    .padR10 {
+        padding-right: 10px;
+    }
+    .custRadWht [type="radio"]:checked + label, .custRadWht [type="radio"]:not(:checked) + label {
+        padding-left: 20px;
+    }
+    .custRad [type="radio"]:checked + label, .custRad [type="radio"]:not(:checked) + label {
+        position: relative;
+        padding-left: 25px;
+        cursor: pointer;
+    }
+    .lh1 {
+        line-height: 1;
+    }
+    .alignItemsCenter {
+        -webkit-align-items: center;
+        -ms-align-items: center;
+        align-items: center;
+    }
+    .dF {
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: -ms-flex;
+        display: flex;
+    }
+    /*.custRadWht [type="radio"]:not(:checked) + label:before, .custRadWht [type="radio"]:checked + label:before {
+        border-color: white;
+        width: 16px;
+        height: 16px;
+    }
+   .custRad [type="radio"]:not(:checked) + label:before, .custRad [type="radio"]:checked + label:before {
+        content: '';
+        border: 2px solid #647a97;
+        position: absolute;
+        left: 0;
+        top: -2px;
+        width: 18px;
+        height: 18px;
+        border-radius: 100%;
+    }*/
+    *:before, *:after {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+    .fb {
+        font-weight: bold;
+        font-style: normal;
+    }
+    .custRad [type="radio"]:not(:checked) + label:after, .custCheck:not(:checked) ~ .checkmark i {
+        opacity: 0;
+        -webkit-transform: scale(0);
+        transform: scale(0);
+        -webkit-transition: all .2s ease;
+    }
+    .custRadWht [type="radio"]:checked + label:after, .custRadWht [type="radio"]:not(:checked) + label:after {
+        background-color: #ffffff;
+        top: 2px;
+        left: 4px;
+        width: 8px;
+        height: 8px;
+    }
+    /*.custRad [type="radio"]:checked + label:after, .custRad [type="radio"]:not(:checked) + label:after {
+        content: '';
+        width: 10px;
+        height: 10px;
+        background-color: #2276e3;
+        position: absolute;
+        top: 2px;
+        left: 4px;
+        border-radius: 100%;
+        transition: all .2s ease;
+    }*/
+    .padT5 {
+        padding-top: 5px;
+    }
+    .width20 {
+        width: 20%;
+    }
+    .autoSuggestBox {
+        position: relative;
+    }
+    .padR20 {
+        padding-right: 20px;
+    }
+    .txtTransUpper {
+        text-transform: uppercase;
+    }
+    .ico12 {
+        font-size: 12px;
+    }
+    .op6 {
+        opacity: .6;
+    }
+    .padR20 {
+        padding-right: 20px;
+    }
+    .col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12 {
+        float: left;
+    }
+    .textOverflow {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .col-lg-1 {
+        width: 8.33333333%;
+    }
+    .marginB10 {
+        margin-bottom: 10px;
+    }
+    .col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 {
+        position: relative;
+        min-height: 1px;
+        padding-right: 5px;
+        padding-left: 5px;
+    }
+
+    .hpySrchDis, .hpySrchEnb {
+        
+        text-align: center;
+        border-radius: 20px;
+        background-color: #4c93e4;
+        color: #2276e3;
+        font-weight: bold;
+        text-transform: uppercase;
+        height: 36px;
+        font-size: 18px;
+    }
+    .button {
+        cursor: pointer;
+        border-radius: 3px;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        
+        text-align: center;
+        color: #fff;
+        border: 0;
+        font-size: 14px;
+        -webkit-appearance: none;
+    }
+
+
+
+    .paxMobile {
+        position: absolute;
+        background: #fff;
+        border: 1px solid #eaeaea;
+        width: auto;
+        border-radius: 3px;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        box-shadow: 0 3px 3px 0 #ccc;
+        z-index: 9;
+        left: 50%;
+        top: 95%;
+        margin-left: -175px;
+        width: 350px;
+    }
+
+        .paxMobile:before {
+            border-color: rgba(234,234,234,0);
+            border-bottom-color: #eaeaea;
+            border-width: 11px;
+            margin-left: -11px;
+        }
+
+        .paxMobile:before {
+            bottom: 100%;
+            left: 50%;
+            border: solid transparent;
+            content: " ";
+            height: 0;
+            width: 0;
+            position: absolute;
+            pointer-events: none;
+        }
+
+    [class^="icon-"], [class*=" icon-"] {
+        font-family: 'go_font_v38' !important;
+        speak: none;
+        font-style: normal;
+        font-weight: normal;
+        font-variant: normal;
+        text-transform: none;
+        line-height: 1;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    .roomRow {
+        padding: 15px 0;
+        float: left;
+        width: 100%;
+        border: none;
+    }
+
+    .widgetUserBlock {
+        width: auto;
+    }
+
+    .ico36, .ico35, .ico34, .ico33, .ico32, .ico31, .ico30, .ico29, .ico28, .ico27, .ico26, .ico25, .ico24, .ico23, .ico22, .ico21, .ico20, .ico19, .ico18, .ico17, .ico15, .ico16, .ico14, .ico13, .ico12, .ico11, .ico10 {
+        line-height: 1;
+    }
+
+    .ico14 {
+        font-size: 14px;
+    }
+
+    .font13Lt {
+        font-size: 13px;
+        color: #999;
+    }
+
+    .padT3 {
+        padding-top: 3px;
+    }
+
+    .number-spinner {
+        float: left;
+        width: 100%;
+    }
+
+    .minSpin {
+        border-right-width: 0;
+    }
+
+    .minSpin, .plusSpin, .numbSpin {
+        height: 25px;
+    }
+
+    .minSpin, .plusSpin {
+        background-color: #ffffff;
+        border: 1px solid #c2c2c2;
+        outline: none;
+        color: #4a4a4a;
+        padding: 0 10px;
+        font-size: 15px;
+        font-weight: bold;
+        cursor: pointer;
+        width: 30px;
+    }
+
+    .numbSpin {
+        border: 1px solid #c2c2c2;
+        border-left-width: 0;
+        border-right-width: 0;
+        outline: none;
+        font-size: 15px;
+        padding: 5px;
+        text-align: center;
+        width: 30px;
+    }
+
+    .plusSpin {
+        border-left-width: 0;
+    }
+
+    .minSpin, .plusSpin {
+        background-color: #ffffff;
+        border: 1px solid #c2c2c2;
+        outline: none;
+        color: #4a4a4a;
+        padding: 0 10px;
+        font-size: 15px;
+        font-weight: bold;
+        cursor: pointer;
+        width: 30px;
+    }
+
+    .paxMobile:before {
+        bottom: 100%;
+        left: 50%;
+        border: solid transparent;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+    }
+
+    ol, ul {
+        list-style: none;
+    }
+
+    .padB15 {
+        padding-bottom: 15px;
+    }
+
+    .padLR15 {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .width70 {
+        width: 70%;
+    }
+
+    select.form-control {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        padding: 5px 25px 5px 5px;
+    }
+
+
+
 </style>
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.css" rel="stylesheet" type="text/css" />
@@ -202,10 +519,78 @@
 </script>
 
 <div class="display-animation" ng-app="AirportAutocompleteoduleApp" ng-controller="SingleFlightSearchApiCall" ng-init="LoadFlightSearch('@ViewBag.Tripmode','@ViewBag.FromCityCode','@ViewBag.TOAirportCode','@ViewBag.FromDate','@ViewBag.ToDate','@ViewBag.TravelType','@ViewBag.Adult','@ViewBag.Child','@ViewBag.Infant')" id="AirportAutocompleteController">
-    <div class="content" style="margin-top:20px;">
+    <div class="content">
         <div class="display-animation">
-            <div class="full-content margin-bottom-40 bg-white" id="Bill_page">
+            <div class="full-content bg-white" id="Bill_page">
                 <div class="row example-row" style="min-height:350px;">
+
+                    <div class="card" style="width:100%; z-index: 2;">
+                        <div class="card-body">
+                            <div class="blueBg padTB15 fl width100 clr marginB20" id="searchWrapOuterBox">
+                                <div class="fltHpyWrp">
+
+
+                                    <div class="mobSearchToggle">
+                                        <div class="fl width100 padB5">
+                                            <span class="custRad custRadWht fl padR10">
+                                                <input type="radio" id="gi_oneway_label_srp" name="radio" value="on" style="float:left;"><label for="gi_oneway_label_srp" class="dF alignItemsCenter lh1">
+                                                    <span class="fb white">One-way</span>
+                                                </label>
+                                            </span><span class="custRad custRadWht fl">
+                                                <input type="radio" id="gi_roundtrip_label_srp" name="radio" value="on" style="float:left;"><label for="gi_roundtrip_label_srp" class="dF alignItemsCenter lh1">
+                                                    <span class="fb white">Round-trip</span>
+                                                </label>
+                                            </span>
+                                        </div><div class="col-md-12 col-sm-12 col-xs-12 padLR0 hpySrpWdgt padT5">
+                                            <div class="">
+                                                <div class="width20 padR20 fl autoSuggestBox" id="source_st_srp">
+                                                    <div class="white ico12 op6 padB5 txtTransUpper">From</div>
+                                                    <div class="width100 fl autoSuggestBox autoSgstOuterWrap">
+                                                        <div class="width100 fl autoSuggestBox autoSgstOuterWrap">
+                                                            <input type="text" id="gi_source_st_srp" class="form-control fltIpF quicks wdgtEle" value="Kolkata" autocomplete="off" role="combobox" aria-autocomplete="list" aria-owns="react-autosuggest-1" aria-expanded="false">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <a href="javascript:void(0);" id="swap_srp" class="fl padT20 marginT5 padR20 swapWrap">
+                                                    <i class="hypflt-dblArw ico18 fl txtCenter white"></i>
+                                                </a>
+                                                <div class="width20 fl padR20 autoSuggestBox" id="destination_st_srp">
+                                                    <div class="white ico12 op6 padB5 txtTransUpper">To</div>
+                                                    <div class="width100 fl autoSuggestBox autoSgstOuterWrap">
+                                                        <div class="width100 fl autoSuggestBox autoSgstOuterWrap">
+                                                            <input type="text" id="gi_destination_st_srp" class="form-control fltIpF quicks wdgtEle" value="Delhi" autocomplete="off" role="combobox" aria-autocomplete="list" aria-owns="react-autosuggest-1" aria-expanded="false">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div><div class="width12 fl calenderInnerBox padR20">
+                                                <div class="white ico12 op6 padB5 txtTransUpper">Departure Date</div><div id="fromEle_srp" class="col-md-12 pad0">
+                                                    <input type="text" class="form-control quicks wdgtEle" name="from" id="start-date_srp" data-date="true" value="Fri, 10 Jul" readonly="">
+                                                </div>
+                                            </div>
+                                            <div class="width12 fl calenderInnerBox padR20">
+                                                <div class="white ico12 op6 padB5 txtTransUpper">Return Date</div><div id="toEle_srp" class="col-md-12 pad0">
+                                                    <input type="text" class="form-control quicks wdgtEle " name="to" id="end-date_srp" data-date="true" value="Wed, 22 Jul" readonly="">
+                                                    <i class="hypflt-close dib ico17 white posAbs calClose curPointFlt"></i>
+                                                </div>
+                                            </div><div class="paxWrapper fl_shInputPaxBox col-lg-2 col-md-2  col-sm-2 col-xs-12 padL0 padR20" id="pax_link_common_srp">
+                                                <div class="white ico12 op6 padB5 txtTransUpper">Passenger &amp; Class</div>
+                                                <span href="javascript:void(0);" class="paxBoxWrap mobdn dF padT10 ico14 quicks">
+                                                    <span id="pax_label_srp" class="textOverflow">1 Traveller(s), </span>
+                                                    <span class="textOverflow">Economy</span>
+                                                </span>
+                                            </div><div class="col-lg-1 col-md-1 col-sm-3 col-xs-12 marginB10">
+                                                <div class="white ico12 op6 padB5 txtTransUpper">&nbsp;</div>
+                                                <button id="submitSearchButton_srp" class="button hpySrchEnb ipadButtonSpace width100 quicks" type="button">Search</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
                     <div class="card" style="width:100%;">
                         <div class="card-body">
                             <div class="row">
@@ -214,18 +599,18 @@
                                         <li class="list-group-item">
                                             <div class="form-group">
                                                 <label>Price range:</label>
-                                                <button class="btn btn-xs btn-default pull-right" style="padding:0px;font-size:xx-small;font-weight:bold" ng-click="lower_price_bound = min; upper_price_bound = max;">Reset</button>
+                                                <button class="btn btn-xs btn-default pull-right" style="padding:5px;font-size:x-small;font-weight:bold" ng-click="lower_price_bound = min; upper_price_bound = max;">Reset</button>
                                                 <div class="clearfix"></div>
 
-                                                <span class="badge badge-dark pull-left">{{lower_price_bound}}</span>
-                                                <span class="badge badge-dark pull-right">{{upper_price_bound}}</span>
+                                                <span class="badge badge-dark pull-left" ng-cloak>{{lower_price_bound}}</span>
+                                                <span class="badge badge-dark pull-right" ng-cloak>{{upper_price_bound}}</span>
                                                 <div class="clearfix"></div>
                                                 <slider floor="{{min}}" ceiling="{{max}}" ng-model-low="lower_price_bound" ng-model-high="upper_price_bound"></slider>
                                             </div>
                                         </li>
                                         <li class="list-group-item">
                                             <label>Time slots for the flight:</label>
-                                            <button class="btn btn-xs btn-default pull-right" style="padding:0px;font-size:xx-small;font-weight:bold" ng-click="
+                                            <button class="btn btn-xs btn-default pull-right" style="padding:5px;font-size:x-small;font-weight:bold" ng-click="
                                                     filterData.timeSlots.EarlyMorning = false;
                                                     filterData.timeSlots.Morning = false;
                                                     filterData.timeSlots.MidDay = false;
@@ -266,7 +651,7 @@
                                         </li>
                                         <li class="list-group-item">
                                             Stops for that flight
-                                            <button class="btn btn-xs btn-default pull-right" style="padding:0px;font-size:xx-small;font-weight:bold" ng-click="filterData.stops = null">Reset</button>
+                                            <button class="btn btn-xs btn-default pull-right" style="padding:5px;font-size:x-small;font-weight:bold" ng-click="filterData.stops = null">Reset</button>
                                             <div class="clearfix"></div>
 
                                             <label style="padding-right:30px">
@@ -290,7 +675,7 @@
                                         </li>
                                         <li class="list-group-item">
                                             Refundable:
-                                            <button class="btn btn-xs btn-default pull-right" style="padding:0px;font-size:xx-small;font-weight:bold" ng-click="filterData.refundable = null">Reset</button>
+                                            <button class="btn btn-xs btn-default pull-right" style="padding:5px;font-size:x-small;font-weight:bold" ng-click="filterData.refundable = null">Reset</button>
                                             <div class="clearfix"></div>
                                             <label style="padding:10px">
                                                 <input type="radio" ng-model="filterData.refundable" value="true">
@@ -303,7 +688,7 @@
                                         </li>
                                         <li class="list-group-item">
                                             Airlines:
-                                            <button class="btn btn-xs btn-default pull-right" style="padding:0px;font-size:xx-small;font-weight:bold" ng-click="filterData.airlines = [];resetFilterAirlinesList()">Reset</button>
+                                            <button class="btn btn-xs btn-default pull-right" style="padding:5px;font-size:x-small;font-weight:bold" ng-click="filterData.airlines = [];resetFilterAirlinesList()">Reset</button>
                                             <div class="clearfix"></div>
                                             <div class="checkboxer" ng-repeat="item in airlinesList">
                                                 <input type="checkbox" ng-model="item.selected" >
@@ -358,7 +743,9 @@
                                                                         </div>
                                                                         <div class="col-md-3 col-sm-3 padL0 col-xs-3 fGS0" data-cy="stopsLength0">
                                                                             {{itemval[0].Stops === "0" ? 0 : itemval[itemval[0].Stops].Stops}}&nbsp;Stops ({{itemval[0].Stops === "0" ? "0" : itemval[itemval[0].Stops].FromAirportCode}})<div class="ico15 fb txtCenter quicks padT5" data-cy="duration">
-                                                                                {{timeConvert(itemval[0].Stops === "0" ? parseNumber(itemval[0].FlightTime) : (parseNumber(itemval[0].FlightTime)+parseNumber(itemval[0].HoldDuration)+parseNumber(itemval[itemval[0].Stops].HoldDuration)))}}
+                                                                            {{calculateDuration(itemval)}}
+                                                                                @*{{calculateDuration(itemval)  timeConvert(itemval[0].Stops === "0" ? parseNumber(itemval[0].FlightTime) : (parseNumber(itemval[0].FlightTime)+parseNumber(itemval[0].HoldDuration)+parseNumber(itemval[itemval[0].Stops].HoldDuration)))}}*@
+                                                                                                                                                                                                                                              @*{{timeConvert(itemval[0].Stops === "0" ? parseNumber(itemval[0].FlightTime) : (parseNumber(itemval[0].FlightTime)+parseNumber(itemval[0].HoldDuration)+parseNumber(itemval[itemval[0].Stops].HoldDuration)))}}*@
                                                                             </div>
                                                                         </div>
 
@@ -552,4 +939,5 @@
             </div>
         </div>
     </div>
+    <div class=""><div class="paxMobile paxContainer" id="paxContainer"><ul><li class="roomRow"><div class="widgetUserBlock fl padR10"><label class="ico14 db padB5"><span>Adults</span><small class="font13Lt db padT3"> (12+ yrs)</small></label><div class="number-spinner"><button class="fl minSpin" id="adultPaxMinus" data-dir="dwn">−</button><input type="text" id="adultPaxBox" class="fl numbSpin" value="1"><button class="fl plusSpin" id="adultPaxPlus" data-dir="up">+</button></div></div><div><div class="widgetUserBlock fl padR10"><label class="ico14 db padB5"><span>Children</span><small class="font13Lt db padT3"> (2-12 yrs)</small></label><div class="number-spinner"><button class="fl minSpin" id="childPaxMinus" data-dir="dwn">−</button><input type="text" id="childPaxBox" class="fl numbSpin" value="0"><button class="fl plusSpin" id="childPaxPlus" data-dir="up">+</button></div></div><div class="widgetUserBlock fl padR10"><label class="ico14 db padB5"><span>Infant(s)</span><small class="font13Lt db padT3"> (below 2 yrs)</small></label><div class="number-spinner"><button class="fl minSpin" id="infantPaxMinus" data-dir="dwn">−</button><input type="text" id="infantPaxBox" class="fl numbSpin" value="0"><button class="fl plusSpin" id="infantPaxPlus" data-dir="up">+</button></div></div></div></li></ul><div class="fl width100 padLR15 padB15 alignItemsCenter dF"><div class="padR10"> Travel Class</div><div class="width70"><div><label><!-- react-text: 3821 --> <!-- /react-text --><!-- react-text: 3822 --><!-- /react-text --></label><div><select class="width100 form-control ico14" id="gi_class"><option value="E">Economy</option><option value="B">Business</option><option value="F">First class</option><option value="W">Premium Economy</option></select></div></div></div></div></div></div>
 </div>

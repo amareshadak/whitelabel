@@ -99,7 +99,7 @@
 
     $scope.LoadFlightSearch = function (Tripmode, FromCityCode, TOAirportCode, FromDate, ToDate, TravelType, Adult, Child, Infant) {
         //const data = { TrackNo: trackNo, TripMode: tripMode };
-        debugger;        
+        
         $scope.formdisplay = true;
         var Tripmode = Tripmode;
         var FromAirportsName = FromCityCode;
@@ -191,7 +191,6 @@
   
     $scope.loadFareDetails = function (srNo,adult,child,infant)
     {
-        debugger;
         var adlt = adult;
         let data = $scope.FlightFareDetails.filter(x => x.SrNo == srNo);
         var adultval = (adult = 0 ? 0 : adult);
@@ -244,5 +243,36 @@
         }
     };
 
+    function diff_minutes(dt2, dt1) {
 
+        var diff = (dt2.getTime() - dt1.getTime()) / 1000;
+        diff /= 60;
+        return Math.abs(Math.round(diff));
+
+    }
+
+    function timeConvert(n) {
+        var num = n;
+        var hours = (num / 60);
+        var rhours = Math.floor(hours);
+        var minutes = (hours - rhours) * 60;
+        var rminutes = Math.round(minutes);
+        return  rhours + "h " + rminutes + "m";
+    }
+
+    $scope.calculateDuration = function(item)
+    {
+        const firstDate = item[0].DepDate;
+        const firstTime = item[0].DepTime;
+        const lastDate = item[item.length - 1].ArrDate;
+        const lastTime = item[item.length - 1].ArrTime;
+        const firstDateArray = firstDate.split('/');
+        const firstTimeArray = firstTime.split(':');
+        const lastDateArray = lastDate.split('/');
+        const lastTimeArray = lastTime.split(':');
+        const firstDateTime = new Date(firstDateArray[2], firstDateArray[1], firstDateArray[0], firstTimeArray[0], firstTimeArray[1]);
+        const lastDateTime = new Date(lastDateArray[2], lastDateArray[1], lastDateArray[0], lastTimeArray[0], lastTimeArray[1]);
+        const totalMinute = diff_minutes(lastDateTime, firstDateTime);
+        return timeConvert(totalMinute);
+    }
 }]);

@@ -314,8 +314,9 @@
 
     .stickyHpy {
         position: sticky;
-        top: 0;
+        top: 63px;
         z-index: 9;
+        background-color:#ccc;
     }
 
     .brdrRd10 {
@@ -365,6 +366,339 @@
     .ico10 {
         font-size: 10px;
     }
+    .paleGreyBg3 {
+        background-color: #f3f6f8;
+    }
+    .fltHpyStp {
+        width: 100%;
+        border-radius: 2px;
+        color: #0a2549;
+    }
+    .padTB10 {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+    .ico11 {
+        font-size: 11px;
+    }
+    .padLR5 {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+    .padB5 {
+        padding-bottom: 5px;
+    }
+
+    .fl {
+        float: left;
+    }
+
+    .width100 {
+        width: 100%;
+    }
+
+    .padR10 {
+        padding-right: 10px;
+    }
+
+    .custRadWht [type="radio"]:checked + label, .custRadWht [type="radio"]:not(:checked) + label {
+        padding-left: 20px;
+    }
+
+    .custRad [type="radio"]:checked + label, .custRad [type="radio"]:not(:checked) + label {
+        position: relative;
+        padding-left: 25px;
+        cursor: pointer;
+    }
+
+    .lh1 {
+        line-height: 1;
+    }
+
+    .alignItemsCenter {
+        -webkit-align-items: center;
+        -ms-align-items: center;
+        align-items: center;
+    }
+
+    .dF {
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: -ms-flex;
+        display: flex;
+    }
+    /*.custRadWht [type="radio"]:not(:checked) + label:before, .custRadWht [type="radio"]:checked + label:before {
+        border-color: white;
+        width: 16px;
+        height: 16px;
+    }
+   .custRad [type="radio"]:not(:checked) + label:before, .custRad [type="radio"]:checked + label:before {
+        content: '';
+        border: 2px solid #647a97;
+        position: absolute;
+        left: 0;
+        top: -2px;
+        width: 18px;
+        height: 18px;
+        border-radius: 100%;
+    }*/
+    *:before, *:after {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+
+    .fb {
+        font-weight: bold;
+        font-style: normal;
+    }
+
+    .custRad [type="radio"]:not(:checked) + label:after, .custCheck:not(:checked) ~ .checkmark i {
+        opacity: 0;
+        -webkit-transform: scale(0);
+        transform: scale(0);
+        -webkit-transition: all .2s ease;
+    }
+
+    .custRadWht [type="radio"]:checked + label:after, .custRadWht [type="radio"]:not(:checked) + label:after {
+        background-color: #ffffff;
+        top: 2px;
+        left: 4px;
+        width: 8px;
+        height: 8px;
+    }
+
+    /*.custRad [type="radio"]:checked + label:after, .custRad [type="radio"]:not(:checked) + label:after {
+        content: '';
+        width: 10px;
+        height: 10px;
+        background-color: #2276e3;
+        position: absolute;
+        top: 2px;
+        left: 4px;
+        border-radius: 100%;
+        transition: all .2s ease;
+    }*/
+
+    .padT5 {
+        padding-top: 5px;
+    }
+
+    .width20 {
+        width: 20%;
+    }
+
+    .autoSuggestBox {
+        position: relative;
+    }
+
+    .padR20 {
+        padding-right: 20px;
+    }
+
+    .txtTransUpper {
+        text-transform: uppercase;
+    }
+
+    .ico12 {
+        font-size: 12px;
+    }
+
+    .op6 {
+        opacity: .6;
+    }
+
+    .padR20 {
+        padding-right: 20px;
+    }
+
+    .col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12 {
+        float: left;
+    }
+
+    .textOverflow {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .col-lg-1 {
+        width: 8.33333333%;
+    }
+
+    .marginB10 {
+        margin-bottom: 10px;
+    }
+
+    .col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 {
+        position: relative;
+        min-height: 1px;
+        padding-right: 5px;
+        padding-left: 5px;
+    }
+
+    .hpySrchDis, .hpySrchEnb {
+        text-align: center;
+        border-radius: 20px;
+        background-color: #4c93e4;
+        color: #2276e3;
+        font-weight: bold;
+        text-transform: uppercase;
+        height: 36px;
+        font-size: 18px;
+    }
+
+    .button {
+        cursor: pointer;
+        border-radius: 3px;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        text-align: center;
+        color: #fff;
+        border: 0;
+        font-size: 14px;
+        -webkit-appearance: none;
+    }
+    .paxMobile {
+        position: absolute;
+        background: #fff;
+        border: 1px solid #eaeaea;
+        width: auto;
+        border-radius: 3px;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        box-shadow: 0 3px 3px 0 #ccc;
+        z-index: 9;
+        left: 50%;
+        top: 95%;
+        margin-left: -175px;
+        width: 350px;
+    }
+        .paxMobile:before {
+            border-color: rgba(234,234,234,0);
+            border-bottom-color: #eaeaea;
+            border-width: 11px;
+            margin-left: -11px;
+        }
+        .paxMobile:before {
+            bottom: 100%;
+            left: 50%;
+            border: solid transparent;
+            content: " ";
+            height: 0;
+            width: 0;
+            position: absolute;
+            pointer-events: none;
+        }
+    [class^="icon-"], [class*=" icon-"] {
+        font-family: 'go_font_v38' !important;
+        speak: none;
+        font-style: normal;
+        font-weight: normal;
+        font-variant: normal;
+        text-transform: none;
+        line-height: 1;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+    .roomRow {
+        padding: 15px 0;
+        float: left;
+        width: 100%;
+        border: none;
+    }
+    .widgetUserBlock {
+        width: auto;
+    }
+        .ico36, .ico35, .ico34, .ico33, .ico32, .ico31, .ico30, .ico29, .ico28, .ico27, .ico26, .ico25, .ico24, .ico23, .ico22, .ico21, .ico20, .ico19, .ico18, .ico17, .ico15, .ico16, .ico14, .ico13, .ico12, .ico11, .ico10
+
+    {
+        line-height: 1;
+    }
+    .ico14 {
+        font-size: 14px;
+    }
+    .font13Lt {
+        font-size: 13px;
+        color: #999;
+    }
+    .padT3 {
+        padding-top: 3px;
+    }
+    .number-spinner {
+        float: left;
+        width: 100%;
+    }
+    .minSpin {
+        border-right-width: 0;
+    }
+    .minSpin, .plusSpin, .numbSpin {
+        height: 25px;
+    }
+    .minSpin, .plusSpin {
+        background-color: #ffffff;
+        border: 1px solid #c2c2c2;
+        outline: none;
+        color: #4a4a4a;
+        padding: 0 10px;
+        font-size: 15px;
+        font-weight: bold;
+        cursor: pointer;
+        width: 30px;
+    }
+    .numbSpin {
+        border: 1px solid #c2c2c2;
+        border-left-width: 0;
+        border-right-width: 0;
+        outline: none;
+        font-size: 15px;
+        padding: 5px;
+        text-align: center;
+        width: 30px;
+    }
+    .plusSpin {
+        border-left-width: 0;
+    }
+    .minSpin, .plusSpin {
+        background-color: #ffffff;
+        border: 1px solid #c2c2c2;
+        outline: none;
+        color: #4a4a4a;
+        padding: 0 10px;
+        font-size: 15px;
+        font-weight: bold;
+        cursor: pointer;
+        width: 30px;
+    }
+    .paxMobile:before {
+        bottom: 100%;
+        left: 50%;
+        border: solid transparent;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+    }
+    ol, ul {
+        list-style: none;
+    }
+    .padB15 {
+        padding-bottom: 15px;
+    }
+    .padLR15 {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    .width70 {
+        width: 70%;
+    }
+    select.form-control {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+       
+        padding: 5px 25px 5px 5px;
+    }
 </style>
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.css" rel="stylesheet" type="text/css" />
@@ -382,145 +716,229 @@
         <div class="display-animation">
             <div class="full-content margin-bottom-40 bg-white" id="Bill_page">
                 <div class="row example-row" style="min-height:350px;">
+                    <div class="card" style="width:100%; margin-bottom:20px;">
+                        <div class="card-body">
+                            <div class="blueBg padTB15 fl width100 clr marginB20" id="searchWrapOuterBox">
+                                <div class="fltHpyWrp">
+
+
+                                    <div class="mobSearchToggle">
+                                        <div class="fl width100 padB5">
+                                            <span class="custRad custRadWht fl padR10">
+                                                <input type="radio" id="gi_oneway_label_srp" name="radio" value="on" style="float:left;"><label for="gi_oneway_label_srp" class="dF alignItemsCenter lh1">
+                                                    <span class="fb white">One-way</span>
+                                                </label>
+                                            </span><span class="custRad custRadWht fl">
+                                                <input type="radio" id="gi_roundtrip_label_srp" name="radio" value="on" style="float:left;"><label for="gi_roundtrip_label_srp" class="dF alignItemsCenter lh1">
+                                                    <span class="fb white">Round-trip</span>
+                                                </label>
+                                            </span>
+                                        </div><div class="col-md-12 col-sm-12 col-xs-12 padLR0 hpySrpWdgt padT5">
+                                            <div class="">
+                                                <div class="width20 padR20 fl autoSuggestBox" id="source_st_srp">
+                                                    <div class="white ico12 op6 padB5 txtTransUpper">From</div>
+                                                    <div class="width100 fl autoSuggestBox autoSgstOuterWrap">
+                                                        <div class="width100 fl autoSuggestBox autoSgstOuterWrap">
+                                                            <input type="text" id="gi_source_st_srp" class="form-control fltIpF quicks wdgtEle" value="Kolkata" autocomplete="off" role="combobox" aria-autocomplete="list" aria-owns="react-autosuggest-1" aria-expanded="false">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <a href="javascript:void(0);" id="swap_srp" class="fl padT20 marginT5 padR20 swapWrap">
+                                                    <i class="hypflt-dblArw ico18 fl txtCenter white"></i>
+                                                </a>
+                                                <div class="width20 fl padR20 autoSuggestBox" id="destination_st_srp">
+                                                    <div class="white ico12 op6 padB5 txtTransUpper">To</div>
+                                                    <div class="width100 fl autoSuggestBox autoSgstOuterWrap">
+                                                        <div class="width100 fl autoSuggestBox autoSgstOuterWrap">
+                                                            <input type="text" id="gi_destination_st_srp" class="form-control fltIpF quicks wdgtEle" value="Delhi" autocomplete="off" role="combobox" aria-autocomplete="list" aria-owns="react-autosuggest-1" aria-expanded="false">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div><div class="width12 fl calenderInnerBox padR20">
+                                                <div class="white ico12 op6 padB5 txtTransUpper">Departure Date</div><div id="fromEle_srp" class="col-md-12 pad0">
+                                                    <input type="text" class="form-control quicks wdgtEle" name="from" id="start-date_srp" data-date="true" value="Fri, 10 Jul" readonly="">
+                                                </div>
+                                            </div>
+                                            <div class="width12 fl calenderInnerBox padR20">
+                                                <div class="white ico12 op6 padB5 txtTransUpper">Return Date</div><div id="toEle_srp" class="col-md-12 pad0">
+                                                    <input type="text" class="form-control quicks wdgtEle " name="to" id="end-date_srp" data-date="true" value="Wed, 22 Jul" readonly="">
+                                                    <i class="hypflt-close dib ico17 white posAbs calClose curPointFlt"></i>
+                                                </div>
+                                            </div>
+                                            <div class="paxWrapper fl_shInputPaxBox col-lg-2 col-md-2  col-sm-2 col-xs-12 padL0 padR20" id="pax_link_common_srp">
+                                                <div class="white ico12 op6 padB5 txtTransUpper">Passenger &amp; Class</div>
+                                                <span href="javascript:void(0);" class="paxBoxWrap mobdn dF padT10 ico14 quicks">
+                                                    <span id="pax_label_srp" class="textOverflow">1 Traveller(s), </span>
+                                                    <span class="textOverflow">Economy</span>
+                                                </span>
+                                            </div><div class="col-lg-1 col-md-1 col-sm-3 col-xs-12 marginB10">
+                                                <div class="white ico12 op6 padB5 txtTransUpper">&nbsp;</div>
+                                                <button id="submitSearchButton_srp" class="button hpySrchEnb ipadButtonSpace width100 quicks" type="button">Search</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+
                     <div class="card" style="width:100%;">
                         <div class="card-body">
                             <div class="row">
                                 <!--.col-->
                                 <div class="row col-md-12" style="padding-bottom:40px;">
-                                    <div class="dropdown mega-menu d-none d-md-block">
-                                        <a href="#" class="btn text-muted dropdown-toggle mr-3" id="dropdownMegaMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Filter Result</a>
-                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                            <div class="row m-0 p-2">
-                                                <div class="col-md-4 p-2">
-                                                    <div class="control-group">
-                                                        <div class="controls">
-                                                            <label>Depart on</label>
-                                                            <div class="input-group">
-                                                                <span class="input-group-addon"><i class="ion-android-calendar"></i></span>
-                                                                <div class="inputer">
-                                                                    <div class="input-wrapper">
-                                                                        <input type="text" name="birthday" class="form-control bootstrap-daterangepicker-basic" value="03/18/2013" />
+                                    <div class="accordion" id="accordionRightIcon" style="width:100%">
+                                        <div class="card">
+                                            <div class="card-header header-elements-inline">
+                                                <h6 class="card-title ul-collapse__icon--size ul-collapse__right-icon mb-0"><a class="text-default collapsed" data-toggle="collapse" href="#accordion-item-icons-1" aria-expanded="false"> Filter Result</a></h6>
+                                            </div>
+                                            <div class="collapse" id="accordion-item-icons-1" data-parent="#accordionRightIcon">
+                                                <div class="card-body">
+                                                    <div class="row m-0 p-2">
+                                                        <div class="col-md-4 p-2">
+                                                            <div class="control-group">
+                                                                <div class="controls">
+                                                                    <label>Depart on</label>
+                                                                    <div>
+                                                                        <span data-cy="timeFilter0" class="fltHpyStp paleGreyBg3 ico11 padLR5 padTB10 txtCenter">4am - 11am</span>
+                                                                        <span data-cy="timeFilter0" class="fltHpyStp paleGreyBg3 ico11 padLR5 padTB10 txtCenter">11am - 4pm</span>
+                                                                        <span data-cy="timeFilter0" class="fltHpyStp paleGreyBg3 ico11 padLR5 padTB10 txtCenter">4pm - 9pm</span>
+                                                                        <span data-cy="timeFilter0" class="fltHpyStp paleGreyBg3 ico11 padLR5 padTB10 txtCenter">9pm - 4am</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-4 p-2">
+                                                            <div class="control-group">
+                                                                <div class="controls">
+                                                                    <label>Return on</label>
+                                                                    <div>
+                                                                        <span data-cy="timeFilter0" class="fltHpyStp paleGreyBg3 ico11 padLR5 padTB10 txtCenter">4am - 11am</span>
+                                                                        <span data-cy="timeFilter0" class="fltHpyStp paleGreyBg3 ico11 padLR5 padTB10 txtCenter">11am - 4pm</span>
+                                                                        <span data-cy="timeFilter0" class="fltHpyStp paleGreyBg3 ico11 padLR5 padTB10 txtCenter">4pm - 9pm</span>
+                                                                        <span data-cy="timeFilter0" class="fltHpyStp paleGreyBg3 ico11 padLR5 padTB10 txtCenter">9pm - 4am</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="col-md-4 p-2">
+                                                            <div class="form-group">
+                                                                <label>Price range:</label>
+                                                                <div id="extra-small-slider-circle-filled" class="circle-filled slider-default slider-extra-small slider-custom noUi-target noUi-ltr noUi-horizontal" style="margin-top:10px;">
+
+                                                                    <div class="noUi-base">
+                                                                        <div class="noUi-origin" style="left: 14.2857%;">
+                                                                            <div class="noUi-handle noUi-handle-lower" data-handle="0" tabindex="0" role="slider" aria-orientation="horizontal" aria-valuemin="0.0" aria-valuemax="71.4" aria-valuenow="14.3" aria-valuetext="20.00" style="z-index: 5;"></div>
+                                                                        </div>
+                                                                        <div class="noUi-connect" style="left: 14.2857%; right: 28.5714%;"></div>
+
+                                                                        <div class="noUi-origin" style="left: 71.4286%;">
+                                                                            <div class="noUi-handle noUi-handle-upper" data-handle="1" tabindex="0" role="slider" aria-orientation="horizontal" aria-valuemin="14.3" aria-valuemax="100.0" aria-valuenow="71.4" aria-valuetext="60.00" style="z-index: 4;"></div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-4 p-2">
+                                                            Stops
+                                                            <div class="clearfix"></div>
+                                                            <div class="btn-group btn-group-xs" data-toggle="buttons">
+
+                                                                <label class="btn btn-blue-grey">
+                                                                    <input type="radio" name="options" id="option1" autocomplete="off" checked>
+                                                                    1
+                                                                </label>
+                                                                <label class="btn btn-blue-grey">
+                                                                    <input type="radio" name="options" id="option2" autocomplete="off">
+                                                                    2
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-4 p-2 row">
+                                                            Preferred Airlines:
+
+                                                            <div id="news-slider2" class="owl-carousel">
+                                                                <div class="post-slide2">
+                                                                    <div class="post-img">
+                                                                        <input type="checkbox" value="" id="check6">
+                                                                        <label for="check6"><img src="~/images/air_india.png" /></label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="post-slide2">
+                                                                    <div class="post-img">
+                                                                        <input type="checkbox" value="" id="check6">
+                                                                        <label for="check6"><img src="~/images/go_air.png" /></label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="post-slide2">
+                                                                    <div class="post-img">
+                                                                        <input type="checkbox" value="" id="check6">
+                                                                        <label for="check6"><img src="~/images/spicejet.png" /></label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="post-slide2">
+                                                                    <div class="post-img">
+                                                                        <input type="checkbox" value="" id="check6">
+                                                                        <label for="check6"><img src="~/images/air_india.png" /></label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="post-slide2">
+                                                                    <div class="post-img">
+                                                                        <input type="checkbox" value="" id="check6">
+                                                                        <label for="check6"><img src="~/images/go_air.png" /></label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="post-slide2">
+                                                                    <div class="post-img">
+                                                                        <input type="checkbox" value="" id="check6">
+                                                                        <label for="check6"><img src="~/images/spicejet.png" /></label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <!--.checkbox-->
+                                                        </div>
+                                                        <div class="col-md-4 p-2">
+                                                            <div class="form-group">
+                                                                <label>Trip duration:</label>
+
+                                                                <div id="extra-small-slider-circle-filled" class="circle-filled slider-default slider-extra-small slider-custom noUi-target noUi-ltr noUi-horizontal" style="margin-top:10px;">
+
+                                                                    <div class="noUi-base">
+                                                                        <div class="noUi-origin" style="left: 14.2857%;">
+                                                                            <div class="noUi-handle noUi-handle-lower" data-handle="0" tabindex="0" role="slider" aria-orientation="horizontal" aria-valuemin="0.0" aria-valuemax="71.4" aria-valuenow="14.3" aria-valuetext="20.00" style="z-index: 5;"></div>
+                                                                        </div>
+                                                                        <div class="noUi-connect" style="left: 14.2857%; right: 28.5714%;"></div>
+
+                                                                        <div class="noUi-origin" style="left: 71.4286%;">
+                                                                            <div class="noUi-handle noUi-handle-upper" data-handle="1" tabindex="0" role="slider" aria-orientation="horizontal" aria-valuemin="14.3" aria-valuemax="100.0" aria-valuenow="71.4" aria-valuetext="60.00" style="z-index: 4;"></div>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-md-4 p-2">
-                                                    <div class="control-group">
-                                                        <div class="controls">
-                                                            <label>Return on</label>
-                                                            <div class="input-group">
-                                                                <span class="input-group-addon"><i class="ion-android-calendar"></i></span>
-                                                                <div class="inputer">
-                                                                    <div class="input-wrapper">
-                                                                        <input type="text" name="birthday" class="form-control bootstrap-daterangepicker-basic" value="03/18/2013" />
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
 
-                                                </div>
-                                                <div class="col-md-4 p-2">
-                                                    <div class="form-group">
-                                                        <label>Price range:</label>
-                                                        <div id="extra-small-slider-circle-filled" class="circle-filled slider-default slider-extra-small slider-custom noUi-target noUi-ltr noUi-horizontal" style="margin-top:10px;">
-
-                                                            <div class="noUi-base">
-                                                                <div class="noUi-origin" style="left: 14.2857%;">
-                                                                    <div class="noUi-handle noUi-handle-lower" data-handle="0" tabindex="0" role="slider" aria-orientation="horizontal" aria-valuemin="0.0" aria-valuemax="71.4" aria-valuenow="14.3" aria-valuetext="20.00" style="z-index: 5;"></div>
-                                                                </div>
-                                                                <div class="noUi-connect" style="left: 14.2857%; right: 28.5714%;"></div>
-
-                                                                <div class="noUi-origin" style="left: 71.4286%;">
-                                                                    <div class="noUi-handle noUi-handle-upper" data-handle="1" tabindex="0" role="slider" aria-orientation="horizontal" aria-valuemin="14.3" aria-valuemax="100.0" aria-valuenow="71.4" aria-valuetext="60.00" style="z-index: 4;"></div>
-                                                                </div>
-                                                            </div>
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4 p-2">
-                                                    Stops
-                                                    <div class="clearfix"></div>
-                                                    <div class="btn-group btn-group-xs" data-toggle="buttons">
-
-                                                        <label class="btn btn-blue-grey">
-                                                            <input type="radio" name="options" id="option1" autocomplete="off" checked>
-                                                            1
-                                                        </label>
-                                                        <label class="btn btn-blue-grey">
-                                                            <input type="radio" name="options" id="option2" autocomplete="off">
-                                                            2
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4 p-2 row">
-                                                    Preferred Airlines:
-
-                                                    <div id="news-slider2" class="owl-carousel">
-                                                        <div class="post-slide2">
-                                                            <div class="post-img">
-                                                                <input type="checkbox" value="" id="check6">
-                                                                <label for="check6"><img src="~/images/air_india.png" /></label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="post-slide2">
-                                                            <div class="post-img">
-                                                                <input type="checkbox" value="" id="check6">
-                                                                <label for="check6"><img src="~/images/go_air.png" /></label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="post-slide2">
-                                                            <div class="post-img">
-                                                                <input type="checkbox" value="" id="check6">
-                                                                <label for="check6"><img src="~/images/spicejet.png" /></label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="post-slide2">
-                                                            <div class="post-img">
-                                                                <input type="checkbox" value="" id="check6">
-                                                                <label for="check6"><img src="~/images/air_india.png" /></label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="post-slide2">
-                                                            <div class="post-img">
-                                                                <input type="checkbox" value="" id="check6">
-                                                                <label for="check6"><img src="~/images/go_air.png" /></label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="post-slide2">
-                                                            <div class="post-img">
-                                                                <input type="checkbox" value="" id="check6">
-                                                                <label for="check6"><img src="~/images/spicejet.png" /></label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!--.checkbox-->
-                                                </div>
-                                                <div class="col-md-4 p-2">
-                                                    <div class="form-group">
-                                                        <label>Trip duration:</label>
-
-                                                        <div id="extra-small-slider-circle-filled" class="circle-filled slider-default slider-extra-small slider-custom noUi-target noUi-ltr noUi-horizontal" style="margin-top:10px;">
-
-                                                            <div class="noUi-base">
-                                                                <div class="noUi-origin" style="left: 14.2857%;">
-                                                                    <div class="noUi-handle noUi-handle-lower" data-handle="0" tabindex="0" role="slider" aria-orientation="horizontal" aria-valuemin="0.0" aria-valuemax="71.4" aria-valuenow="14.3" aria-valuetext="20.00" style="z-index: 5;"></div>
-                                                                </div>
-                                                                <div class="noUi-connect" style="left: 14.2857%; right: 28.5714%;"></div>
-
-                                                                <div class="noUi-origin" style="left: 71.4286%;">
-                                                                    <div class="noUi-handle noUi-handle-upper" data-handle="1" tabindex="0" role="slider" aria-orientation="horizontal" aria-valuemin="14.3" aria-valuemax="100.0" aria-valuenow="71.4" aria-valuetext="60.00" style="z-index: 4;"></div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
+
                                     </div>
+
+
+
+
+                                    @*<div class="dropdown mega-menu d-none d-md-block">
+                                            <a href="#" class="btn text-muted dropdown-toggle mr-3" id="dropdownMegaMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Filter Result</a>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            </div>
+                                        </div>*@
                                 </div>
                                 <div class="flexCol fltHpyRsltCard whiteBg brdrRd10 pad10 stickyHpy marginT5 padB15 width100" style="z-index: 2;">
                                     <div class="dF justifyBetween">
@@ -603,14 +1021,14 @@
                                                 </span>
                                             </span><span class="dF flexCol">
                                                 <span class="db clearfix padTB15">
-                                                    <input type="button" value="BOOK" class="button fr fltbook fb widthF105 quicks fb"  ng-click="RoundtripgetFlightDetails(AdultCount,ChildCount,InfantCount,(FlightTrackNo+','+DesFlightTrackNo),TripMode)">
+                                                    <input type="button" value="BOOK" class="button fr fltbook fb widthF105 quicks fb" ng-click="RoundtripgetFlightDetails(AdultCount,ChildCount,InfantCount,(FlightTrackNo+','+DesFlightTrackNo),TripMode)">
                                                 </span>
                                             </span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-6 material-animate">
-                                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"   infinite-scroll="loadMore()">
+                                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" infinite-scroll="loadMore()">
                                         <div class="quicks">
                                             <div class="fb padTB10 ico14">Sort By</div>
                                             <ul class="fltHpySrt ico12 dF justifyAround whiteBg pad10 brdrRd5" style="background-color:#ccc; padding:5px;">
@@ -669,8 +1087,8 @@
                                                                     <span class="ico20">{{Deptitemval[0].TotalAmount}}/-</span>
                                                                 </span>
                                                             </span>
-                                                            <span class="custRad">
-                                                                <input type="radio" ng-model="RbtSourceDetails" id="rbtSourceId{{$index}}" name="Source"  ng-click="selectDestimationSource(Deptitemval[0].TrackNo,Deptitemval[0].FromAirportCode,Deptitemval[0].DepTime,(Deptitemval[0].Stops === '0' ? '' : Deptitemval[Deptitemval[0].Stops].FromAirportCode),(timeConvert(Deptitemval[0].Stops === '0' ? parseNumber(Deptitemval[0].FlightTime) : (parseNumber(Deptitemval[0].FlightTime)+parseNumber(Deptitemval[0].HoldDuration)+parseNumber(Deptitemval[Deptitemval[0].Stops].HoldDuration)))),(Deptitemval[0].Stops === '0' ? 0 : Deptitemval[Deptitemval[0].Stops].Stops),(Deptitemval[0].Stops === '0' ? Deptitemval[0].ToAirportCode : Deptitemval[Deptitemval[0].Stops].ToAirportCode),(Deptitemval[0].Stops === '0' ? Deptitemval[0].ArrTime : Deptitemval[Deptitemval[0].Stops].ArrTime),Deptitemval[0].DepDate,Deptitemval[0].TotalAmount,Deptitemval[0].SrNo,Deptitemval[0].FlightNo)"><label></label>
+                                                            <span class="custRad" style="padding-left:10px;">
+                                                                <input type="radio" ng-model="RbtSourceDetails" id="rbtSourceId{{$index}}" name="Source" ng-click="selectDestimationSource(Deptitemval[0].TrackNo,Deptitemval[0].FromAirportCode,Deptitemval[0].DepTime,(Deptitemval[0].Stops === '0' ? '' : Deptitemval[Deptitemval[0].Stops].FromAirportCode),(timeConvert(Deptitemval[0].Stops === '0' ? parseNumber(Deptitemval[0].FlightTime) : (parseNumber(Deptitemval[0].FlightTime)+parseNumber(Deptitemval[0].HoldDuration)+parseNumber(Deptitemval[Deptitemval[0].Stops].HoldDuration)))),(Deptitemval[0].Stops === '0' ? 0 : Deptitemval[Deptitemval[0].Stops].Stops),(Deptitemval[0].Stops === '0' ? Deptitemval[0].ToAirportCode : Deptitemval[Deptitemval[0].Stops].ToAirportCode),(Deptitemval[0].Stops === '0' ? Deptitemval[0].ArrTime : Deptitemval[Deptitemval[0].Stops].ArrTime),Deptitemval[0].DepDate,Deptitemval[0].TotalAmount,Deptitemval[0].SrNo,Deptitemval[0].FlightNo)"><label></label>
                                                             </span>
                                                         </div>
                                                     </div>
@@ -699,7 +1117,7 @@
                                                                                 <span>
                                                                                     Indigo-
                                                                                     {{ReturnOneway.TrackNo}}
-                                                                                  
+
                                                                                 </span>
                                                                             </div>
                                                                             <div class="col-md-3">
@@ -750,7 +1168,7 @@
                                         <div data-cy="flightItem_CCUDEL20200710ESG:SG3281SG903:0">
                                             <div class="fltHpyRsltCard flexCol whiteBg marginT10 brdrRd5" ng-repeat="(key, Returnval) in returnFlight | groupBy: 'TrackNo' | limitTo:numberToDisplay">
                                                 <div class="fl width100 fltCrdTpRd cardOffer"></div>
-                                                <div class="dF justifyBetween alignItemsEnd padTB10" >
+                                                <div class="dF justifyBetween alignItemsEnd padTB10">
                                                     <div class="dF justifyBetween  alignItemsEnd width70 padLR0">
                                                         <div class="width100">
                                                             <div class="col-md-3 col-sm-2 col-xs-2 padL10">
@@ -798,9 +1216,9 @@
                                                                     </span>
                                                                 </span>
                                                             </span>
-                                                            <span class="custRad">
+                                                            <span class="custRad" style="padding-left:10px;">
                                                                 @*<input  type="radio" ng-model="RbtDestinationDetails" name="destination" id="rbtDestinationId{{$index}}" ng-click="selectReturnFlightSource(Returnval[0].TrackNo,Returnval[0].FromAirportCode,Returnval[0].DepTime,(Returnval[0].Stops === '0' ? '' : Returnval[Returnval[0].Stops].FromAirportCode),(timeConvert(Returnval[0].Stops === '0' ? parseNumber(Returnval[0].FlightTime) : (parseNumber(Returnval[0].FlightTime)+parseNumber(Returnval[0].HoldDuration)+parseNumber(Returnval[Returnval[0].Stops].HoldDuration)))),(Returnval[0].Stops === '0' ? 0 : Returnval[Returnval[0].Stops].Stops),(Returnval[0].Stops === '0' ? Returnval[0].ToAirportCode : Returnval[Returnval[0].Stops].ToAirportCode),(Returnval[0].Stops === '0' ? Returnval[0].ArrTime : Returnval[Returnval[0].Stops].ArrTime),Returnval[0].DepDate,Returnval[0].TotalAmount,Returnval[0].SrNo,,Returnval[0].FlightNo)"><label></label>*@
-                                                            <input type="radio" ng-model="RbtDestinationDetails" id="rbtDestinationId{{$index}}" name="destination" ng-click="selectReturnFlightSource(Returnval[0].TrackNo,Returnval[0].FromAirportCode,Returnval[0].DepTime,(Returnval[0].Stops === '0' ? '' : Returnval[Returnval[0].Stops].FromAirportCode),(timeConvert(Returnval[0].Stops === '0' ? parseNumber(Returnval[0].FlightTime) : (parseNumber(Returnval[0].FlightTime)+parseNumber(Returnval[0].HoldDuration)+parseNumber(Returnval[Returnval[0].Stops].HoldDuration)))),(Returnval[0].Stops === '0' ? 0 : Returnval[Returnval[0].Stops].Stops),(Returnval[0].Stops === '0' ? Returnval[0].ToAirportCode : Returnval[Returnval[0].Stops].ToAirportCode),(Returnval[0].Stops === '0' ? Returnval[0].ArrTime : Returnval[Returnval[0].Stops].ArrTime),Returnval[0].DepDate,Returnval[0].TotalAmount,Returnval[0].SrNo,Returnval[0].FlightNo)"><label></label>
+                                                                <input type="radio" ng-model="RbtDestinationDetails" id="rbtDestinationId{{$index}}" name="destination" ng-click="selectReturnFlightSource(Returnval[0].TrackNo,Returnval[0].FromAirportCode,Returnval[0].DepTime,(Returnval[0].Stops === '0' ? '' : Returnval[Returnval[0].Stops].FromAirportCode),(timeConvert(Returnval[0].Stops === '0' ? parseNumber(Returnval[0].FlightTime) : (parseNumber(Returnval[0].FlightTime)+parseNumber(Returnval[0].HoldDuration)+parseNumber(Returnval[Returnval[0].Stops].HoldDuration)))),(Returnval[0].Stops === '0' ? 0 : Returnval[Returnval[0].Stops].Stops),(Returnval[0].Stops === '0' ? Returnval[0].ToAirportCode : Returnval[Returnval[0].Stops].ToAirportCode),(Returnval[0].Stops === '0' ? Returnval[0].ArrTime : Returnval[Returnval[0].Stops].ArrTime),Returnval[0].DepDate,Returnval[0].TotalAmount,Returnval[0].SrNo,Returnval[0].FlightNo)"><label></label>
 
 
                                                             </span>
@@ -872,4 +1290,6 @@
             </div>
         </div>
     </div>
+
+    <div class=""><div class="paxMobile paxContainer" id="paxContainer"><ul><li class="roomRow"><div class="widgetUserBlock fl padR10"><label class="ico14 db padB5"><span>Adults</span><small class="font13Lt db padT3"> (12+ yrs)</small></label><div class="number-spinner"><button class="fl minSpin" id="adultPaxMinus" data-dir="dwn">−</button><input type="text" id="adultPaxBox" class="fl numbSpin" value="1"><button class="fl plusSpin" id="adultPaxPlus" data-dir="up">+</button></div></div><div><div class="widgetUserBlock fl padR10"><label class="ico14 db padB5"><span>Children</span><small class="font13Lt db padT3"> (2-12 yrs)</small></label><div class="number-spinner"><button class="fl minSpin" id="childPaxMinus" data-dir="dwn">−</button><input type="text" id="childPaxBox" class="fl numbSpin" value="0"><button class="fl plusSpin" id="childPaxPlus" data-dir="up">+</button></div></div><div class="widgetUserBlock fl padR10"><label class="ico14 db padB5"><span>Infant(s)</span><small class="font13Lt db padT3"> (below 2 yrs)</small></label><div class="number-spinner"><button class="fl minSpin" id="infantPaxMinus" data-dir="dwn">−</button><input type="text" id="infantPaxBox" class="fl numbSpin" value="0"><button class="fl plusSpin" id="infantPaxPlus" data-dir="up">+</button></div></div></div></li></ul><div class="fl width100 padLR15 padB15 alignItemsCenter dF"><div class="padR10"> Travel Class</div><div class="width70"><div><label><!-- react-text: 3821 --> <!-- /react-text --><!-- react-text: 3822 --><!-- /react-text --></label><div><select class="width100 form-control ico14" id="gi_class"><option value="E">Economy</option><option value="B">Business</option><option value="F">First class</option><option value="W">Premium Economy</option></select></div></div></div></div></div></div>
 </div>
