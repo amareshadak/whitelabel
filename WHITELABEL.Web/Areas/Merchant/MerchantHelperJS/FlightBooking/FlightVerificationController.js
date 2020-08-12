@@ -5,6 +5,7 @@
     $scope.infant = 0;
     $scope.passengers = [];
     $scope.trackNumber = '';
+
     let pessengerObj = {
         "PaxSeqNo": 0,
         "Title": "",
@@ -19,13 +20,15 @@
         "label": ""
     };
 
+
+
     $scope.bookingRequestObj = {
         "RequestXml": {
             "Authenticate": {
-                "InterfaceCode": "1",
-                "InterfaceAuthKey": "AirticketOnlineWebSite",
-                "AgentCode": "MLD0000001",
-                "Password": "TEST1_"
+                "InterfaceCode": "",
+                "InterfaceAuthKey": "",
+                "AgentCode": "",
+                "Password": ""
             },
             "BookTicketRequest": {
                 "TrackNo": $scope.trackNumber,

@@ -24,16 +24,15 @@
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
-    @*<script src="~/newpanel/assets/js/vendor/jquery-3.3.1.min.js"></script>*@
-    @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>*@
+
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
     <script src="~/Scripts/jquery.validate.js"></script>
     <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.19/lodash.min.js"></script>
-    @*<script src="~/Scripts/angular.min.js"></script>
-        <script src="~/Scripts/angular-route.min.js"></script>*@
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular.min.js"></script>
-    <script scc="https://code.angularjs.org/1.8.0/angular-animate.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-animate.min.js"></script>
+
     <script scc="https://code.angularjs.org/1.8.0/angular-touch.min.js"></script>
     <script src="~/HelperJS/AngularjsLinks/ui-bootstrap-tpls-3.0.6.min.js"></script>
 
@@ -68,6 +67,30 @@
         [ng-cloak] {
             display: none !important;
         }
+
+        .animation {
+            -webkit-transition: 5s;
+        }
+
+            .animation.ng-enter {
+                -webkit-transition: 2s;
+                transition: 2s linear all;
+                opacity: 0;
+            }
+
+            .animation.ng-leave {
+                -webkit-transition: 2s;
+                transition: 2s linear all;
+                opacity: 1;
+            }
+
+            .animation.ng-enter.ng-enter-active {
+                opacity: 1;
+            }
+
+            .animation.ng-leave.ng-leave-active {
+                opacity: 0;
+            }
     </style>
 
     <style>
