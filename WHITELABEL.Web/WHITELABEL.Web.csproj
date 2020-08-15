@@ -524,6 +524,7 @@
     <Content Include="Areas\Merchant\MerchantHelperJS\FlightBooking\app.js" />
     <Content Include="Areas\Merchant\MerchantHelperJS\FlightBooking\FlightServices.js" />
     <Content Include="Areas\Merchant\MerchantHelperJS\FlightBooking\FlightVerificationController.js" />
+    <Content Include="Areas\Merchant\MerchantHelperJS\FlightBooking\ReturnTripSearch.js" />
     <Content Include="Areas\Merchant\MerchantHelperJS\FlightBooking\SingleFlightSearch.js" />
     <Content Include="Areas\Merchant\MerchantHelperJS\GasBillRecharge\Index.js" />
     <Content Include="Areas\Merchant\MerchantHelperJS\InsurancePayment\Index.js" />

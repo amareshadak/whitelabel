@@ -100,6 +100,10 @@
     .ico11 {
         font-size: 11px;
     }
+    .nav-tabs {
+        border-bottom: 1px solid #8601af !important;
+    }
+
 
     .quicks {
         font-family: "QuickSand",Helvetica,Arial,sans-serif;
@@ -699,6 +703,7 @@
        
         padding: 5px 25px 5px 5px;
     }
+
 </style>
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.css" rel="stylesheet" type="text/css" />
@@ -709,9 +714,11 @@
 <script src="~/HelperJS/AngularjsLinks/sidebar.large.script.min.js"></script>
 <script src="~/HelperJS/AngularjsLinks/nuslider.min.js"></script>
 <script src="~/Areas/Merchant/MerchantHelperJS/FlightBooking/app.js"></script>
-<script src="~/Areas/Merchant/MerchantHelperJS/FlightBooking/AirportAutocomplete.js"></script>
+<script src="~/Areas/Merchant/MerchantHelperJS/FlightBooking/FlightServices.js"></script>
+<script src="~/Areas/Merchant/MerchantHelperJS/FlightBooking/ReturnTripSearch.js"></script>
+@*<script src="~/Areas/Merchant/MerchantHelperJS/FlightBooking/AirportAutocomplete.js"></script>*@
 
-<div class="display-animation" ng-app="AirportAutocompleteoduleApp" ng-controller="AirportAutocompleteController" ng-init="LoadFlightSearch('@ViewBag.Tripmode','@ViewBag.FromCityCode','@ViewBag.TOAirportCode','@ViewBag.FromDate','@ViewBag.ToDate','@ViewBag.TravelType','@ViewBag.Adult','@ViewBag.Child','@ViewBag.Infant')" id="AirportAutocompleteController">
+<div class="display-animation" ng-app="AirportAutocompleteoduleApp" ng-controller="ReturnFlightSearchApiCall" ng-init="LoadFlightSearch('@ViewBag.Tripmode','@ViewBag.FromCityCode','@ViewBag.TOAirportCode','@ViewBag.FromDate','@ViewBag.ToDate','@ViewBag.TravelType','@ViewBag.Adult','@ViewBag.Child','@ViewBag.Infant')" id="AirportAutocompleteController">
     <div class="content" style="margin-top:20px;">
         <div class="display-animation">
             <div class="full-content margin-bottom-40 bg-white" id="Bill_page">
@@ -781,12 +788,6 @@
                             </div>
                         </div>
                     </div>
-
-
-
-
-
-
                     <div class="card" style="width:100%;">
                         <div class="card-body">
                             <div class="row">
@@ -805,10 +806,11 @@
                                                                 <div class="controls">
                                                                     <label>Depart on</label>
                                                                     <div>
-                                                                        <span data-cy="timeFilter0" class="fltHpyStp paleGreyBg3 ico11 padLR5 padTB10 txtCenter">4am - 11am</span>
-                                                                        <span data-cy="timeFilter0" class="fltHpyStp paleGreyBg3 ico11 padLR5 padTB10 txtCenter">11am - 4pm</span>
-                                                                        <span data-cy="timeFilter0" class="fltHpyStp paleGreyBg3 ico11 padLR5 padTB10 txtCenter">4pm - 9pm</span>
-                                                                        <span data-cy="timeFilter0" class="fltHpyStp paleGreyBg3 ico11 padLR5 padTB10 txtCenter">9pm - 4am</span>
+                                                                        <button type="button" class="btn btn" ng-model="filterData.timeSlots.EarlyMorning" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">12am - 8am</button>
+                                                                        <button type="button" class="btn btn" ng-model="filterData.timeSlots.Morning" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">8am - 12pm</button>
+                                                                        <button type="button" class="btn btn" ng-model="filterData.timeSlots.MidDay" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">12pm - 4pm</button>
+                                                                        <button type="button" class="btn btn" ng-model="filterData.timeSlots.Evening" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">4pm - 8pm</button>
+                                                                        <button type="button" class="btn btn" ng-model="filterData.timeSlots.Night" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">8pm - 12am</button>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -818,10 +820,11 @@
                                                                 <div class="controls">
                                                                     <label>Return on</label>
                                                                     <div>
-                                                                        <span data-cy="timeFilter0" class="fltHpyStp paleGreyBg3 ico11 padLR5 padTB10 txtCenter">4am - 11am</span>
-                                                                        <span data-cy="timeFilter0" class="fltHpyStp paleGreyBg3 ico11 padLR5 padTB10 txtCenter">11am - 4pm</span>
-                                                                        <span data-cy="timeFilter0" class="fltHpyStp paleGreyBg3 ico11 padLR5 padTB10 txtCenter">4pm - 9pm</span>
-                                                                        <span data-cy="timeFilter0" class="fltHpyStp paleGreyBg3 ico11 padLR5 padTB10 txtCenter">9pm - 4am</span>
+                                                                        <button type="button" class="btn btn" ng-model="filterRetrunData.timeSlots.EarlyMorning" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">12am - 8am</button>
+                                                                        <button type="button" class="btn btn" ng-model="filterRetrunData.timeSlots.Morning" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">8am - 12pm</button>
+                                                                        <button type="button" class="btn btn" ng-model="filterRetrunData.timeSlots.MidDay" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">12pm - 4pm</button>
+                                                                        <button type="button" class="btn btn" ng-model="filterRetrunData.timeSlots.Evening" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">4pm - 8pm</button>
+                                                                        <button type="button" class="btn btn" ng-model="filterRetrunData.timeSlots.Night" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">8pm - 12am</button>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -830,8 +833,14 @@
                                                         <div class="col-md-4 p-2">
                                                             <div class="form-group">
                                                                 <label>Price range:</label>
-                                                                <div id="extra-small-slider-circle-filled" class="circle-filled slider-default slider-extra-small slider-custom noUi-target noUi-ltr noUi-horizontal" style="margin-top:10px;">
+                                                                @*<button class="btn btn-xs btn-default pull-right" style="padding:5px;font-size:x-small;font-weight:bold" ng-click="lower_price_bound = min; upper_price_bound = max;">Reset</button>*@
+                                                                <div class="clearfix"></div>
 
+                                                                <span class="badge badge-dark pull-left" ng-cloak>{{lower_price_bound}}</span>
+                                                                <span class="badge badge-dark pull-right" ng-cloak>{{upper_price_bound}}</span>
+                                                                <div class="clearfix"></div>
+                                                                <slider floor="{{min}}" ceiling="{{max}}" ng-model-low="lower_price_bound" ng-model-high="upper_price_bound"></slider>
+                                                                @*<div id="extra-small-slider-circle-filled" class="circle-filled slider-default slider-extra-small slider-custom noUi-target noUi-ltr noUi-horizontal" style="margin-top:10px;">
                                                                     <div class="noUi-base">
                                                                         <div class="noUi-origin" style="left: 14.2857%;">
                                                                             <div class="noUi-handle noUi-handle-lower" data-handle="0" tabindex="0" role="slider" aria-orientation="horizontal" aria-valuemin="0.0" aria-valuemax="71.4" aria-valuenow="14.3" aria-valuetext="20.00" style="z-index: 5;"></div>
@@ -842,8 +851,7 @@
                                                                             <div class="noUi-handle noUi-handle-upper" data-handle="1" tabindex="0" role="slider" aria-orientation="horizontal" aria-valuemin="14.3" aria-valuemax="100.0" aria-valuenow="71.4" aria-valuetext="60.00" style="z-index: 4;"></div>
                                                                         </div>
                                                                     </div>
-
-                                                                </div>
+                                                                </div>*@
                                                             </div>
                                                         </div>
                                                         <div class="col-md-4 p-2">
@@ -852,12 +860,20 @@
                                                             <div class="btn-group btn-group-xs" data-toggle="buttons">
 
                                                                 <label class="btn btn-blue-grey">
-                                                                    <input type="radio" name="options" id="option1" autocomplete="off" checked>
+                                                                    <input type="radio" ng-model="filterData.stops" value="1">
                                                                     1
                                                                 </label>
                                                                 <label class="btn btn-blue-grey">
-                                                                    <input type="radio" name="options" id="option2" autocomplete="off">
+                                                                    <input type="radio" ng-model="filterData.stops" value="2">
                                                                     2
+                                                                </label>
+                                                                <label class="btn btn-blue-grey">
+                                                                    <input type="radio" ng-model="filterData.stops" value="3">
+                                                                    3
+                                                                </label>
+                                                                <label class="btn btn-blue-grey">
+                                                                    <input type="radio" ng-model="filterData.stops" value="0">
+                                                                    Show Direct Flights Only
                                                                 </label>
                                                             </div>
                                                         </div>
@@ -928,17 +944,7 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                     </div>
-
-
-
-
-                                    @*<div class="dropdown mega-menu d-none d-md-block">
-                                            <a href="#" class="btn text-muted dropdown-toggle mr-3" id="dropdownMegaMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Filter Result</a>
-                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                            </div>
-                                        </div>*@
                                 </div>
                                 <div class="flexCol fltHpyRsltCard whiteBg brdrRd10 pad10 stickyHpy marginT5 padB15 width100" style="z-index: 2;">
                                     <div class="dF justifyBetween">
@@ -947,32 +953,33 @@
                                             <div class="dF">
                                                 <div class="dF justifyBetween alignItemsEnd width50 padLR0 borderRight">
                                                     <div class="col-md-3 col-sm-2 col-xs-2">
-                                                        <span class="dF justifyCenter">
-                                                            <img src="https://goibibo.ibcdn.com/images/v2/carrierImages/SG.gif" class="flightImagesNew" alt="flights">
-                                                        </span><span class="db txtCenter greyLt ico11 padT5">Spicejet-{{FlightTrackNo}}-{{OriginResultIndex}}- {{FlightNo}} </span>
+                                                        <span class="dF justifyCenter" ng-cloak>
+                                                            <img src="~/Content/static-airlines-master/logos/{{selectedDeptFlight[0].AirlineCode}}.png" class="flightImagesNew" alt="flights">
+                                                        </span><span class="db txtCenter greyLt ico11 padT5"  ng-cloak>
+                                                        <span style="display:none;">{{FlightTrackNo}}-{{OriginResultIndex}}-</span> {{FlightNo}} </span>
                                                     </div>
                                                     <div class="col-md-9 col-sm-10 col-xs-10 padLR0">
                                                         <div class="fl width100  alignItemsEnd dF">
                                                             <div class="col-md-4 col-sm-4 col-xs-4">
-                                                                <span class="db ico11 nowrap padB5">{{DepartDate}}</span>
+                                                                <span class="db ico11 nowrap padB5" ng-cloak>{{DepartDate}}</span>
                                                                 <span class="db">
-                                                                    <span class="db ico12 greyLt padB5">{{OriginAirportCode}}</span>
-                                                                    <span class="fb ico16 quicks">{{Departtime}}</span>
+                                                                    <span class="db ico12 greyLt padB5" ng-cloak>{{OriginAirportCode}}</span>
+                                                                    <span class="fb ico16 quicks" ng-cloak>{{Departtime}}</span>
                                                                 </span>
                                                             </div>
                                                             <div class="col-md-5 col-sm-5 padLR0 col-xs-5 alignSelfCenter">
-                                                                <div class="ico12 grey txtCenter padB5">{{ViaFromStopage}}-{{Duration}}</div>
+                                                                <div class="ico12 grey txtCenter padB5" ng-cloak>{{ViaFromStopage}} ({{Duration}})</div>
                                                                 <span>
                                                                     <span class="col-md-5 col-sm-3 col-xs-3 pad0 prgrsDot dotVH"></span>
                                                                     <span class="col-md-5 col-sm-3 col-xs-3 pad0 prgrsDot"></span>
                                                                     <span class="col-md-2 col-sm-3 col-xs-3 pad0 prgrsDot dotVH"></span>
                                                                 </span>
-                                                                <div class="ico12 grey txtCenter">{{FromStops}} Stop</div>
+                                                                <div class="ico12 grey txtCenter" ng-cloak>{{FromStops}} Stop</div>
                                                             </div>
                                                             <div class="col-md-3 col-sm-3 col-xs-3 width29">
                                                                 <span class="db">
-                                                                    <span class="db ico12 greyLt padB5"><!-- react-text: 2065 -->{{DestinationAirportcode}}<!-- /react-text --></span>
-                                                                    <span class="fb ico16 quicks">{{Reachedtime}}</span>
+                                                                    <span class="db ico12 greyLt padB5" ng-cloak><!-- react-text: 2065 -->{{DestinationAirportcode}}<!-- /react-text --></span>
+                                                                    <span class="fb ico16 quicks" ng-cloak>{{Reachedtime}}</span>
                                                                 </span>
                                                             </div>
                                                         </div>
@@ -980,26 +987,27 @@
                                                 </div>
                                                 <div class="dF justifyBetween alignItemsEnd width50 padLR0 ">
                                                     <div class="col-md-3 col-sm-2 col-xs-2">
-                                                        <span class="dF justifyCenter"><img src="https://goibibo.ibcdn.com/images/v2/carrierImages/I5.gif" class="flightImagesNew" alt="flights"></span>
-                                                        <span class="db txtCenter greyLt ico11 padT5">{{DesFlightTrackNo}} {{DesFlightNo}}</span>
+                                                        <span class="dF justifyCenter"  ng-cloak><img src="~/Content/static-airlines-master/logos/{{ReturnAirLineCode}}.png" class="flightImagesNew" alt="flights"></span>
+                                                        <span class="db txtCenter greyLt ico11 padT5"  ng-cloak>
+                                                        <span style="display:none;">{{DesFlightTrackNo}}</span> {{DesFlightNo}}</span>
                                                     </div>
                                                     <div class="col-md-9 col-sm-10 col-xs-10 padLR0">
                                                         <div class="fl width100  alignItemsEnd dF">
                                                             <div class="col-md-4 col-sm-4 col-xs-4">
-                                                                <span class="db ico11 nowrap padB5">{{DesDepartDate}}</span>
+                                                                <span class="db ico11 nowrap padB5"  ng-cloak>{{DesDepartDate}}</span>
                                                                 <span class="db">
-                                                                    <span class="db ico12 greyLt padB5">{{DesOriginAirportCode}}</span>
-                                                                    <span class="fb ico16 quicks">{{DesDeparttime}}</span>
+                                                                    <span class="db ico12 greyLt padB5"  ng-cloak>{{DesOriginAirportCode}}</span>
+                                                                    <span class="fb ico16 quicks"  ng-cloak>{{DesDeparttime}}</span>
                                                                 </span>
                                                             </div>
                                                             <div class="col-md-5 col-sm-5 padLR0 col-xs-5 alignSelfCenter">
-                                                                <div class="ico12 grey txtCenter padB5">{{retvia}}-{{DesDuration}}</div>
-                                                                <div class="ico12 grey txtCenter">{{DesFromStops}}-Stop</div>
+                                                                <div class="ico12 grey txtCenter padB5"  ng-cloak>{{retvia}}  ({{DesDuration}})</div>
+                                                                <div class="ico12 grey txtCenter"  ng-cloak>{{DesFromStops}}-Stop</div>
                                                             </div>
                                                             <div class="col-md-3 col-sm-3 col-xs-3 width29">
                                                                 <span class="db">
-                                                                    <span class="db ico12 greyLt padB5">{{DesDestinationAirportcode}}</span>
-                                                                    <span class="fb ico16 quicks">{{DesReachedtime}}</span>
+                                                                    <span class="db ico12 greyLt padB5"  ng-cloak>{{DesDestinationAirportcode}}</span>
+                                                                    <span class="fb ico16 quicks"  ng-cloak>{{DesReachedtime}}</span>
                                                                 </span>
                                                             </div>
                                                         </div>
@@ -1011,7 +1019,9 @@
                                         <div class="dF alignItemsEnd width30 padL5 padB3 justifyEnd fltHpySumryPrc">
                                             <span class="padR15  alignItemsEnd  flexCol">
                                                 <span class="alignItemsCenter dF padT5">
-                                                    <i class="icon-rupee ico13"></i><span class="ico24 quicks fb">{{parseFloat(FlightPrice) + parseFloat(DesFlightPrice)}}</span>
+                                                    <i class="icon-rupee ico13"></i><span class="ico24 quicks fb">
+                                                    {{AddTotalAmount(FlightPrice,DesFlightPrice)}}
+                                                    @*{{parseFloat(FlightPrice) + parseFloat(DesFlightPrice)}}*@</span>
                                                 </span>
                                                 <span class="reserveWrp padT5">
                                                     <small class="ico12 dF alignItemsCenter quicks">
@@ -1039,27 +1049,29 @@
                                             </ul>
                                         </div>
                                         <div data-cy="flightItem_CCUDEL20200710ESG:SG3281SG903:0">
-                                            <div class="fltHpyRsltCard flexCol whiteBg marginT10 brdrRd5" ng-repeat="(key, Deptitemval) in deptureFlight | groupBy: 'TrackNo' | limitTo:numberToDisplay">
+                                            <div class="fltHpyRsltCard flexCol whiteBg marginT10 brdrRd5" ng-repeat="Deptitemval in deptureFlight | filter: filterDeptFlightData | limitTo:numberToDisplay">
                                                 <div class="fl width100 fltCrdTpRd cardOffer"></div>
                                                 <div class="dF justifyBetween alignItemsEnd padTB10">
                                                     <div class="dF justifyBetween  alignItemsEnd width70 padLR0">
                                                         <div class="width100">
                                                             <div class="col-md-3 col-sm-2 col-xs-2 padL10">
-                                                                <span class="dF"><img src="https://goibibo.ibcdn.com/images/v2/carrierImages/SG.gif" class="flightImagesNew" alt="flights"></span>
+                                                                <span class="dF"><img src="~/Content/static-airlines-master/logos/{{Deptitemval[0].AirlineCode}}.png" class="flightImagesNew" alt="flights"></span>
                                                                 <span class="db greyLt ico11 padT3">
-                                                                    Spicejet
-                                                                    {{Deptitemval[0].TrackNo}}-
+                                                                    {{Deptitemval[0].FlightNo}}
+                                                                    <span  style="display:none;">{{Deptitemval[0].TrackNo}}-</span>
+                                                                    
                                                                 </span>
                                                             </div>
                                                             <div class="col-md-9 col-sm-10 col-xs-10 padLR0">
                                                                 <div class="fl width100  alignItemsEnd dF">
                                                                     <div class="col-md-3 col-sm-3 col-xs-3 width29">
                                                                         <span class="db">
-                                                                            <span class="db ico12 greyLt padB5">{{Deptitemval[0].FromAirportCode}}-{{Deptitemval[0].FlightNo}}</span><span class="fb ico16 quicks">{{Deptitemval[0].DepTime}}</span><span style="display:none;">{{Deptitemval[0].DepDate}}{{Deptitemval[0].SrNo}}</span>
+                                                                            <span class="db ico12 greyLt padB5">{{Deptitemval[0].FromAirportCode}}</span><span class="fb ico16 quicks">{{Deptitemval[0].DepTime}}</span><span style="display:none;">{{Deptitemval[0].DepDate}}{{Deptitemval[0].SrNo}}</span>
                                                                         </span>
                                                                     </div>
                                                                     <div class="col-md-5 col-sm-5 padLR0 col-xs-5 alignSelfCenter">
-                                                                        <div class="ico12 grey txtCenter padB5">{{Deptitemval[0].Stops === "0" ? "" : Deptitemval[Deptitemval[0].Stops].FromAirportCode}}--> {{timeConvert(Deptitemval[0].Stops === "0" ? parseNumber(Deptitemval[0].FlightTime) : (parseNumber(Deptitemval[0].FlightTime)+parseNumber(Deptitemval[0].HoldDuration)+parseNumber(Deptitemval[Deptitemval[0].Stops].HoldDuration)))}} </div>
+                                                                        <div class="ico12 grey txtCenter padB5">{{Deptitemval[0].Stops === "0" ? "" : Deptitemval[Deptitemval[0].Stops].FromAirportCode}}-->
+                                                                        {{calculateDuration(Deptitemval)}}</div>
                                                                         <span>
                                                                             <span class="col-md-5 col-sm-3 col-xs-3 pad0 prgrsDot dotVH"></span>
                                                                             <span class="col-md-5 col-sm-3 col-xs-3 pad0 prgrsDot"></span>
@@ -1088,7 +1100,9 @@
                                                                 </span>
                                                             </span>
                                                             <span class="custRad" style="padding-left:10px;">
-                                                                <input type="radio" ng-model="RbtSourceDetails" id="rbtSourceId{{$index}}" name="Source" ng-click="selectDestimationSource(Deptitemval[0].TrackNo,Deptitemval[0].FromAirportCode,Deptitemval[0].DepTime,(Deptitemval[0].Stops === '0' ? '' : Deptitemval[Deptitemval[0].Stops].FromAirportCode),(timeConvert(Deptitemval[0].Stops === '0' ? parseNumber(Deptitemval[0].FlightTime) : (parseNumber(Deptitemval[0].FlightTime)+parseNumber(Deptitemval[0].HoldDuration)+parseNumber(Deptitemval[Deptitemval[0].Stops].HoldDuration)))),(Deptitemval[0].Stops === '0' ? 0 : Deptitemval[Deptitemval[0].Stops].Stops),(Deptitemval[0].Stops === '0' ? Deptitemval[0].ToAirportCode : Deptitemval[Deptitemval[0].Stops].ToAirportCode),(Deptitemval[0].Stops === '0' ? Deptitemval[0].ArrTime : Deptitemval[Deptitemval[0].Stops].ArrTime),Deptitemval[0].DepDate,Deptitemval[0].TotalAmount,Deptitemval[0].SrNo,Deptitemval[0].FlightNo)"><label></label>
+                                                                @*<input type="radio" ng-model="RbtSourceDetails" id="rbtSourceId{{$index}}" name="Source" ng-click="selectedDeptFlight =  Deptitemval"  selectDestimationSource(Deptitemval[0].TrackNo,Deptitemval[0].FromAirportCode,Deptitemval[0].DepTime,(Deptitemval[0].Stops === '0' ? '' : Deptitemval[Deptitemval[0].Stops].FromAirportCode),(calculateDuration(Deptitemval)),(Deptitemval[0].Stops === '0' ? 0 : Deptitemval[Deptitemval[0].Stops].Stops),(Deptitemval[0].Stops === '0' ? Deptitemval[0].ToAirportCode : Deptitemval[Deptitemval[0].Stops].ToAirportCode),(Deptitemval[0].Stops === '0' ? Deptitemval[0].ArrTime : Deptitemval[Deptitemval[0].Stops].ArrTime),Deptitemval[0].DepDate,Deptitemval[0].TotalAmount,Deptitemval[0].SrNo,Deptitemval[0].FlightNo,Deptitemval[0].AirlineCode)"><label></label>*@
+                                                                <input type="radio" ng-model="RbtSourceDetails" id="rbtSourceId{{$index}}" name="Source" ng-click="selectedDeptFlight =  Deptitemval" /> <label></label>
+                                                           
                                                             </span>
                                                         </div>
                                                     </div>
@@ -1101,50 +1115,102 @@
                                                             </div>
                                                         </div>
                                                         <div class="collapse" id="accordion-item-icons-1101{{$index}}" data-parent="#accordionRightIcon">
-                                                            <div class="card-body">
-                                                                <ul class="nav nav-pills" id="myPillTab" role="tablist">
-                                                                    <li class="nav-item"><a class="nav-link active" id="home-icon-pill" data-toggle="pill" href="#homePIll" role="tab" aria-controls="homePIll" aria-selected="true">Flight Information</a></li>
-                                                                    <li class="nav-item"><a class="nav-link" id="profile-icon-pill" data-toggle="pill" href="#profilePIll" role="tab" aria-controls="profilePIll" aria-selected="false"> Fare Details</a></li>
-                                                                    <li class="nav-item"><a class="nav-link" id="contact-icon-pill" data-toggle="pill" href="#contactPIll" role="tab" aria-controls="contactPIll" aria-selected="false"> Baggage Rules</a></li>
-                                                                    <li class="nav-item"><a class="nav-link" id="contact-icon-pill" data-toggle="pill" href="#contactPIll" role="tab" aria-controls="contactPIll" aria-selected="false"> Cancellation Rules</a></li>
-                                                                </ul>
-                                                                <div class="tab-content" id="myPillTabContent">
-                                                                    <div class="tab-pane fade show active" id="homePIll" role="tabpanel" aria-labelledby="home-icon-pill" ng-repeat="ReturnOneway in Deptitemval">
-
-                                                                        <div class="col-md-12 row" style="border:1px solid #ccc; border-radius:2px; padding:20px;">
-                                                                            <div class="col-md-2">
-                                                                                <img class="" src="images/indiGo_Logo.jpg" width="24" height="24"><br>
-                                                                                <span>
-                                                                                    Indigo-
-                                                                                    {{ReturnOneway.TrackNo}}
-
-                                                                                </span>
-                                                                            </div>
-                                                                            <div class="col-md-3">
-                                                                                {{ReturnOneway.DepTime}}<br>
-                                                                                <span class="label label-info"> {{ReturnOneway.FromAirportCode}} →  {{ReturnOneway.ToAirportCode}}</span>
-
-                                                                            </div>
-                                                                            <div class="col-md-3">
-
-                                                                                {{ReturnOneway.ArrTime}}<br>
-                                                                                <span class="label label-info">Duration: {{timeConvert(ReturnOneway.FlightTime )}} </span>
-
-                                                                            </div>
-                                                                            <div class="col-md-2">
-                                                                                <i class="fa fa-check text-amber"></i>*
-                                                                            </div>
-                                                                            <div class="col-md-2">
-                                                                                {{ReturnOneway.TotalAmount}}/-
-                                                                                <button class="btn btn-primary btn-xs "> Book</button>*
+                                                            <div>
+                                                                <div class="card-body">
+                                                                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                                                        <li class="nav-item"><a class="nav-link active show" id="home-basic-tab" data-toggle="tab" href="#homeBasic_2{{$index + 1}}" role="tab" aria-controls="homeBasic" aria-selected="true">Flight Information</a></li>
+                                                                        <li ng-click="loadDeptFareDetails(Deptitemval[0].SrNo,AdultCount,ChildCount,InfantCount)" class="nav-item"><a class="nav-link" id="profile-basic-tab" data-toggle="tab" href="#profileBasic_3{{$index + 1}}" role="tab" aria-controls="profileBasic" aria-selected="false"> Fare Details</a></li>
+                                                                        <li class="nav-item"><a class="nav-link" id="contact-basic-tab" data-toggle="tab" href="#contactBasic_4{{$index + 1}}" role="tab" aria-controls="contactBasic" aria-selected="false"> Baggage Rules</a></li>
+                                                                    </ul>
+                                                                    <div class="tab-content" id="myTabContent">
+                                                                        <div class="tab-pane fade active show" id="homeBasic_2{{$index + 1}}" role="tabpanel" aria-labelledby="home-basic-tab">
+                                                                            <div div class="fltHpyRsltCard flexCol whiteBg marginT10 brdrRd5" ng-repeat="ReturnOneway in Deptitemval" >
+                                                                                <div class="fl width100 fltCrdTpRd cardOffer"></div>
+                                                                                <div class="dF justifyBetween alignItemsEnd padTB10">
+                                                                                    <div class="dF justifyBetween  alignItemsEnd width70 padLR0">
+                                                                                        <div class="width100">
+                                                                                            <div class="col-md-3 col-sm-2 col-xs-2 padL10">
+                                                                                                <span class="dF"><img src="~/Content/static-airlines-master/logos/{{ReturnOneway.AirlineCode}}.png" class="flightImagesNew" alt="flights"></span>
+                                                                                                <span class="db greyLt ico11 padT3">
+                                                                                                    {{ReturnOneway.FlightNo}}
+                                                                                                </span>
+                                                                                            </div>
+                                                                                            <div class="col-md-9 col-sm-10 col-xs-10 padLR0">
+                                                                                                <div class="fl width100  alignItemsEnd dF">
+                                                                                                    <div class="col-md-3 col-sm-3 col-xs-3 width29">
+                                                                                                        <span class="db">
+                                                                                                            <span class="db ico12 greyLt padB5">{{ReturnOneway.FromAirportCode}}-</span><span class="fb ico16 quicks">{{ReturnOneway.DepTime}}</span><span style="display:none;">{{ReturnOneway.DepDate}}</span>
+                                                                                                        </span>
+                                                                                                    </div>
+                                                                                                    <div class="col-md-5 col-sm-5 padLR0 col-xs-5 alignSelfCenter">
+                                                                                                        <span style="display:none;">{{ReturnOneway.TrackNo}}</span>
+                                                                                                        <span style="display:none;">{{ReturnOneway.SrNo}}</span>
+                                                                                                        <div class="ico12 grey txtCenter padB5">
+                                                                                                        </div>
+                                                                                                        <span>
+                                                                                                            <span class="col-md-5 col-sm-3 col-xs-3 pad0 prgrsDot dotVH"></span>
+                                                                                                            <span class="col-md-5 col-sm-3 col-xs-3 pad0 prgrsDot">{{timeConvert(ReturnOneway.FlightTime)}} </span>
+                                                                                                            <span class="col-md-2 col-sm-3 col-xs-3 pad0 prgrsDot dotVH"></span>
+                                                                                                        </span>
+                                                                                                        <div class="ico12 grey txtCenter"></div>
+                                                                                                    </div>
+                                                                                                    <div class="col-md-3 col-sm-3 col-xs-3 width29">
+                                                                                                        <span class="db">
+                                                                                                            <span class="db ico12 greyLt padB5">{{ReturnOneway.ToAirportCode}}</span>
+                                                                                                            <span class="fb dF alignItemsCenter ico18 quicks">
+                                                                                                                <span>{{ReturnOneway.ArrTime}}</span>
+                                                                                                            </span>
+                                                                                                        </span>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="widMd30 padLR0 flexCol alignItemsEnd padB5">
+                                                                                        <div class="dF alignItemsEnd">
+                                                                                            <span class="padR5 alignItemsEnd flexCol">
+                                                                                                <span class="alignItemsCenter dF padT2 quicks fb">
+                                                                                                    <i class="icon-rupee ico11"></i>
+                                                                                                    <span class="ico20">{{ReturnOneway.TotalAmount}}/-</span>
+                                                                                                </span>
+                                                                                            </span>
+                                                                                            <span class="custRad" style="padding-left:10px;">
+                                                                                            </span>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
                                                                             </div>
                                                                         </div>
-                                                                    </div>
-                                                                    <div class="tab-pane fade" id="profilePIll" role="tabpanel" aria-labelledby="profile-icon-pill">
-                                                                        Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard locavore.
+                                                                        <div class="tab-pane fade" id="profileBasic_3{{$index + 1}}" role="tabpanel" aria-labelledby="profile-basic-tab">
+                                                                            <table class="table table-bordered">
+                                                                                <tr>
+                                                                                    <td>Base Fare (<span>{{AdultCount}} {{AdultCount > 1 ? 'Adults' : 'Adult'}}</span> <span ng-show="ChildCount > 0">, {{ChildCount}} {{ChildCount > 1 ? 'Childs' : 'Child'}}</span><span ng-show="InfantCount > 0">, {{InfantCount}} {{InfantCount > 1 ? 'Infants' : 'Infant'}}</span>)</td>
+                                                                                    <td>{{FlightDeptTotalBasefare}}/-</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>Taxes and Fees (<span>{{AdultCount}} {{AdultCount > 1 ? 'Adults' : 'Adult'}}</span> <span ng-show="ChildCount > 0">, {{ChildCount}} {{ChildCount > 1 ? 'Childs' : 'Child'}}</span><span ng-show="InfantCount > 0">, {{InfantCount}} {{InfantCount > 1 ? 'Infants' : 'Infant'}}</span>)</td>
+                                                                                    <td>{{FlightDeptTotalTaxfare}}/-</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>Cute Fees (<span>{{AdultCount}} {{AdultCount > 1 ? 'Adults' : 'Adult'}}</span> <span ng-show="ChildCount > 0">, {{ChildCount}} {{ChildCount > 1 ? 'Childs' : 'Child'}}</span><span ng-show="InfantCount > 0">, {{InfantCount}} {{InfantCount > 1 ? 'Infants' : 'Infant'}}</span>)</td>
+                                                                                    <td>{{FlightDeptTotalCutefare}}/-</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>Total Fare (<span>{{AdultCount}} {{AdultCount > 1 ? 'Adults' : 'Adult'}}</span> <span ng-show="ChildCount > 0">, {{ChildCount}} {{ChildCount > 1 ? 'Childs' : 'Child'}}</span><span ng-show="InfantCount > 0">, {{InfantCount}} {{InfantCount > 1 ? 'Infants' : 'Infant'}}</span>)</td>
+                                                                                    <td><b>{{FlightDeptTotalFare}}/- </b></td>
+                                                                                </tr>
+                                                                            </table>
 
+                                                                        </div>
+                                                                        <div class="tab-pane fade" id="contactBasic_4{{$index + 1}}" role="tabpanel" aria-labelledby="contact-basic-tab">
+                                                                            <table class="table table-bordered">
+                                                                                <tr>
+                                                                                    <td>Baggage Allowance</td>
+                                                                                    <td>{{BaggageDeptAllowance}}</td>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </div>
                                                                     </div>
-                                                                    <div class="tab-pane fade" id="contactPIll" role="tabpanel" aria-labelledby="contact-icon-pill">Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard locavore.</div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1166,27 +1232,28 @@
                                             </ul>
                                         </div>
                                         <div data-cy="flightItem_CCUDEL20200710ESG:SG3281SG903:0">
-                                            <div class="fltHpyRsltCard flexCol whiteBg marginT10 brdrRd5" ng-repeat="(key, Returnval) in returnFlight | groupBy: 'TrackNo' | limitTo:numberToDisplay">
+                                            <div class="fltHpyRsltCard flexCol whiteBg marginT10 brdrRd5" ng-repeat="Returnval in returnFlight | filter: filterReturnFlightData | limitTo:numberToDisplay">
                                                 <div class="fl width100 fltCrdTpRd cardOffer"></div>
                                                 <div class="dF justifyBetween alignItemsEnd padTB10">
                                                     <div class="dF justifyBetween  alignItemsEnd width70 padLR0">
                                                         <div class="width100">
                                                             <div class="col-md-3 col-sm-2 col-xs-2 padL10">
-                                                                <span class="dF"><img src="https://goibibo.ibcdn.com/images/v2/carrierImages/SG.gif" class="flightImagesNew" alt="flights"></span>
+                                                                <span class="dF"><img src="~/Content/static-airlines-master/logos/{{Returnval[0].AirlineCode}}.png" class="flightImagesNew" alt="flights"></span>
                                                                 <span class="db greyLt ico11 padT3">
-                                                                    {{$index}} --  Spicejet-
-                                                                    {{Returnval[0].TrackNo}}
+                                                                    {{Returnval[0].FlightNo}}
+                                                                    <span style="display:none;">{{$index}} {{Returnval[0].TrackNo}}</span>
                                                                 </span>
                                                             </div>
                                                             <div class="col-md-9 col-sm-10 col-xs-10 padLR0">
                                                                 <div class="fl width100  alignItemsEnd dF">
                                                                     <div class="col-md-3 col-sm-3 col-xs-3 width29">
                                                                         <span class="db">
-                                                                            <span class="db ico12 greyLt padB5">{{Returnval[0].FromAirportCode}} 111</span><span class="fb ico16 quicks">{{Returnval[0].DepTime}}</span><span style="display:none;">{{Returnval[0].DepDate}}{{Returnval[0].SrNo}}</span>
+                                                                            <span class="db ico12 greyLt padB5">{{Returnval[0].FromAirportCode}} </span><span class="fb ico16 quicks">{{Returnval[0].DepTime}}</span><span style="display:none;">{{Returnval[0].DepDate}}{{Returnval[0].SrNo}}</span>
                                                                         </span>
                                                                     </div>
                                                                     <div class="col-md-5 col-sm-5 padLR0 col-xs-5 alignSelfCenter">
-                                                                        <div class="ico12 grey txtCenter padB5">{{Returnval[0].Stops === "0" ? "" : Returnval[Returnval[0].Stops].FromAirportCode}}-- {{timeConvert(Returnval[0].Stops === "0" ? parseNumber(Returnval[0].FlightTime) : (parseNumber(Returnval[0].FlightTime)+parseNumber(Returnval[0].HoldDuration)+parseNumber(Returnval[Returnval[0].Stops].HoldDuration)))}}</div>
+                                                                        <div class="ico12 grey txtCenter padB5">{{Returnval[0].Stops === "0" ? "" : Returnval[Returnval[0].Stops].FromAirportCode}}--> 
+                                                                        {{calculateDuration(Returnval)}}</div>
                                                                         <span>
                                                                             <span class="col-md-5 col-sm-3 col-xs-3 pad0 prgrsDot dotVH"></span>
                                                                             <span class="col-md-5 col-sm-3 col-xs-3 pad0 prgrsDot"></span>
@@ -1217,10 +1284,8 @@
                                                                 </span>
                                                             </span>
                                                             <span class="custRad" style="padding-left:10px;">
-                                                                @*<input  type="radio" ng-model="RbtDestinationDetails" name="destination" id="rbtDestinationId{{$index}}" ng-click="selectReturnFlightSource(Returnval[0].TrackNo,Returnval[0].FromAirportCode,Returnval[0].DepTime,(Returnval[0].Stops === '0' ? '' : Returnval[Returnval[0].Stops].FromAirportCode),(timeConvert(Returnval[0].Stops === '0' ? parseNumber(Returnval[0].FlightTime) : (parseNumber(Returnval[0].FlightTime)+parseNumber(Returnval[0].HoldDuration)+parseNumber(Returnval[Returnval[0].Stops].HoldDuration)))),(Returnval[0].Stops === '0' ? 0 : Returnval[Returnval[0].Stops].Stops),(Returnval[0].Stops === '0' ? Returnval[0].ToAirportCode : Returnval[Returnval[0].Stops].ToAirportCode),(Returnval[0].Stops === '0' ? Returnval[0].ArrTime : Returnval[Returnval[0].Stops].ArrTime),Returnval[0].DepDate,Returnval[0].TotalAmount,Returnval[0].SrNo,,Returnval[0].FlightNo)"><label></label>*@
-                                                                <input type="radio" ng-model="RbtDestinationDetails" id="rbtDestinationId{{$index}}" name="destination" ng-click="selectReturnFlightSource(Returnval[0].TrackNo,Returnval[0].FromAirportCode,Returnval[0].DepTime,(Returnval[0].Stops === '0' ? '' : Returnval[Returnval[0].Stops].FromAirportCode),(timeConvert(Returnval[0].Stops === '0' ? parseNumber(Returnval[0].FlightTime) : (parseNumber(Returnval[0].FlightTime)+parseNumber(Returnval[0].HoldDuration)+parseNumber(Returnval[Returnval[0].Stops].HoldDuration)))),(Returnval[0].Stops === '0' ? 0 : Returnval[Returnval[0].Stops].Stops),(Returnval[0].Stops === '0' ? Returnval[0].ToAirportCode : Returnval[Returnval[0].Stops].ToAirportCode),(Returnval[0].Stops === '0' ? Returnval[0].ArrTime : Returnval[Returnval[0].Stops].ArrTime),Returnval[0].DepDate,Returnval[0].TotalAmount,Returnval[0].SrNo,Returnval[0].FlightNo)"><label></label>
-
-
+                                                                <input type="radio" ng-model="RbtDestinationDetails" id="rbtDestinationId{{$index}}" name="destination" ng-click="selectReturnFlightSource(Returnval[0].TrackNo,Returnval[0].FromAirportCode,Returnval[0].DepTime,(Returnval[0].Stops === '0' ? '' : Returnval[Returnval[0].Stops].FromAirportCode),(calculateDuration(Returnval)),(Returnval[0].Stops === '0' ? 0 : Returnval[Returnval[0].Stops].Stops),(Returnval[0].Stops === '0' ? Returnval[0].ToAirportCode : Returnval[Returnval[0].Stops].ToAirportCode),(Returnval[0].Stops === '0' ? Returnval[0].ArrTime : Returnval[Returnval[0].Stops].ArrTime),Returnval[0].DepDate,Returnval[0].TotalAmount,Returnval[0].SrNo,Returnval[0].FlightNo,Returnval[0].AirlineCode)"><label></label>
+                                                                @*<input type="radio" ng-model="RbtDestinationDetails" id="rbtDestinationId{{$index}}" name="destination" ng-click="selectReturnFlightSource(Returnval[0].TrackNo,Returnval[0].FromAirportCode,Returnval[0].DepTime,(Returnval[0].Stops === '0' ? '' : Returnval[Returnval[0].Stops].FromAirportCode),(timeConvert(Returnval[0].Stops === '0' ? parseNumber(Returnval[0].FlightTime) : (parseNumber(Returnval[0].FlightTime)+parseNumber(Returnval[0].HoldDuration)+parseNumber(Returnval[Returnval[0].Stops].HoldDuration)))),(Returnval[0].Stops === '0' ? 0 : Returnval[Returnval[0].Stops].Stops),(Returnval[0].Stops === '0' ? Returnval[0].ToAirportCode : Returnval[Returnval[0].Stops].ToAirportCode),(Returnval[0].Stops === '0' ? Returnval[0].ArrTime : Returnval[Returnval[0].Stops].ArrTime),Returnval[0].DepDate,Returnval[0].TotalAmount,Returnval[0].SrNo,Returnval[0].FlightNo,Returnval[0].AirlineCode)"><label></label>*@
                                                             </span>
                                                         </div>
                                                     </div>
@@ -1233,46 +1298,103 @@
                                                             </div>
                                                         </div>
                                                         <div class="collapse" id="accordion-item-icons-9901{{$index}}" data-parent="#accordionRightIcon">
-                                                            <div class="card-body">
-                                                                <ul class="nav nav-pills" id="myPillTab" role="tablist">
-                                                                    <li class="nav-item"><a class="nav-link active" id="home-icon-pill" data-toggle="pill" href="#homePIll" role="tab" aria-controls="homePIll" aria-selected="true">Flight Information</a></li>
-                                                                    <li class="nav-item"><a class="nav-link" id="profile-icon-pill" data-toggle="pill" href="#profilePIll" role="tab" aria-controls="profilePIll" aria-selected="false"> Fare Details</a></li>
-                                                                    <li class="nav-item"><a class="nav-link" id="contact-icon-pill" data-toggle="pill" href="#contactPIll" role="tab" aria-controls="contactPIll" aria-selected="false"> Baggage Rules</a></li>
-                                                                    <li class="nav-item"><a class="nav-link" id="contact-icon-pill" data-toggle="pill" href="#contactPIll" role="tab" aria-controls="contactPIll" aria-selected="false"> Cancellation Rules</a></li>
-                                                                </ul>
-                                                                <div class="tab-content" id="myPillTabContent">
-                                                                    <div class="tab-pane fade show active" id="homePIll" role="tabpanel" aria-labelledby="home-icon-pill" ng-repeat="ReturnOneway in Returnval">
+                                                            <div>
+                                                                <div class="card-body">
 
-                                                                        <div class="col-md-12 row" style="border:1px solid #ccc; border-radius:2px; padding:20px;">
-                                                                            <div class="col-md-2">
-                                                                                <img class="" src="images/indiGo_Logo.jpg" width="24" height="24"><br>
-                                                                                <span>
-                                                                                    Indigo-
-                                                                                    {{ReturnOneway.TrackNo}}
-                                                                                </span>
-                                                                            </div>
-                                                                            <div class="col-md-3">
-                                                                                {{ReturnOneway.DepTime}}<br>
-                                                                                <span class="label label-info">{{ReturnOneway.FromAirportCode}} → {{ReturnOneway.ToAirportCode}}</span>
-                                                                            </div>
-                                                                            <div class="col-md-3">
-                                                                                {{ReturnOneway.ArrTime}}<br>
-                                                                                <span class="label label-info">Duration: 2h:30m</span>
-                                                                            </div>
-                                                                            <div class="col-md-2">
-                                                                                <i class="fa fa-check text-amber"></i>*
-                                                                            </div>
-                                                                            <div class="col-md-2">
-                                                                                {{ReturnOneway.TotalAmount}}/-
-                                                                                <button class="btn btn-primary btn-xs "> Book</button>*
+                                                                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                                                        <li class="nav-item"><a class="nav-link active show" id="home-basic-tab" data-toggle="tab" href="#homeBasic_4{{$index + 1}}" role="tab" aria-controls="homeBasic" aria-selected="true">Flight Information</a></li>
+                                                                        <li ng-click="loadRetrnFareDetails(Returnval[0].SrNo,AdultCount,ChildCount,InfantCount)" class="nav-item"><a class="nav-link" id="profile-basic-tab" data-toggle="tab" href="#profileBasic_5{{$index + 1}}" role="tab" aria-controls="profileBasic" aria-selected="false"> Fare Details</a></li>
+                                                                        <li class="nav-item"><a class="nav-link" id="contact-basic-tab" data-toggle="tab" href="#contactBasic_6{{$index + 1}}" role="tab" aria-controls="contactBasic" aria-selected="false"> Baggage Rules</a></li>
+                                                                    </ul>
+                                                                    <div class="tab-content" id="myTabContent">
+                                                                        <div class="tab-pane fade active show" id="homeBasic_4{{$index + 1}}" role="tabpanel" aria-labelledby="home-basic-tab">
+                                                                            <div div class="fltHpyRsltCard flexCol whiteBg marginT10 brdrRd5" ng-repeat="Returnway in Returnval">
+                                                                                <div class="fl width100 fltCrdTpRd cardOffer"></div>
+                                                                                <div class="dF justifyBetween alignItemsEnd padTB10">
+                                                                                    <div class="dF justifyBetween  alignItemsEnd width70 padLR0">
+                                                                                        <div class="width100">
+                                                                                            <div class="col-md-3 col-sm-2 col-xs-2 padL10">
+                                                                                                <span class="dF"><img src="~/Content/static-airlines-master/logos/{{Returnway.AirlineCode}}.png" class="flightImagesNew" alt="flights"></span>
+                                                                                                <span class="db greyLt ico11 padT3">
+                                                                                                    {{Returnway.FlightNo}}
+                                                                                                </span>
+                                                                                            </div>
+                                                                                            <div class="col-md-9 col-sm-10 col-xs-10 padLR0">
+                                                                                                <div class="fl width100  alignItemsEnd dF">
+                                                                                                    <div class="col-md-3 col-sm-3 col-xs-3 width29">
+                                                                                                        <span class="db">
+                                                                                                            <span class="db ico12 greyLt padB5">{{Returnway.FromAirportCode}}-</span><span class="fb ico16 quicks">{{Returnway.DepTime}}</span><span style="display:none;">{{Returnway.DepDate}}</span>
+                                                                                                        </span>
+                                                                                                    </div>
+                                                                                                    <div class="col-md-5 col-sm-5 padLR0 col-xs-5 alignSelfCenter">
+                                                                                                        <span style="display:none;">{{Returnway.TrackNo}}</span>
+                                                                                                        <span style="display:none;">{{Returnway.SrNo}}</span>
+                                                                                                        <div class="ico12 grey txtCenter padB5">
+                                                                                                        </div>
+                                                                                                        <span>
+                                                                                                            <span class="col-md-5 col-sm-3 col-xs-3 pad0 prgrsDot dotVH"></span>
+                                                                                                            <span class="col-md-5 col-sm-3 col-xs-3 pad0 prgrsDot">{{timeConvert(Returnway.FlightTime)}} </span>
+                                                                                                            <span class="col-md-2 col-sm-3 col-xs-3 pad0 prgrsDot dotVH"></span>
+                                                                                                        </span>
+                                                                                                        <div class="ico12 grey txtCenter"></div>
+                                                                                                    </div>
+                                                                                                    <div class="col-md-3 col-sm-3 col-xs-3 width29">
+                                                                                                        <span class="db">
+                                                                                                            <span class="db ico12 greyLt padB5">{{Returnway.ToAirportCode}}</span>
+                                                                                                            <span class="fb dF alignItemsCenter ico18 quicks">
+                                                                                                                <span>{{Returnway.ArrTime}}</span>
+                                                                                                            </span>
+                                                                                                        </span>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="widMd30 padLR0 flexCol alignItemsEnd padB5">
+                                                                                        <div class="dF alignItemsEnd">
+                                                                                            <span class="padR5 alignItemsEnd flexCol">
+                                                                                                <span class="alignItemsCenter dF padT2 quicks fb">
+                                                                                                    <i class="icon-rupee ico11"></i>
+                                                                                                    <span class="ico20">{{Returnway.TotalAmount}}/-</span>
+                                                                                                </span>
+                                                                                            </span>
+                                                                                            <span class="custRad" style="padding-left:10px;">
+                                                                                            </span>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
                                                                             </div>
                                                                         </div>
-                                                                    </div>
-                                                                    <div class="tab-pane fade" id="profilePIll" role="tabpanel" aria-labelledby="profile-icon-pill">
-                                                                        Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard locavore.
+                                                                        <div class="tab-pane fade" id="profileBasic_5{{$index + 1}}" role="tabpanel" aria-labelledby="profile-basic-tab">
+                                                                            <table class="table table-bordered">
+                                                                                <tr>
+                                                                                    <td>Base Fare (<span>{{AdultCount}} {{AdultCount > 1 ? 'Adults' : 'Adult'}}</span> <span ng-show="ChildCount > 0">, {{ChildCount}} {{ChildCount > 1 ? 'Childs' : 'Child'}}</span><span ng-show="InfantCount > 0">, {{InfantCount}} {{InfantCount > 1 ? 'Infants' : 'Infant'}}</span>)</td>
+                                                                                    <td>{{FlightReturnTotalBasefare}}/-</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>Taxes and Fees (<span>{{AdultCount}} {{AdultCount > 1 ? 'Adults' : 'Adult'}}</span> <span ng-show="ChildCount > 0">, {{ChildCount}} {{ChildCount > 1 ? 'Childs' : 'Child'}}</span><span ng-show="InfantCount > 0">, {{InfantCount}} {{InfantCount > 1 ? 'Infants' : 'Infant'}}</span>)</td>
+                                                                                    <td>{{FlightReturnTotalTaxfare}}/-</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>Cute Fees (<span>{{AdultCount}} {{AdultCount > 1 ? 'Adults' : 'Adult'}}</span> <span ng-show="ChildCount > 0">, {{ChildCount}} {{ChildCount > 1 ? 'Childs' : 'Child'}}</span><span ng-show="InfantCount > 0">, {{InfantCount}} {{InfantCount > 1 ? 'Infants' : 'Infant'}}</span>)</td>
+                                                                                    <td>{{FlightReturnTotalCutefare}}/-</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>Total Fare (<span>{{AdultCount}} {{AdultCount > 1 ? 'Adults' : 'Adult'}}</span> <span ng-show="ChildCount > 0">, {{ChildCount}} {{ChildCount > 1 ? 'Childs' : 'Child'}}</span><span ng-show="InfantCount > 0">, {{InfantCount}} {{InfantCount > 1 ? 'Infants' : 'Infant'}}</span>)</td>
+                                                                                    <td><b>{{FlightReturnTotalFare}}/- </b></td>
+                                                                                </tr>
+                                                                            </table>
 
+                                                                        </div>
+                                                                        <div class="tab-pane fade" id="contactBasic_6{{$index + 1}}" role="tabpanel" aria-labelledby="contact-basic-tab">
+                                                                            <table class="table table-bordered">
+                                                                                <tr>
+                                                                                    <td>Baggage Allowance</td>
+                                                                                    <td>{{BaggageReturnAllowance}}</td>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </div>
                                                                     </div>
-                                                                    <div class="tab-pane fade" id="contactPIll" role="tabpanel" aria-labelledby="contact-icon-pill">Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard locavore.</div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1291,5 +1413,5 @@
         </div>
     </div>
 
-    <div class=""><div class="paxMobile paxContainer" id="paxContainer"><ul><li class="roomRow"><div class="widgetUserBlock fl padR10"><label class="ico14 db padB5"><span>Adults</span><small class="font13Lt db padT3"> (12+ yrs)</small></label><div class="number-spinner"><button class="fl minSpin" id="adultPaxMinus" data-dir="dwn">−</button><input type="text" id="adultPaxBox" class="fl numbSpin" value="1"><button class="fl plusSpin" id="adultPaxPlus" data-dir="up">+</button></div></div><div><div class="widgetUserBlock fl padR10"><label class="ico14 db padB5"><span>Children</span><small class="font13Lt db padT3"> (2-12 yrs)</small></label><div class="number-spinner"><button class="fl minSpin" id="childPaxMinus" data-dir="dwn">−</button><input type="text" id="childPaxBox" class="fl numbSpin" value="0"><button class="fl plusSpin" id="childPaxPlus" data-dir="up">+</button></div></div><div class="widgetUserBlock fl padR10"><label class="ico14 db padB5"><span>Infant(s)</span><small class="font13Lt db padT3"> (below 2 yrs)</small></label><div class="number-spinner"><button class="fl minSpin" id="infantPaxMinus" data-dir="dwn">−</button><input type="text" id="infantPaxBox" class="fl numbSpin" value="0"><button class="fl plusSpin" id="infantPaxPlus" data-dir="up">+</button></div></div></div></li></ul><div class="fl width100 padLR15 padB15 alignItemsCenter dF"><div class="padR10"> Travel Class</div><div class="width70"><div><label><!-- react-text: 3821 --> <!-- /react-text --><!-- react-text: 3822 --><!-- /react-text --></label><div><select class="width100 form-control ico14" id="gi_class"><option value="E">Economy</option><option value="B">Business</option><option value="F">First class</option><option value="W">Premium Economy</option></select></div></div></div></div></div></div>
+    @*<div class=""><div class="paxMobile paxContainer" id="paxContainer"><ul><li class="roomRow"><div class="widgetUserBlock fl padR10"><label class="ico14 db padB5"><span>Adults</span><small class="font13Lt db padT3"> (12+ yrs)</small></label><div class="number-spinner"><button class="fl minSpin" id="adultPaxMinus" data-dir="dwn">−</button><input type="text" id="adultPaxBox" class="fl numbSpin" value="1"><button class="fl plusSpin" id="adultPaxPlus" data-dir="up">+</button></div></div><div><div class="widgetUserBlock fl padR10"><label class="ico14 db padB5"><span>Children</span><small class="font13Lt db padT3"> (2-12 yrs)</small></label><div class="number-spinner"><button class="fl minSpin" id="childPaxMinus" data-dir="dwn">−</button><input type="text" id="childPaxBox" class="fl numbSpin" value="0"><button class="fl plusSpin" id="childPaxPlus" data-dir="up">+</button></div></div><div class="widgetUserBlock fl padR10"><label class="ico14 db padB5"><span>Infant(s)</span><small class="font13Lt db padT3"> (below 2 yrs)</small></label><div class="number-spinner"><button class="fl minSpin" id="infantPaxMinus" data-dir="dwn">−</button><input type="text" id="infantPaxBox" class="fl numbSpin" value="0"><button class="fl plusSpin" id="infantPaxPlus" data-dir="up">+</button></div></div></div></li></ul><div class="fl width100 padLR15 padB15 alignItemsCenter dF"><div class="padR10"> Travel Class</div><div class="width70"><div><label><!-- react-text: 3821 --> <!-- /react-text --><!-- react-text: 3822 --><!-- /react-text --></label><div><select class="width100 form-control ico14" id="gi_class"><option value="E">Economy</option><option value="B">Business</option><option value="F">First class</option><option value="W">Premium Economy</option></select></div></div></div></div></div></div>*@
 </div>
