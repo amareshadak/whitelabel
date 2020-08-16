@@ -345,5 +345,23 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
 
         }
         #endregion
+
+        #region Flight Booking Request
+        [HttpPost]
+        public JsonResult FlightBookingRequest(string req)
+        {
+            try
+            {
+                dynamic VerifyFlight = MultiLinkAirAPI.BookedFlightTicket(req);
+                var data = JsonConvert.SerializeObject(VerifyFlight);
+                return Json(data, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+        #endregion
     }
 }

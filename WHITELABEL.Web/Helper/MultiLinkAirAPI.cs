@@ -131,7 +131,7 @@ namespace WHITELABEL.Web.Helper
         public static dynamic BookedFlightTicket(string req)
         {
             string url = $"{root}API/BookTicket";
-            AdditionalDetailsDTO AdditionalDetails = JsonConvert.DeserializeObject<AdditionalDetailsDTO>(req);
+            FlightBookingDTO AdditionalDetails = JsonConvert.DeserializeObject<FlightBookingDTO>(req);
             AdditionalDetails.RequestXml.Authenticate.InterfaceCode = "1";
             AdditionalDetails.RequestXml.Authenticate.InterfaceAuthKey = token;
             AdditionalDetails.RequestXml.Authenticate.AgentCode = AgentCode;

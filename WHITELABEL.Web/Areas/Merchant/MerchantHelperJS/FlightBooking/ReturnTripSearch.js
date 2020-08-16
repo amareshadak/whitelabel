@@ -1,4 +1,4 @@
-﻿app.controller('ReturnFlightSearchApiCall', ['FlightServices', '$scope', '$http', '$window', '$filter', function (FlightServices, $scope, $http, $window, $filter) {
+﻿app.controller('ReturnFlightSearchController', ['FlightServices', '$scope', '$http', '$window', '$filter', function (FlightServices, $scope, $http, $window, $filter) {
     $scope.lower_price_bound = 0;
     $scope.upper_price_bound = 1000;
     $scope.min = 0;
@@ -30,11 +30,13 @@
     };
 
     $scope.airlinesList = [];
+    $scope.selectDeptTrackNo = '';
+    $scope.selectReturnTrackNo = '';
 
 
 
     $scope.filterDeptFlightData = function (item) {
-        debugger;
+        
         let returnValue = false;
 
         let amount = Math.round(item[0].TotalAmount);
@@ -96,9 +98,11 @@
         return returnValue;
 
     };
+
+
     $scope.filterReturnFlightData = function (item) {
         let returnValue = false;
-        debugger;
+      
         let amount = Math.round(item[0].TotalAmount);
         returnValue = Math.round(amount) >= $scope.lower_price_bound && Math.round(amount) <= $scope.upper_price_bound;
 
@@ -170,9 +174,12 @@
         });
     }
 
+    $scope.selectedDeptFlight = [];
+    $scope.selectedReturnFlight = [];
+
     $scope.LoadFlightSearch = function (Tripmode, FromCityCode, TOAirportCode, FromDate, ToDate, TravelType, Adult, Child, Infant) {
         //const data = { TrackNo: trackNo, TripMode: tripMode };
-        debugger;
+        // debugger;
         $scope.formdisplay = true;
         var Tripmode = Tripmode;
         var FromAirportsName = FromCityCode;
@@ -208,7 +215,6 @@
 
         const service = FlightServices.getFlightReturnSearchDetails(data);
         service.then(function (response) {
-            debugger;
             const data = response.data;
             const FlightResponse = JSON.parse(data);
             const info = FlightResponse.GetFlightAvailibilityResponse;
@@ -236,9 +242,11 @@
             $scope.returnFlight = Object.keys(objReturnFlightSearchResult).map(function (key) {
                 return objReturnFlightSearchResult[key];
             });
+            $scope.selectedDeptFlight = $scope.deptureFlight[0];
+            $scope.selectedReturnFlight = $scope.returnFlight[0];
+            $scope.selectDeptTrackNo = $scope.selectedDeptFlight[0].TrackNo;
+            $scope.selectReturnTrackNo = $scope.selectedReturnFlight[0].TrackNo;
 
-            console.log($scope.deptureFlight);
-            console.log($scope.returnFlight);
 
             const maxPeak = $scope.FlightFareDetails.reduce((p, c) => Math.round(p.NetAmount) > Math.round(c.NetAmount) ? p : c);
             const minPeak = $scope.FlightFareDetails.reduce((p, c) => Math.round(p.NetAmount) < Math.round(c.NetAmount) ? p : c);
@@ -309,12 +317,20 @@
         $scope.BaggageReturnAllowance = baggageval;
     }
 
-    $scope.selectedDeptFlight = [];
-    $scope.selectedReturnFlight = [];
+    $scope.setSelectedDeptFlight = function (item) {
+        $scope.selectedDeptFlight = angular.copy(item);
+        $scope.selectDeptTrackNo = $scope.selectedDeptFlight[0].TrackNo;
+    }
+    $scope.setSelectedReturnFlight = function (item) {
+        $scope.selectedReturnFlight = angular.copy(item);
+        $scope.selectReturnTrackNo = $scope.selectedReturnFlight[0].TrackNo;
+    }
+
+    
 
     //$scope.selectDestimationSource = function (TrackNo, FromAirportCode, DepTime, Via, TotalDur, Stops, TOAirportCode, ArivTime, DepDate, TotalAmount, SrNo, FlightNo, AirlineCode) {
     $scope.selectDestimationSource = function (ItemVal) {
-        debugger;
+        // debugger;
         //var FlightSelect = $scope.deptureFlight[$index];
         $scope.selectval = true;
         $scope.DeptAirLineCode = ItemVal[0].AirlineCode;
@@ -339,7 +355,7 @@
         //console.log(FlightPrice);
     }
     $scope.selectReturnFlightSource = function (TrackNo, FromAirportCode, DepTime, Via, TotalDur, Stops, TOAirportCode, ArivTime, DepDate, TotalAmount, SrNo, FlightNo, AirlineCode) {
-        debugger;
+        // debugger;
         //var FlightSelect = $scope.flightsearchResult.FlightDetails[$index];
         //var FlightSelect = $scope.returnFlight[$index];
         $scope.selectval = true;
@@ -365,8 +381,9 @@
 
         //console.log(DesFlightPrice);
     }
+
     $scope.RoundtripgetFlightDetails = function (Adult, Children, Infant, TrackNo, TripMode) {
-        debugger;
+        // debugger;
         //var Tracevalue = JSON.parse(window.localStorage.getItem("SearchTraceDetails"));
         //var timevalue = new Date(Tracevalue.Time);
         //var TraceId = Tracevalue.Token;
@@ -376,15 +393,17 @@
 
     };
 
-    $scope.AddTotalAmount = function (DerpAmt,RetAmt) {        
-        let TotalAmt = 0;
-        if (DerpAmt != undefined && RetAmt != undefined) {
-            TotalAmt = parseFloat(DerpAmt) + parseFloat(RetAmt);
+    $scope.AddTotalAmount = function (DerpAmt, RetAmt) {   
+        if (DerpAmt && RetAmt) {
+            let TotalAmt = 0;
+            if (DerpAmt[0].TotalAmount && RetAmt[0].TotalAmount != undefined) {
+                TotalAmt = parseFloat(DerpAmt[0].TotalAmount) + parseFloat(RetAmt[0].TotalAmount);
+            }
+            else {
+                TotalAmt = 0;
+            }
+            return Math.round(TotalAmt);
         }
-        else {
-            TotalAmt =0;
-        }
-        return Math.round(TotalAmt);
     }
 
 
@@ -393,12 +412,15 @@
         var hours = (n - minutes) / 60
         return hours + " hr " + minutes + " m";
     }
+
     $scope.parseNumber = function (value) {
         return parseInt(value);
     }
+
     $scope.parseFloat = function (value) {
         return parseFloat(value);
     }
+
     $scope.getFlightDetails = function (Adult, Children, Infant, TrackNo, TripMode) {
         var Tracevalue = JSON.parse(window.localStorage.getItem("SearchTraceDetails"));
         var timevalue = new Date(Tracevalue.Time);
@@ -437,17 +459,20 @@
     }
 
     $scope.calculateDuration = function (item) {
-        const firstDate = item[0].DepDate;
-        const firstTime = item[0].DepTime;
-        const lastDate = item[item.length - 1].ArrDate;
-        const lastTime = item[item.length - 1].ArrTime;
-        const firstDateArray = firstDate.split('/');
-        const firstTimeArray = firstTime.split(':');
-        const lastDateArray = lastDate.split('/');
-        const lastTimeArray = lastTime.split(':');
-        const firstDateTime = new Date(firstDateArray[2], firstDateArray[1], firstDateArray[0], firstTimeArray[0], firstTimeArray[1]);
-        const lastDateTime = new Date(lastDateArray[2], lastDateArray[1], lastDateArray[0], lastTimeArray[0], lastTimeArray[1]);
-        const totalMinute = diff_minutes(lastDateTime, firstDateTime);
-        return timeConvert(totalMinute);
+        if (item) {
+            const firstDate = item[0].DepDate;
+            const firstTime = item[0].DepTime;
+            const lastDate = item[item.length - 1].ArrDate;
+            const lastTime = item[item.length - 1].ArrTime;
+            const firstDateArray = firstDate.split('/');
+            const firstTimeArray = firstTime.split(':');
+            const lastDateArray = lastDate.split('/');
+            const lastTimeArray = lastTime.split(':');
+            const firstDateTime = new Date(firstDateArray[2], firstDateArray[1], firstDateArray[0], firstTimeArray[0], firstTimeArray[1]);
+            const lastDateTime = new Date(lastDateArray[2], lastDateArray[1], lastDateArray[0], lastTimeArray[0], lastTimeArray[1]);
+            const totalMinute = diff_minutes(lastDateTime, firstDateTime);
+            return timeConvert(totalMinute);
+        }
+        
     }
 }]);

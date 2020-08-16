@@ -5,6 +5,12 @@
     $scope.min = 0;
     $scope.max = 1000;
 
+    $scope.dynamicPopover = {
+        content: '',
+        templateUrl: 'myPopoverTemplate.html',
+        title: ''
+    };
+
 
     $scope.filterData = {
         stops: null,
@@ -29,11 +35,11 @@
         let amount = Math.round(item[0].TotalAmount);
         returnValue = Math.round(amount) >= $scope.lower_price_bound && Math.round(amount) <= $scope.upper_price_bound;
 
-        if ($scope.filterData.timeSlots.EarlyMorning
+        if (($scope.filterData.timeSlots.EarlyMorning
             || $scope.filterData.timeSlots.Morning
             || $scope.filterData.timeSlots.MidDay
             || $scope.filterData.timeSlots.Evening
-            || $scope.filterData.timeSlots.Night) {
+            || $scope.filterData.timeSlots.Night) && returnValue) {
 
             let checkValue = [];
             let time =parseInt(item[0].DepTime.replace(':',''));

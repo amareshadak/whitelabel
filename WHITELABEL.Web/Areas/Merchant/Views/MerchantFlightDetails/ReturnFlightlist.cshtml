@@ -718,7 +718,7 @@
 <script src="~/Areas/Merchant/MerchantHelperJS/FlightBooking/ReturnTripSearch.js"></script>
 @*<script src="~/Areas/Merchant/MerchantHelperJS/FlightBooking/AirportAutocomplete.js"></script>*@
 
-<div class="display-animation" ng-app="AirportAutocompleteoduleApp" ng-controller="ReturnFlightSearchApiCall" ng-init="LoadFlightSearch('@ViewBag.Tripmode','@ViewBag.FromCityCode','@ViewBag.TOAirportCode','@ViewBag.FromDate','@ViewBag.ToDate','@ViewBag.TravelType','@ViewBag.Adult','@ViewBag.Child','@ViewBag.Infant')" id="AirportAutocompleteController">
+<div class="display-animation" ng-app="AirportAutocompleteoduleApp" ng-controller="ReturnFlightSearchController" ng-init="LoadFlightSearch('@ViewBag.Tripmode','@ViewBag.FromCityCode','@ViewBag.TOAirportCode','@ViewBag.FromDate','@ViewBag.ToDate','@ViewBag.TravelType','@ViewBag.Adult','@ViewBag.Child','@ViewBag.Infant')" id="AirportAutocompleteController">
     <div class="content" style="margin-top:20px;">
         <div class="display-animation">
             <div class="full-content margin-bottom-40 bg-white" id="Bill_page">
@@ -946,92 +946,102 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="flexCol fltHpyRsltCard whiteBg brdrRd10 pad10 stickyHpy marginT5 padB15 width100" style="z-index: 2;">
+                                <div ng-cloak class="flexCol fltHpyRsltCard whiteBg brdrRd10 pad10 stickyHpy marginT5 padB15 width100" style="z-index: 2;" ng-show="selectedReturnFlight.length > 0">
                                     <div class="dF justifyBetween">
-                                        <div class="flexCol width70 justifyEnd">
+                                        <div class="flexCol justifyEnd"  style="width:80%">
                                             <div class="ico12 fb padB10 quicks">Your Selection</div>
                                             <div class="dF">
-                                                <div class="dF justifyBetween alignItemsEnd width50 padLR0 borderRight">
-                                                    <div class="col-md-3 col-sm-2 col-xs-2">
+                                                <div class="dF justifyBetween width50 alignItemsEnd padLR0 borderRight">
+                                                    <div class="col-md-2 col-sm-2 col-xs-2">
                                                         <span class="dF justifyCenter" ng-cloak>
-                                                            <img src="~/Content/static-airlines-master/logos/{{selectedDeptFlight[0].AirlineCode}}.png" class="flightImagesNew" alt="flights">
-                                                        </span><span class="db txtCenter greyLt ico11 padT5"  ng-cloak>
-                                                        <span style="display:none;">{{FlightTrackNo}}-{{OriginResultIndex}}-</span> {{FlightNo}} </span>
+                                                            <img ng-src="~/Content/static-airlines-master/logos/{{selectedDeptFlight[0].AirlineCode}}.png" class="flightImagesNew" alt="flights">
+                                                        </span><span class="db txtCenter greyLt ico11 padT5" ng-cloak>
+                                                            <span style="display:none;">{{FlightTrackNo}}-{{OriginResultIndex}}-</span> {{FlightNo}}
+                                                        </span>
                                                     </div>
-                                                    <div class="col-md-9 col-sm-10 col-xs-10 padLR0">
+                                                    <div class="col-md-10 col-sm-10 col-xs-10 padLR0">
                                                         <div class="fl width100  alignItemsEnd dF">
                                                             <div class="col-md-4 col-sm-4 col-xs-4">
-                                                                <span class="db ico11 nowrap padB5" ng-cloak>{{DepartDate}}</span>
+                                                                <span class="db ico11 nowrap padB5" ng-cloak>{{selectedDeptFlight[0].DepDate}}</span>
                                                                 <span class="db">
-                                                                    <span class="db ico12 greyLt padB5" ng-cloak>{{OriginAirportCode}}</span>
-                                                                    <span class="fb ico16 quicks" ng-cloak>{{Departtime}}</span>
+                                                                    <span class="db ico12 greyLt padB5" ng-cloak>{{selectedDeptFlight[0].FromAirportCode}}</span>
+                                                                    <span class="fb ico16 quicks" ng-cloak>{{selectedDeptFlight[0].DepTime}}</span>
                                                                 </span>
                                                             </div>
-                                                            <div class="col-md-5 col-sm-5 padLR0 col-xs-5 alignSelfCenter">
-                                                                <div class="ico12 grey txtCenter padB5" ng-cloak>{{ViaFromStopage}} ({{Duration}})</div>
-                                                                <span>
-                                                                    <span class="col-md-5 col-sm-3 col-xs-3 pad0 prgrsDot dotVH"></span>
-                                                                    <span class="col-md-5 col-sm-3 col-xs-3 pad0 prgrsDot"></span>
-                                                                    <span class="col-md-2 col-sm-3 col-xs-3 pad0 prgrsDot dotVH"></span>
-                                                                </span>
-                                                                <div class="ico12 grey txtCenter" ng-cloak>{{FromStops}} Stop</div>
+                                                            <div class="col-md-4 col-sm-4 padLR0 col-xs-5 alignSelfCenter">
+                                                                <div class="text-center">
+                                                                    {{selectedDeptFlight[0].Stops === "0" ? "" : selectedDeptFlight[selectedDeptFlight[0].Stops].FromAirportCode}} -->
+                                                                    {{calculateDuration(selectedDeptFlight)}}
+                                                                </div>
+                                                                <div class="text-center">{{selectedDeptFlight[0].Stops}} Stop</div>
                                                             </div>
-                                                            <div class="col-md-3 col-sm-3 col-xs-3 width29">
+                                                            <div class="col-md-4 col-sm-4 col-xs-4">
+                                                                <span class="db ico11 nowrap padB5" ng-cloak>{{selectedDeptFlight[selectedDeptFlight.length - 1].DepDate}}</span>
                                                                 <span class="db">
-                                                                    <span class="db ico12 greyLt padB5" ng-cloak><!-- react-text: 2065 -->{{DestinationAirportcode}}<!-- /react-text --></span>
-                                                                    <span class="fb ico16 quicks" ng-cloak>{{Reachedtime}}</span>
+                                                                    <span class="db ico12 greyLt padB5" ng-cloak>{{selectedDeptFlight[selectedDeptFlight.length - 1].ToAirportCode}}</span>
+                                                                    <span class="fb ico16 quicks" ng-cloak>{{selectedDeptFlight[selectedDeptFlight.length - 1].DepTime}}</span>
                                                                 </span>
                                                             </div>
+
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="dF justifyBetween alignItemsEnd width50 padLR0 ">
-                                                    <div class="col-md-3 col-sm-2 col-xs-2">
-                                                        <span class="dF justifyCenter"  ng-cloak><img src="~/Content/static-airlines-master/logos/{{ReturnAirLineCode}}.png" class="flightImagesNew" alt="flights"></span>
-                                                        <span class="db txtCenter greyLt ico11 padT5"  ng-cloak>
-                                                        <span style="display:none;">{{DesFlightTrackNo}}</span> {{DesFlightNo}}</span>
+                                                    <div class="col-md-2 col-sm-2 col-xs-2">
+                                                        <span class="dF justifyCenter" ng-cloak>
+                                                            <img ng-src="~/Content/static-airlines-master/logos/{{selectedReturnFlight[0].AirlineCode}}.png" class="flightImagesNew" alt="flights">
+                                                        </span><span class="db txtCenter greyLt ico11 padT5" ng-cloak>
+                                                            <span style="display:none;">{{FlightTrackNo}}-{{OriginResultIndex}}-</span> {{FlightNo}}
+                                                        </span>
                                                     </div>
-                                                    <div class="col-md-9 col-sm-10 col-xs-10 padLR0">
+                                                    <div class="col-md-10 col-sm-10 col-xs-10 padLR0">
                                                         <div class="fl width100  alignItemsEnd dF">
                                                             <div class="col-md-4 col-sm-4 col-xs-4">
-                                                                <span class="db ico11 nowrap padB5"  ng-cloak>{{DesDepartDate}}</span>
+                                                                <span class="db ico11 nowrap padB5" ng-cloak>{{selectedReturnFlight[0].DepDate}}</span>
                                                                 <span class="db">
-                                                                    <span class="db ico12 greyLt padB5"  ng-cloak>{{DesOriginAirportCode}}</span>
-                                                                    <span class="fb ico16 quicks"  ng-cloak>{{DesDeparttime}}</span>
+                                                                    <span class="db ico12 greyLt padB5" ng-cloak>{{selectedReturnFlight[0].FromAirportCode}}</span>
+                                                                    <span class="fb ico16 quicks" ng-cloak>{{selectedReturnFlight[0].DepTime}}</span>
                                                                 </span>
                                                             </div>
-                                                            <div class="col-md-5 col-sm-5 padLR0 col-xs-5 alignSelfCenter">
-                                                                <div class="ico12 grey txtCenter padB5"  ng-cloak>{{retvia}}  ({{DesDuration}})</div>
-                                                                <div class="ico12 grey txtCenter"  ng-cloak>{{DesFromStops}}-Stop</div>
+                                                            <div class="col-md-4 col-sm-4 padLR0 col-xs-5 alignSelfCenter">
+                                                                <div class="text-center">
+                                                                    {{selectedReturnFlight[0].Stops === "0" ? "" : selectedReturnFlight[selectedReturnFlight[0].Stops].FromAirportCode}} -->
+                                                                    {{calculateDuration(selectedReturnFlight)}}
+                                                                </div>
+                                                                <div class="text-center">{{selectedReturnFlight[0].Stops}} Stop</div>
                                                             </div>
-                                                            <div class="col-md-3 col-sm-3 col-xs-3 width29">
+                                                            <div class="col-md-4 col-sm-4 col-xs-4">
+                                                                <span class="db ico11 nowrap padB5" ng-cloak>{{selectedReturnFlight[selectedReturnFlight.length - 1].DepDate}}</span>
                                                                 <span class="db">
-                                                                    <span class="db ico12 greyLt padB5"  ng-cloak>{{DesDestinationAirportcode}}</span>
-                                                                    <span class="fb ico16 quicks"  ng-cloak>{{DesReachedtime}}</span>
+                                                                    <span class="db ico12 greyLt padB5" ng-cloak>{{selectedReturnFlight[selectedReturnFlight.length - 1].ToAirportCode}}</span>
+                                                                    <span class="fb ico16 quicks" ng-cloak>{{selectedReturnFlight[selectedReturnFlight.length - 1].DepTime}}</span>
                                                                 </span>
                                                             </div>
+
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="txtRight padT20"></div>
                                         </div>
-                                        <div class="dF alignItemsEnd width30 padL5 padB3 justifyEnd fltHpySumryPrc">
-                                            <span class="padR15  alignItemsEnd  flexCol">
+                                        <div class="dF alignItemsCenter padL5 padB3 justifyEnd fltHpySumryPrc"  style="width:20%">
+                                            <span class="padR15  alignItemsCenter  flexCol">
                                                 <span class="alignItemsCenter dF padT5">
-                                                    <i class="icon-rupee ico13"></i><span class="ico24 quicks fb">
-                                                    {{AddTotalAmount(FlightPrice,DesFlightPrice)}}
-                                                    @*{{parseFloat(FlightPrice) + parseFloat(DesFlightPrice)}}*@</span>
+                                                    <i class="icon-rupee ico13"></i>
+                                                    <span class="ico24 quicks fb" ng-cloak>
+                                                        {{AddTotalAmount(selectedDeptFlight,selectedReturnFlight)}}
+                                                    </span>
                                                 </span>
                                                 <span class="reserveWrp padT5">
-                                                    <small class="ico12 dF alignItemsCenter quicks">
+                                                    <small class="ico12 dF alignItemsCenter quicks" style="display:none">
                                                         <span class="padR2">No-cost EMI </span><i class="icon-rupee fb ico9"></i>
                                                         <span class="fb">3,841</span>
                                                     </small>
                                                 </span>
                                             </span><span class="dF flexCol">
                                                 <span class="db clearfix padTB15">
-                                                    <input type="button" value="BOOK" class="button fr fltbook fb widthF105 quicks fb" ng-click="RoundtripgetFlightDetails(AdultCount,ChildCount,InfantCount,(FlightTrackNo+','+DesFlightTrackNo),TripMode)">
+                                                    <input type="button" value="BOOK" class="button fr fltbook fb widthF105 quicks fb" 
+                                                           ng-click="RoundtripgetFlightDetails(AdultCount,ChildCount,InfantCount,(selectedDeptFlight[0].TrackNo +','+selectedReturnFlight[0].TrackNo),TripMode)">
                                                 </span>
                                             </span>
                                         </div>
@@ -1100,9 +1110,7 @@
                                                                 </span>
                                                             </span>
                                                             <span class="custRad" style="padding-left:10px;">
-                                                                @*<input type="radio" ng-model="RbtSourceDetails" id="rbtSourceId{{$index}}" name="Source" ng-click="selectedDeptFlight =  Deptitemval"  selectDestimationSource(Deptitemval[0].TrackNo,Deptitemval[0].FromAirportCode,Deptitemval[0].DepTime,(Deptitemval[0].Stops === '0' ? '' : Deptitemval[Deptitemval[0].Stops].FromAirportCode),(calculateDuration(Deptitemval)),(Deptitemval[0].Stops === '0' ? 0 : Deptitemval[Deptitemval[0].Stops].Stops),(Deptitemval[0].Stops === '0' ? Deptitemval[0].ToAirportCode : Deptitemval[Deptitemval[0].Stops].ToAirportCode),(Deptitemval[0].Stops === '0' ? Deptitemval[0].ArrTime : Deptitemval[Deptitemval[0].Stops].ArrTime),Deptitemval[0].DepDate,Deptitemval[0].TotalAmount,Deptitemval[0].SrNo,Deptitemval[0].FlightNo,Deptitemval[0].AirlineCode)"><label></label>*@
-                                                                <input type="radio" ng-model="RbtSourceDetails" id="rbtSourceId{{$index}}" name="Source" ng-click="selectedDeptFlight =  Deptitemval" /> <label></label>
-                                                           
+                                                                <input type="radio" ng-model="selectDeptTrackNo" name="chkDept" ng-value="Deptitemval[0].TrackNo" ng-change="setSelectedDeptFlight(Deptitemval)" /> <label></label>
                                                             </span>
                                                         </div>
                                                     </div>
@@ -1284,8 +1292,7 @@
                                                                 </span>
                                                             </span>
                                                             <span class="custRad" style="padding-left:10px;">
-                                                                <input type="radio" ng-model="RbtDestinationDetails" id="rbtDestinationId{{$index}}" name="destination" ng-click="selectReturnFlightSource(Returnval[0].TrackNo,Returnval[0].FromAirportCode,Returnval[0].DepTime,(Returnval[0].Stops === '0' ? '' : Returnval[Returnval[0].Stops].FromAirportCode),(calculateDuration(Returnval)),(Returnval[0].Stops === '0' ? 0 : Returnval[Returnval[0].Stops].Stops),(Returnval[0].Stops === '0' ? Returnval[0].ToAirportCode : Returnval[Returnval[0].Stops].ToAirportCode),(Returnval[0].Stops === '0' ? Returnval[0].ArrTime : Returnval[Returnval[0].Stops].ArrTime),Returnval[0].DepDate,Returnval[0].TotalAmount,Returnval[0].SrNo,Returnval[0].FlightNo,Returnval[0].AirlineCode)"><label></label>
-                                                                @*<input type="radio" ng-model="RbtDestinationDetails" id="rbtDestinationId{{$index}}" name="destination" ng-click="selectReturnFlightSource(Returnval[0].TrackNo,Returnval[0].FromAirportCode,Returnval[0].DepTime,(Returnval[0].Stops === '0' ? '' : Returnval[Returnval[0].Stops].FromAirportCode),(timeConvert(Returnval[0].Stops === '0' ? parseNumber(Returnval[0].FlightTime) : (parseNumber(Returnval[0].FlightTime)+parseNumber(Returnval[0].HoldDuration)+parseNumber(Returnval[Returnval[0].Stops].HoldDuration)))),(Returnval[0].Stops === '0' ? 0 : Returnval[Returnval[0].Stops].Stops),(Returnval[0].Stops === '0' ? Returnval[0].ToAirportCode : Returnval[Returnval[0].Stops].ToAirportCode),(Returnval[0].Stops === '0' ? Returnval[0].ArrTime : Returnval[Returnval[0].Stops].ArrTime),Returnval[0].DepDate,Returnval[0].TotalAmount,Returnval[0].SrNo,Returnval[0].FlightNo,Returnval[0].AirlineCode)"><label></label>*@
+                                                                <input type="radio" ng-model="selectReturnTrackNo" name="chkReturn" ng-value="Returnval[0].TrackNo" ng-change="setSelectedReturnFlight(Returnval)" /> <label></label>
                                                             </span>
                                                         </div>
                                                     </div>

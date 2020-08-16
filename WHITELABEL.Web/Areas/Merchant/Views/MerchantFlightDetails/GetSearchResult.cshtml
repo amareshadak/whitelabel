@@ -511,12 +511,6 @@
 <script src="~/Areas/Merchant/MerchantHelperJS/FlightBooking/SingleFlightSearch.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
-<script>
-    $(function () {
-       
-        
-    });
-</script>
 
 <div class="display-animation" ng-app="AirportAutocompleteoduleApp" ng-controller="SingleFlightSearchApiCall" ng-init="LoadFlightSearch('@ViewBag.Tripmode','@ViewBag.FromCityCode','@ViewBag.TOAirportCode','@ViewBag.FromDate','@ViewBag.ToDate','@ViewBag.TravelType','@ViewBag.Adult','@ViewBag.Child','@ViewBag.Infant')" id="AirportAutocompleteController">
     <div class="content">
@@ -542,54 +536,84 @@
                                                 </label>
                                             </span>
                                         </div><div class="col-md-12 col-sm-12 col-xs-12 padLR0 hpySrpWdgt padT5">
-                                            <div class="">
-                                                <div class="width20 padR20 fl autoSuggestBox" id="source_st_srp">
-                                                    <div class="white ico12 op6 padB5 txtTransUpper">From</div>
-                                                    <div class="width100 fl autoSuggestBox autoSgstOuterWrap">
-                                                        <div class="width100 fl autoSuggestBox autoSgstOuterWrap">
-                                                            <input type="text" id="gi_source_st_srp" class="form-control fltIpF quicks wdgtEle" value="Kolkata" autocomplete="off" role="combobox" aria-autocomplete="list" aria-owns="react-autosuggest-1" aria-expanded="false">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <a href="javascript:void(0);" id="swap_srp" class="fl padT20 marginT5 padR20 swapWrap">
-                                                    <i class="hypflt-dblArw ico18 fl txtCenter white"></i>
-                                                </a>
-                                                <div class="width20 fl padR20 autoSuggestBox" id="destination_st_srp">
-                                                    <div class="white ico12 op6 padB5 txtTransUpper">To</div>
-                                                    <div class="width100 fl autoSuggestBox autoSgstOuterWrap">
-                                                        <div class="width100 fl autoSuggestBox autoSgstOuterWrap">
-                                                            <input type="text" id="gi_destination_st_srp" class="form-control fltIpF quicks wdgtEle" value="Delhi" autocomplete="off" role="combobox" aria-autocomplete="list" aria-owns="react-autosuggest-1" aria-expanded="false">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div><div class="width12 fl calenderInnerBox padR20">
-                                                <div class="white ico12 op6 padB5 txtTransUpper">Departure Date</div><div id="fromEle_srp" class="col-md-12 pad0">
-                                                    <input type="text" class="form-control quicks wdgtEle" name="from" id="start-date_srp" data-date="true" value="Fri, 10 Jul" readonly="">
-                                                </div>
-                                            </div>
-                                            <div class="width12 fl calenderInnerBox padR20">
-                                                <div class="white ico12 op6 padB5 txtTransUpper">Return Date</div><div id="toEle_srp" class="col-md-12 pad0">
-                                                    <input type="text" class="form-control quicks wdgtEle " name="to" id="end-date_srp" data-date="true" value="Wed, 22 Jul" readonly="">
-                                                    <i class="hypflt-close dib ico17 white posAbs calClose curPointFlt"></i>
-                                                </div>
-                                            </div><div class="paxWrapper fl_shInputPaxBox col-lg-2 col-md-2  col-sm-2 col-xs-12 padL0 padR20" id="pax_link_common_srp">
-                                                <div class="white ico12 op6 padB5 txtTransUpper">Passenger &amp; Class</div>
-                                                <span href="javascript:void(0);" class="paxBoxWrap mobdn dF padT10 ico14 quicks">
-                                                    <span id="pax_label_srp" class="textOverflow">1 Traveller(s), </span>
-                                                    <span class="textOverflow">Economy</span>
-                                                </span>
-                                            </div><div class="col-lg-1 col-md-1 col-sm-3 col-xs-12 marginB10">
-                                                <div class="white ico12 op6 padB5 txtTransUpper">&nbsp;</div>
-                                                <button id="submitSearchButton_srp" class="button hpySrchEnb ipadButtonSpace width100 quicks" type="button">Search</button>
-                                            </div>
-                                        </div>
+    <div class="">
+        <div class="width20 padR20 fl autoSuggestBox" id="source_st_srp">
+            <div class="white ico12 op6 padB5 txtTransUpper">From</div>
+            <div class="width100 fl autoSuggestBox autoSgstOuterWrap">
+                <div class="width100 fl autoSuggestBox autoSgstOuterWrap">
+                    <input type="text" id="gi_source_st_srp" class="form-control fltIpF quicks wdgtEle" value="Kolkata" autocomplete="off" role="combobox" aria-autocomplete="list" aria-owns="react-autosuggest-1" aria-expanded="false">
+                </div>
+            </div>
+        </div>
+        <a href="javascript:void(0);" id="swap_srp" class="fl padT20 marginT5 padR20 swapWrap">
+            <i class="hypflt-dblArw ico18 fl txtCenter white"></i>
+        </a>
+        <div class="width20 fl padR20 autoSuggestBox" id="destination_st_srp">
+            <div class="white ico12 op6 padB5 txtTransUpper">To</div>
+            <div class="width100 fl autoSuggestBox autoSgstOuterWrap">
+                <div class="width100 fl autoSuggestBox autoSgstOuterWrap">
+                    <input type="text" id="gi_destination_st_srp" class="form-control fltIpF quicks wdgtEle" value="Delhi" autocomplete="off" role="combobox" aria-autocomplete="list" aria-owns="react-autosuggest-1" aria-expanded="false">
+                </div>
+            </div>
+        </div>
+    </div><div class="width12 fl calenderInnerBox padR20">
+        <div class="white ico12 op6 padB5 txtTransUpper">Departure Date</div><div id="fromEle_srp" class="col-md-12 pad0">
+            <input type="text" class="form-control quicks wdgtEle" name="from" id="start-date_srp" data-date="true" value="Fri, 10 Jul" readonly="">
+        </div>
+    </div>
+    <div class="width12 fl calenderInnerBox padR20">
+        <div class="white ico12 op6 padB5 txtTransUpper">Return Date</div><div id="toEle_srp" class="col-md-12 pad0">
+            <input type="text" class="form-control quicks wdgtEle " name="to" id="end-date_srp" data-date="true" value="Wed, 22 Jul" readonly="">
+            <i class="hypflt-close dib ico17 white posAbs calClose curPointFlt"></i>
+        </div>
+    </div>
+    <div class="paxWrapper fl_shInputPaxBox col-lg-2 col-md-2  col-sm-2 col-xs-12 padL0 padR20" id="pax_link_common_srp">
+        <div class="white ico12 op6 padB5 txtTransUpper">Passenger &amp; Class</div>
+        <button uib-popover-template="dynamicPopover.templateUrl" popover-placement="bottom" popover-title="{{dynamicPopover.title}}" type="button" class="btn btn-default"> 1 Traveller(s), Economy</button>
+        <script type="text/ng-template" id="myPopoverTemplate.html">
+            <div class="paxMobile paxContainer" id="paxContainer">
+                <ul>
+                    <li class="roomRow">
+                        <div class="widgetUserBlock fl padR10">
+                            <label class="ico14 db padB5"><span>Adults</span><small class="font13Lt db padT3"> (12+ yrs)</small></label>
+                            <div class="number-spinner">
+                                <button class="fl minSpin" id="adultPaxMinus" data-dir="dwn">−</button><input type="text" id="adultPaxBox" class="fl numbSpin" value="1"><button class="fl plusSpin" id="adultPaxPlus" data-dir="up">+</button>
+                            </div>
+                        </div><div><div class="widgetUserBlock fl padR10"><label class="ico14 db padB5"><span>Children</span><small class="font13Lt db padT3"> (2-12 yrs)</small></label><div class="number-spinner"><button class="fl minSpin" id="childPaxMinus" data-dir="dwn">−</button><input type="text" id="childPaxBox" class="fl numbSpin" value="0"><button class="fl plusSpin" id="childPaxPlus" data-dir="up">+</button></div></div><div class="widgetUserBlock fl padR10"><label class="ico14 db padB5"><span>Infant(s)</span><small class="font13Lt db padT3"> (below 2 yrs)</small></label><div class="number-spinner"><button class="fl minSpin" id="infantPaxMinus" data-dir="dwn">−</button><input type="text" id="infantPaxBox" class="fl numbSpin" value="0"><button class="fl plusSpin" id="infantPaxPlus" data-dir="up">+</button></div></div></div>
+                    </li>
+                </ul>
+                <div class="fl width100 padLR15 padB15 alignItemsCenter dF">
+                    <div class="padR10"> Travel Class</div>
+                    <div class="width70">
+                        <div>
+                            <label>
+                                <!-- react-text: 3821 --> <!-- /react-text --><!-- react-text: 3822 --><!-- /react-text -->
+                            </label><div>
+                                <select class="width100 form-control ico14" id="gi_class">
+                                    <option value="E">Economy</option>
+                                    <option value="B">Business</option>
+                                    <option value="F">First class</option>
+                                    <option value="W">Premium Economy</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </script>
+    </div>
+   
+  
+    <div class="col-lg-1 col-md-1 col-sm-3 col-xs-12 marginB10">
+        <div class="white ico12 op6 padB5 txtTransUpper">&nbsp;</div>
+        <button id="submitSearchButton_srp" class="button hpySrchEnb ipadButtonSpace width100 quicks" type="button">Search</button>
+    </div>
+</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-
 
                     <div class="card" style="width:100%;">
                         <div class="card-body">
@@ -616,7 +640,9 @@
                                                     filterData.timeSlots.MidDay = false;
                                                     filterData.timeSlots.Evening = false;
                                                     filterData.timeSlots.Night = false;
-                                                    ">Reset</button>
+                                                    ">
+                                                Reset
+                                            </button>
                                             <div class="clearfix"></div>
                                             <div class="checkboxer">
                                                 <input type="checkbox" ng-model="filterData.timeSlots.EarlyMorning">
@@ -691,7 +717,7 @@
                                             <button class="btn btn-xs btn-default pull-right" style="padding:5px;font-size:x-small;font-weight:bold" ng-click="filterData.airlines = [];resetFilterAirlinesList()">Reset</button>
                                             <div class="clearfix"></div>
                                             <div class="checkboxer" ng-repeat="item in airlinesList">
-                                                <input type="checkbox" ng-model="item.selected" >
+                                                <input type="checkbox" ng-model="item.selected">
                                                 <label for="check6"> {{item.name}} <img ng-hide="item.code == ''" ng-src="~/Content/static-airlines-master/logos/{{item.code}}.png" class="flightImagesNew" alt="flights"></label>
                                             </div>
                                             <!--.checkbox-->
@@ -728,8 +754,9 @@
                                                                     <div class="width100 dF alignItemsEnd">
                                                                         <div class="col-md-3 col-sm-3 col-xs-3 fGS0 width11" style="padding:0">
                                                                             <img ng-src="~/Content/static-airlines-master/logos/{{itemval[0].AirlineCode}}.png" />
-                                                                            <span class="ico13 padR10 padL5" data-cy="Spicejet">{{itemval[0].AirlineCode}}-{{itemval[0].FlightNo}}</span><span style="display:none;">{{itemval[0].TrackNo}}</span>
-
+                                                                            <span class="ico13 padR10 padL5" data-cy="Spicejet">{{itemval[0].AirlineCode}}-{{itemval[0].FlightNo}}</span>
+                                                                            <span style="display:none;">{{itemval[0].TrackNo}}</span>
+                                                                            <span class="badge badge-success" style="margin-left:15px">{{(itemval[0].FareType == 'R' ? 'Refundable' : 'Non-Refundable')}}</span>
                                                                         </div>
 
                                                                         <div class="col-md-3 col-sm-3 col-xs-3 padL0 fGS0">
@@ -743,9 +770,7 @@
                                                                         </div>
                                                                         <div class="col-md-3 col-sm-3 padL0 col-xs-3 fGS0" data-cy="stopsLength0">
                                                                             {{itemval[0].Stops === "0" ? 0 : itemval[itemval[0].Stops].Stops}}&nbsp;Stops ({{itemval[0].Stops === "0" ? "0" : itemval[itemval[0].Stops].FromAirportCode}})<div class="ico15 fb txtCenter quicks padT5" data-cy="duration">
-                                                                            {{calculateDuration(itemval)}}
-                                                                                @*{{calculateDuration(itemval)  timeConvert(itemval[0].Stops === "0" ? parseNumber(itemval[0].FlightTime) : (parseNumber(itemval[0].FlightTime)+parseNumber(itemval[0].HoldDuration)+parseNumber(itemval[itemval[0].Stops].HoldDuration)))}}*@
-                                                                                                                                                                                                                                              @*{{timeConvert(itemval[0].Stops === "0" ? parseNumber(itemval[0].FlightTime) : (parseNumber(itemval[0].FlightTime)+parseNumber(itemval[0].HoldDuration)+parseNumber(itemval[itemval[0].Stops].HoldDuration)))}}*@
+                                                                                {{calculateDuration(itemval)}}
                                                                             </div>
                                                                         </div>
 
@@ -939,5 +964,7 @@
             </div>
         </div>
     </div>
-    <div class=""><div class="paxMobile paxContainer" id="paxContainer"><ul><li class="roomRow"><div class="widgetUserBlock fl padR10"><label class="ico14 db padB5"><span>Adults</span><small class="font13Lt db padT3"> (12+ yrs)</small></label><div class="number-spinner"><button class="fl minSpin" id="adultPaxMinus" data-dir="dwn">−</button><input type="text" id="adultPaxBox" class="fl numbSpin" value="1"><button class="fl plusSpin" id="adultPaxPlus" data-dir="up">+</button></div></div><div><div class="widgetUserBlock fl padR10"><label class="ico14 db padB5"><span>Children</span><small class="font13Lt db padT3"> (2-12 yrs)</small></label><div class="number-spinner"><button class="fl minSpin" id="childPaxMinus" data-dir="dwn">−</button><input type="text" id="childPaxBox" class="fl numbSpin" value="0"><button class="fl plusSpin" id="childPaxPlus" data-dir="up">+</button></div></div><div class="widgetUserBlock fl padR10"><label class="ico14 db padB5"><span>Infant(s)</span><small class="font13Lt db padT3"> (below 2 yrs)</small></label><div class="number-spinner"><button class="fl minSpin" id="infantPaxMinus" data-dir="dwn">−</button><input type="text" id="infantPaxBox" class="fl numbSpin" value="0"><button class="fl plusSpin" id="infantPaxPlus" data-dir="up">+</button></div></div></div></li></ul><div class="fl width100 padLR15 padB15 alignItemsCenter dF"><div class="padR10"> Travel Class</div><div class="width70"><div><label><!-- react-text: 3821 --> <!-- /react-text --><!-- react-text: 3822 --><!-- /react-text --></label><div><select class="width100 form-control ico14" id="gi_class"><option value="E">Economy</option><option value="B">Business</option><option value="F">First class</option><option value="W">Premium Economy</option></select></div></div></div></div></div></div>
+    
+
+ 
 </div>
