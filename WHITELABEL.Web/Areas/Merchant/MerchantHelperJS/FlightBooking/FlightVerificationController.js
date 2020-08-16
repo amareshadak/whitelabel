@@ -103,7 +103,23 @@
     $scope.ServicesBaggage = [];
 
     $scope.totalBaseFare = function (fareDetails) {
-        return (parseFloat(fareDetails[0].AdultBaseFare) + parseFloat(fareDetails[0].ChildBaseFare) + parseFloat(fareDetails[0].InfantBaseFare));
+        if (fareDetails) {
+            return (parseFloat(fareDetails[0].AdultBaseFare) + parseFloat(fareDetails[0].ChildBaseFare) + parseFloat(fareDetails[0].InfantBaseFare));
+        }
+        return '';
+    }
+    $scope.totalTaxAndCharges = function (fareDetails) {
+        if (fareDetails) {
+            return (
+                parseFloat(fareDetails[0].AdultTax)
+                + parseFloat(fareDetails[0].ChildTax)
+                + parseFloat(fareDetails[0].InfantTax)
+                + parseFloat(fareDetails[0].AdultCuteFee)
+                + parseFloat(fareDetails[0].ChildCuteFee)
+                + parseFloat(fareDetails[0].InfantCuteFee)
+            );
+        }
+        return '';
     }
 
     $scope.loadFlightDetails = function (trackNo, tripMode) {
@@ -254,7 +270,14 @@
         const service = FlightServices.getFlightBookeServices(req);
 
         service.then(function (response) {
-            console.log(response);
+            let data = JSON.parse(response.data);
+            if (data.BookTicketResponses.BookTicketResponse.length > 0) {
+                $('#modelTicketConfirmed').modal('show');
+            }
+            else {
+                alert('Please check all the information and submit again.');
+            }
+            
         });
 
     };
