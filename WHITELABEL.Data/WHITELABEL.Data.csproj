@@ -104,6 +104,7 @@
     <Compile Include="Models\TBL_FINAL_CANCELLATION.cs" />
     <Compile Include="Models\TBL_FINAL_RDS_BOOKING.cs" />
     <Compile Include="Models\TBL_FINGERPRINT_DEVICE_MASTER.cs" />
+    <Compile Include="Models\TBL_FLIGHT_BOOKING_DETAILS.cs" />
     <Compile Include="Models\TBL_INSTANTPAY_RECHARGE_RESPONSE.cs" />
     <Compile Include="Models\TBL_MASTER_MEMBER.cs" />
     <Compile Include="Models\TBL_MASTER_MEMBER_ROLE.cs" />

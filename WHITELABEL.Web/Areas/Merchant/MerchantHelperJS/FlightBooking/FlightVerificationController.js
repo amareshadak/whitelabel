@@ -270,16 +270,48 @@
         const service = FlightServices.getFlightBookeServices(req);
 
         service.then(function (response) {
-            let data = JSON.parse(response.data);
-            if (data.BookTicketResponses.BookTicketResponse.length > 0) {
-                $('#modelTicketConfirmed').modal('show');
+            try {
+                let data = JSON.parse(response.data);
+                if (data.BookTicketResponses.BookTicketResponse.length > 0) {
+                    //$('#modelTicketConfirmed').modal('show');
+                    bootbox.alert({
+                        message: "Your booking is confirmed.",
+                        callback: function () {
+                            var URL = "/Merchant/MerchantFlightDetails";
+                            $window.location.href = URL;
+                            console.log('This was logged in the callback!');
+                        }
+                    });
+                }
+                else {                    
+                    bootbox.alert({
+                        message: "Please check all the information and submit again.",
+                        callback: function () {
+                            //var URL = "/Merchant/MerchantFlightDetails/FlightBookingDetails";
+                            //$window.location.href = URL;
+                            //console.log('This was logged in the callback!');
+                        }
+                    });
+                }
+            } catch (e) {
+                bootbox.alert({
+                    message: "Please check all the information and submit again.",
+                    callback: function () {
+                        //var URL = "/Merchant/MerchantFlightDetails/FlightBookingDetails";
+                        //$window.location.href = URL;
+                        //console.log('This was logged in the callback!');
+                    }
+                });
             }
-            else {
-                alert('Please check all the information and submit again.');
-            }
+           
             
         });
 
+    };
+
+    $scope.PrintFlightInvoice = function (ref_no,Pnr)
+    {
+        debugger;
     };
 
 }]);

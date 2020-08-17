@@ -566,7 +566,7 @@
     }
 </style>
 
-<script src="//momentjs.com/downloads/moment.min.js"></script>
+<script src="https://momentjs.com/downloads/moment.min.js"></script>
 <script src="~/HelperJS/AngularjsLinks/bootstrap.bundle.min.js"></script>
 <script src="~/HelperJS/AngularjsLinks/perfect-scrollbar.min.js"></script>
 <script src="~/HelperJS/AngularjsLinks/script.min.js"></script>
@@ -712,7 +712,7 @@
                                                     <div class="row" style="margin-top:20px">
                                                         <div class="col-md-2 col-sm-2 col-xs-12"></div>
                                                         <div class="col-md-5 col-sm-5 col-xs-12">
-                                                            <input ng-model="psssenger.DateOfBirth" type="text" class="form-control inputMedium padLR5 placeholder" placeholder="Date of birth">
+                                                            <input ng-model="psssenger.DateOfBirth" type="text" class="form-control inputMedium padLR5 placeholder DateofBirthVal" placeholder="dd/MM/yyyy">
                                                         </div>
                                                         <div class="col-md-5 col-sm-5 col-xs-12">
                                                             <input ng-model="psssenger.PassportNo" type="text" class="form-control inputMedium padLR5 placeholder" placeholder="Passport Number">
@@ -965,3 +965,23 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+        //$('.DateofBirthVal').datepicker({
+        //    startDate: new Date(),
+        //    //dateFormat: "yy-mm-dd",
+        //    //format: 'yyyy-MM-dd',
+        //    dateFormat: "dd/MM/yyyy",
+        //    uiLibrary: 'bootstrap4',
+        //    minDate: 0,
+        //    autoclose: true
+        //})
+        $(".DateofBirthVal").datepicker({
+            dateFormat: 'dd/mm/yy',//check change
+            changeMonth: true,
+            changeYear: true
+        });
+    });
+    
+</script>

@@ -44,5 +44,21 @@
         });
         return request;
     }
+    this.getFlightBookingInvoice = function () {
+        var request = $http({
+            method: "POST",           
+            url: "/Merchant/MerchantFlightDetails/FlightBookingInvoice"
+        });
+        return request;
+    }
+    this.getFlightBookingPrintInvoice = function (data) {
+        debugger;
+        var request = $http({
+            method: "POST",
+            data: data,
+            url: "/Merchant/MerchantFlightDetails/PrintFlightInvoice"
+        });
+        return request;
+    }
 
 }]);

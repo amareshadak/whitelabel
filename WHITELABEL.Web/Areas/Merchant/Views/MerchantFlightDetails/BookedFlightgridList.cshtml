@@ -1,0 +1,41 @@
+﻿@using NonFactors.Mvc.Grid;
+@using WHITELABEL.Web.Helper;
+@model IEnumerable<WHITELABEL.Data.Models.TBL_FLIGHT_BOOKING_DETAILS>
+@{
+    Layout = null;
+}
+
+@(Html
+                                    .Grid(Model)
+                                    .Build(columns =>
+                                    {
+                                        columns.Add(model => model.SLN).Titled("Sln").Filterable(true).Sortable(true);
+                                        columns.Add(model => model.PNR).Titled("Pnr").Filterable(true).Sortable(true);
+                                        columns.Add(model => model.REF_NO).Titled("Ref No").Filterable(true).Sortable(true);
+                                        columns.Add(model => model.AIRLINE_CODE).Titled("Airline Code").Filterable(true).Sortable(true);
+                                        columns.Add(model => model.FLIGHT_NO).Titled("Flight No").Filterable(true).Sortable(true);
+                                        columns.Add(model => model.BOOKING_DATE).Titled("Booking Date").Filterable(true).Sortable(true);
+                                        columns.Add(model => model.TOTAL_FLIGHT_BASE_FARE).Titled("Base Fare").Filterable(true).Sortable(true);
+                                        columns.Add(model => model.TOTAL_FLIGHT_TAX).Titled("Tax Amt").Filterable(true).Sortable(true);
+                                        columns.Add(model => model.TOTAL_FLIGHT_ADDITIONAL_CHARGE).Titled("Addn Charges").Filterable(true).Sortable(true);
+                                        columns.Add(model => model.TOTAL_FLIGHT_CUTE_FEE).Titled("Cute Fare").Filterable(true).Sortable(true);
+                                        columns.Add(model => model.TOTAL_FLIGHT_MEAL_FEE).Titled("Meal Amt").Filterable(true).Sortable(true);
+                                        columns.Add(model => model.TOTAL_FLIGHT_AMT).Titled("Total Amt").Filterable(true).Sortable(true);
+                                        columns.Add(model => model.TOTAL_BAGGAGE_ALLOWES).Titled("Baggages allowed").Filterable(true).Sortable(true);
+
+                                        columns.Add(model => model.MEM_ID).Encoded(false).Filterable(false).Sortable(false).Titled("Print Ticket ")
+                                            .RenderedAs(model => "<div><a class='btn btn-primary btn-xs' style='color: white;' data-toggle='modal' data-target='.printTransd' id='printTransd' data-id='"+ model.REF_NO + "' ng-click='PrintFlightInvoice('" + model.REF_NO + "', '"+ model.PNR + "')'>print Ticket</a></div>");
+
+                                    })
+                                    .Css("css-classes")
+                                    .AppendCss("table table-striped")
+                                    .Empty("No data found")
+                                    .Id("my-ajax-grid")
+                                    .Pageable(pager =>
+                                    {
+                                        pager.PagesToDisplay = 5;
+                                        pager.RowsPerPage = 5;
+                                    })
+                                    .Filterable()
+                                    .Sortable()
+)

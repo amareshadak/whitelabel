@@ -76,6 +76,7 @@
         public DbSet<TBL_RAIL_AGENTS_COMMISSION> TBL_RAIL_AGENTS_COMMISSION { get; set; }
         public DbSet<TBL_FINAL_RDS_BOOKING> TBL_FINAL_RDS_BOOKING { get; set; }
         public DbSet<TBL_FINAL_CANCELLATION> TBL_FINAL_CANCELLATION { get; set; }
+        public DbSet<TBL_FLIGHT_BOOKING_DETAILS> TBL_FLIGHT_BOOKING_DETAILS { get; set; }
     }
     
 }

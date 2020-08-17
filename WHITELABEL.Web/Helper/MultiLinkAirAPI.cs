@@ -128,14 +128,19 @@ namespace WHITELABEL.Web.Helper
             }
         }
 
-        public static dynamic BookedFlightTicket(string req)
-        {
+        public static dynamic BookedFlightTicket(string req,string Mem_id)
+        //public static dynamic BookedFlightTicket(string req)
+        {           
+
+            var ClientRequestID = Mem_id;
             string url = $"{root}API/BookTicket";
             FlightBookingDTO AdditionalDetails = JsonConvert.DeserializeObject<FlightBookingDTO>(req);
             AdditionalDetails.RequestXml.Authenticate.InterfaceCode = "1";
             AdditionalDetails.RequestXml.Authenticate.InterfaceAuthKey = token;
             AdditionalDetails.RequestXml.Authenticate.AgentCode = AgentCode;
             AdditionalDetails.RequestXml.Authenticate.Password = AgentPass;
+            AdditionalDetails.RequestXml.BookTicketRequest.ClientRequestID = ClientRequestID.ToString();
+            //AdditionalDetails.RequestXml.BookTicketRequest.ClientRequestID = "";
 
             string requestObject = JsonConvert.SerializeObject(AdditionalDetails);
 
@@ -149,6 +154,41 @@ namespace WHITELABEL.Web.Helper
                 return res;
             }
         }
+
+
+        public static dynamic printBookTicket(string refId,string GDSPNR,string AirlinePNR,string ClientRequestID,string BookingFromDate,string BookingToDate)
+        {
+            string url = root + "/API/PNRDetailsVer2";
+            dynamic RequestXml_Val = new JObject();
+            dynamic RequestXmlObj = new JObject();
+            dynamic Authenticate_Val = new JObject();
+            Authenticate_Val.InterfaceCode = "1";
+            Authenticate_Val.InterfaceAuthKey = token;
+            Authenticate_Val.AgentCode = AgentCode;
+            Authenticate_Val.Password = AgentPass;
+            RequestXml_Val.Authenticate = new JObject(Authenticate_Val);
+            dynamic GetRefNoValue = new JObject();
+            GetRefNoValue.RefNo = refId;
+            GetRefNoValue.GDSPNR = "";
+            GetRefNoValue.AirlinePNR = "";
+            GetRefNoValue.ClientRequestID = "";
+            GetRefNoValue.BookingFromDate = "";
+            GetRefNoValue.BookingToDate = "";
+            RequestXml_Val.PNRDetailsRequest = new JObject(GetRefNoValue);
+            RequestXmlObj.RequestXml = new JObject(RequestXml_Val);
+            string SearchparamValue = JsonConvert.SerializeObject(RequestXmlObj);
+            var res = GetResponse(SearchparamValue, url);
+            if (res != null)
+            {
+                return res;
+            }
+            else
+            {
+                return res;
+            }
+        }
+
+
 
         public static dynamic GetResponse(string requestData, string url)
         {

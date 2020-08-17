@@ -99,11 +99,7 @@
                                         <td>Trans Date </td>
                                         <td>Receipt</td>
                                     </tr>
-                                </thead>
-                                @*<tbody ng-repeat="m in AllTransactionList | filter:{txnId: TransactionID.txnId, RecipientID: Beneficiary.RecipientID}|  orderBy:sortColumn:reverseSort| offset: currentPage*itemsPerPage | limitTo: itemsPerPage">*@
-                                @*<tbody ng-repeat="m in AllTransactionList | filter:{txnId: TransactionID.txnId, RecipientID: Beneficiary.RecipientID}|  orderBy:sortColumn:reverseSort ">*@
-                                @*// For paging code*@
-                                @*<tbody dir-paginate="m in AllTransactionList | filter:{txnId: TransactionID.txnId, RecipientID: Beneficiary.RecipientID, CustomerID: Beneficiary.CustomerID}|  orderBy:sortColumn:reverseSort|itemsPerPage:5 ">*@
+                                </thead>                               
                                 <tbody dir-paginate="m in AllTransactionList | filter:{TXN_ID: TransactionID.txnId, RECIPIENT_ID: Beneficiary.RecipientID, CLIENT_REF_ID: Beneficiary.CustomerID}|  orderBy:sortColumn:reverseSort|itemsPerPage:3 ">
                                     <tr>
                                         <td>
@@ -159,7 +155,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="card-footer" style="text-align:right">
                     <button id="btnExport" class="btn btn-info btn-xs" onclick="tableToExcel('testTable', 'Transaction List')" value="Export to Excel"><span class="ion-forward"></span> EXPORT</button>
                 </div>
@@ -395,7 +390,8 @@
                     </div>
                 <br />
                     <div class="modal-footer text-center">
-                        <a href="#" class="btn btn-primary" onclick="PrintDiv();">Print Receipts</a>
+                        <a href="#" class="btn btn-primary mb-sm-0 mb-3 print-invoice" style="float:right;" onclick="PrintDiv();">Print Invoice</a>
+                        @*<a href="#" class="btn btn-primary" onclick="PrintDiv();">Print Receipts</a>*@
                     </div>
                 </div><!--.modal-content-->
             </div><!--.modal-dialog-->

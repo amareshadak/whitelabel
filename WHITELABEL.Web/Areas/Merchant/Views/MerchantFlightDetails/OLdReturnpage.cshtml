@@ -4,7 +4,7 @@
     Layout = "~/Areas/Merchant/Views/Shared/_RetailerLayout.cshtml";
 }
 
-<style>
+@*<style>
     .fb {
         font-weight: bold;
         font-style: normal;
@@ -879,4 +879,201 @@
             </div>
         </div>
     </div>
+</div>*@
+
+@{
+    ViewBag.Title = "PrintTicket";
+    Layout = "~/Areas/Merchant/Views/Shared/_RetailerLayout.cshtml";
+}
+
+<div class="main-content-wrap sidenav-open d-flex flex-column">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="tab-pane fade show active" id="invoice" role="tabpanel" aria-labelledby="invoice-tab">
+                    <div class="d-sm-flex mb-5" data-view="print">
+                        <span class="m-auto"></span>
+                        <button class="btn btn-primary mb-sm-0 mb-3 print-invoice">Print Invoice</button>
+                    </div>
+                    <!---===== Print Area =======-->
+                    <div id="print-area">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4 class="font-weight-bold">Indigo</h4>
+                            </div>
+                        </div>
+                        <div class="row col-md-12" style="margin-top:20px;">
+                            <div class="col-md-3">
+                                <h5>
+                                    PNR/Booking Reference
+                                </h5>
+                                <p>
+                                    WDQP9C
+                                </p>
+                            </div>
+                            <div class="col-md-3">
+                                <h5>
+                                    Status
+
+                                </h5>
+                                <p>
+                                    Conrmed
+                                </p>
+                            </div>
+                            <div class="col-md-3">
+                                <h5>
+                                    Date of Booking*
+                                </h5>
+                                <p>
+                                    09 Feb 2019 13:10
+                                </p>
+                            </div>
+                            <div class="col-md-3">
+                                <h5>
+                                    Payment Status
+                                </h5>
+                                <p>
+                                    Complete
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row col-md-12" style="margin-top:20px;">
+                            <h1>IndiGo Passengers</h1>
+                        </div>
+                        <div class="row col-md-12" style="margin-top:20px;">
+                            <p class="col-md-12">Passenger 1</p>
+                            <h5 class="col-md-12">1)MR ATANU KARMAKAR</h5>
+                        </div>
+                        <div class="row col-md-12" style="margin-top:20px;">
+                            <h1 class="col-md-12">Kolkata <i class="fa fa-long-arrow-alt-right"></i> Delhi</h1>
+                            <p class="col-md-12">P13 Feb 2019 . A320</p>
+                        </div>
+                        <div class="row col-md-12" style="margin-top:20px;">
+                            <div class="row col-md-6">
+                                <div class="col-md-12"><p>From (Terminal)</p></div>
+                                <div class="col-md-12"><h5>CCU</h5></div>
+                            </div>
+                            <div class="row col-md-6">
+                                <div class="col-md-12"><p>To (Terminal)</p></div>
+                                <div class="col-md-12"><h5>DEL(1)</h5></div>
+                            </div>
+                            <div class="row col-md-6">
+                                <div class="col-md-12"><p>Flight</p></div>
+                                <div class="col-md-12"><h5>6E 474</h5></div>
+                            </div>
+                            <div class="row col-md-6">
+                                <div class="col-md-12"><p>Dep Time</p></div>
+                                <div class="col-md-12"><h5>06:05</h5></div>
+                            </div>
+                            <div class="row col-md-6">
+                                <div class="col-md-12"><p>Check in/ Bag Drop closes</p></div>
+                                <div class="col-md-12"><h5>05:20</h5></div>
+                            </div>
+                            <div class="row col-md-6">
+                                <div class="col-md-12"><p>ARR Time</p></div>
+                                <div class="col-md-12"><h5>08:35</h5></div>
+                            </div>
+                        </div>
+                        <div class="col-md-12" style=" height:3px; background-color:#ccc; margin:10px 0;"></div>
+                        <div class=" row col-md-12">
+                            <p class="col-md-12">* Booking Date reects in UTC ( Coordinated Universal Time), all other timings mentioned are as per local TIME</p>
+                            <h1 class="col-md-12">
+                                GST Information
+                            </h1>
+                            <p class="col-md-12">GST Company Name : <strong>ENCOREDIGITECHPVTLTD</strong></p>
+                            <p class="col-md-12">GST Number :<strong>19AACCT7467P1ZE</strong></p>
+                        </div>
+                        <div class="row col-md-12">
+                            <div class="col-md-6">
+                                <div class="col-md-12"><h1>Price Summary</h1></div>
+                                <div class="row col-md-12">
+                                    <div class="col-md-8" style="text-align:left;">Airfare Charges </div>
+                                    <div class="col-md-4" style="text-align:right;">5,499.00 INR</div>
+                                </div>
+                                <div class="row col-md-12">
+                                    <div class="col-md-8" style="text-align:left;">Passenger Service Fee </div>
+                                    <div class="col-md-4" style="text-align:right;">153.00 INR</div>
+                                </div>
+                                <div class="row col-md-12">
+                                    <div class="col-md-8" style="text-align:left;">User Development fee </div>
+                                    <div class="col-md-4" style="text-align:right;">636.00 INR</div>
+                                </div>
+                                <div class="row col-md-12">
+                                    <div class="col-md-8" style="text-align:left;">CGST For West Bengal  </div>
+                                    <div class="col-md-4" style="text-align:right;">137.00 INR</div>
+                                </div>
+                                <div class="row col-md-12">
+                                    <div class="col-md-8" style="text-align:left;">SGST For West Bengal </div>
+                                    <div class="col-md-4" style="text-align:right;">137.00 INR</div>
+                                </div>
+                                <div class="row col-md-12" style="border-bottom:1px solid #ccc; border-top:1px solid #ccc; padding:20px 0; margin-top:10px;">
+                                    <div class="col-md-8" style="text-align:left;"><strong>Total</strong> </div>
+                                    <div class="col-md-4" style="text-align:right;"><strong>6,562.00 INR</strong></div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="col-md-12">
+                                    <h1>
+                                        Contact Details
+                                    </h1>
+                                </div>
+                                <div class="col-md-12">
+                                    <p class="col-md-12">
+                                        Address
+                                    </p>
+                                    <h5 class="col-md-12">
+                                        MR TRAVEL AGENT Encore Digitech Private Limited 3 , Canal
+                                        Street L okenath Apartment 1st Floor Kolkata - 700014 enco CCU
+                                    </h5>
+                                    <p class="col-md-12">
+                                        Company Name
+                                    </p>
+                                    <h5 class="col-md-12">
+                                        Encore Digitech Private Limited
+                                    </h5>
+                                    <p class="col-md-12">
+                                        Passenger Mobile number
+                                    </p>
+                                    <h5 class="col-md-12">
+                                        91-8240148377
+                                    </h5>
+                                    <p class="col-md-12">
+                                        Email id
+                                    </p>
+                                    <h5 class="col-md-12">
+                                        edpl.chaitali.air@gmail.com
+                                    </h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row col-md-12">
+                            <h1 class="col-md-12" style="padding:20px 0; border-bottom:1px solid #ccc;">Note</h1>
+                            <p class="col-md-12">
+                                Goods and Services Tax (GST) shall be levied at applicable rates on all air transportation services provided by IndiGo, except in
+                                cases specically exempted under law.
+                            </p>
+                            <p class="col-md-12">
+                                This is not a GST invoice. The GST invoice shall be sent to the email address in the name of the rst passenger, mentioned in this
+                                itinerary. In case of a booking made by a GSTIN holder, the GST invoice shall be sent in the name of the GSTIN holder to the
+                                email address mentioned while providing the GSTIN information at the time of reservation.
+                            </p>
+                            <p class="col-md-12">
+                                Additionally, passengers may download the GST invoice using their PNR number on the IndiGo website www.goindigo.in.
+                            </p>
+                            <p class="col-md-12">
+                                GST shall also be applicable on any special services requested by the passenger at applicable rates.
+                        </div>
+                    </div>
+                    <!--==== / Print Area =====-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Start -->
+    <div class="flex-grow-1"></div>
+
+    <!-- fotter end -->
+
 </div>
+

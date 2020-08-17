@@ -441,6 +441,7 @@
     <Compile Include="Controllers\ServiceController.cs" />
     <Compile Include="DTO\FlightApi\AdditionalDetailsDTO.cs" />
     <Compile Include="DTO\FlightApi\AuthenticateDTO.cs" />
+    <Compile Include="DTO\FlightApi\BookTicketResponsesDTO.cs" />
     <Compile Include="DTO\FlightApi\FlightBookingDTO.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -522,6 +523,7 @@
     <Content Include="Areas\Merchant\MerchantHelperJS\FingerPrinterJs\Index.js" />
     <Content Include="Areas\Merchant\MerchantHelperJS\FlightBooking\AirportAutocomplete.js" />
     <Content Include="Areas\Merchant\MerchantHelperJS\FlightBooking\app.js" />
+    <Content Include="Areas\Merchant\MerchantHelperJS\FlightBooking\FlightInvoicePrint.js" />
     <Content Include="Areas\Merchant\MerchantHelperJS\FlightBooking\FlightServices.js" />
     <Content Include="Areas\Merchant\MerchantHelperJS\FlightBooking\FlightVerificationController.js" />
     <Content Include="Areas\Merchant\MerchantHelperJS\FlightBooking\ReturnTripSearch.js" />
@@ -2303,6 +2305,8 @@
     <Content Include="Content\static-airlines-master\airlines.csv" />
     <Content Include="Content\static-airlines-master\bower.json" />
     <Content Include="Content\static-airlines-master\README.md" />
+    <Content Include="Areas\Merchant\Views\MerchantFlightDetails\BookedFlightInformaiton.cshtml" />
+    <Content Include="Areas\Merchant\Views\MerchantFlightDetails\BookedFlightgridList.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\dirPagination.js" />
