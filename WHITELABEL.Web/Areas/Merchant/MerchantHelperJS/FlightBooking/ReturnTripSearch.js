@@ -3,6 +3,11 @@
     $scope.upper_price_bound = 1000;
     $scope.min = 0;
     $scope.max = 1000;
+
+    $scope.Return_lower_price_bound = 0;
+    $scope.Return_upper_price_bound = 1000;
+    $scope.Return_min = 0;
+    $scope.Return_max = 1000;
     $scope.filterData = {
         stops: null,
         timeSlots: {
@@ -35,10 +40,9 @@
 
 
 
-    $scope.filterDeptFlightData = function (item) {
-        
+    $scope.filterDeptFlightData = function (item) {        
         let returnValue = false;
-
+        
         let amount = Math.round(item[0].TotalAmount);
         returnValue = Math.round(amount) >= $scope.lower_price_bound && Math.round(amount) <= $scope.upper_price_bound;
 
@@ -46,7 +50,7 @@
             || $scope.filterData.timeSlots.Morning
             || $scope.filterData.timeSlots.MidDay
             || $scope.filterData.timeSlots.Evening
-            || $scope.filterData.timeSlots.Night) {
+            || $scope.filterData.timeSlots.Night && returnValue) {
 
             let checkValue = [];
             let time = parseInt(item[0].DepTime.replace(':', ''));
@@ -102,15 +106,15 @@
 
     $scope.filterReturnFlightData = function (item) {
         let returnValue = false;
-      
+        
         let amount = Math.round(item[0].TotalAmount);
-        returnValue = Math.round(amount) >= $scope.lower_price_bound && Math.round(amount) <= $scope.upper_price_bound;
+        returnValue = Math.round(amount) >= $scope.Return_lower_price_bound && Math.round(amount) <= $scope.Return_upper_price_bound;
 
         if ($scope.filterRetrunData.timeSlots.EarlyMorning
             || $scope.filterRetrunData.timeSlots.Morning
             || $scope.filterRetrunData.timeSlots.MidDay
             || $scope.filterRetrunData.timeSlots.Evening
-            || $scope.filterRetrunData.timeSlots.Night) {
+            || $scope.filterRetrunData.timeSlots.Night && returnValue) {
 
             let checkValue = [];
             let time = parseInt(item[0].DepTime.replace(':', ''));
@@ -218,7 +222,7 @@
             const data = response.data;
             const FlightResponse = JSON.parse(data);
             const info = FlightResponse.GetFlightAvailibilityResponse;
-
+            debugger;
             $scope.airlinesList = FlightResponse.GetFlightAvailibilityResponse.AirlineList.map(item => {
                 const container = {};
                 container.name = item.AirlineName;
@@ -229,7 +233,12 @@
             
             
             const FlightSearchDetails = FlightResponse.GetFlightAvailibilityResponse.FlightDetails;
-            $scope.FlightFareDetails = FlightResponse.GetFlightAvailibilityResponse.FareDetails;
+            const FlightFareDetails = FlightResponse.GetFlightAvailibilityResponse.FareDetails;
+
+            const deptureFlightFare = FlightFareDetails.filter(x => x.SrNo.charAt(x.SrNo.length - 1) === 'O');
+            const returnFlightFare = FlightFareDetails.filter(x => x.SrNo.charAt(x.SrNo.length - 1) === 'R');
+            $scope.DeptFlightFareDetails = deptureFlightFare;
+            $scope.ReturnFlightFareDetails = returnFlightFare;
 
             const deptureFlight = FlightSearchDetails.filter(x => x.SrNo.charAt(x.SrNo.length - 1) === 'O');
             const returnFlight = FlightSearchDetails.filter(x => x.SrNo.charAt(x.SrNo.length - 1) === 'R');
@@ -248,8 +257,10 @@
             $scope.selectReturnTrackNo = $scope.selectedReturnFlight[0].TrackNo;
 
 
-            const maxPeak = $scope.FlightFareDetails.reduce((p, c) => Math.round(p.NetAmount) > Math.round(c.NetAmount) ? p : c);
-            const minPeak = $scope.FlightFareDetails.reduce((p, c) => Math.round(p.NetAmount) < Math.round(c.NetAmount) ? p : c);
+            //const maxPeak = $scope.FlightFareDetails.reduce((p, c) => Math.round(p.NetAmount) > Math.round(c.NetAmount) ? p : c);
+            //const minPeak = $scope.FlightFareDetails.reduce((p, c) => Math.round(p.NetAmount) < Math.round(c.NetAmount) ? p : c);
+            const maxPeak = $scope.DeptFlightFareDetails.reduce((p, c) => Math.round(p.NetAmount) > Math.round(c.NetAmount) ? p : c);
+            const minPeak = $scope.DeptFlightFareDetails.reduce((p, c) => Math.round(p.NetAmount) < Math.round(c.NetAmount) ? p : c);
 
             $scope.minAmount = Math.round(minPeak.NetAmount);
             $scope.maxAmount = Math.round(maxPeak.NetAmount);
@@ -258,11 +269,20 @@
             $scope.upper_price_bound = $scope.maxAmount;
             $scope.min = $scope.minAmount;
             $scope.max = $scope.maxAmount;
+            // for return fare
 
-            //const myObj = { Time: new Date(), Token: FlightSearchDetails };
-            //localStorage.setItem('searchResult', null);
-            //localStorage.setItem('SearchTraceDetails', JSON.stringify(myObj));
-            //localStorage.setItem('searchResult', JSON.stringify(FlightSearchDetails));
+            const ReturnmaxPeak = $scope.ReturnFlightFareDetails.reduce((p, c) => Math.round(p.NetAmount) > Math.round(c.NetAmount) ? p : c);
+            const ReturnminPeak = $scope.ReturnFlightFareDetails.reduce((p, c) => Math.round(p.NetAmount) < Math.round(c.NetAmount) ? p : c);
+
+            $scope.ReturnminAmount = Math.round(ReturnminPeak.NetAmount);
+            $scope.ReturnmaxAmount = Math.round(ReturnmaxPeak.NetAmount);
+
+            $scope.Return_lower_price_bound = $scope.ReturnminAmount;
+            $scope.Return_upper_price_bound = $scope.ReturnmaxAmount;
+            $scope.Return_min = $scope.ReturnminAmount;
+            $scope.Return_max = $scope.ReturnmaxAmount;
+
+
 
 
         });
@@ -393,8 +413,9 @@
 
     };
 
-    $scope.AddTotalAmount = function (DerpAmt, RetAmt) {   
-        if (DerpAmt && RetAmt) {
+    $scope.AddTotalAmount = function (DerpAmt, RetAmt) {
+       
+        if (DerpAmt.length > 0 && RetAmt.length > 0) {
             let TotalAmt = 0;
             if (DerpAmt[0].TotalAmount && RetAmt[0].TotalAmount != undefined) {
                 TotalAmt = parseFloat(DerpAmt[0].TotalAmount) + parseFloat(RetAmt[0].TotalAmount);
@@ -458,8 +479,8 @@
         return rhours + "h " + rminutes + "m";
     }
 
-    $scope.calculateDuration = function (item) {
-        if (item) {
+    $scope.calculateDuration = function (item) {        
+        if (item.length>0) {
             const firstDate = item[0].DepDate;
             const firstTime = item[0].DepTime;
             const lastDate = item[item.length - 1].ArrDate;

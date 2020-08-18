@@ -108,7 +108,9 @@
             </div>
         </div>
 
-        
+      
+
+
         <!-- Modal -->
         <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document" >
@@ -182,7 +184,7 @@
                                                     </div>
                                                     <div class="row col-md-12" style="margin-top:20px;" ng-repeat="objpssng in FlightInvoicePrint.PNRDetailsResponse.TicketDetails[0].PassengerDetails">
                                                         <p class="col-md-12">Passenger {{$index +1}}</p>
-                                                        <h5 class="col-md-12">1){{objpssng.Title}} {{objpssng.FirstName}} {{objpssng.LastName}}</h5>
+                                                        <h5 class="col-md-12">1) {{objpssng.Title}} {{objpssng.FirstName}} {{objpssng.LastName}}</h5>
                                                     </div>
                                                     <div ng-repeat="objpssng in FlightInvoicePrint.PNRDetailsResponse.TicketDetails[0].FlightFareDetails">
                                                         <div class="row col-md-12" style="margin-top:20px;">

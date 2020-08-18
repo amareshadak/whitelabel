@@ -716,6 +716,7 @@
 <script src="~/Areas/Merchant/MerchantHelperJS/FlightBooking/app.js"></script>
 <script src="~/Areas/Merchant/MerchantHelperJS/FlightBooking/FlightServices.js"></script>
 <script src="~/Areas/Merchant/MerchantHelperJS/FlightBooking/ReturnTripSearch.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 @*<script src="~/Areas/Merchant/MerchantHelperJS/FlightBooking/AirportAutocomplete.js"></script>*@
 
 <div class="display-animation" ng-app="AirportAutocompleteoduleApp" ng-controller="ReturnFlightSearchController" ng-init="LoadFlightSearch('@ViewBag.Tripmode','@ViewBag.FromCityCode','@ViewBag.TOAirportCode','@ViewBag.FromDate','@ViewBag.ToDate','@ViewBag.TravelType','@ViewBag.Adult','@ViewBag.Child','@ViewBag.Infant')" id="AirportAutocompleteController">
@@ -796,9 +797,9 @@
                                     <div class="accordion" id="accordionRightIcon" style="width:100%">
                                         <div class="card">
                                             <div class="card-header header-elements-inline">
-                                                <h6 class="card-title ul-collapse__icon--size ul-collapse__right-icon mb-0"><a class="text-default collapsed" data-toggle="collapse" href="#accordion-item-icons-1" aria-expanded="false"> Filter Result</a></h6>
+                                                <h6 class="card-title ul-collapse__icon--size ul-collapse__right-icon mb-0"><a class="text-default collapsed" data-toggle="collapse" href="#accordion-item-icons-1" aria-expanded="true"> Filter Result</a></h6>
                                             </div>
-                                            <div class="collapse" id="accordion-item-icons-1" data-parent="#accordionRightIcon">
+                                            <div class="collapse show" id="accordion-item-icons-1" data-parent="#accordionRightIcon">
                                                 <div class="card-body">
                                                     <div class="row m-0 p-2">
                                                         <div class="col-md-4 p-2">
@@ -806,11 +807,11 @@
                                                                 <div class="controls">
                                                                     <label>Depart on</label>
                                                                     <div>
-                                                                        <button type="button" class="btn btn" ng-model="filterData.timeSlots.EarlyMorning" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">12am - 8am</button>
-                                                                        <button type="button" class="btn btn" ng-model="filterData.timeSlots.Morning" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">8am - 12pm</button>
-                                                                        <button type="button" class="btn btn" ng-model="filterData.timeSlots.MidDay" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">12pm - 4pm</button>
-                                                                        <button type="button" class="btn btn" ng-model="filterData.timeSlots.Evening" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">4pm - 8pm</button>
-                                                                        <button type="button" class="btn btn" ng-model="filterData.timeSlots.Night" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">8pm - 12am</button>
+                                                                        <button type="button" class="btn btn-{{filterData.timeSlots.EarlyMorning ? 'primary':'default'}}" ng-model="filterData.timeSlots.EarlyMorning" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">12am - 8am</button>
+                                                                        <button type="button" class="btn btn-{{filterData.timeSlots.Morning ? 'primary':'default'}}" ng-model="filterData.timeSlots.Morning" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">8am - 12pm</button>
+                                                                        <button type="button" class="btn btn-{{filterData.timeSlots.MidDay ? 'primary':'default'}}" ng-model="filterData.timeSlots.MidDay" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">12pm - 4pm</button>
+                                                                        <button type="button" class="btn btn-{{filterData.timeSlots.Evening ? 'primary':'default'}}" ng-model="filterData.timeSlots.Evening" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">4pm - 8pm</button>
+                                                                        <button type="button" class="btn btn-{{filterData.timeSlots.Night ? 'primary':'default'}}" ng-model="filterData.timeSlots.Night" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">8pm - 12am</button>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -818,13 +819,16 @@
                                                         <div class="col-md-4 p-2">
                                                             <div class="control-group">
                                                                 <div class="controls">
-                                                                    <label>Return on</label>
+                                                                    <label>
+                                                                        Return on
+                                                                        @*{{filterRetrunData.timeSlots}}*@
+                                                                    </label>
                                                                     <div>
-                                                                        <button type="button" class="btn btn" ng-model="filterRetrunData.timeSlots.EarlyMorning" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">12am - 8am</button>
-                                                                        <button type="button" class="btn btn" ng-model="filterRetrunData.timeSlots.Morning" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">8am - 12pm</button>
-                                                                        <button type="button" class="btn btn" ng-model="filterRetrunData.timeSlots.MidDay" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">12pm - 4pm</button>
-                                                                        <button type="button" class="btn btn" ng-model="filterRetrunData.timeSlots.Evening" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">4pm - 8pm</button>
-                                                                        <button type="button" class="btn btn" ng-model="filterRetrunData.timeSlots.Night" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">8pm - 12am</button>
+                                                                        <button type="button" class="btn btn-{{filterRetrunData.timeSlots.EarlyMorning ? 'primary':'default'}}" ng-model="filterRetrunData.timeSlots.EarlyMorning" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">12am - 8am</button>
+                                                                        <button type="button" class="btn btn-{{filterRetrunData.timeSlots.Morning ? 'primary':'default'}}" ng-model="filterRetrunData.timeSlots.Morning" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">8am - 12pm</button>
+                                                                        <button type="button" class="btn btn-{{filterRetrunData.timeSlots.MidDay ? 'primary':'default'}}" ng-model="filterRetrunData.timeSlots.MidDay" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">12pm - 4pm</button>
+                                                                        <button type="button" class="btn btn-{{filterRetrunData.timeSlots.Evening ? 'primary':'default'}}" ng-model="filterRetrunData.timeSlots.Evening" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">4pm - 8pm</button>
+                                                                        <button type="button" class="btn btn-{{filterRetrunData.timeSlots.Night ? 'primary':'default'}}" ng-model="filterRetrunData.timeSlots.Night" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">8pm - 12am</button>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -832,7 +836,7 @@
                                                         </div>
                                                         <div class="col-md-4 p-2">
                                                             <div class="form-group">
-                                                                <label>Price range:</label>
+                                                                <label>Departure Price range:</label>
                                                                 @*<button class="btn btn-xs btn-default pull-right" style="padding:5px;font-size:x-small;font-weight:bold" ng-click="lower_price_bound = min; upper_price_bound = max;">Reset</button>*@
                                                                 <div class="clearfix"></div>
 
@@ -857,73 +861,90 @@
                                                         <div class="col-md-4 p-2">
                                                             Stops
                                                             <div class="clearfix"></div>
+                                                            @*btn-group-xs*@
                                                             <div class="btn-group btn-group-xs" data-toggle="buttons">
+                                                                <label class="btn btn-{{filterData.stops=='1' ? 'primary':'success'}}" ng-model="filterData.stops" uib-btn-radio="1" uncheckable ng-value="1">1</label>&nbsp;
+                                                                <label class="btn btn-{{filterData.stops=='2' ? 'primary':'success'}}" ng-model="filterData.stops" uib-btn-radio="2" uncheckable ng-value="2">2</label>&nbsp;
+                                                                <label class="btn btn-{{filterData.stops=='3' ? 'primary':'success'}}" ng-model="filterData.stops" uib-btn-radio="3" uib-uncheckable="uncheckable" ng-value="3">3</label>&nbsp;
+                                                                <label class="btn btn-{{filterData.stops=='0' ? 'primary':'success'}}" ng-model="filterData.stops" uib-btn-radio="0" uncheckable ng-value="0">show Direct Flight</label>
 
-                                                                <label class="btn btn-blue-grey">
-                                                                    <input type="radio" ng-model="filterData.stops" value="1">
+                                                                @*<label class="btn btn-blue-grey">
+                                                                    <input type="radio" ng-model="filterData.stops" ng-value="1">
                                                                     1
                                                                 </label>
                                                                 <label class="btn btn-blue-grey">
-                                                                    <input type="radio" ng-model="filterData.stops" value="2">
+                                                                    <input type="radio" ng-model="filterData.stops" ng-value="2">
                                                                     2
                                                                 </label>
                                                                 <label class="btn btn-blue-grey">
-                                                                    <input type="radio" ng-model="filterData.stops" value="3">
+                                                                    <input type="radio" ng-model="filterData.stops" ng-value="3">
                                                                     3
                                                                 </label>
                                                                 <label class="btn btn-blue-grey">
-                                                                    <input type="radio" ng-model="filterData.stops" value="0">
+                                                                    <input type="radio" ng-model="filterData.stops" ng-value="0">
                                                                     Show Direct Flights Only
-                                                                </label>
+                                                                </label>*@
                                                             </div>
                                                         </div>
                                                         <div class="col-md-4 p-2 row">
                                                             Preferred Airlines:
 
-                                                            <div id="news-slider2" class="owl-carousel">
-                                                                <div class="post-slide2">
-                                                                    <div class="post-img">
-                                                                        <input type="checkbox" value="" id="check6">
-                                                                        <label for="check6"><img src="~/images/air_india.png" /></label>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="post-slide2">
-                                                                    <div class="post-img">
-                                                                        <input type="checkbox" value="" id="check6">
-                                                                        <label for="check6"><img src="~/images/go_air.png" /></label>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="post-slide2">
-                                                                    <div class="post-img">
-                                                                        <input type="checkbox" value="" id="check6">
-                                                                        <label for="check6"><img src="~/images/spicejet.png" /></label>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="post-slide2">
-                                                                    <div class="post-img">
-                                                                        <input type="checkbox" value="" id="check6">
-                                                                        <label for="check6"><img src="~/images/air_india.png" /></label>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="post-slide2">
-                                                                    <div class="post-img">
-                                                                        <input type="checkbox" value="" id="check6">
-                                                                        <label for="check6"><img src="~/images/go_air.png" /></label>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="post-slide2">
-                                                                    <div class="post-img">
-                                                                        <input type="checkbox" value="" id="check6">
-                                                                        <label for="check6"><img src="~/images/spicejet.png" /></label>
-                                                                    </div>
-                                                                </div>
+                                                            @*<button class="btn btn-xs btn-default pull-right" style="padding:5px;font-size:x-small;font-weight:bold" ng-click="filterData.airlines = [];resetFilterAirlinesList()">Reset</button>*@
+                                                            <div class="clearfix"></div>
+                                                            <br />
+                                                            <div class="checkboxer" ng-repeat="item in airlinesList">
+                                                                <input type="checkbox" ng-model="item.selected">
+                                                                <label for="check6"> {{item.name}} <img ng-hide="item.code == ''" ng-src="~/Content/static-airlines-master/logos/{{item.code}}.png" class="flightImagesNew" alt="flights"></label>
                                                             </div>
+                                                            @*{{airlinesList}} ng-repeat="item in airlinesList"*@
+                                                           
+
+                                                            @*<div id="news-slider2" class="owl-carousel">
+                                                               
+                                                                <div class="post-slide2">
+                                                                    <div class="post-img">
+                                                                        <input type="checkbox" value="" id="check6">
+                                                                        <label for="check6"><img src="~/images/go_air.png" /></label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="post-slide2">
+                                                                    <div class="post-img">
+                                                                        <input type="checkbox" value="" id="check6">
+                                                                        <label for="check6"><img src="~/images/go_air.png" /></label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="post-slide2">
+                                                                    <div class="post-img">
+                                                                        <input type="checkbox" value="" id="check6">
+                                                                        <label for="check6"><img src="~/images/air_india.png" /></label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="post-slide2">
+                                                                    <div class="post-img">
+                                                                        <input type="checkbox" value="" id="check6">
+                                                                        <label for="check6"><img src="~/images/air_india.png" /></label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="post-slide2">
+                                                                    <div class="post-img">
+                                                                        <input type="checkbox" value="" id="check6">
+                                                                        <label for="check6"><img src="~/images/go_air.png" /></label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>*@
                                                             <!--.checkbox-->
                                                         </div>
                                                         <div class="col-md-4 p-2">
                                                             <div class="form-group">
-                                                                <label>Trip duration:</label>
+                                                                <label>Return Price range:</label>
+                                                                @*<button class="btn btn-xs btn-default pull-right" style="padding:5px;font-size:x-small;font-weight:bold" ng-click="lower_price_bound = min; upper_price_bound = max;">Reset</button>*@
+                                                                <div class="clearfix"></div>
 
+                                                                <span class="badge badge-dark pull-left" ng-cloak>{{Return_lower_price_bound}}</span>
+                                                                <span class="badge badge-dark pull-right" ng-cloak>{{Return_upper_price_bound}}</span>
+                                                                <div class="clearfix"></div>
+                                                                <slider floor="{{Return_min}}" ceiling="{{Return_max}}" ng-model-low="Return_lower_price_bound" ng-model-high="Return_upper_price_bound"></slider>
+                                                                @*<label>Trip duration:</label>
                                                                 <div id="extra-small-slider-circle-filled" class="circle-filled slider-default slider-extra-small slider-custom noUi-target noUi-ltr noUi-horizontal" style="margin-top:10px;">
 
                                                                     <div class="noUi-base">
@@ -936,11 +957,10 @@
                                                                             <div class="noUi-handle noUi-handle-upper" data-handle="1" tabindex="0" role="slider" aria-orientation="horizontal" aria-valuemin="14.3" aria-valuemax="100.0" aria-valuenow="71.4" aria-valuetext="60.00" style="z-index: 4;"></div>
                                                                         </div>
                                                                     </div>
-                                                                </div>
+                                                                </div>*@
                                                             </div>
                                                         </div>
                                                     </div>
-
                                                 </div>
                                             </div>
                                         </div>
