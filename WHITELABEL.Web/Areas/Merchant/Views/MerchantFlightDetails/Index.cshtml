@@ -37,7 +37,7 @@
                                             <label>From</label>
                                             <div angucomplete-alt id="txtAutocomplete" placeholder="Type airport name" pause="100"
                                                  selected-object="SelectedAirport" local-data="Airports" search-fields="CITYNAME" ng-model="Airport.AirportsName"
-                                                 title-field="CITYNAME" minlength="1" input-class="form-control" match-class="highlight">
+                                                 title-field="CITYNAME" minlength="3" input-class="form-control" match-class="highlight">
                                             </div>
                                             <input type="hidden" id="AirportCode" ng-model="SelectedAirport.CITYCODE" />
                                             <div ng-hide="SelectedAirport" ng-cloak>
@@ -50,7 +50,7 @@
                                             <label>To</label>
                                             <div angucomplete-alt id="txtTOAutocomplete" placeholder="Type airport name" pause="100"
                                                  selected-object="ToAirportName" local-data="Airports" search-fields="CITYNAME" ng-model="Airport.ToAirportsName"
-                                                 title-field="CITYNAME" minlength="1" input-class="form-control" match-class="highlight">
+                                                 title-field="CITYNAME" minlength="3" input-class="form-control" match-class="highlight">
                                             </div>
                                             <div ng-hide="ToAirportName" ng-cloak>
                                                 {{ToAirportName.CITYCODE}}

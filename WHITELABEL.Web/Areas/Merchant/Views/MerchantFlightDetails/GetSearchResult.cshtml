@@ -756,6 +756,8 @@
                                                                             <img ng-src="~/Content/static-airlines-master/logos/{{itemval[0].AirlineCode}}.png" />
                                                                             <span class="ico13 padR10 padL5" data-cy="Spicejet">{{itemval[0].AirlineCode}}-{{itemval[0].FlightNo}}</span>
                                                                             <span style="display:none;">{{itemval[0].TrackNo}}</span>
+                                                                            
+                                                                            <span class="badge badge-info" style="margin-left:15px">{{(itemval[0].HoldAllowed == 'Y' ? 'Hold Allowed' : 'Hold Not Allowed')}}</span>
                                                                             <span class="badge badge-success" style="margin-left:15px">{{(itemval[0].FareType == 'R' ? 'Refundable' : 'Non-Refundable')}}</span>
                                                                         </div>
 

@@ -44,6 +44,17 @@
         });
         return request;
     }
+
+    this.getFlightHoldingServices = function (data) {
+        var request = $http({
+            method: "POST",
+            data: data,
+            url: "/Merchant/MerchantFlightDetails/FlightHoldingRequest"
+        });
+        return request;
+    }
+    
+
     this.getFlightBookingInvoice = function () {
         var request = $http({
             method: "POST",           

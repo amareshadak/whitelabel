@@ -155,6 +155,32 @@ namespace WHITELABEL.Web.Helper
             }
         }
 
+        public static dynamic HoldingFlightTicket(string req, string Mem_id)
+        //public static dynamic BookedFlightTicket(string req)
+        {
+
+            var ClientRequestID = Mem_id;
+            string url = $"{root}API/BookTicket";
+            FlightHoldingReqDTO Request = JsonConvert.DeserializeObject<FlightHoldingReqDTO>(req);
+            Request.RequestXml.Authenticate.InterfaceCode = "1";
+            Request.RequestXml.Authenticate.InterfaceAuthKey = token;
+            Request.RequestXml.Authenticate.AgentCode = AgentCode;
+            Request.RequestXml.Authenticate.Password = AgentPass;
+            Request.RequestXml.BookTicketRequest.ClientRequestID = ClientRequestID.ToString();
+            //AdditionalDetails.RequestXml.BookTicketRequest.ClientRequestID = "";
+
+            string requestObject = JsonConvert.SerializeObject(Request);
+
+            var res = GetResponse(requestObject, url);
+            if (res != null)
+            {
+                return res;
+            }
+            else
+            {
+                return res;
+            }
+        }
 
         public static dynamic printBookTicket(string refId,string GDSPNR,string AirlinePNR,string ClientRequestID,string BookingFromDate,string BookingToDate)
         {
