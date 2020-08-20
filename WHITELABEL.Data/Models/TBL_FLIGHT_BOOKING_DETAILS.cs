@@ -63,5 +63,8 @@
         public decimal? ADMIN_cGST { get; set; }
         public decimal? ADMIN_iGST { get; set; }
         public string FLIGHT_BOOKING_DATE { get; set; }
+        public string BOOKING_STATUS { get; set; }
+        public string MAIN_CLASS { get; set; }
+        public string BOOKING_CLASS { get; set; }
     }
 }

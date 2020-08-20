@@ -77,6 +77,7 @@
         public DbSet<TBL_FINAL_RDS_BOOKING> TBL_FINAL_RDS_BOOKING { get; set; }
         public DbSet<TBL_FINAL_CANCELLATION> TBL_FINAL_CANCELLATION { get; set; }
         public DbSet<TBL_FLIGHT_BOOKING_DETAILS> TBL_FLIGHT_BOOKING_DETAILS { get; set; }
+        public DbSet<TBL_FLIGHT_BOOKING_PASSENGER_LIST> TBL_FLIGHT_BOOKING_PASSENGER_LIST { get; set; }
     }
     
 }

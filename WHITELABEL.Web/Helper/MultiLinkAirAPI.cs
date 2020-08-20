@@ -184,34 +184,88 @@ namespace WHITELABEL.Web.Helper
 
         public static dynamic printBookTicket(string refId,string GDSPNR,string AirlinePNR,string ClientRequestID,string BookingFromDate,string BookingToDate)
         {
-            string url = root + "/API/PNRDetailsVer2";
-            dynamic RequestXml_Val = new JObject();
-            dynamic RequestXmlObj = new JObject();
-            dynamic Authenticate_Val = new JObject();
-            Authenticate_Val.InterfaceCode = "1";
-            Authenticate_Val.InterfaceAuthKey = token;
-            Authenticate_Val.AgentCode = AgentCode;
-            Authenticate_Val.Password = AgentPass;
-            RequestXml_Val.Authenticate = new JObject(Authenticate_Val);
-            dynamic GetRefNoValue = new JObject();
-            GetRefNoValue.RefNo = refId;
-            GetRefNoValue.GDSPNR = "";
-            GetRefNoValue.AirlinePNR = "";
-            GetRefNoValue.ClientRequestID = "";
-            GetRefNoValue.BookingFromDate = "";
-            GetRefNoValue.BookingToDate = "";
-            RequestXml_Val.PNRDetailsRequest = new JObject(GetRefNoValue);
-            RequestXmlObj.RequestXml = new JObject(RequestXml_Val);
-            string SearchparamValue = JsonConvert.SerializeObject(RequestXmlObj);
-            var res = GetResponse(SearchparamValue, url);
-            if (res != null)
+            try
             {
-                return res;
+                string url = root + "/API/PNRDetailsVer2";
+                dynamic RequestXml_Val = new JObject();
+                dynamic RequestXmlObj = new JObject();
+                dynamic Authenticate_Val = new JObject();
+                Authenticate_Val.InterfaceCode = "1";
+                Authenticate_Val.InterfaceAuthKey = token;
+                Authenticate_Val.AgentCode = AgentCode;
+                Authenticate_Val.Password = AgentPass;
+                RequestXml_Val.Authenticate = new JObject(Authenticate_Val);
+                dynamic GetRefNoValue = new JObject();
+                GetRefNoValue.RefNo = refId;
+                GetRefNoValue.GDSPNR = "";
+                GetRefNoValue.AirlinePNR = "";
+                GetRefNoValue.ClientRequestID = "";
+                GetRefNoValue.BookingFromDate = "";
+                GetRefNoValue.BookingToDate = "";
+                RequestXml_Val.PNRDetailsRequest = new JObject(GetRefNoValue);
+                RequestXmlObj.RequestXml = new JObject(RequestXml_Val);
+                string SearchparamValue = JsonConvert.SerializeObject(RequestXmlObj);
+                var res = GetResponse(SearchparamValue, url);
+                if (res != null)
+                {
+                    return res;
+                }
+                else
+                {
+                    return res;
+                }
             }
-            else
+            catch (WebException webEx)
+            {//get the response stream
+                WebResponse response = webEx.Response;
+                Stream stream = response.GetResponseStream();
+                String responseMessage = new StreamReader(stream).ReadToEnd();
+                return responseMessage;
+            }
+            
+        }
+
+        public static dynamic HoldTicketConfrim(string refId, string  ClientRequestID)
+        {
+            try
             {
-                return res;
+                string url = root + "/API/HoldBookingConfirm";
+                dynamic RequestXml_Val = new JObject();
+                dynamic RequestXmlObj = new JObject();
+                dynamic Authenticate_Val = new JObject();
+                Authenticate_Val.InterfaceCode = "1";
+                Authenticate_Val.InterfaceAuthKey = token;
+                Authenticate_Val.AgentCode = AgentCode;
+                Authenticate_Val.Password = AgentPass;
+                RequestXml_Val.Authenticate = new JObject(Authenticate_Val);
+                dynamic HoldBookingConfirmRequest_val = new JObject();
+                HoldBookingConfirmRequest_val.RefNo = refId;
+                HoldBookingConfirmRequest_val.ClientRequestID = ClientRequestID;
+                HoldBookingConfirmRequest_val.MerchantCode = "PAY9zJhspxq7m";
+                HoldBookingConfirmRequest_val.MerchantKey = "eSpbcYMkPoZYFPcE8FnZ";
+                HoldBookingConfirmRequest_val.SaltKey = "WHJIIcNjVXaZj03TnDme";                
+                RequestXml_Val.HoldBookingConfirmRequest = new JObject(HoldBookingConfirmRequest_val);
+                RequestXmlObj.RequestXml = new JObject(RequestXml_Val);
+                string SearchparamValue = JsonConvert.SerializeObject(RequestXmlObj);
+                var res = GetResponse(SearchparamValue, url);
+                if (res != null)
+                {
+                    return res;
+                }
+                else
+                {
+                    return res;
+                }
             }
+            catch (WebException webEx)
+            {
+                //get the response stream
+                WebResponse response = webEx.Response;
+                Stream stream = response.GetResponseStream();
+                String responseMessage = new StreamReader(stream).ReadToEnd();
+                return responseMessage;
+            }
+            
         }
 
 

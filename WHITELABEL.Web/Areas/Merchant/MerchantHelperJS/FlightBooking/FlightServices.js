@@ -71,5 +71,14 @@
         });
         return request;
     }
+    this.getHoldTicketConfirm = function (data) {
+        debugger;
+        var request = $http({
+            method: "POST",
+            data: data,
+            url: "/Merchant/MerchantFlightDetails/ConfirmHoldTicket"
+        });
+        return request;
+    }
 
 }]);

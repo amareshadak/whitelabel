@@ -41,14 +41,14 @@
                                             <td>Cute Fee </td>
                                             <td>Total Amount </td>
                                             <td>Baggage </td>
-                                            <td>Hold</td>
+                                            <td>Status</td>
                                             <td>Cancel ticket</td>
                                             <td>Print </td>
 
                                         </tr>
                                     </thead>
                                     <tbody ng-repeat="m in GetTicketList">
-                                        <tr>
+                                        <tr ng-cloak>
                                             <td>
                                                 <span>{{m.SLN}}</span>
                                             </td>
@@ -81,10 +81,17 @@
                                             </td>
                                             <td><span>{{m.TOTAL_FLIGHT_AMT}}</span></td>
                                             <td><span>{{m.TOTAL_BAGGAGE_ALLOWES}}</span></td>
-                                           <td><a class='btn btn-warning btn-xs' style="color:white;">Hold Ticket</a></td>
-                                            <td><a class='btn btn-danger btn-xs' style="color:white;">Cancel Ticket</a></td>
+                                           <td>
+                                            <span class="badge badge-{{m.IS_HOLD=='1'?'warning':'success'}}" style="color:white;font-size:small;width:106px">{{m.BOOKING_STATUS}}</span>
+                                           </td>
+                                            <td><a class="btn btn-{{m.IS_CANCELLATION=='1'?'danger':'disable'}} btn-xs" style="color:black;">Cancel Ticket</a></td>
                                             <td>
-                                                <a class='btn btn-primary btn-xs' style="color:white;" data-toggle="modal" data-target="#exampleModalCenter" id='PrinttransactionvalueAdminid' data-id="{{m.REF_NO}}" ng-click="PrintInvoice(m.REF_NO)">print Ticket</a>
+                                                <div ng-show="m.IS_HOLD=='0'">
+                                                    <a class='btn btn-primary btn-xs btn-block' style="color:white;" data-toggle="modal" data-target="#exampleModalCenter" id='PrinttransactionvalueAdminid' data-id="{{m.REF_NO}}" ng-click="PrintInvoice(m.REF_NO)">print Ticket</a>
+                                                </div>
+                                                <div ng-show="m.IS_HOLD=='1'">
+                                                    <a class='btn btn-success btn-xs btn-block' style="color:white;"  id='confirmholdTicket' ng-click="ConfirmHoldTicket(m.REF_NO,m.CORELATION_ID)">Confirm Ticket</a>
+                                                </div>
 
                                             </td>
                                         </tr>
