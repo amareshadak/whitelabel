@@ -257,6 +257,20 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                 ViewBag.AdultCount = PassAdult;
                 ViewBag.ChildCount = PassChild;
                 ViewBag.InfantCount = PassInfant;
+
+                if (TripMode == "1") // One Way Trip
+                {
+                    return View("~/Areas/Merchant/Views/MerchantFlightDetails/FlightBookingDetails.cshtml");
+                }
+                else if (TripMode == "2") // Round Trip
+                {
+                    return View("~/Areas/Merchant/Views/MerchantFlightDetails/RoundTripDetails.cshtml");
+                }
+                else if (TripMode == "3") // Multicity
+                {
+                    return View("~/Areas/Merchant/Views/MerchantFlightDetails/FlightBookingDetails.cshtml");
+                }
+
                 return View();
             }
             catch (Exception ex)

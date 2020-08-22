@@ -529,6 +529,7 @@
     <Content Include="Areas\Merchant\MerchantHelperJS\FlightBooking\FlightServices.js" />
     <Content Include="Areas\Merchant\MerchantHelperJS\FlightBooking\FlightVerificationController.js" />
     <Content Include="Areas\Merchant\MerchantHelperJS\FlightBooking\ReturnTripSearch.js" />
+    <Content Include="Areas\Merchant\MerchantHelperJS\FlightBooking\RoundTripDetailsController.js" />
     <Content Include="Areas\Merchant\MerchantHelperJS\FlightBooking\SingleFlightSearch.js" />
     <Content Include="Areas\Merchant\MerchantHelperJS\GasBillRecharge\Index.js" />
     <Content Include="Areas\Merchant\MerchantHelperJS\InsurancePayment\Index.js" />
@@ -2309,6 +2310,7 @@
     <Content Include="Content\static-airlines-master\README.md" />
     <Content Include="Areas\Merchant\Views\MerchantFlightDetails\BookedFlightInformaiton.cshtml" />
     <Content Include="Areas\Merchant\Views\MerchantFlightDetails\BookedFlightgridList.cshtml" />
+    <Content Include="Areas\Merchant\Views\MerchantFlightDetails\RoundTripDetails.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\dirPagination.js" />

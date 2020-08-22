@@ -1,0 +1,1048 @@
+﻿
+@{
+    ViewBag.Title = "RoundTripDetails";
+    Layout = "~/Areas/Merchant/Views/Shared/_RetailerLayout.cshtml";
+}
+
+
+    <style>
+        .fb {
+            font-weight: bold;
+            font-style: normal;
+        }
+
+        .brdrRd5 {
+            border-radius: 5px;
+        }
+
+        .fltHpySrt li {
+            width: 25%;
+            list-style: none;
+        }
+
+        .curPointFlt {
+            cursor: pointer;
+        }
+
+        .dF {
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: -ms-flex;
+            display: flex;
+        }
+
+        .clr {
+            clear: both;
+        }
+
+        .fltHpyRsltCard {
+            box-shadow: 0 2px 4px 0 rgba(0,0,0,0.13);
+        }
+
+        .flexCol {
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: -ms-flex;
+            display: flex;
+            -webkit-flex-direction: column;
+            -ms-flex-direction: column;
+            flex-direction: column;
+        }
+
+        .fl {
+            float: left;
+        }
+
+        .alignItemsCenter {
+            -webkit-align-items: center;
+            -ms-align-items: center;
+            align-items: center;
+        }
+
+        .flightImagesNew {
+            max-height: 30px;
+        }
+
+        .flightImagesNew {
+            max-width: 100%;
+            max-height: 30px;
+            padding-right: 10px;
+        }
+
+        .padT10 {
+            padding-top: 10px;
+        }
+
+        .alignItemsEnd {
+            -webkit-align-items: flex-end;
+            -ms-align-items: flex-end;
+            align-items: flex-end;
+        }
+
+        .fGS0 {
+            flex-grow: 0;
+            flex-shrink: 0;
+        }
+
+        .db {
+            display: block;
+        }
+
+        .textOverflow {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .ico12 {
+            font-size: 12px;
+        }
+
+        .ico11 {
+            font-size: 11px;
+        }
+
+        .quicks {
+            font-family: "QuickSand",Helvetica,Arial,sans-serif;
+        }
+
+        .padT5 {
+            padding-top: 5px;
+        }
+
+        .ico18 {
+            font-size: 18px;
+        }
+
+        .fGS0 {
+            flex-grow: 0;
+            flex-shrink: 0;
+        }
+
+        .ico15 {
+            font-size: 15px;
+        }
+
+        .justifyBetween {
+            -webkit-justify-content: space-between;
+            -ms-justify-content: space-between;
+            justify-content: space-between;
+        }
+
+        .alignItemsCenter {
+            -webkit-align-items: center;
+            -ms-align-items: center;
+            align-items: center;
+        }
+
+        .ico20 {
+            font-size: 20px;
+        }
+
+        .button.fltbook {
+            border-radius: 5px;
+            padding: 7px 0;
+            background-color: #f37638;
+            border: solid 1px #f37638;
+        }
+
+        .fr {
+            float: right;
+        }
+
+        .widthF105 {
+            width: 80px;
+        }
+
+        .padB20 {
+            padding-bottom: 20px;
+        }
+
+        .justifyEnd {
+            -webkit-justify-content: flex-end;
+            -ms-justify-content: flex-end;
+            justify-content: flex-end;
+        }
+
+        .marginT10 {
+            margin-top: 10px;
+        }
+
+        .ico12 {
+            font-size: 12px;
+        }
+
+        .ico11 {
+            font-size: 11px;
+        }
+
+        .padTB10 {
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        .alignItemsEnd {
+            -webkit-align-items: flex-end;
+            -ms-align-items: flex-end;
+            align-items: flex-end;
+        }
+
+        .justifyBetween {
+            -webkit-justify-content: space-between;
+            -ms-justify-content: space-between;
+            justify-content: space-between;
+        }
+
+        .width100 {
+            width: 100%;
+        }
+
+        .padL10 {
+            padding-left: 10px;
+        }
+
+        .dF {
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: -ms-flex;
+            display: flex;
+        }
+
+        .ico11 {
+            font-size: 11px;
+        }
+
+        .db {
+            display: block;
+        }
+
+        .fl {
+            float: left;
+        }
+
+        .width29 {
+            width: 29%;
+        }
+
+        .padLR0 {
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        .padB5 {
+            padding-bottom: 5px;
+        }
+
+        .ico12 {
+            font-size: 12px;
+        }
+
+        .ico12 {
+            font-size: 12px;
+        }
+
+        .fb {
+            font-weight: bold;
+            font-style: normal;
+        }
+
+        .alignSelfCenter {
+            -webkit-align-self: center;
+            -ms-align-self: center;
+            align-self: center;
+        }
+
+        .padB5 {
+            padding-bottom: 5px;
+        }
+
+        .ico12 {
+            font-size: 12px;
+        }
+
+        .pad0 {
+            padding: 0 !important;
+        }
+
+        .col-md-5 {
+            width: 41.66666667%;
+        }
+
+        .prgrsDot.dotVH:before {
+            visibility: hidden;
+        }
+
+        .prgrsDot:after {
+            width: 100%;
+            height: 1px;
+            content: '';
+            position: absolute;
+            background-color: #e7e7e7;
+            top: 1px;
+            z-index: 0;
+        }
+
+        .width70 {
+            width: 70%;
+        }
+
+        .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12 {
+            float: left;
+        }
+
+        .padB5 {
+            padding-bottom: 5px;
+        }
+
+        .padLR0 {
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        .widMd30 {
+            width: 30%;
+        }
+
+        .flexCol {
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: -ms-flex;
+            display: flex;
+            -webkit-flex-direction: column;
+            -ms-flex-direction: column;
+            flex-direction: column;
+        }
+
+        .stickyHpy {
+            position: sticky;
+            top: 0;
+            z-index: 9;
+        }
+
+        .brdrRd10 {
+            border-radius: 10px;
+        }
+
+        .fltHpyRsltCard {
+            box-shadow: 0 2px 4px 0 rgba(0,0,0,0.13);
+        }
+
+        .marginT5 {
+            margin-top: 5px;
+        }
+
+        .pad10 {
+            padding: 10px;
+        }
+
+        .borderRight {
+            border-right: 1px solid #e6e6e6;
+        }
+
+        .width50 {
+            width: 50%;
+        }
+
+        .width30 {
+            width: 30%;
+        }
+
+        .fltHpySumryPrc {
+            border-left: 1px dashed #c2c2c2;
+        }
+
+        .padR15 {
+            padding-right: 15px;
+        }
+
+        .ico24 {
+            font-size: 24px;
+        }
+
+        .padTB15 {
+            padding-top: 15px;
+            padding-bottom: 15px;
+        }
+
+        .borderAll {
+            border: 1px solid #e6e6e6;
+        }
+
+        .brRadius5 {
+            border-radius: 5px;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+        }
+
+        a:hover {
+            color: #f77521;
+        }
+
+        .greenBgLt {
+            background-color: #7ed321;
+        }
+
+        .brRadius2 {
+            border-radius: 2px;
+        }
+
+        .fr {
+            float: right;
+        }
+
+        .txtTransUpper {
+            text-transform: uppercase;
+        }
+
+        .txtUln {
+            text-decoration: underline;
+        }
+
+        .padTB10 {
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        .padB5 {
+            padding-bottom: 5px;
+        }
+
+        .padT10 {
+            padding-top: 10px;
+        }
+
+        .borderTop {
+            border-top: 1px solid #e6e6e6;
+        }
+
+        .padB5 {
+            padding-bottom: 5px;
+        }
+
+        .padT10 {
+            padding-top: 10px;
+        }
+
+        .gstTabs {
+            border-radius: 30px;
+            -webkit-border-radius: 30px;
+            -moz-border-radius: 30px;
+            float: left;
+            border: 1px solid #e6e6e6;
+            background: #fff;
+            overflow: hidden;
+            margin: 0 0 15px 0;
+        }
+
+            .gstTabs .tabs {
+                padding: 7px 15px;
+                float: left;
+                border-right: 1px solid #e6e6e6;
+            }
+
+        .greyBg {
+            background: #f5f5f5;
+        }
+
+        .gstTabs .tabs span {
+            color: #2d67b2;
+            font-size: 15px;
+            line-height: 1;
+        }
+
+        .gstTabs .tabs.last {
+            border-right: none;
+        }
+
+        .gstTabs .tabs.active {
+            background: #2d67b2;
+        }
+
+            .gstTabs .tabs.active span {
+                color: #fff;
+            }
+
+        .padTB10 {
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        .button.orange {
+            background: #f26722;
+            color: #fff;
+            margin-right: 20px;
+        }
+
+        .button.large {
+            font-size: 16px;
+            line-height: 1.33;
+            padding: 8px 16px;
+        }
+
+        .button {
+            cursor: pointer;
+            border-radius: 3px;
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
+            padding: 7px 15px;
+            text-align: center;
+            color: #fff;
+            border: 0;
+            font-size: 14px;
+            -webkit-appearance: none;
+        }
+
+        .justifyCenter {
+            -webkit-justify-content: center;
+            -ms-justify-content: center;
+            justify-content: center;
+        }
+
+        .alert_msg.info_msg {
+            color: #40708D;
+            background: #F5FBFE;
+        }
+
+        .alert_msg {
+            font-size: 12px;
+            padding: 5px;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+
+            .alert_msg.info_msg .status_info {
+                background: #74BFDB;
+            }
+
+            .alert_msg .status_info {
+                border-radius: 3px;
+                -webkit-border-radius: 3px;
+                -moz-border-radius: 3px;
+                color: #fff;
+                font-size: 11px;
+                text-transform: uppercase;
+                margin-right: 10px;
+                padding: 3px 7px 1px;
+            }
+
+            .alert_msg .status_cont {
+                line-height: 18px;
+            }
+
+        .padLR10 {
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        .ico14 {
+            font-size: 14px;
+        }
+
+        .smlrBrdrDsh {
+            border-bottom: 1px dashed #cbcbcb;
+        }
+
+        .fr {
+            float: right;
+        }
+
+        .ico16 {
+            font-size: 16px;
+        }
+
+        .ico12 {
+            font-size: 12px;
+        }
+
+        .blue {
+            color: #2d67b2;
+        }
+
+        .smlrBrdrDsh {
+            border-bottom: 1px dashed #cbcbcb;
+        }
+
+        [ng-cloak] {
+            display: none !important;
+        }
+    </style>
+
+
+<script src="//momentjs.com/downloads/moment.min.js"></script>
+<script src="~/HelperJS/AngularjsLinks/bootstrap.bundle.min.js"></script>
+<script src="~/HelperJS/AngularjsLinks/perfect-scrollbar.min.js"></script>
+<script src="~/HelperJS/AngularjsLinks/script.min.js"></script>
+<script src="~/HelperJS/AngularjsLinks/sidebar.large.script.min.js"></script>
+<script src="~/HelperJS/AngularjsLinks/nuslider.min.js"></script>
+<script src="~/HelperJS/AngularjsLinks/ui-bootstrap-tpls-2.5.0.min.js"></script>
+<script src="~/Areas/Merchant/MerchantHelperJS/FlightBooking/app.js"></script>
+<script src="~/Areas/Merchant/MerchantHelperJS/FlightBooking/FlightServices.js"></script>
+<script src="~/Areas/Merchant/MerchantHelperJS/FlightBooking/RoundTripDetailsController.js"></script>
+
+<div ng-app="AirportAutocompleteoduleApp" class="display-animation" ng-controller="RoundTripDetailsController" ng-init="loadFlightDetails('@ViewBag.TrackNo','@ViewBag.TripMode');populatePesengerList('@ViewBag.AdultCount','@ViewBag.ChildCount','@ViewBag.InfantCount');" id="FlightBookingControllerId">
+    <div class="content" style="margin-top:20px;">
+        <div class="display-animation">
+            <div class="full-content margin-bottom-40 bg-white" id="Bill_page">
+
+                <div class="row example-row" style="min-height:350px;">
+
+                    <div class=" col-md-9">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+
+                                    <div class=" whiteBg posRel crdShdw brRadius5 fl width100 marginT10 padB20">
+                                        <div class="fl width100 borderBtm padLR15 padTB10">
+                                            <div class="fl">
+                                                <span class="fl padLR10 padT5 ico18 quicks fb">Ticket Details</span>
+                                            </div>
+                                        </div>
+                                        <div>
+
+                                            <div class="flt-details">
+                                                <div class="fl width100 padTB10">
+                                                    <div class="fl width100 padLR10 padTB10">
+                                                        <i class="fl icon-flight_line1 ico18 mobdn blue "></i>
+                                                        <span class="fl mobdn ico18 padL10" ng-cloak ng-show="deptureFlight[0].FromAirportName">
+                                                            {{deptureFlight[0].FromAirportName}} to
+                                                            {{deptureFlight[deptureFlight.length - 1].ToAirportName}}
+                                                            {{getAirDate(deptureFlight[0].ArrDate) | date : 'EEEE, dd MMM yyyy'}}
+                                                        </span>
+                                                        <span class="fr txtTransUpper white ico11 brRadius2 pad5 greenBgLt">{{(deptureFlight[0].FareType == 'R' ? ' Refundable' : ' Non-Refundable')}}</span>
+                                                        <a class="fr pad5 mobTxtRight ico12 txtUln">@*Baggage and Fare Rules*@ &nbsp;&nbsp; &nbsp;&nbsp; </a>
+                                                    </div>
+                                                    <div class="borderAll posRel whiteBg brRadius5 fl width100 fl padTB10" ng-repeat="item in deptureFlight" ng-cloak>
+                                                        <div class="bkHalfCircleTop mobdn bkHalfCirctop posAbs"></div>
+                                                        <div class="fl width100 bkFlt padLR20 padTB10">
+                                                            <div class="col-md-2 padT10 col-sm-2 col-xs-3 bkAirlineLogo">
+                                                                <span class="db padB5"><img ng-src="~/Content/static-airlines-master/logos/{{item.AirlineCode}}.png" class="flightImagesNew" alt="flights icon"></span>
+                                                                <span class="db greyLt ico12">{{item.AirlineName}}</span><span class="db greyLter padT2 ico11">{{getFlightClass(item.FlightClass)}}</span>
+                                                                <span class="db greyLter padT2 ico11">({{item.FlightNo}})</span><span class="db greyLter padT2 ico11 fb">(Aircraft:320)</span>
+                                                            </div>
+                                                            <div class="col-md-3 col-sm-3 col-xs-4 padL20">
+                                                                <span class="co12 db grey">{{getAirDate(item.DepDate) | date: 'EEE MMM dd yyyy'}}</span>
+                                                                <span class="ico20 db padT5 padB10">
+                                                                    {{item.FromAirportCode}}
+                                                                    <span class="fb mobdb">{{item.DepTime}}</span>
+                                                                </span><span class="ico13 db greyLter lh1-2 mobdn">
+                                                                    <span class="db">{{item.FromAirportName}}</span>
+                                                                    <span class="db">{{item.FromAirportName}}</span>
+                                                                    <span class="db ico11">(Terminal:{{item.FromTerminal}})</span>
+                                                                </span>
+                                                            </div>
+                                                            <div class="col-md-4 col-sm-4 col-xs-4 mobdn txtCenter padLR20 padT20">
+                                                                <span class="db ico20 backgroundLn">
+                                                                    <i class="oval-2 fl"></i>
+                                                                    <span class="padLR10 whiteBg">{{calculateDurationTime(item.FlightTime)}}</span><i class="fr ico22 blue icon-flight_line1"></i>
+                                                                </span>
+                                                                <span class="ico12 greyLter padT5 txtCap">Flight Duration</span>
+                                                            </div>
+                                                            <div class="visible-xs padT20 col-xs-1"><i class="fr ico22 blue icon-flight_line1"></i></div>
+                                                            <div class="col-md-3 col-sm-3 col-xs-4 padL10 mobTxtRight">
+                                                                <span class="co12 db grey">{{getAirDate(item.ArrDate) | date: 'EEE MMM dd yyyy'}}</span>
+                                                                <span class="ico20 db padT5 padB10">
+                                                                    {{item.ToAirportCode}}
+                                                                    <span class="fb mobdb">{{item.ArrTime}}</span>
+                                                                </span><span class="ico13 db greyLter lh1-2 mobdn">
+                                                                    <span class="db">{{item.ToAirportName}}</span>
+                                                                    <span class="db">{{item.ToAirportName}}</span>
+                                                                    <span class="db ico11">(Terminal:{{item.ToTerminal}})</span>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="bkHalfCircleTop mobdn bkHalfCirctop posAbs"></div>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="fl width100 padTB10">
+                                                    <div class="fl width100 padLR10 padTB10">
+                                                        <i class="fl icon-flight_line1 ico18 mobdn blue "></i>
+                                                        <span class="fl mobdn ico18 padL10" ng-cloak ng-show="returnFlight[0].FromAirportName">
+                                                            {{returnFlight[0].FromAirportName}} to
+                                                            {{returnFlight[returnFlight.length - 1].ToAirportName}}
+                                                            {{getAirDate(returnFlight[0].ArrDate) | date : 'EEEE, dd MMM yyyy'}}
+                                                        </span>
+                                                        <span class="fr txtTransUpper white ico11 brRadius2 pad5 greenBgLt">{{(returnFlight[0].FareType == 'R' ? ' Refundable' : ' Non-Refundable')}}</span>
+                                                        <a class="fr pad5 mobTxtRight ico12 txtUln">@*Baggage and Fare Rules*@ &nbsp;&nbsp; &nbsp;&nbsp; </a>
+                                                    </div>
+                                                    <div class="borderAll posRel whiteBg brRadius5 fl width100 fl padTB10" ng-repeat="item in returnFlight" ng-cloak>
+                                                        <div class="bkHalfCircleTop mobdn bkHalfCirctop posAbs"></div>
+                                                        <div class="fl width100 bkFlt padLR20 padTB10">
+                                                            <div class="col-md-2 padT10 col-sm-2 col-xs-3 bkAirlineLogo">
+                                                                <span class="db padB5"><img ng-src="~/Content/static-airlines-master/logos/{{item.AirlineCode}}.png" class="flightImagesNew" alt="flights icon"></span>
+                                                                <span class="db greyLt ico12">{{item.AirlineName}}</span><span class="db greyLter padT2 ico11">{{getFlightClass(item.FlightClass)}}</span>
+                                                                <span class="db greyLter padT2 ico11">({{item.FlightNo}})</span><span class="db greyLter padT2 ico11 fb">(Aircraft:320)</span>
+                                                            </div>
+                                                            <div class="col-md-3 col-sm-3 col-xs-4 padL20">
+                                                                <span class="co12 db grey">{{getAirDate(item.DepDate) | date: 'EEE MMM dd yyyy'}}</span>
+                                                                <span class="ico20 db padT5 padB10">
+                                                                    {{item.FromAirportCode}}
+                                                                    <span class="fb mobdb">{{item.DepTime}}</span>
+                                                                </span><span class="ico13 db greyLter lh1-2 mobdn">
+                                                                    <span class="db">{{item.FromAirportName}}</span>
+                                                                    <span class="db">{{item.FromAirportName}}</span>
+                                                                    <span class="db ico11">(Terminal:{{item.FromTerminal}})</span>
+                                                                </span>
+                                                            </div>
+                                                            <div class="col-md-4 col-sm-4 col-xs-4 mobdn txtCenter padLR20 padT20">
+                                                                <span class="db ico20 backgroundLn">
+                                                                    <i class="oval-2 fl"></i>
+                                                                    <span class="padLR10 whiteBg">{{calculateDurationTime(item.FlightTime)}}</span><i class="fr ico22 blue icon-flight_line1"></i>
+                                                                </span>
+                                                                <span class="ico12 greyLter padT5 txtCap">Flight Duration</span>
+                                                            </div>
+                                                            <div class="visible-xs padT20 col-xs-1"><i class="fr ico22 blue icon-flight_line1"></i></div>
+                                                            <div class="col-md-3 col-sm-3 col-xs-4 padL10 mobTxtRight">
+                                                                <span class="co12 db grey">{{getAirDate(item.ArrDate) | date: 'EEE MMM dd yyyy'}}</span>
+                                                                <span class="ico20 db padT5 padB10">
+                                                                    {{item.ToAirportCode}}
+                                                                    <span class="fb mobdb">{{item.ArrTime}}</span>
+                                                                </span><span class="ico13 db greyLter lh1-2 mobdn">
+                                                                    <span class="db">{{item.ToAirportName}}</span>
+                                                                    <span class="db">{{item.ToAirportName}}</span>
+                                                                    <span class="db ico11">(Terminal:{{item.ToTerminal}})</span>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="bkHalfCircleTop mobdn bkHalfCirctop posAbs"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <div class="card" style="margin-top:20px;">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="fl width100 padLR15 padTB10 borderBtm">
+                                        <div class="fl">
+                                            <span class="fl padLR10 padT5 ico18 quicks fb">Traveller Details</span>
+                                        </div>
+                                    </div>
+                                    <form id="travellerForm" name="travellerForm" method="POST">
+                                        <div class="fl width100 padLR20 mobpadLR5 bkTraveller padT10">
+                                            <div class="fl width100" style="display:none">
+                                                <div style="width: 210px; margin: 0px auto;">
+                                                    <div class="gstTabs">
+                                                        <a class="tabs active" id="gstPersonal"><span>Personal</span></a>
+                                                        <a class="tabs last " id="gstBusiness"><span>Business</span></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="alert_msg info_msg fl"><b class="status_info fl">Note: </b><span class="status_cont">Please make sure you enter the Name as per your govt. photo id.</span></div>
+
+                                            <div class="fl width100 padLR10 greyBg borderBtm marginB5" ng-repeat="psssenger in passengers">
+                                                <div class="fl width100 padTB10 curPoint">
+                                                    <span class="fl padR5">
+                                                        <i class="fl icon-user3 ico24"></i>
+                                                        <i class="fl fltCirc bordBlac icon-tick-mark ico8 pad1 marginLN5"></i>
+                                                    </span>
+                                                    <span class="fl padLR20 ico14 padT5">{{psssenger.label}}</span>
+                                                </div>
+                                                <div class="padL30 fl width100" style="margin-bottom:5px">
+                                                    <div class="row">
+                                                        <div class="col-md-2 col-sm-2 col-xs-12">
+                                                            <select ng-model="psssenger.Title" data-traveller="0" data-index="1" data-field="title" data-fieldname="Title" data-name="Adult" name="Adultchoose1" id="Adulttitle1" class="form-control inputMedium">
+                                                                <option value="">Title</option>
+                                                                <option ng-show="psssenger.PassengerType == 'A'" value="Mr">Mr</option>
+                                                                <option value="Ms">Ms</option>
+                                                                <option ng-show="psssenger.PassengerType == 'A'" value="Mrs">Mrs</option>
+                                                                <option value="Mrs">Mstr</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-5 col-sm-5 col-xs-12">
+                                                            <input ng-model="psssenger.FirstName" type="text" class="form-control inputMedium padLR5 placeholder" placeholder="First Name/Given Name" value="">
+                                                        </div>
+                                                        <div class="col-md-5 col-sm-5 col-xs-12">
+                                                            <input ng-model="psssenger.LastName" type="text" class="form-control inputMedium padLR5 placeholder" placeholder="Last Name">
+                                                        </div>
+
+
+                                                    </div>
+                                                    <div class="row" style="margin-top:20px">
+                                                        <div class="col-md-2 col-sm-2 col-xs-12"></div>
+                                                        <div class="col-md-5 col-sm-5 col-xs-12">
+                                                            <input ng-model="psssenger.DateOfBirth" type="text" class="form-control inputMedium padLR5 placeholder DateofBirthVal" placeholder="dd/MM/yyyy">
+                                                        </div>
+                                                        <div class="col-md-5 col-sm-5 col-xs-12">
+                                                            <input ng-model="psssenger.PassportNo" type="text" class="form-control inputMedium padLR5 placeholder" placeholder="Passport Number">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="fl width100 padLR10 greyBg borderBtm marginB5">
+                                                <hr />
+                                                <div class="padL30 fl width100" style="margin-bottom:5px">
+                                                    <div class="row">
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                            <input type="email" ng-model="emailAddress" class="form-control inputMedium" placeholder="Enter Email Id.">
+                                                        </div>
+                                                        <div class="col-md-3 col-sm-3 col-xs-12">
+                                                            <input type="text" ng-model="mobileNumber" class="form-control inputMedium" maxlength="10" placeholder="Mobile No.">
+                                                        </div>
+                                                        <div class="col-md-3 col-sm-3 col-xs-12">
+                                                            <input type="text" ng-model="altMobileNo" class="form-control inputMedium" maxlength="10" placeholder="Alternative Mobile No.">
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card" style="margin-top:20px;margin-bottom:50px">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="borderAll whiteBg posRel crdShdw brRadius5 fl width100 marginT10">
+                                        <div class="fl width100 padLR15 padTB10 borderBtm">
+                                            <div class="fl">
+                                                <span class="fl padLR10 padT5 ico18 quicks fb">Additional Services (Bages & Meals)</span>
+                                            </div>
+                                        </div>
+                                        <form id="travellerForm" name="travellerForm" method="POST">
+
+                                            <div class="fl width100 padLR20 mobpadLR5 bkTraveller padT10">
+                                                <div class="row" @*ng-hide="isAddtionalServives"*@>
+                                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                                        <div class="alert_msg info_msg fl"><b class="status_info fl">Note: </b><span class="status_cont">No additional services available.</span></div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="accordion" id="accordionRightIcon" style="display:none">
+                                                    <div class="card" ng-show="ServicesMeals.length > 0" ng-cloak>
+                                                        <div class="card-header header-elements-inline">
+                                                            <h6 class="card-title ul-collapse__icon--size ul-collapse__right-icon mb-0"><a class="text-default collapsed" data-toggle="collapse" href="#accordion-item-icons-1" aria-expanded="false">Meal</a></h6>
+                                                        </div>
+                                                        <div class="collapse" id="accordion-item-icons-1" data-parent="#accordionRightIcon" style="">
+                                                            <div class="card-body">
+                                                                <div class="table-responsive">
+                                                                    <table class="table table-striped">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th scope="col">Services name</th>
+                                                                                <th scope="col">Airport</th>
+                                                                                <th scope="col">Amount</th>
+                                                                                <th scope="col">Action</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <tr ng-repeat="item in ServicesMeals">
+                                                                                <td>{{item.ServiceName}}</td>
+                                                                                <td>
+                                                                                    <span class="badge badge-primary">{{item.FromAirportCode}}</span>
+                                                                                    -
+                                                                                    <span class="badge badge-secondary">{{item.ToAirportCode}}</span>
+                                                                                </td>
+                                                                                <td>{{item.Amount}}</td>
+                                                                                <td style="text-align:center;"><input ng-model="item.IsSelected" class="form-check-input" type="checkbox"></td>
+
+                                                                            </tr>
+
+
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card" ng-show="ServicesSeats.length > 0" ng-cloak>
+                                                        <div class="card-header header-elements-inline">
+                                                            <h6 class="card-title ul-collapse__icon--size ul-collapse__right-icon mb-0"><a class="text-default collapsed" data-toggle="collapse" href="#accordion-item-icons-2"> Seat</a></h6>
+                                                        </div>
+                                                        <div class="collapse" id="accordion-item-icons-2" data-parent="#accordionRightIcon">
+                                                            <div class="card-body">
+                                                                <div class="table-responsive">
+                                                                    <table class="table table-striped">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th scope="col">Services name</th>
+                                                                                <th scope="col">Airport</th>
+                                                                                <th scope="col">Amount</th>
+                                                                                <th scope="col">Action</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <tr ng-repeat="item in ServicesSeats">
+                                                                                <td>{{item.ServiceName}}</td>
+                                                                                <td>
+                                                                                    <span class="badge badge-primary">{{item.FromAirportCode}}</span>
+                                                                                    -
+                                                                                    <span class="badge badge-secondary">{{item.ToAirportCode}}</span>
+                                                                                </td>
+                                                                                <td>{{item.Amount}}</td>
+                                                                                <td style="text-align:center;"><input class="form-check-input" id="gridCheck1" type="checkbox"></td>
+
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="card" ng-show="ServicesBaggages.length > 0" ng-cloak>
+                                                        <div class="card-header header-elements-inline">
+                                                            <h6 class="card-title ul-collapse__icon--size ul-collapse__right-icon mb-0"><a class="text-default collapsed" data-toggle="collapse" href="#accordion-item-icons-3"> Baggage</a></h6>
+                                                        </div>
+                                                        <div class="collapse" id="accordion-item-icons-3" data-parent="#accordionRightIcon">
+                                                            <div class="card-body">
+                                                                <div class="table-responsive">
+                                                                    <table class="table table-striped">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th scope="col">Services name</th>
+                                                                                <th scope="col">Airport</th>
+                                                                                <th scope="col">Amount</th>
+                                                                                <th scope="col">Action</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <tr ng-repeat="item in ServicesBaggages">
+                                                                                <td>{{item.ServiceName}}</td>
+                                                                                <td>
+                                                                                    <span class="badge badge-primary">{{item.FromAirportCode}}</span>
+                                                                                    -
+                                                                                    <span class="badge badge-secondary">{{item.ToAirportCode}}</span>
+                                                                                </td>
+                                                                                <td>{{item.Amount}}</td>
+                                                                                <td style="text-align:center;"><input class="form-check-input" id="gridCheck1" type="checkbox"></td>
+
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="fl width100 borderTop padLR15 padTB10">
+
+                                                <div class="row">
+                                                    <div class="col-md-7 col-sm-7 col-xs-12">
+                                                        <div class="alert_msg info_msg fl"><b class="status_info fl">Note: </b><span class="status_cont">Please check all the above information carefully before procced.</span></div>
+                                                    </div>
+                                                    <div class="col-md-2 col-sm-2 col-xs-12">
+                                                        <button ng-click="holdingFlightRequest()" ng-show="flightDetails[0].HoldAllowed == 'Y'" class="button orange btn-block"><div>Hold Ticket</div></button>
+                                                    </div>
+                                                    <div class="col-md-3 col-sm-3 col-xs-12">
+                                                        <button ng-click="bookFlightRequest()" class="button orange btn-block">Issue Ticket</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="card" style="padding:2px;">
+                            <div class="card-body" style="padding:2px;">
+
+                                <div class="row">
+                                    <div class="borderAll posRel whiteBg crdShdw brRadius5 fl width100 padB10 bkFxdRt marginTB10">
+                                        <div class="fl width100 padTB10 smlrBrdrDsh">
+                                            <div class="ico18 padLR10"><span class="fb quicks ">Fare Summary</span></div>
+                                            <div class="ico12 padLR10 padT5" ng-cloak>
+                                                <span style="font-weight:bold">Travelers </span>
+                                                <span class="grey" ng-show="adult">{{adult}} {{adult > 1 ? 'Adults' : 'Adult'}}</span>
+                                                <span class="grey" ng-show="child">&nbsp;|&nbsp;{{child}} {{child > 1 ? 'Childs' : 'Child'}}</span>
+                                                <span class="grey" ng-show="infant">&nbsp;|&nbsp;{{infant}} {{infant > 1 ? 'Infants' : 'Infant'}}</span>
+                                            </div>
+                                        </div>
+                                        <table class="table table-sm table-bordered">
+                                            <tr>
+                                                <td>Base Fare</td>
+                                                <td class="text-right">{{totalBaseFare}}/-</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Tax and Charges</td>
+                                                <td class="text-right">{{totalTaxAndCharges}}/-</td>
+                                            </tr>
+                                            <tr>
+                                                <td><b>Total</b></td>
+                                                <td class="text-right"><b>{{TotalAmount}}/-</b></td>
+                                            </tr>
+                                        </table>
+
+
+                                        @*<div class="blueBgLt fl padTB10 width100 ">
+                                            <span class="fl  ico18">
+                                                <span class="db padB5 padL10">Total </span>
+
+                                            </span>
+                                            <span class="fr padR10">
+                                                <span class="fr">
+                                                    <span class="fr ico20 ">
+                                                        <i class="icon-pee icoru15"></i>
+                                                        <span>{{totalAmount}}</span>
+                                                    </span>
+                                                </span>
+                                            </span>
+                                        </div>*@
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modelTicketConfirmed" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Message</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Your booking is confirmed.</p>
+            </div>
+            <div class="modal-footer">
+                @*<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Send message</button>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        //$('.DateofBirthVal').datepicker({
+        //    startDate: new Date(),
+        //    //dateFormat: "yy-mm-dd",
+        //    //format: 'yyyy-MM-dd',
+        //    dateFormat: "dd/MM/yyyy",
+        //    uiLibrary: 'bootstrap4',
+        //    minDate: 0,
+        //    autoclose: true
+        //})
+        $(".DateofBirthVal").datepicker({
+            dateFormat: 'dd/mm/yy',//check change
+            changeMonth: true,
+            changeYear: true
+        });
+    });
+
+</script>
