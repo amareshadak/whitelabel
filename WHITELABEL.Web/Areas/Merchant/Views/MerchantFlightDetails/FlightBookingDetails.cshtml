@@ -909,16 +909,24 @@
                                         <table class="table table-sm table-bordered">
                                             <tr>
                                                 <td>Base Fare</td>
-                                                <td ng-cloak> {{totalBaseFare(fareDetails)}}/-</td>
+                                                <td class="text-right"> {{totalBaseFare(fareDetails)}}/-</td>
                                             </tr>
                                             <tr>
                                                 <td>Tax and Charges</td>
-                                                <td>{{totalTaxAndCharges(fareDetails)}}/-</td>
+                                                <td class="text-right">{{totalTaxAndCharges(fareDetails)}}/-</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Additional Charges</td>
+                                                <td class="text-right">{{additionalAddedAmount}}/-</td>
+                                            </tr>
+                                            <tr>
+                                                <td><b> Total Amount</b></td>
+                                                <td class="text-right">{{totalAmountCalculation(fareDetails[0].TotalAmount)}}/-</td>
                                             </tr>
                                         </table>
                                        
                                        
-                                        <div class="blueBgLt fl padTB10 width100 ">
+                                        <div class="blueBgLt fl padTB10 width100 " style="display:none">
                                             <span class="fl  ico18">
                                                 <span class="db padB5 padL10">Total </span>
 
@@ -927,7 +935,7 @@
                                                 <span class="fr">
                                                     <span class="fr ico20 ">
                                                         <i class="icon-pee icoru15"></i>
-                                                        <span>{{fareDetails[0].TotalAmount}}</span>
+                                                        <span>{{totalAmountCalculation(fareDetails[0].TotalAmount)}}</span>
                                                     </span>
                                                 </span>
                                             </span>

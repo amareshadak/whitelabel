@@ -1146,7 +1146,7 @@
                                                                                             <span class="padR5 alignItemsEnd flexCol">
                                                                                                 <span class="alignItemsCenter dF padT2 quicks fb">
                                                                                                     <i class="icon-rupee ico11"></i>
-                                                                                                    <span class="ico20">{{ReturnOneway.TotalAmount}}/-</span>
+                                                                                                    <span class="ico20">{{getFloatNumber(ReturnOneway.TotalAmount) + $scope.additionalAddedAmount}}/-</span>
                                                                                                 </span>
                                                                                             </span>
                                                                                             <span class="custRad" style="padding-left:10px;">
@@ -1171,8 +1171,12 @@
                                                                                     <td>{{FlightDeptTotalCutefare}}/-</td>
                                                                                 </tr>
                                                                                 <tr>
+                                                                                    <td>Additional Charges</td>
+                                                                                    <td>{{additionalAddedAmount}}/-</td>
+                                                                                </tr>
+                                                                                <tr>
                                                                                     <td>Total Fare (<span>{{AdultCount}} {{AdultCount > 1 ? 'Adults' : 'Adult'}}</span> <span ng-show="ChildCount > 0">, {{ChildCount}} {{ChildCount > 1 ? 'Childs' : 'Child'}}</span><span ng-show="InfantCount > 0">, {{InfantCount}} {{InfantCount > 1 ? 'Infants' : 'Infant'}}</span>)</td>
-                                                                                    <td><b>{{FlightDeptTotalFare}}/- </b></td>
+                                                                                    <td><b>{{FlightDeptTotalFare + additionalAddedAmount}}/- </b></td>
                                                                                 </tr>
                                                                             </table>
 

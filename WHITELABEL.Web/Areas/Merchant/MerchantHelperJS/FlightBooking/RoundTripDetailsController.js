@@ -1,5 +1,5 @@
 ﻿app.controller('RoundTripDetailsController', ['FlightServices', '$scope', '$http', '$window', function (FlightServices, $scope, $http, $window) {
-
+    $scope.additionalAddedAmount = parseFloat(document.getElementById('AIRADDITIONALAMOUNT').value);
     $scope.adult = 0;
     $scope.child = 0;
     $scope.infant = 0;
@@ -118,14 +118,24 @@
                 parseFloat($scope.returnFareDetails.InfantBaseFare);
 
 
-            $scope.totalTaxAndCharges = parseFloat($scope.deptureFareDetails.AdultTax)
+            $scope.totalTaxAndCharges =
+                parseFloat($scope.deptureFareDetails.AdultTax)
                 + parseFloat($scope.deptureFareDetails.ChildTax)
                 + parseFloat($scope.deptureFareDetails.InfantTax)
+
+                + parseFloat($scope.returnFareDetails.AdultTax)
+                + parseFloat($scope.returnFareDetails.ChildTax)
+                + parseFloat($scope.returnFareDetails.InfantTax)
+
+                + parseFloat($scope.deptureFareDetails.AdultCuteFee)
+                + parseFloat($scope.deptureFareDetails.ChildCuteFee)
+                + parseFloat($scope.deptureFareDetails.InfantCuteFee)
+
                 + parseFloat($scope.returnFareDetails.AdultCuteFee)
                 + parseFloat($scope.returnFareDetails.ChildCuteFee)
                 + parseFloat($scope.returnFareDetails.InfantCuteFee);
 
-            $scope.totalAmount = $scope.totalBaseFare + $scope.totalTaxAndCharges;
+            $scope.totalAmount = $scope.totalBaseFare + $scope.totalTaxAndCharges + $scope.additionalAddedAmount;
         }
     }
     

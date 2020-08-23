@@ -798,7 +798,7 @@
                                                                 <span class="alignItemsEnd flexCol">
                                                                     <span class="alignItemsCenter dF padT2">
                                                                         <i class="icon-rupee ico12 fb"></i>
-                                                                        <span class="ico20 fb quicks" data-cy="finalPrice">{{itemval[0].TotalAmount}}/-</span>
+                                                                        <span class="ico20 fb quicks" data-cy="finalPrice">{{getFloatNumber(itemval[0].TotalAmount) + additionalAddedAmount}}/-</span>
                                                                         <span class="ico20 fb quicks" data-cy="finalPrice" style="display:none">{{itemval[0].TrackNo}}</span>
                                                                     </span>
                                                                     <span class="padT5 padB10 ">
@@ -833,7 +833,7 @@
                                                                             <div class="tab-pane fade active show" id="homeBasic_2{{$index + 1}}" role="tabpanel" aria-labelledby="home-basic-tab">
                                                                                 <div class="flexCol whiteBg brdrRd5 brdrRd5 marginT10">
                                                                                     <div class="fl width100 flexCol">
-                                                                                        <div class="fl width100 fltHpyRsltCard dF padLR20 padT10" ng-repeat="Oneway in itemval">
+                                                                                        <div class="fl width100 fltHpyRsltCard dF padLR20 padT10" style="padding:10px" ng-repeat="Oneway in itemval">
                                                                                             <div class="col-md-8 col-sm-8 col-xs-8 padLR0">
                                                                                                 <div class="flexCol width100 padT5 ">
                                                                                                     <div class="dF width100 alignItemsCenter">
@@ -927,8 +927,12 @@
                                                                                         <td>{{FlightTotalCutefare}}/-</td>
                                                                                     </tr>
                                                                                     <tr>
+                                                                                        <td>Additional Charges</td>
+                                                                                        <td>{{additionalAddedAmount}}/-</td>
+                                                                                    </tr>
+                                                                                    <tr>
                                                                                         <td>Total Fare (<span>{{AdultCount}} {{AdultCount > 1 ? 'Adults' : 'Adult'}}</span> <span ng-show="ChildCount > 0">, {{ChildCount}} {{ChildCount > 1 ? 'Childs' : 'Child'}}</span><span ng-show="InfantCount > 0">, {{InfantCount}} {{InfantCount > 1 ? 'Infants' : 'Infant'}}</span>)</td>
-                                                                                        <td><b>{{FlightTotalFare}}/- </b></td>
+                                                                                        <td><b>{{(FlightTotalFare + additionalAddedAmount)}}/- </b></td>
                                                                                     </tr>
                                                                                 </table>
 

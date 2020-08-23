@@ -1,4 +1,14 @@
 ﻿app.controller('ReturnFlightSearchController', ['FlightServices', '$scope', '$http', '$window', '$filter', function (FlightServices, $scope, $http, $window, $filter) {
+
+    $scope.additionalAddedAmount = parseFloat(document.getElementById('AIRADDITIONALAMOUNT').value);
+
+    $scope.getFloatNumber = function (n) {
+        if (n) {
+            return parseFloat(n);
+        }
+        return 0;
+    }
+
     $scope.lower_price_bound = 0;
     $scope.upper_price_bound = 1000;
     $scope.min = 0;
@@ -44,7 +54,7 @@
         let returnValue = false;
         
         let amount = Math.round(item[0].TotalAmount);
-        returnValue = Math.round(amount) >= $scope.lower_price_bound && Math.round(amount) <= $scope.upper_price_bound;
+        returnValue = Math.round(amount) >= ($scope.lower_price_bound - $scope.additionalAddedAmount) && Math.round(amount) <= ($scope.upper_price_bound - $scope.additionalAddedAmount);
 
         if ($scope.filterData.timeSlots.EarlyMorning
             || $scope.filterData.timeSlots.Morning
@@ -262,8 +272,8 @@
             const maxPeak = $scope.DeptFlightFareDetails.reduce((p, c) => Math.round(p.NetAmount) > Math.round(c.NetAmount) ? p : c);
             const minPeak = $scope.DeptFlightFareDetails.reduce((p, c) => Math.round(p.NetAmount) < Math.round(c.NetAmount) ? p : c);
 
-            $scope.minAmount = Math.round(minPeak.NetAmount);
-            $scope.maxAmount = Math.round(maxPeak.NetAmount);
+            $scope.minAmount = Math.round(minPeak.NetAmount) + $scope.additionalAddedAmount;
+            $scope.maxAmount = Math.round(maxPeak.NetAmount) + $scope.additionalAddedAmount;
 
             $scope.lower_price_bound = $scope.minAmount;
             $scope.upper_price_bound = $scope.maxAmount;
@@ -302,7 +312,7 @@
 
     $scope.loadDeptFareDetails = function (srNo, adult, child, infant) {
         let adlt = adult;
-        let data = $scope.FlightFareDetails.filter(x => x.SrNo == srNo);
+        let data = $scope.DeptFlightFareDetails.filter(x => x.SrNo == srNo);
         let adultval = (adult = 0 ? 0 : adult);
         let childval = (child = 0 ? 0 : child);
         let infantval = (infant = 0 ? 0 : infant);
@@ -319,7 +329,7 @@
 
     $scope.loadRetrnFareDetails = function (srNo, adult, child, infant) {
         let adlt = adult;
-        let data = $scope.FlightFareDetails.filter(x => x.SrNo == srNo);
+        let data = $scope.ReturnFlightFareDetails.filter(x => x.SrNo == srNo);
         let adultval = (adult = 0 ? 0 : adult);
         let childval = (child = 0 ? 0 : child);
         let infantval = (infant = 0 ? 0 : infant);
@@ -418,7 +428,7 @@
         if (DerpAmt.length > 0 && RetAmt.length > 0) {
             let TotalAmt = 0;
             if (DerpAmt[0].TotalAmount && RetAmt[0].TotalAmount != undefined) {
-                TotalAmt = parseFloat(DerpAmt[0].TotalAmount) + parseFloat(RetAmt[0].TotalAmount);
+                TotalAmt = parseFloat(DerpAmt[0].TotalAmount) + parseFloat(RetAmt[0].TotalAmount) + $scope.additionalAddedAmount;
             }
             else {
                 TotalAmt = 0;
@@ -496,4 +506,12 @@
         }
         
     }
+
+    $scope.totalAmountCalculation = function (amount) {
+        if (amount) {
+            return parseFloat(amount) + $scope.additionalAddedAmount;
+        }
+        return 0;
+    }
+
 }]);

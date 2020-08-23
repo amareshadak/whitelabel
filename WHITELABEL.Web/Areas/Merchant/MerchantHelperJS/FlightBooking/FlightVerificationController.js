@@ -1,5 +1,5 @@
 ﻿app.controller('FlightVerificationController', ['FlightServices', '$scope', '$http', '$window', function (FlightServices, $scope, $http, $window) {
-
+    $scope.additionalAddedAmount = parseFloat(document.getElementById('AIRADDITIONALAMOUNT').value);
     $scope.adult = 0;
     $scope.child = 0;
     $scope.infant = 0;
@@ -120,6 +120,13 @@
             );
         }
         return '';
+    }
+
+    $scope.totalAmountCalculation = function (amount) {
+        if (amount) {
+            return parseFloat(amount) + $scope.additionalAddedAmount;
+        }
+        return 0;
     }
 
     $scope.loadFlightDetails = function (trackNo, tripMode) {
