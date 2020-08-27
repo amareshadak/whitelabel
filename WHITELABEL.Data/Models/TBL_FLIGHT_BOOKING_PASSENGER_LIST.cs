@@ -22,5 +22,9 @@
         public string DETAILS { get; set; }
         public string PASSENGER_RESP { get; set; }
         public DateTime CREATE_DATE { get; set; }
+        public string PNSG_SEQ_NO { get; set; }
+        public string CORELATION_ID { get; set; }
+        public string PASSENGER_STATUS { get; set; }
+        public string CancelReqNo { get; set; }
     }
 }

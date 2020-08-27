@@ -536,6 +536,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                     var val_Pnsg_Details = JsonConvert.SerializeObject(pnsgitem.Details);
                     string Pngdetails = Convert.ToString(val_Pnsg_Details);
                     string PngDOB = Convert.ToString(pnsgitem.BirthDate);
+                    string PnsgSeq_No = Convert.ToString(pnsgitem.SeqNo);
                     TBL_FLIGHT_BOOKING_PASSENGER_LIST objpnsg = new TBL_FLIGHT_BOOKING_PASSENGER_LIST()
                     {
                         MEM_ID = CurrentMerchant.MEM_ID,
@@ -549,7 +550,11 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                         BIRTH_DATE = PngDOB,
                         DETAILS = Pngdetails,
                         PASSENGER_RESP = pnsgRes,
-                        CREATE_DATE = DateTime.Now
+                        CREATE_DATE = DateTime.Now,
+                        PNSG_SEQ_NO= PnsgSeq_No,
+                        CORELATION_ID = COrelationID,
+                        PASSENGER_STATUS= BookingStatus,
+                        CancelReqNo=""
                     };
                     _db.TBL_FLIGHT_BOOKING_PASSENGER_LIST.Add(objpnsg);
                     _db.SaveChanges();
@@ -564,7 +569,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
         }
         #endregion
 
-        #region Flight Booking Request
+        #region Flight holding Request
         [HttpPost]
         public JsonResult FlightHoldingRequest(string req)
         {
@@ -741,6 +746,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                     var val_Pnsg_Details = JsonConvert.SerializeObject(pnsgitem.Details);                    
                     string Pngdetails = Convert.ToString(val_Pnsg_Details);
                     string PngDOB = Convert.ToString(pnsgitem.BirthDate);
+                    string PnsgSeq_No = Convert.ToString(pnsgitem.SeqNo);
                     TBL_FLIGHT_BOOKING_PASSENGER_LIST objpnsg = new TBL_FLIGHT_BOOKING_PASSENGER_LIST()
                     {
                         MEM_ID=CurrentMerchant.MEM_ID,
@@ -754,7 +760,11 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                         BIRTH_DATE= PngDOB,
                         DETAILS= Pngdetails,
                         PASSENGER_RESP= pnsgRes,
-                        CREATE_DATE=DateTime.Now
+                        CREATE_DATE=DateTime.Now,
+                        PNSG_SEQ_NO= PnsgSeq_No,
+                        CORELATION_ID = COrelationID,
+                        PASSENGER_STATUS = BookingStatus,
+                        CancelReqNo=""
                     };
                     _db.TBL_FLIGHT_BOOKING_PASSENGER_LIST.Add(objpnsg);
                     _db.SaveChanges();
@@ -793,29 +803,29 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
             try
             {
                 var db = new DBContext();
-                var GetBookedFlightList = _db.TBL_FLIGHT_BOOKING_DETAILS.Where(x=>x.MEM_ID==CurrentMerchant.MEM_ID).ToList();
+                var GetBookedFlightList = _db.TBL_FLIGHT_BOOKING_DETAILS.Where(x=>x.MEM_ID==CurrentMerchant.MEM_ID && x.BOOKING_STATUS!= "Cancelled").OrderByDescending(z=>z.BOOKING_DATE).ToList();
 
                 return Json(GetBookedFlightList, JsonRequestBehavior.AllowGet);
 
             }
             catch (Exception ex)
             {
-                throw;
+                return Json(false, JsonRequestBehavior.AllowGet);
             }
         }
         [HttpPost]
-        public JsonResult PrintFlightInvoice(string refId)
+        public JsonResult PrintFlightInvoice(string refId,string PNR)
         {
             try
             {
-                dynamic PrintFlghtInvoice = MultiLinkAirAPI.printBookTicket(refId,"","","","","");
+                dynamic PrintFlghtInvoice = MultiLinkAirAPI.printBookTicket(refId,"", PNR, "","","");
                 var data = JsonConvert.SerializeObject(PrintFlghtInvoice);
                 return Json(data, JsonRequestBehavior.AllowGet);
 
             }
             catch (Exception ex)
             {
-                throw;
+                return Json(false, JsonRequestBehavior.AllowGet);
             }
         }
         [HttpPost]
@@ -1025,9 +1035,69 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
             }
             catch (Exception ex)
             {
-                throw;
+                return Json(false, JsonRequestBehavior.AllowGet);
             }
         }
+        public JsonResult BookedTicketPassangerList(string refId, string corelation)
+        {
+            try
+            {
 
+                var GetPassangerDetails = _db.TBL_FLIGHT_BOOKING_PASSENGER_LIST.Where(x => x.REF_NO == refId && x.CORELATION_ID== corelation && x.PASSENGER_STATUS== "Acknowledged").ToList();
+                return Json(GetPassangerDetails, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
+        }
+        public JsonResult CancelFlightTicket(string[] PngsVal, string refId)
+        {
+            try
+            {
+                var db = new DBContext();
+                 dynamic FlightCancellation = MultiLinkAirAPI.FlightCancellation(PngsVal, refId);
+                string val= "";
+                var getticketinfo = FlightCancellation.TicketCancelDetails.TicketCancelResponse[0];
+                string resmas = Convert.ToString(getticketinfo);
+                var getticketCancelRefifinfo = FlightCancellation.TicketCancelDetails.CancelReqNo[0];
+                string valsdsf = "";
+                string valsds345345f = "";
+                var passangerId = PngsVal;
+                var pangCount = PngsVal.Length;
+                long Pnsgid = 0;
+                foreach (string pnsgid in passangerId)
+                {
+                    long.TryParse(pnsgid,out Pnsgid);
+                    var getpassagerlist = db.TBL_FLIGHT_BOOKING_PASSENGER_LIST.FirstOrDefault(x=>x.SLN== Pnsgid);
+                    if (getpassagerlist != null)
+                    {
+                        getpassagerlist.PASSENGER_STATUS = "Cancelled";
+                        getpassagerlist.CancelReqNo = getticketCancelRefifinfo;
+                        db.Entry(getpassagerlist).State = System.Data.Entity.EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                }
+                if (pangCount == 1)
+                {
+                    var cancelledFlightInfo = db.TBL_FLIGHT_BOOKING_DETAILS.FirstOrDefault(x => x.REF_NO == refId);
+                    if (cancelledFlightInfo != null) {
+                        cancelledFlightInfo.BOOKING_STATUS = "Cancelled";
+                        cancelledFlightInfo.CANCELLATION_DATE =DateTime.Now;
+                        cancelledFlightInfo.IS_CANCELLATION = true;
+                        cancelledFlightInfo.FLIGHT_CANCELLATION_ID = getticketCancelRefifinfo;
+                        db.Entry(cancelledFlightInfo).State = System.Data.Entity.EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                }                
+                return Json(resmas, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
+        }
     }   
 }

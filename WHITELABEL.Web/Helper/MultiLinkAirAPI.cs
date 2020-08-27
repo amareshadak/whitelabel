@@ -17,6 +17,7 @@ using WHITELABEL.Data;
 using WHITELABEL.Web.Areas.Merchant.Models;
 using WHITELABEL.Web.DTO.FlightApi;
 
+
 namespace WHITELABEL.Web.Helper
 {
     public static class MultiLinkAirAPI
@@ -198,7 +199,7 @@ namespace WHITELABEL.Web.Helper
                 dynamic GetRefNoValue = new JObject();
                 GetRefNoValue.RefNo = refId;
                 GetRefNoValue.GDSPNR = "";
-                GetRefNoValue.AirlinePNR = "";
+                GetRefNoValue.AirlinePNR = AirlinePNR;
                 GetRefNoValue.ClientRequestID = "";
                 GetRefNoValue.BookingFromDate = "";
                 GetRefNoValue.BookingToDate = "";
@@ -267,6 +268,119 @@ namespace WHITELABEL.Web.Helper
             }
             
         }
+
+
+        //public static dynamic FlightCancellation(string refId, string fName, string lName,string AirlineCode, string FlightNo,
+        //    string FromAirportCode, string ToAirportCode, string FlightClass)
+        //{
+        //    try
+        //    {
+        //        string url = root + "/API/TicketCancel";
+        //        var test = @"{'RequestXml':{'Authenticate':{'InterfaceCode':'1','InterfaceAuthKey':'"+ token + "','AgentCode':'"+ AgentCode + "','Password':'"+ AgentPass + "'},'TicketCancelRequest':{'RefNo':'"+ refId + "','Passengers':{'Passenger':{'PaxSeqNo':'1','FirstName':'"+ fName + "','LastName':'"+ lName + "'}},'Segments':{'Segment':{'SegmentSeqNo':'1','AirlineCode':'"+ AirlineCode + "','FlightNo':'"+ FlightNo + "','FromAirportCode':'"+ FromAirportCode + "','ToAirportCode':'"+ ToAirportCode + "','FlightClass':'"+ FlightClass + "','PaxSeqNo':'1'}},'IsNoShow':'False','CancelRemark':'Test','CancellationType':'Full Cancel'}}}";
+        //        //TicketCancellationDTO objticketcancel = new TicketCancellationDTO();
+        //        TicketCancellationDTO objticketcancel = JsonConvert.DeserializeObject<TicketCancellationDTO>(test);
+        //        //objticketcancel.RequestXml.Authenticate.InterfaceCode = "1";
+        //        //objticketcancel.RequestXml.Authenticate.InterfaceAuthKey = token;
+        //        //objticketcancel.RequestXml.Authenticate.AgentCode = AgentCode;
+        //        //objticketcancel.RequestXml.Authenticate.Password = AgentPass;
+        //        //objticketcancel.RequestXml.TicketCancelRequest.RefNo = refId;
+        //        //objticketcancel.RequestXml.TicketCancelRequest.Passengers.Passenger.PaxSeqNo = "1";
+        //        //objticketcancel.RequestXml.TicketCancelRequest.Passengers.Passenger.FirstName = fName;
+        //        //objticketcancel.RequestXml.TicketCancelRequest.Passengers.Passenger.LastName = lName;
+        //        //objticketcancel.RequestXml.TicketCancelRequest.Segments.Segment.SegmentSeqNo = "1";
+        //        //objticketcancel.RequestXml.TicketCancelRequest.Segments.Segment.AirlineCode = AirlineCode;
+        //        //objticketcancel.RequestXml.TicketCancelRequest.Segments.Segment.FlightNo = FlightNo;
+        //        //objticketcancel.RequestXml.TicketCancelRequest.Segments.Segment.FromAirportCode = FromAirportCode;
+        //        //objticketcancel.RequestXml.TicketCancelRequest.Segments.Segment.ToAirportCode = ToAirportCode;
+        //        //objticketcancel.RequestXml.TicketCancelRequest.Segments.Segment.FlightClass = FlightClass;
+        //        //objticketcancel.RequestXml.TicketCancelRequest.Segments.Segment.PaxSeqNo = "1";
+
+        //        string requestObject = JsonConvert.SerializeObject(objticketcancel);
+
+        //        var res = GetResponse(requestObject, url);
+        //        if (res != null)
+        //        {
+        //            return res;
+        //        }
+        //        else
+        //        {
+        //            return res;
+        //        }
+        //    }
+        //    catch (WebException webEx)
+        //    {
+        //        //get the response stream
+        //        WebResponse response = webEx.Response;
+        //        Stream stream = response.GetResponseStream();
+        //        String responseMessage = new StreamReader(stream).ReadToEnd();
+        //        return responseMessage;
+        //    }
+        //}
+
+        public static dynamic FlightCancellation(string[] pnsgDetails, string RefNo)
+        {
+            try
+            {
+                var db = new DBContext();
+                string url = root + "API/TicketCancel";
+                //var test = @"{'RequestXml': {'Authenticate': {'InterfaceCode': '1','InterfaceAuthKey': 'AirticketOnlineWebSite','AgentCode': 'MOS0000001','Password': 'KGBW5P'},'TicketCancelRequest': {'RefNo': '6923576722','Passengers': {'Passenger': [{'PaxSeqNo': '1','FirstName': 'Vikas','LastName': 'Gore'},{'PaxSeqNo': '2','FirstName': 'Avneet','LastName': 'Gore'}]},'Segments': {'Segment': [{'SegmentSeqNo': '1','AirlineCode': 'SG','FlightNo': '158','FromAirportCode': 'BOM','ToAirportCode': 'DEL','FlightClass': 'Y','PaxSeqNo': '1'},{'SegmentSeqNo': '1','AirlineCode': 'SG','FlightNo': '158','FromAirportCode': 'BOM','ToAirportCode': 'DEL','FlightClass': 'Y','PaxSeqNo': '2'}]},'IsNoShow': 'False','CancelRemark': 'Malay Team Test','CancellationType': 'Full Cancel'}}}";
+
+
+                var test = @"{'RequestXml': {'Authenticate': {'InterfaceCode': '1','InterfaceAuthKey': 'AirticketOnlineWebSite','AgentCode': '" + AgentCode + "','Password': '"+ AgentPass + "'},'TicketCancelRequest': {'RefNo': '"+ RefNo + "','Passengers': {'Passenger': []},'Segments': {'Segment': []},'IsNoShow': 'False','CancelRemark': 'Malay Team Test','CancellationType': 'Full Cancel'}}}";                
+                BookedTicketCancellationDTO ObjcancelTicket = JsonConvert.DeserializeObject<BookedTicketCancellationDTO>(test);                
+                var pangCount = pnsgDetails.Length;
+                var FlightBookingDetails = db.TBL_FLIGHT_BOOKING_DETAILS.FirstOrDefault(x => x.REF_NO == RefNo);
+                string BookingRes = Convert.ToString(FlightBookingDetails.API_RESPONSE);
+                BookTicketResponsesDTO BookingResponse = JsonConvert.DeserializeObject<BookTicketResponsesDTO>(BookingRes);
+                var FareDetails = BookingResponse.BookTicketResponses.BookTicketResponse[0].FlightFareDetails.ToList();
+                var FareDetailsCount = BookingResponse.BookTicketResponses.BookTicketResponse[0].FlightFareDetails.Count;
+                string pnnn = string.Empty;
+                string Sseg = string.Empty;
+                
+                var pnsg = ObjcancelTicket.RequestXml.TicketCancelRequest.Passengers.Passenger;
+                long Pnsgid_Val = 0;                
+                foreach (string PnsgId in pnsgDetails)
+                {
+                    long.TryParse(PnsgId, out Pnsgid_Val);
+                    var getpnsglist = db.TBL_FLIGHT_BOOKING_PASSENGER_LIST.FirstOrDefault(x => x.SLN == Pnsgid_Val);
+                    ObjcancelTicket.RequestXml.TicketCancelRequest.Passengers.Passenger.Add(new CancelPassenger {
+                        PaxSeqNo = getpnsglist.PNSG_SEQ_NO,
+                        FirstName = getpnsglist.FIRST_NAME,
+                        LastName = getpnsglist.LAST_NAME,
+                    });
+                    ObjcancelTicket.RequestXml.TicketCancelRequest.Segments.Segment.Add(new CancelSegment
+                    {
+                        SegmentSeqNo = FareDetails[0].SeqNo,
+                        AirlineCode = FareDetails[0].AirlineCode,
+                        FlightNo = FareDetails[0].FlightNo,
+                        FromAirportCode = FareDetails[0].FromAirportCode,
+                        ToAirportCode = FareDetails[FareDetailsCount - 1].ToAirportCode,
+                        FlightClass = FareDetails[0].MainClass,
+                        PaxSeqNo = getpnsglist.PNSG_SEQ_NO
+                    });
+                }
+                string requestObject = JsonConvert.SerializeObject(ObjcancelTicket);                
+                var res = GetResponse(requestObject, url);
+                if (res != null)
+                {
+                    return res;
+                }
+                else
+                {
+                    return res;
+                }
+            }
+            catch (WebException webEx)
+            {
+                //get the response stream
+                WebResponse response = webEx.Response;
+                Stream stream = response.GetResponseStream();
+                String responseMessage = new StreamReader(stream).ReadToEnd();
+                return responseMessage;
+            }
+
+        }
+
 
 
 

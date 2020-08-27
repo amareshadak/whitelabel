@@ -441,10 +441,12 @@
     <Compile Include="Controllers\ServiceController.cs" />
     <Compile Include="DTO\FlightApi\AdditionalDetailsDTO.cs" />
     <Compile Include="DTO\FlightApi\AuthenticateDTO.cs" />
+    <Compile Include="DTO\FlightApi\BookedTicketCancellationDTO.cs" />
     <Compile Include="DTO\FlightApi\BookTicketResponsesDTO.cs" />
     <Compile Include="DTO\FlightApi\FlightBookingDTO.cs" />
     <Compile Include="DTO\FlightApi\FlightHoldingReqDTO.cs" />
     <Compile Include="DTO\FlightApi\HoldBookingConfirmResponsesDTO.cs" />
+    <Compile Include="DTO\FlightApi\TicketCancellationDTO.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

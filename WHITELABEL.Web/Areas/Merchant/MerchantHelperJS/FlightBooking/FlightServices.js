@@ -80,5 +80,23 @@
         });
         return request;
     }
+    this.getBooedPassangerList = function (data) {
+        debugger;
+        var request = $http({
+            method: "POST",
+            data: data,
+            url: "/Merchant/MerchantFlightDetails/BookedTicketPassangerList"
+        });
+        return request;
+    }
+    this.getCancelFlightTicket = function (data) {
+        debugger;
+        var request = $http({
+            method: "POST",
+            data: data,
+            url: "/Merchant/MerchantFlightDetails/CancelFlightTicket"
+        });
+        return request;
+    }
 
 }]);

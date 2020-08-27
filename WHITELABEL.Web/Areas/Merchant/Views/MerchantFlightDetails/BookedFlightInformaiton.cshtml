@@ -8,7 +8,8 @@
 <script src="~/Areas/Merchant/MerchantHelperJS/FlightBooking/app.js"></script>
 <script src="~/Areas/Merchant/MerchantHelperJS/FlightBooking/FlightServices.js"></script>
 <script src="~/Areas/Merchant/MerchantHelperJS/FlightBooking/FlightInvoicePrint.js"></script>
-
+<script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
+@*<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">*@
     <div class="row" ng-app="AirportAutocompleteoduleApp" ng-controller="FlightBookingInvoicePrintController" ng-init="GetBookedFlightInvoice()">
         <div class="col-md-12 padding-top-20">
             <div class="col-md-12 row headcolor">
@@ -47,10 +48,10 @@
 
                                         </tr>
                                     </thead>
-                                    <tbody ng-repeat="m in GetTicketList">
+                                    <tbody ng-repeat="m in GetTicketList.slice(((currentPage-1)*itemsPerPage), ((currentPage)*itemsPerPage))">
                                         <tr ng-cloak>
                                             <td>
-                                                <span>{{m.SLN}}</span>
+                                                <span style="display:none;">{{m.SLN}}</span>{{$index+1}}
                                             </td>
                                             <td>
                                                 <span>{{m.PNR}}</span>
@@ -65,7 +66,8 @@
                                                 <span>{{m.FLIGHT_NO}}</span>
                                             </td>
                                             <td>
-                                                <span>{{getAirDate(m.BOOKING_DATE) | date:"dd/MM/yyyy"}}</span>
+                                                @*<span>{{getAirDate(m.BOOKING_DATE) | date : 'EEEE, dd MMM yyyy'}}</span>*@
+                                                <span>{{m.FLIGHT_BOOKING_DATE}}</span>
                                             </td>
                                             <td>
                                                 <span>{{m.TOTAL_FLIGHT_BASE_FARE}}</span>
@@ -84,10 +86,14 @@
                                            <td>
                                             <span class="badge badge-{{m.IS_HOLD=='1'?'warning':'success'}}" style="color:white;font-size:small;width:106px">{{m.BOOKING_STATUS}}</span>
                                            </td>
-                                            <td><a class="btn btn-{{m.IS_CANCELLATION=='1'?'danger':'disable'}} btn-xs" style="color:black;">Cancel Ticket</a></td>
+                                            <td>
+                                                <a class='btn btn-danger btn-xs btn-block' style="color:white;"  id='confirmholdTicket' data-toggle="modal" ng-click="DisplayPassangerDetails(m.REF_NO,m.CORELATION_ID)">Cancel Ticket</a>
+                                                @*<a class='btn btn-danger btn-xs btn-block' style="color:white;" data-toggle="modal" data-target="#exampleCancelticketModal" id='confirmholdTicket' >Cancel Ticket</a>*@
+                                                @*<a class='btn btn-danger btn-xs btn-block' style="color:white;" data-toggle="modal" data-target="#exampleCancelticketModal" id='confirmholdTicket' ng-click="CancelFlightTicket(m.REF_NO,m.CORELATION_ID)">Cancel Ticket</a>*@
+                                            </td>
                                             <td>
                                                 <div ng-show="m.IS_HOLD=='0'">
-                                                    <a class='btn btn-primary btn-xs btn-block' style="color:white;" data-toggle="modal" data-target="#exampleModalCenter" id='PrinttransactionvalueAdminid' data-id="{{m.REF_NO}}" ng-click="PrintInvoice(m.REF_NO)">print Ticket</a>
+                                                    <a class='btn btn-primary btn-xs btn-block' style="color:white;" data-toggle="modal" data-target="#exampleModalCenter" id='PrinttransactionvalueAdminid' data-id="{{m.REF_NO}}" ng-click="PrintInvoice(m.REF_NO,m.PNR)">print Ticket</a>
                                                 </div>
                                                 <div ng-show="m.IS_HOLD=='1'">
                                                     <a class='btn btn-success btn-xs btn-block' style="color:white;"  id='confirmholdTicket' ng-click="ConfirmHoldTicket(m.REF_NO,m.CORELATION_ID)">Confirm Ticket</a>
@@ -100,10 +106,11 @@
                                 </table>
 
                                 <div style="text-align:center">
-                                    <dir-pagination-controls max-size="3"
+                                    <pagination total-items="totalItems" ng-model="currentPage" ng-change="pageChanged()" class="pagination-sm" items-per-page="itemsPerPage"></pagination>
+                                    @*<dir-pagination-controls max-size="3"
                                                              direction-links="true"
                                                              boundary-links="true">
-                                    </dir-pagination-controls>
+                                    </dir-pagination-controls>*@
                                 </div>
                             </div>
                         </div>
@@ -345,6 +352,57 @@
             </div>
         </div>
 
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleCancelticketModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Passanger List</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <table border="1">
+                            <thead  class="mvc-grid-headers ">
+                                <tr>
+                                    <td>Check</td>
+                                    <td>Ref No</td>
+                                    <td>PNR</td>
+                                    <td>Title</td>
+                                    <td>First Name</td>
+                                    <td>Last Name</td>
+                                    <td>Sequene No</td>
+                                </tr>
+                            </thead>
+                            <tbody ng-repeat="pnsg in BookedTicketPassangerList">
+                                <tr ng-cloak>
+                                    @*<td><input type="checkbox" ng-model="pnsg.SLN"></td>*@
+                                    <td><input type="checkbox" id="checkboxval_{{SLN}}"  ng-model="active" ng-change="CheckBoxchange(pnsg, active)"></td>
+                                    <td>{{pnsg.REF_NO}}</td>
+                                    <td>{{pnsg.PNSG_SEQ_NO}}</td>
+                                    <td>{{pnsg.PNR}}</td>
+                                    <td>{{pnsg.TITLE}}</td>
+                                    <td>{{pnsg.FIRST_NAME}}</td>
+                                    <td>{{pnsg.LAST_NAME}}</td>
+                                    
+                                    <td style="display:none;">{{pnsg.CORELATION_ID}}</td>
+                                    <td style="display:none;">{{pnsg.MEM_ID}}</td>
+                                    <td style="display:none;">{{pnsg.SLN}}</td>
+                                </tr>
+                            </tbody>                         
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        @*<button type="button" class="btn btn-primary" ng-click="CancelFlightTicket(m.REF_NO,m.CORELATION_ID)">Cancel Ticket</button>*@
+                        <button type="button" class="btn btn-primary" ng-click="CancelFlightTicket(lst,BookedReferenceNumber)">Cancel Ticket</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
 
