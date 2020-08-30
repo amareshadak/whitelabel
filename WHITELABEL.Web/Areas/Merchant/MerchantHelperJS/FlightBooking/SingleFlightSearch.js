@@ -41,7 +41,7 @@
 
     $scope.filterFlightData = function (item) {
         let returnValue = false;
-        debugger;
+       
         let amount = Math.round(item[0].TotalAmount);
         returnValue = Math.round(amount) >= ($scope.lower_price_bound - $scope.additionalAddedAmount) && Math.round(amount) <= ($scope.upper_price_bound - $scope.additionalAddedAmount);
 
@@ -128,6 +128,7 @@
         var Adult = Adult;
         var Child = Child;
         var Infant = Infant;
+
         $scope.FromCityCodeVal = FromCityCode;
         $scope.ToDistination = TOAirportCode;
         $scope.TripMode = Tripmode;
@@ -148,6 +149,8 @@
             Child: Child,
             Infant: Infant
         };
+
+        localStorage.setItem('SEARCH_FLIGHT_DATA', JSON.stringify(data));
 
         const service = FlightServices.getFlightSingleSearchDetails(data);
         service.then(function (response) {
@@ -187,7 +190,7 @@
             const myObj = { Time: new Date(), Token: FlightSearchDetails };
             localStorage.setItem('searchResult', null);
             localStorage.setItem('SearchTraceDetails', JSON.stringify(myObj));
-            localStorage.setItem('searchResult', JSON.stringify(FlightSearchDetails));
+            //localStorage.setItem('searchResult', JSON.stringify(FlightSearchDetails));
            
 
         });

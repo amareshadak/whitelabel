@@ -528,6 +528,7 @@
     <Content Include="Areas\Merchant\MerchantHelperJS\FlightBooking\AirportAutocomplete.js" />
     <Content Include="Areas\Merchant\MerchantHelperJS\FlightBooking\app.js" />
     <Content Include="Areas\Merchant\MerchantHelperJS\FlightBooking\FlightInvoicePrint.js" />
+    <Content Include="Areas\Merchant\MerchantHelperJS\FlightBooking\FlightSearchWidgetController.js" />
     <Content Include="Areas\Merchant\MerchantHelperJS\FlightBooking\FlightServices.js" />
     <Content Include="Areas\Merchant\MerchantHelperJS\FlightBooking\FlightVerificationController.js" />
     <Content Include="Areas\Merchant\MerchantHelperJS\FlightBooking\ReturnTripSearch.js" />

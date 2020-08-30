@@ -713,6 +713,7 @@
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.css" rel="stylesheet" type="text/css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
+<script src="//momentjs.com/downloads/moment.min.js"></script>
 <script src="~/HelperJS/AngularjsLinks/bootstrap.bundle.min.js"></script>
 <script src="~/HelperJS/AngularjsLinks/perfect-scrollbar.min.js"></script>
 <script src="~/HelperJS/AngularjsLinks/script.min.js"></script>
@@ -721,16 +722,19 @@
 <script src="~/Areas/Merchant/MerchantHelperJS/FlightBooking/app.js"></script>
 <script src="~/Areas/Merchant/MerchantHelperJS/FlightBooking/FlightServices.js"></script>
 <script src="~/Areas/Merchant/MerchantHelperJS/FlightBooking/ReturnTripSearch.js"></script>
+<script src="~/Areas/Merchant/MerchantHelperJS/FlightBooking/FlightSearchWidgetController.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-@*<script src="~/Areas/Merchant/MerchantHelperJS/FlightBooking/AirportAutocomplete.js"></script>*@
 
-<div class="display-animation" ng-app="AirportAutocompleteoduleApp" ng-controller="ReturnFlightSearchController" ng-init="LoadFlightSearch('@ViewBag.Tripmode','@ViewBag.FromCityCode','@ViewBag.TOAirportCode','@ViewBag.FromDate','@ViewBag.ToDate','@ViewBag.TravelType','@ViewBag.Adult','@ViewBag.Child','@ViewBag.Infant')" id="AirportAutocompleteController">
-    <div class="content" style="margin-top:20px;">
+
+
+<div class="display-animation" ng-app="AirportAutocompleteoduleApp" >
+    <div class="content">
         <div class="display-animation">
-            <div class="full-content margin-bottom-40 bg-white" id="Bill_page">
+            <div class="full-content bg-white" id="Bill_page">
                 <div class="row example-row" style="min-height:350px;">
-                    <div class="card" style="width:100%; margin-bottom:20px;">
-                        <div class="card-body">
+
+                    <div class="card" style="width:100%; z-index: 2;">
+                        <div class="card-body" ng-controller="FlightSearchWidgetController">
                             <div class="blueBg padTB15 fl width100 clr marginB20" id="searchWrapOuterBox">
                                 <div class="fltHpyWrp">
 
@@ -738,55 +742,136 @@
                                     <div class="mobSearchToggle">
                                         <div class="fl width100 padB5">
                                             <span class="custRad custRadWht fl padR10">
-                                                <input type="radio" id="gi_oneway_label_srp" name="radio" value="on" style="float:left;"><label for="gi_oneway_label_srp" class="dF alignItemsCenter lh1">
+                                                <input type="radio" id="gi_oneway_label_srp" ng-model="tripType" name="radio" value="1" style="float:left;">
+                                                <label for="gi_oneway_label_srp" class="dF alignItemsCenter lh1">
                                                     <span class="fb white">One-way</span>
                                                 </label>
                                             </span><span class="custRad custRadWht fl">
-                                                <input type="radio" id="gi_roundtrip_label_srp" name="radio" value="on" style="float:left;"><label for="gi_roundtrip_label_srp" class="dF alignItemsCenter lh1">
+                                                <input type="radio" id="gi_roundtrip_label_srp" ng-model="tripType" name="radio" value="2" style="float:left;">
+                                                <label for="gi_roundtrip_label_srp" class="dF alignItemsCenter lh1">
                                                     <span class="fb white">Round-trip</span>
                                                 </label>
                                             </span>
-                                        </div><div class="col-md-12 col-sm-12 col-xs-12 padLR0 hpySrpWdgt padT5">
-                                            <div class="">
-                                                <div class="width20 padR20 fl autoSuggestBox" id="source_st_srp">
-                                                    <div class="white ico12 op6 padB5 txtTransUpper">From</div>
+                                        </div>
+                                        <div class="col-md-12 col-sm-12 col-xs-12 padLR0 hpySrpWdgt padT5">
+
+                                            <div class="width20 padR20 fl autoSuggestBox" id="source_st_srp">
+                                                <div class="white ico12 op6 padB5 txtTransUpper">From</div>
+                                                <div class="width100 fl autoSuggestBox autoSgstOuterWrap">
                                                     <div class="width100 fl autoSuggestBox autoSgstOuterWrap">
-                                                        <div class="width100 fl autoSuggestBox autoSgstOuterWrap">
-                                                            <input type="text" id="gi_source_st_srp" class="form-control fltIpF quicks wdgtEle" value="Kolkata" autocomplete="off" role="combobox" aria-autocomplete="list" aria-owns="react-autosuggest-1" aria-expanded="false">
+                                                        <input type="text" ng-model="fromAirportDetails" placeholder="From" uib-typeahead="items as items.CITYNAME for items in getAirport($viewValue)" typeahead-loading="fromLoadingAirport" typeahead-no-results="fromNoResults" class="form-control">
+                                                        <i ng-show="fromLoadingAirport" class="glyphicon glyphicon-refresh"></i>
+                                                        <div ng-show="fromNoResults" class="text-danger">
+                                                            <i class="glyphicon glyphicon-remove"></i> No Results Found
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <a href="javascript:void(0);" id="swap_srp" class="fl padT20 marginT5 padR20 swapWrap">
-                                                    <i class="hypflt-dblArw ico18 fl txtCenter white"></i>
-                                                </a>
-                                                <div class="width20 fl padR20 autoSuggestBox" id="destination_st_srp">
-                                                    <div class="white ico12 op6 padB5 txtTransUpper">To</div>
+                                            </div>
+
+                                            <div class="width20 fl padR20 autoSuggestBox" id="destination_st_srp">
+                                                <div class="white ico12 op6 padB5 txtTransUpper">To</div>
+                                                <div class="width100 fl autoSuggestBox autoSgstOuterWrap">
                                                     <div class="width100 fl autoSuggestBox autoSgstOuterWrap">
-                                                        <div class="width100 fl autoSuggestBox autoSgstOuterWrap">
-                                                            <input type="text" id="gi_destination_st_srp" class="form-control fltIpF quicks wdgtEle" value="Delhi" autocomplete="off" role="combobox" aria-autocomplete="list" aria-owns="react-autosuggest-1" aria-expanded="false">
+                                                        <input type="text" ng-model="toAirportDetails" placeholder="Destination" uib-typeahead="items as items.CITYNAME for items in getAirport($viewValue)" typeahead-loading="toLoadingAirport" typeahead-no-results="toNoResults" class="form-control">
+                                                        <i ng-show="toLoadingAirport" class="glyphicon glyphicon-refresh"></i>
+                                                        <div ng-show="toNoResults" class="text-danger">
+                                                            <i class="glyphicon glyphicon-remove"></i> No Results Found
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div><div class="width12 fl calenderInnerBox padR20">
+                                            </div>
+
+                                            <div class="width16 fl calenderInnerBox padR20">
                                                 <div class="white ico12 op6 padB5 txtTransUpper">Departure Date</div><div id="fromEle_srp" class="col-md-12 pad0">
-                                                    <input type="text" class="form-control quicks wdgtEle" name="from" id="start-date_srp" data-date="true" value="Fri, 10 Jul" readonly="">
+                                                    <input style="width:125px" id="startDate" name="startDate" type="text"
+                                                           uib-datepicker-popup="EEE, dd MMM" popup-placement="bottom"
+                                                           datepicker-options="{showWeeks:false}"
+                                                           show-button-bar="false"
+                                                           ng-model="startDate" ng-model-options="{updateOn: 'blur',  debounce: {default: 500, blur: 0}}"
+                                                           ng-keyup="cancel($event)" ng-change="MigrationHistoryDetails()" is-open="startDatePopup.opened"
+                                                           ng-focus="openStartDatePicker()"
+                                                           class="form-control" placeholder="Start Date" />
                                                 </div>
                                             </div>
-                                            <div class="width12 fl calenderInnerBox padR20">
+                                            <div class="width16 fl calenderInnerBox padR20">
                                                 <div class="white ico12 op6 padB5 txtTransUpper">Return Date</div><div id="toEle_srp" class="col-md-12 pad0">
-                                                    <input type="text" class="form-control quicks wdgtEle " name="to" id="end-date_srp" data-date="true" value="Wed, 22 Jul" readonly="">
-                                                    <i class="hypflt-close dib ico17 white posAbs calClose curPointFlt"></i>
+                                                    <input style="width:125px" id="endDate" name="endDate" type="text"
+                                                           uib-datepicker-popup="EEE, dd MMM" popup-placement="bottom"
+                                                           datepicker-options="{showWeeks:false, minDate:startDate}"
+                                                           show-button-bar="false"
+                                                           ng-model="endDate" ng-model-options="{updateOn: 'blur', debounce: {default: 500, blur: 0}}"
+                                                           ng-keyup="cancel($event)" ng-change="MigrationHistoryDetails()" is-open="endDatePopup.opened"
+                                                           ng-focus="openEndDatePicker()"
+                                                           ng-disabled="tripType == '1'"
+                                                           class="form-control" placeholder="End Date" />
                                                 </div>
                                             </div>
-                                            <div class="paxWrapper fl_shInputPaxBox col-lg-2 col-md-2  col-sm-2 col-xs-12 padL0 padR20" id="pax_link_common_srp">
+                                            <div class="width20 padR20 fl autoSuggestBox" id="pax_link_common_srp">
                                                 <div class="white ico12 op6 padB5 txtTransUpper">Passenger &amp; Class</div>
-                                                <span href="javascript:void(0);" class="paxBoxWrap mobdn dF padT10 ico14 quicks">
-                                                    <span id="pax_label_srp" class="textOverflow">1 Traveller(s), </span>
-                                                    <span class="textOverflow">Economy</span>
-                                                </span>
-                                            </div><div class="col-lg-1 col-md-1 col-sm-3 col-xs-12 marginB10">
+                                                <button uib-popover-template="dynamicPopover.templateUrl" popover-trigger="'outsideClick'" popover-placement="bottom" popover-title="{{dynamicPopover.title}}" type="button" class="btn btn-default" ng-cloak> {{passengerCount}} Traveller{{passengerCount > 1 ? 's':''}}, {{travellTypeText}}</button>
+                                                <script type="text/ng-template" id="myPopoverTemplate.html">
+                                                    <div class="paxMobile paxContainer" id="paxContainer">
+                                                        <ul>
+                                                            <li class="roomRow">
+                                                                <div class="widgetUserBlock fl padR10">
+                                                                    <label class="ico14 db padB5"><span>Adults</span><small class="font13Lt db padT3"> (12+ yrs)</small></label>
+                                                                    <div class="number-spinner">
+                                                                        <button class="fl minSpin" ng-disabled="adultsCount == 1" ng-click="adultsCount = adultsCount - 1;updatePassenger(adultsCount,childsCount,infantsCount);" data-dir="dwn">−</button>
+                                                                        <input readonly type="text" ng-model="adultsCount" class="fl numbSpin">
+                                                                        <button class="fl plusSpin" ng-disabled="adultsCount == 8" ng-click="adultsCount = adultsCount + 1;updatePassenger(adultsCount,childsCount,infantsCount);" data-dir="up">+</button>
+                                                                    </div>
+                                                                </div>
+                                                                <div>
+                                                                    <div class="widgetUserBlock fl padR10">
+                                                                        <label class="ico14 db padB5"><span>Children</span><small class="font13Lt db padT3"> (2-12 yrs)</small></label>
+                                                                        <div class="number-spinner">
+                                                                            <button class="fl minSpin" ng-disabled="childsCount == 0" ng-click="childsCount = childsCount - 1;updatePassenger(adultsCount,childsCount,infantsCount);" data-dir="dwn">−</button>
+                                                                            <input readonly type="text" ng-model="childsCount" class="fl numbSpin">
+                                                                            <button class="fl plusSpin" ng-disabled="childsCount == 8" ng-click="childsCount = childsCount + 1;updatePassenger(adultsCount,childsCount,infantsCount);" data-dir="up">+</button>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="widgetUserBlock fl padR10">
+                                                                        <label class="ico14 db padB5"><span>Infant(s)</span><small class="font13Lt db padT3"> (below 2 yrs)</small></label>
+                                                                        <div class="number-spinner">
+                                                                            <button class="fl minSpin" ng-disabled="infantsCount == 0" ng-click="infantsCount = infantsCount - 1;updatePassenger(adultsCount,childsCount,infantsCount);" data-dir="dwn">−</button>
+                                                                            <input readonly type="text" ng-model="infantsCount" class="fl numbSpin">
+                                                                            <button class="fl plusSpin" ng-disabled="infantsCount == 8" ng-click="infantsCount = infantsCount + 1;updatePassenger(adultsCount,childsCount,infantsCount);" data-dir="up">+</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                        <div class="fl width100 padLR15 padB15 alignItemsCenter dF">
+                                                            <div class="padR10"> Travel Class</div>
+                                                            <div class="width70">
+                                                                <div>
+                                                                    <label>
+                                                                    </label><div>
+                                                                        <select class="width100 form-control ico14" id="gi_class" ng-change="updateTravellType(travellType)" ng-model="travellType">
+                                                                            <option value="Y" selected="selected">Economy</option>
+                                                                            <option value="C">Business</option>
+                                                                            <option value="W">Premium Economy</option>
+                                                                            <option value="F">First Class</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </script>
+                                            </div>
+
+
+                                            <div class="col-lg-1 col-md-1 col-sm-3 col-xs-12 marginB10">
                                                 <div class="white ico12 op6 padB5 txtTransUpper">&nbsp;</div>
-                                                <button id="submitSearchButton_srp" class="button hpySrchEnb ipadButtonSpace width100 quicks" type="button">Search</button>
+                                                <button id="submitSearchButton_srp"
+                                                        ng-disabled="!fromAirportDetails.ID
+                                                        || !toAirportDetails.ID
+                                                        || !startDate"
+                                                        ng-click="submitSearch()"
+                                                        class="button hpySrchEnb ipadButtonSpace width100 quicks" type="button">
+                                                    Search
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -794,7 +879,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card" style="width:100%;">
+
+                    <div class="card" style="width:100%;" ng-controller="ReturnFlightSearchController" ng-init="LoadFlightSearch('@ViewBag.Tripmode','@ViewBag.FromCityCode','@ViewBag.TOAirportCode','@ViewBag.FromDate','@ViewBag.ToDate','@ViewBag.TravelType','@ViewBag.Adult','@ViewBag.Child','@ViewBag.Infant')" id="AirportAutocompleteController">
                         <div class="card-body">
                             <div class="row">
                                 <!--.col-->
@@ -853,7 +939,7 @@
                                                         </div>
                                                         <div class="col-md-4 p-2">
                                                             Stops
-                                                            <div class="clearfix"></div>                                                          
+                                                            <div class="clearfix"></div>
                                                             <div class="btn-group btn-group-xs" data-toggle="buttons">
                                                                 <label class="btn btn-{{filterData.stops=='1' ? 'primary':'success'}}" ng-model="filterData.stops" uib-btn-radio="1" uncheckable ng-value="1">1</label>&nbsp;
                                                                 <label class="btn btn-{{filterData.stops=='2' ? 'primary':'success'}}" ng-model="filterData.stops" uib-btn-radio="2" uncheckable ng-value="2">2</label>&nbsp;
@@ -866,21 +952,21 @@
 
                                                             @*<button class="btn btn-xs btn-default pull-right" style="padding:5px;font-size:x-small;font-weight:bold" ng-click="filterData.airlines = [];resetFilterAirlinesList()">Reset</button>*@
                                                             @*<div class="clearfix"></div>
-                                                            <br />
-                                                            <div class="checkboxer" ng-repeat="item in airlinesList">
-                                                                <input type="checkbox" ng-model="item.selected">
-                                                                <label for="check6"> {{item.name}} <img ng-hide="item.code == ''" ng-src="~/Content/static-airlines-master/logos/{{item.code}}.png" class="flightImagesNew" alt="flights"></label>
-                                                            </div>*@                                                            
-                                                            <div id="news-slider2" class="owl-carousel"  ng-repeat="item in airlinesList">
+                                                <br />
+                                                <div class="checkboxer" ng-repeat="item in airlinesList">
+                                                    <input type="checkbox" ng-model="item.selected">
+                                                    <label for="check6"> {{item.name}} <img ng-hide="item.code == ''" ng-src="~/Content/static-airlines-master/logos/{{item.code}}.png" class="flightImagesNew" alt="flights"></label>
+                                                </div>*@
+                                                            <div id="news-slider2" class="owl-carousel" ng-repeat="item in airlinesList">
                                                                 <div class="post-slide2">
                                                                     <div class="post-img">
-                                                                        <input type="checkbox"  ng-model="item.selected" value="" id="check6">
+                                                                        <input type="checkbox" ng-model="item.selected" value="" id="check6">
                                                                         <label for="check6"><img ng-hide="item.code == ''" ng-src="~/Content/static-airlines-master/logos/{{item.code}}.png" class="flightImagesNew" alt="flights"><br />{{item.name}}</label>
                                                                     </div>
                                                                 </div>
-                                                                </div>
-                                                                <!--.checkbox-->
                                                             </div>
+                                                            <!--.checkbox-->
+                                                        </div>
                                                         <div class="col-md-4 p-2">
                                                             <div class="form-group">
                                                                 <label>Return Price range:</label>
@@ -892,19 +978,19 @@
                                                                 <div class="clearfix"></div>
                                                                 <slider floor="{{Return_min}}" ceiling="{{Return_max}}" ng-model-low="Return_lower_price_bound" ng-model-high="Return_upper_price_bound"></slider>
                                                                 @*<label>Trip duration:</label>
-                                                                <div id="extra-small-slider-circle-filled" class="circle-filled slider-default slider-extra-small slider-custom noUi-target noUi-ltr noUi-horizontal" style="margin-top:10px;">
+                                                    <div id="extra-small-slider-circle-filled" class="circle-filled slider-default slider-extra-small slider-custom noUi-target noUi-ltr noUi-horizontal" style="margin-top:10px;">
 
-                                                                    <div class="noUi-base">
-                                                                        <div class="noUi-origin" style="left: 14.2857%;">
-                                                                            <div class="noUi-handle noUi-handle-lower" data-handle="0" tabindex="0" role="slider" aria-orientation="horizontal" aria-valuemin="0.0" aria-valuemax="71.4" aria-valuenow="14.3" aria-valuetext="20.00" style="z-index: 5;"></div>
-                                                                        </div>
-                                                                        <div class="noUi-connect" style="left: 14.2857%; right: 28.5714%;"></div>
+                                                        <div class="noUi-base">
+                                                            <div class="noUi-origin" style="left: 14.2857%;">
+                                                                <div class="noUi-handle noUi-handle-lower" data-handle="0" tabindex="0" role="slider" aria-orientation="horizontal" aria-valuemin="0.0" aria-valuemax="71.4" aria-valuenow="14.3" aria-valuetext="20.00" style="z-index: 5;"></div>
+                                                            </div>
+                                                            <div class="noUi-connect" style="left: 14.2857%; right: 28.5714%;"></div>
 
-                                                                        <div class="noUi-origin" style="left: 71.4286%;">
-                                                                            <div class="noUi-handle noUi-handle-upper" data-handle="1" tabindex="0" role="slider" aria-orientation="horizontal" aria-valuemin="14.3" aria-valuemax="100.0" aria-valuenow="71.4" aria-valuetext="60.00" style="z-index: 4;"></div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>*@
+                                                            <div class="noUi-origin" style="left: 71.4286%;">
+                                                                <div class="noUi-handle noUi-handle-upper" data-handle="1" tabindex="0" role="slider" aria-orientation="horizontal" aria-valuemin="14.3" aria-valuemax="100.0" aria-valuenow="71.4" aria-valuetext="60.00" style="z-index: 4;"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>*@
                                                             </div>
                                                         </div>
                                                     </div>
@@ -915,7 +1001,7 @@
                                 </div>
                                 <div ng-cloak class="flexCol fltHpyRsltCard whiteBg brdrRd10 pad10 stickyHpy marginT5 padB15 width100" style="z-index: 2;" ng-show="selectedReturnFlight.length > 0">
                                     <div class="dF justifyBetween">
-                                        <div class="flexCol justifyEnd"  style="width:80%">
+                                        <div class="flexCol justifyEnd" style="width:80%">
                                             <div class="ico12 fb padB10 quicks">Your Selection</div>
                                             <div class="dF">
                                                 <div class="dF justifyBetween width50 alignItemsEnd padLR0 borderRight">
@@ -991,7 +1077,7 @@
                                             </div>
                                             <div class="txtRight padT20"></div>
                                         </div>
-                                        <div class="dF alignItemsCenter padL5 padB3 justifyEnd fltHpySumryPrc"  style="width:20%">
+                                        <div class="dF alignItemsCenter padL5 padB3 justifyEnd fltHpySumryPrc" style="width:20%">
                                             <span class="padR15  alignItemsCenter  flexCol">
                                                 <span class="alignItemsCenter dF padT5">
                                                     <i class="icon-rupee ico13"></i>
@@ -1007,7 +1093,7 @@
                                                 </span>
                                             </span><span class="dF flexCol">
                                                 <span class="db clearfix padTB15">
-                                                    <input type="button" value="BOOK" class="button fr fltbook fb widthF105 quicks fb" 
+                                                    <input type="button" value="BOOK" class="button fr fltbook fb widthF105 quicks fb"
                                                            ng-click="RoundtripgetFlightDetails(AdultCount,ChildCount,InfantCount,(selectedDeptFlight[0].TrackNo +','+selectedReturnFlight[0].TrackNo),TripMode)">
                                                 </span>
                                             </span>
@@ -1032,11 +1118,11 @@
                                                     <div class="dF justifyBetween  alignItemsEnd width70 padLR0">
                                                         <div class="width100">
                                                             <div class="col-md-3 col-sm-2 col-xs-2 padL10">
-                                                                <span class="dF"><img src="~/Content/static-airlines-master/logos/{{Deptitemval[0].AirlineCode}}.png" class="flightImagesNew" alt="flights"></span>
+                                                                <span class="dF"><img ng-src="~/Content/static-airlines-master/logos/{{Deptitemval[0].AirlineCode}}.png" class="flightImagesNew" alt="flights"></span>
                                                                 <span class="db greyLt ico11 padT3">
                                                                     {{Deptitemval[0].FlightNo}}
-                                                                    <span  style="display:none;">{{Deptitemval[0].TrackNo}}-</span>
-                                                                    
+                                                                    <span style="display:none;">{{Deptitemval[0].TrackNo}}-</span>
+
                                                                 </span>
                                                             </div>
                                                             <div class="col-md-9 col-sm-10 col-xs-10 padLR0">
@@ -1047,8 +1133,10 @@
                                                                         </span>
                                                                     </div>
                                                                     <div class="col-md-5 col-sm-5 padLR0 col-xs-5 alignSelfCenter">
-                                                                        <div class="ico12 grey txtCenter padB5">{{Deptitemval[0].Stops === "0" ? "" : Deptitemval[Deptitemval[0].Stops].FromAirportCode}}-->
-                                                                        {{calculateDuration(Deptitemval)}}</div>
+                                                                        <div class="ico12 grey txtCenter padB5">
+                                                                            {{Deptitemval[0].Stops === "0" ? "" : Deptitemval[Deptitemval[0].Stops].FromAirportCode}}-->
+                                                                            {{calculateDuration(Deptitemval)}}
+                                                                        </div>
                                                                         <span>
                                                                             <span class="col-md-5 col-sm-3 col-xs-3 pad0 prgrsDot dotVH"></span>
                                                                             <span class="col-md-5 col-sm-3 col-xs-3 pad0 prgrsDot"></span>
@@ -1099,13 +1187,13 @@
                                                                     </ul>
                                                                     <div class="tab-content" id="myTabContent">
                                                                         <div class="tab-pane fade active show" id="homeBasic_2{{$index + 1}}" role="tabpanel" aria-labelledby="home-basic-tab">
-                                                                            <div div class="fltHpyRsltCard flexCol whiteBg marginT10 brdrRd5" ng-repeat="ReturnOneway in Deptitemval" >
+                                                                            <div div class="fltHpyRsltCard flexCol whiteBg marginT10 brdrRd5" ng-repeat="ReturnOneway in Deptitemval">
                                                                                 <div class="fl width100 fltCrdTpRd cardOffer"></div>
                                                                                 <div class="dF justifyBetween alignItemsEnd padTB10">
                                                                                     <div class="dF justifyBetween  alignItemsEnd width70 padLR0">
                                                                                         <div class="width100">
                                                                                             <div class="col-md-3 col-sm-2 col-xs-2 padL10">
-                                                                                                <span class="dF"><img src="~/Content/static-airlines-master/logos/{{ReturnOneway.AirlineCode}}.png" class="flightImagesNew" alt="flights"></span>
+                                                                                                <span class="dF"><img ng-src="~/Content/static-airlines-master/logos/{{ReturnOneway.AirlineCode}}.png" class="flightImagesNew" alt="flights"></span>
                                                                                                 <span class="db greyLt ico11 padT3">
                                                                                                     {{ReturnOneway.FlightNo}}
                                                                                                 </span>
@@ -1217,7 +1305,7 @@
                                                     <div class="dF justifyBetween  alignItemsEnd width70 padLR0">
                                                         <div class="width100">
                                                             <div class="col-md-3 col-sm-2 col-xs-2 padL10">
-                                                                <span class="dF"><img src="~/Content/static-airlines-master/logos/{{Returnval[0].AirlineCode}}.png" class="flightImagesNew" alt="flights"></span>
+                                                                <span class="dF"><img ng-src="~/Content/static-airlines-master/logos/{{Returnval[0].AirlineCode}}.png" class="flightImagesNew" alt="flights"></span>
                                                                 <span class="db greyLt ico11 padT3">
                                                                     {{Returnval[0].FlightNo}}
                                                                     <span style="display:none;">{{$index}} {{Returnval[0].TrackNo}}</span>
@@ -1231,8 +1319,10 @@
                                                                         </span>
                                                                     </div>
                                                                     <div class="col-md-5 col-sm-5 padLR0 col-xs-5 alignSelfCenter">
-                                                                        <div class="ico12 grey txtCenter padB5">{{Returnval[0].Stops === "0" ? "" : Returnval[Returnval[0].Stops].FromAirportCode}}--> 
-                                                                        {{calculateDuration(Returnval)}}</div>
+                                                                        <div class="ico12 grey txtCenter padB5">
+                                                                            {{Returnval[0].Stops === "0" ? "" : Returnval[Returnval[0].Stops].FromAirportCode}}-->
+                                                                            {{calculateDuration(Returnval)}}
+                                                                        </div>
                                                                         <span>
                                                                             <span class="col-md-5 col-sm-3 col-xs-3 pad0 prgrsDot dotVH"></span>
                                                                             <span class="col-md-5 col-sm-3 col-xs-3 pad0 prgrsDot"></span>
@@ -1292,7 +1382,7 @@
                                                                                     <div class="dF justifyBetween  alignItemsEnd width70 padLR0">
                                                                                         <div class="width100">
                                                                                             <div class="col-md-3 col-sm-2 col-xs-2 padL10">
-                                                                                                <span class="dF"><img src="~/Content/static-airlines-master/logos/{{Returnway.AirlineCode}}.png" class="flightImagesNew" alt="flights"></span>
+                                                                                                <span class="dF"><img ng-src="~/Content/static-airlines-master/logos/{{Returnway.AirlineCode}}.png" class="flightImagesNew" alt="flights"></span>
                                                                                                 <span class="db greyLt ico11 padT3">
                                                                                                     {{Returnway.FlightNo}}
                                                                                                 </span>
@@ -1386,10 +1476,11 @@
                             </div>
                         </div>
                     </div>
+
+
                 </div>
             </div>
         </div>
     </div>
-
-    @*<div class=""><div class="paxMobile paxContainer" id="paxContainer"><ul><li class="roomRow"><div class="widgetUserBlock fl padR10"><label class="ico14 db padB5"><span>Adults</span><small class="font13Lt db padT3"> (12+ yrs)</small></label><div class="number-spinner"><button class="fl minSpin" id="adultPaxMinus" data-dir="dwn">−</button><input type="text" id="adultPaxBox" class="fl numbSpin" value="1"><button class="fl plusSpin" id="adultPaxPlus" data-dir="up">+</button></div></div><div><div class="widgetUserBlock fl padR10"><label class="ico14 db padB5"><span>Children</span><small class="font13Lt db padT3"> (2-12 yrs)</small></label><div class="number-spinner"><button class="fl minSpin" id="childPaxMinus" data-dir="dwn">−</button><input type="text" id="childPaxBox" class="fl numbSpin" value="0"><button class="fl plusSpin" id="childPaxPlus" data-dir="up">+</button></div></div><div class="widgetUserBlock fl padR10"><label class="ico14 db padB5"><span>Infant(s)</span><small class="font13Lt db padT3"> (below 2 yrs)</small></label><div class="number-spinner"><button class="fl minSpin" id="infantPaxMinus" data-dir="dwn">−</button><input type="text" id="infantPaxBox" class="fl numbSpin" value="0"><button class="fl plusSpin" id="infantPaxPlus" data-dir="up">+</button></div></div></div></li></ul><div class="fl width100 padLR15 padB15 alignItemsCenter dF"><div class="padR10"> Travel Class</div><div class="width70"><div><label><!-- react-text: 3821 --> <!-- /react-text --><!-- react-text: 3822 --><!-- /react-text --></label><div><select class="width100 form-control ico14" id="gi_class"><option value="E">Economy</option><option value="B">Business</option><option value="F">First class</option><option value="W">Premium Economy</option></select></div></div></div></div></div></div>*@
 </div>
+

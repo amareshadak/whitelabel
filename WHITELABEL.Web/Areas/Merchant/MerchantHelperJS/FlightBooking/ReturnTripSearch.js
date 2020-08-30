@@ -192,8 +192,6 @@
     $scope.selectedReturnFlight = [];
 
     $scope.LoadFlightSearch = function (Tripmode, FromCityCode, TOAirportCode, FromDate, ToDate, TravelType, Adult, Child, Infant) {
-        //const data = { TrackNo: trackNo, TripMode: tripMode };
-        // debugger;
         $scope.formdisplay = true;
         var Tripmode = Tripmode;
         var FromAirportsName = FromCityCode;
@@ -227,12 +225,14 @@
             Infant: Infant
         };
 
+        localStorage.setItem('SEARCH_FLIGHT_DATA', JSON.stringify(data));
+
         const service = FlightServices.getFlightReturnSearchDetails(data);
         service.then(function (response) {
             const data = response.data;
             const FlightResponse = JSON.parse(data);
             const info = FlightResponse.GetFlightAvailibilityResponse;
-            debugger;
+           
             $scope.airlinesList = FlightResponse.GetFlightAvailibilityResponse.AirlineList.map(item => {
                 const container = {};
                 container.name = item.AirlineName;
@@ -360,7 +360,7 @@
 
     //$scope.selectDestimationSource = function (TrackNo, FromAirportCode, DepTime, Via, TotalDur, Stops, TOAirportCode, ArivTime, DepDate, TotalAmount, SrNo, FlightNo, AirlineCode) {
     $scope.selectDestimationSource = function (ItemVal) {
-        // debugger;
+        //
         //var FlightSelect = $scope.deptureFlight[$index];
         $scope.selectval = true;
         $scope.DeptAirLineCode = ItemVal[0].AirlineCode;
@@ -385,7 +385,7 @@
         //console.log(FlightPrice);
     }
     $scope.selectReturnFlightSource = function (TrackNo, FromAirportCode, DepTime, Via, TotalDur, Stops, TOAirportCode, ArivTime, DepDate, TotalAmount, SrNo, FlightNo, AirlineCode) {
-        // debugger;
+        //
         //var FlightSelect = $scope.flightsearchResult.FlightDetails[$index];
         //var FlightSelect = $scope.returnFlight[$index];
         $scope.selectval = true;
@@ -413,7 +413,7 @@
     }
 
     $scope.RoundtripgetFlightDetails = function (Adult, Children, Infant, TrackNo, TripMode) {
-        // debugger;
+        //
         //var Tracevalue = JSON.parse(window.localStorage.getItem("SearchTraceDetails"));
         //var timevalue = new Date(Tracevalue.Time);
         //var TraceId = Tracevalue.Token;

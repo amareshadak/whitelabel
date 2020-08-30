@@ -474,6 +474,55 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
             }
         }
 
+        [HttpGet]
+        public JsonResult GetAllAirports(string req)
+        {
+            try
+            {
+                var db = new DBContext();
+                //var airportlist = db.TBL_AIRPORT_DETAILS.Where(x => x.CITYNAME.Contains(pretext)).ToList();
+                var airportlist = db.TBL_AIRPORT_DETAILS.Where(x=> x.CITYCODE.ToLower().Contains(req.ToLower()) || x.CITYNAME.ToLower().Contains(req.ToLower())).Select(z => new
+                {
+                    ID = z.ID,
+                    CITYCODE = z.CITYCODE,
+                    CITYNAME = z.CITYNAME + " " + z.CITYCODE,
+                    COUNTRYCODE = z.COUNTRYCODE,
+                    AIRPORT_TYPE = z.AIRPORT_TYPE,
+                    ISACTIVE = z.ISACTIVE
+                }).Take(10).OrderBy(x=>x.CITYNAME).ToList();
+                return new JsonResult { Data = airportlist, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpGet]
+        public JsonResult GetAllAirportsByCitycode(string code)
+        {
+            try
+            {
+                var db = new DBContext();
+                var airportlist = db.TBL_AIRPORT_DETAILS.FirstOrDefault(x => x.CITYCODE == code);
+
+                return new JsonResult { Data = new
+                {
+                    ID = airportlist.ID,
+                    CITYCODE = airportlist.CITYCODE,
+                    CITYNAME = airportlist.CITYNAME + " " + airportlist.CITYCODE,
+                    COUNTRYCODE = airportlist.COUNTRYCODE,
+                    AIRPORT_TYPE = airportlist.AIRPORT_TYPE,
+                    ISACTIVE = airportlist.ISACTIVE
+                }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         [HttpPost]
         public JsonResult SerachFlight(FlightSearchParameter objserch)
         {
