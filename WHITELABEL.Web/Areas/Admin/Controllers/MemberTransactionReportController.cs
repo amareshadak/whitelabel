@@ -1307,5 +1307,71 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
             //    return grid;
             //}
         }
+
+        public ActionResult TotalFlightBookingHistory()
+        {
+            if (Session["WhiteLevelUserId"] != null)
+            {
+                try
+                {
+                    initpage();
+                    return View();
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error("Controller:-  MemverRequisitionReport(Admin), method:- Index (GET) Line No:- 78", ex);
+                    return RedirectToAction("Exception", "ErrorHandler", new { area = "" });
+                    throw ex;
+                }
+            }
+            else
+            {
+                Session["WhiteLevelUserId"] = null;
+                Session["WhiteLevelUserName"] = null;
+                Session["UserType"] = null;
+                Session.Remove("WhiteLevelUserId");
+                Session.Remove("WhiteLevelUserName");
+                Session.Remove("UserType");
+                return RedirectToAction("Index", "Login", new { area = "" });
+            }
+        }
+
+        public PartialViewResult FLightBookingDetailsGrid(string DateFrom = "", string Date_To = "")
+        {
+            try
+            {
+                var db = new DBContext();
+                if (DateFrom != "" && Date_To != "")
+                {
+                    string FromDATE = string.Empty;
+                    string TO_DATE = string.Empty;
+                    FromDATE = DateTime.Parse(DateFrom.ToString()).ToString("yyyy-MM-dd");
+                    DateTime Date_From_Val = Convert.ToDateTime(FromDATE);
+                    string From_TO = string.Empty;
+                    TO_DATE = DateTime.Parse(Date_To.ToString()).ToString("yyyy-MM-dd");
+                    DateTime Date_To_Val = Convert.ToDateTime(TO_DATE);
+
+                    DateTime valueFrom = Convert.ToDateTime(Date_To_Val);
+                    DateTime ToDateVal = valueFrom.AddDays(1);
+
+                    var flightBookedinfo = db.TBL_FLIGHT_BOOKING_DETAILS.Where(x => x.BOOKING_DATE >= Date_From_Val && x.BOOKING_DATE <= ToDateVal).ToList();
+                    return PartialView("FLightBookingDetailsGrid", flightBookedinfo);
+                }
+                else
+                {
+                    var flightBookedinfo = db.TBL_FLIGHT_BOOKING_DETAILS.ToList();
+                    return PartialView("FLightBookingDetailsGrid", flightBookedinfo);
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            
+        }
+
+
     }
+
 }

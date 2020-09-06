@@ -772,7 +772,7 @@
                                                             <input ng-model="psssenger.DateOfBirth" type="text" class="form-control inputMedium padLR5 placeholder DateofBirthVal" placeholder="dd/MM/yyyy">
                                                         </div>
                                                         <div class="col-md-5 col-sm-5 col-xs-12">
-                                                            <input ng-model="psssenger.PassportNo" type="text" class="form-control inputMedium padLR5 placeholder" placeholder="Passport Number">
+                                                            @*<input ng-model="psssenger.PassportNo" type="text" class="form-control inputMedium padLR5 placeholder" placeholder="Passport Number">*@
                                                         </div>
                                                     </div>
                                                 </div>
@@ -977,26 +977,30 @@
                                                 <td class="text-right">{{additionalAddedAmount}}/-</td>
                                             </tr>
                                             <tr>
+                                                <td>Processing Charges</td>
+                                                <td class="text-right pull-right"><input type="text" class="form-control form-control-sm" style="text-align:right; width:70px" min="0" ng-change="totalAmountCalculation(totalAmount)" name="usermarkup" ng-model="userMarkup" onkeypress="return isNumber(event)" /></td>
+                                            </tr>
+                                            <tr>
                                                 <td><b>Total</b></td>
-                                                <td class="text-right"><b>{{totalAmount}}/-</b></td>
+                                                <td class="text-right"><b>{{totalAmountCalculation(totalAmount)}}/-</b></td>
                                             </tr>
                                         </table>
-
+                                        
 
                                         @*<div class="blueBgLt fl padTB10 width100 ">
-                                            <span class="fl  ico18">
-                                                <span class="db padB5 padL10">Total </span>
+        <span class="fl  ico18">
+            <span class="db padB5 padL10">Total </span>
 
-                                            </span>
-                                            <span class="fr padR10">
-                                                <span class="fr">
-                                                    <span class="fr ico20 ">
-                                                        <i class="icon-pee icoru15"></i>
-                                                        <span>{{totalAmount}}</span>
-                                                    </span>
-                                                </span>
-                                            </span>
-                                        </div>*@
+        </span>
+        <span class="fr padR10">
+            <span class="fr">
+                <span class="fr ico20 ">
+                    <i class="icon-pee icoru15"></i>
+                    <span>{{totalAmount}}</span>
+                </span>
+            </span>
+        </span>
+    </div>*@
                                     </div>
 
                                 </div>
@@ -1048,5 +1052,12 @@
             changeYear: true
         });
     });
-
+    function isNumber(evt) {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
+    }
 </script>

@@ -66,5 +66,24 @@
         public string BOOKING_STATUS { get; set; }
         public string MAIN_CLASS { get; set; }
         public string BOOKING_CLASS { get; set; }
+
+        public decimal? USER_MARKUP_GST { get; set; }
+        public decimal? USER_MARKUP_cGST { get; set; }
+        public decimal? USER_MARKUP_sGST { get; set; }
+        public decimal? USER_MARKUP_iGST { get; set; }
+        public string OP_MODE { get; set; }
+        public decimal? HOLD_CHARGE { get; set; }
+        public decimal? HOLD_CGST { get; set; }
+        public decimal? HOLD_SGST { get; set; }
+        public decimal? HOLD_IGST { get; set; }
+        public string API_CANCELLATION_RESPONSE { get; set; }
+        public string PASSAGER_SEGMENT { get; set; }
+        public string API_REQUEST { get; set; }
+        public string Cancellation_status { get; set; }
+        public int? STOPAGE { get; set; }
+        [NotMapped]
+        public string FROM_DATE { get; set; }
+        [NotMapped]
+        public string TO_DATE { get; set; }
     }
 }

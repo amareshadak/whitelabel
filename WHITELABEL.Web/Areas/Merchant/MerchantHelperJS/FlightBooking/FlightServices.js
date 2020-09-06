@@ -55,9 +55,10 @@
     }
     
 
-    this.getFlightBookingInvoice = function () {
+    this.getFlightBookingInvoice = function (data) {
         var request = $http({
-            method: "POST",           
+            method: "POST",
+            data: data,
             url: "/Merchant/MerchantFlightDetails/FlightBookingInvoice"
         });
         return request;
@@ -68,6 +69,24 @@
             method: "POST",
             data: data,
             url: "/Merchant/MerchantFlightDetails/PrintFlightInvoice"
+        });
+        return request;
+    }
+    this.getFlightBookingInformation = function (data) {
+        debugger;
+        var request = $http({
+            method: "POST",
+            data: data,
+            url: "/Merchant/MerchantFlightDetails/TicketInformationGet"
+        });
+        return request;
+    }
+    this.getFlightCancellationInformation = function (data) {
+        debugger;
+        var request = $http({
+            method: "POST",
+            data: data,
+            url: "/Merchant/MerchantFlightDetails/TIcketCancellationStatusCheck"
         });
         return request;
     }
@@ -86,6 +105,15 @@
             method: "POST",
             data: data,
             url: "/Merchant/MerchantFlightDetails/BookedTicketPassangerList"
+        });
+        return request;
+    }
+    this.getFullCancellationBooedPassangerList = function (data) {
+        debugger;
+        var request = $http({
+            method: "POST",
+            data: data,
+            url: "/Merchant/MerchantFlightDetails/returnFullTicketPassangerList"
         });
         return request;
     }

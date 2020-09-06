@@ -1,31 +1,71 @@
-﻿//var app = angular.module('FlightBookingInvoicePrintApp', ["angularUtils.directives.dirPagination"])
-app.controller('FlightBookingInvoicePrintController', ['FlightServices', '$scope', '$http', '$window',function (FlightServices, $scope, $http, $window) {
-
+﻿app.controller('FlightBookingInvoicePrintController', ['FlightServices', '$scope', '$http', '$window', '$timeout', function (FlightServices, $scope, $http, $window, $timeout) {
+    $scope.fromDate = null;
+    $scope.toDate = null;
     $scope.viewby = 10;
     $scope.totalItems = null;
     $scope.currentPage = 4;
     $scope.itemsPerPage = $scope.viewby;
     $scope.maxSize = 5; //Number of pager buttons to show
-
-    $scope.GetBookedFlightInvoice = function () {
-        const service = FlightServices.getFlightBookingInvoice();
-        service.then(function (response) {
-            debugger;
+    $scope.GetTicketList = null;
+    $scope.GetBookedFlightInvoice = function () {        
+        let  data = {};
+        if ($scope.fromDate && $scope.toDate ) {
+            data = { fromDate: $scope.fromDate, toDate: $scope.toDate };
+        }
+        const service = FlightServices.getFlightBookingInvoice(data);
+        service.then(function (response) {            
             const data = response.data;
             $scope.GetTicketList = response.data;
             $scope.totalItems = response.data.length;
+            $timeout(function () {
+                if (document.getElementById('hdnIsShowPrintTicket').value == "Show") {
+                    document.getElementsByClassName('btn-print-ticket')[0].click();
+                }
+            }, 100);
         });
     }
-
-    $scope.PrintInvoice = function (refid, Pnr) {
-        debugger;
+    $scope.fullCancellation = "Full";
+    $scope.PrintInvoice = function (refid, Pnr) {        
         const data = { refId: refid, PNR: Pnr };
         const service = FlightServices.getFlightBookingPrintInvoice(data);
         service.then(function (response) {
             debugger;
-            const data = response.data;
+            const data = response.data.result;
+            const AddnlCharge = response.data.AdditionalCharge;
+            const Processingam = response.data.ProcessingCharge;
             const FlightResponse = JSON.parse(data);
             $scope.FlightInvoicePrint = FlightResponse;
+            $scope.AdditionalCharge = AddnlCharge;
+            $scope.ProcessingCharge = Processingam;
+            console.log($scope.FlightInvoicePrint);
+        });
+    };
+    $scope.BookedTicketInformationFetch = function (refid, Pnr) {        
+        const data = { refId: refid, PNR: Pnr };
+        const service = FlightServices.getFlightBookingInformation(data);
+        service.then(function (response) {            
+            const data = response.data.result;
+            const AddnlCharge = response.data.AdditionalCharge;
+            const Processingam = response.data.ProcessingCharge;
+            const FlightResponse = JSON.parse(data);
+            $scope.FlightInvoicePrint = FlightResponse;
+            $scope.AdditionalCharge = AddnlCharge;
+            $scope.ProcessingCharge = Processingam;
+            console.log($scope.FlightInvoicePrint);
+        });
+    };
+    $scope.CancellationTIcketStatusCheck = function (refid, Pnr) {
+        debugger;
+        const data = { refId: refid, PNR: Pnr };
+        const service = FlightServices.getFlightCancellationInformation(data);
+        service.then(function (response) {
+            const data = response.data.result;
+            const AddnlCharge = response.data.AdditionalCharge;
+            const Processingam = response.data.ProcessingCharge;
+            const FlightResponse = JSON.parse(data);
+            $scope.FlightInvoicePrint = FlightResponse;
+            $scope.AdditionalCharge = AddnlCharge;
+            $scope.ProcessingCharge = Processingam;
             console.log($scope.FlightInvoicePrint);
         });
     };
@@ -56,68 +96,44 @@ app.controller('FlightBookingInvoicePrintController', ['FlightServices', '$scope
                     }
                 });
             }
-            //const data = response.data;
-            //const FlightResponse = JSON.parse(data);
-            //$scope.FlightInvoicePrint = FlightResponse;
             console.log($scope.FlightInvoicePrint);
         });
     };
 
-    $scope.DisplayPassangerDetails = function (refid, corelation) {
+    $scope.DisplayPassangerDetails = function (refid, corelation, TicketType, FromAirport, ToAirport) {
         debugger;
+        $scope.fullCancellation = "";
         $scope.BookedReferenceNumber = refid;
-        const data = { refId: refid, corelation: corelation };
+        const data = { refId: refid, corelation: corelation, TicketType: TicketType, FromAirport: FromAirport, ToAirport: ToAirport };
         const service = FlightServices.getBooedPassangerList(data);
         service.then(function (response) {
             debugger;
             //let data = JSON.parse(response.data);
+            $scope.BookedTicketPassangerList = response.data;
+            $scope.lst = [];
+            $('#exampleCancelticketModal').modal('show');
+            console.log(data);
+        });
+    };
+    $scope.returnFullCancellationPnsg = function (refid, corelation, TicketType, FromAirport, ToAirport) {
+        debugger;
+        $scope.fullCancellation = "Full";
+        $scope.BookedReferenceNumber = refid;
+        const data = { refId: refid, corelation: corelation, TicketType: TicketType, FromAirport: FromAirport, ToAirport: ToAirport };
+        const service = FlightServices.getFullCancellationBooedPassangerList(data);
+        service.then(function (response) {
+            debugger;
+            //let data = JSON.parse(response.data);
+            $scope.lst = [];
             $scope.BookedTicketPassangerList = response.data;
             $('#exampleCancelticketModal').modal('show');
             console.log(data);
         });
     };
 
-    //$scope.CancelFlightTicket = function (refid, corelation) {
-    //    debugger;
-    //    const data = { refId: refid, corelation: corelation };
-    //    const service = FlightServices.getCancelFlightTicket(data);
-    //    service.then(function (response) {
-    //        debugger;
-    //        let data = JSON.parse(response.data);
-    //        let msgVAl = data.TicketCancelResponse.Error;
-    //        if (data.TicketCancelDetails.TicketCancelResponse.length > 0) {
-    //            //$('#modelTicketConfirmed').modal('show');
-    //            bootbox.alert({
-    //                message: "Hold booked ticket is confirmed.",
-    //                callback: function () {
-    //                    var URL = "/Merchant/MerchantFlightDetails/BookedFlightInformaiton";
-    //                    $window.location.href = URL;
-    //                    console.log('This was logged in the callback!');
-    //                }
-    //            });
-    //        }
-    //        else {
-    //            var msg = data.TicketCancelResponse.Error.errorDescription;
-
-    //            bootbox.alert({
-    //                message: msgVAl,
-    //                callback: function () {
-    //                    //var URL = "/Merchant/MerchantFlightDetails/FlightBookingDetails";
-    //                    //$window.location.href = URL;
-    //                    //console.log('This was logged in the callback!');
-    //                }
-    //            });
-    //        }
-    //        //const data = response.data;
-    //        //const FlightResponse = JSON.parse(data);
-    //        //$scope.FlightInvoicePrint = FlightResponse;
-    //        console.log($scope.FlightInvoicePrint);
-    //    });
-    //};
-
     $scope.lst = [];
     $scope.CheckBoxchange = function (list, active) {
-        debugger;
+       
         if (active) {
             $scope.lst.push(list.SLN);
         }
@@ -127,10 +143,11 @@ app.controller('FlightBookingInvoicePrintController', ['FlightServices', '$scope
     };
 
 
-    $scope.CancelFlightTicket = function (PnsgVal, refid) {
+    $scope.CancelFlightTicket = function (PnsgVal, refid,type) {
         debugger;
+        const cancellationType = type;
         if (PnsgVal.length > 0) {
-            const data = { PngsVal: PnsgVal, refId: refid };
+            const data = { PngsVal: PnsgVal, refId: refid, Cancellation_Type: cancellationType };
             const service = FlightServices.getCancelFlightTicket(data);
             service.then(function (response) {
                 debugger;
@@ -177,5 +194,5 @@ app.controller('FlightBookingInvoicePrintController', ['FlightServices', '$scope
         $scope.currentPage = 1; //reset to first page
     }
 
-}]);
-//getFlightBookingPrintInvoice
+
+}])

@@ -1,4 +1,4 @@
-﻿app.controller('SingleFlightSearchApiCall', ['FlightServices', '$scope', '$http', '$window', '$filter', function (FlightServices, $scope, $http, $window, $filter) {
+﻿app.controller('SingleFlightSearchApiCall', ['FlightServices', '$scope', '$http', '$window', '$filter', 'orderByFilter', function (FlightServices, $scope, $http, $window, $filter, orderBy) {
 
 
     $scope.additionalAddedAmount = parseFloat(document.getElementById('AIRADDITIONALAMOUNT').value);
@@ -175,6 +175,8 @@
             $scope.flightsearchResult = Object.keys(objFlightSearchResult).map(function (key) {
                 return objFlightSearchResult[key];
             });
+            debugger;
+            $scope.flightsearchResult = orderBy($scope.flightsearchResult, '[0].TotalAmount', false);
 
             const maxPeak = $scope.FlightFareDetails.reduce((p, c) => Math.round(p.NetAmount) > Math.round(c.NetAmount) ? p : c);
             const minPeak = $scope.FlightFareDetails.reduce((p, c) => Math.round(p.NetAmount) < Math.round(c.NetAmount) ? p : c);

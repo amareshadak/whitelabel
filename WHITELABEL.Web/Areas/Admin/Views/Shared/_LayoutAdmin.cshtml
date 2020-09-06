@@ -32,6 +32,16 @@
     <script src="~/Scripts/angular.min.js"></script>
     <script src="~/Scripts/angular-route.min.js"></script>
     <script src="~/Scripts/angucomplete-alt.js"></script>
+    @*<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.19/lodash.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-animate.min.js"></script>
+    <script scc="https://code.angularjs.org/1.8.0/angular-touch.min.js"></script>
+    <script src="~/HelperJS/AngularjsLinks/ui-bootstrap-tpls-3.0.6.min.js"></script>
+    <script type="text/javascript" src='//rawgithub.com/prajwalkman/angular-slider/master/angular-slider.js' charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-filter/0.5.17/angular-filter.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ngInfiniteScroll/1.3.0/ng-infinite-scroll.min.js"></script>
+    <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/angular-loading-bar/0.9.0/loading-bar.min.css' type='text/css' media='all' />
+    <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/angular-loading-bar/0.9.0/loading-bar.min.js'></script>
+    <script src="~/Scripts/checklist-model.js"></script>*@
     
     <style>
         .headcolor {
@@ -342,6 +352,12 @@
                                 <span class="item-name">Issue Credit/Debit Note</span>
                             </a>
                         </li>*@
+                    <li class="nav-item">
+                        <a href="@Url.Action("TotalFlightBookingHistory", "MemberTransactionReport",new {area="Admin" })">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name">Total Flight Booking List</span>
+                        </a>
+                    </li>
                     <li class="nav-item">
                         <a href="@Url.Action("Index", "MemberTransactionReport",new {area="Admin" })">
                             <i class="fa fa-location-arrow nav-icon"></i>

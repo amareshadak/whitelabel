@@ -26,5 +26,15 @@
         public string CORELATION_ID { get; set; }
         public string PASSENGER_STATUS { get; set; }
         public string CancelReqNo { get; set; }
+        public string API_CANCELLATION_RESP { get; set; }
+        public string CANCELLATIONHISTORY_RESP { get; set; }
+        public string TRIP_TYPE { get; set; }
+        public string FLIGHT_SEGMENT { get; set; }
+        public string CANCEL_RESPONSE { get; set; }
+        public DateTime? DOJ { get; set; }
+        public string FROM_AIRPORT { get; set; }
+        public string TO_AIRPORT { get; set; }
+        public string CANCEL_STATUS { get; set; }
+
     }
 }

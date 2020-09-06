@@ -29,27 +29,19 @@
     <script src="~/Scripts/jquery.validate.js"></script>
     <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.19/lodash.min.js"></script>
-
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-animate.min.js"></script>
-
     <script scc="https://code.angularjs.org/1.8.0/angular-touch.min.js"></script>
     <script src="~/HelperJS/AngularjsLinks/ui-bootstrap-tpls-3.0.6.min.js"></script>
-
     <script type="text/javascript" src='//rawgithub.com/prajwalkman/angular-slider/master/angular-slider.js' charset="utf-8"></script>
-
     <script src="~/HelperJS/AngularjsLinks/angular-route.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-filter/0.5.17/angular-filter.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ngInfiniteScroll/1.3.0/ng-infinite-scroll.min.js"></script>
-
     <script src="~/HelperJS/AngularjsLinks/angucomplete-alt.js"></script>
     <link href="~/Content/angucomplete-alt.css" rel="stylesheet" />
     <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/angular-loading-bar/0.9.0/loading-bar.min.css' type='text/css' media='all' />
     <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/angular-loading-bar/0.9.0/loading-bar.min.js'></script>
     <script src="~/Scripts/checklist-model.js"></script>
-
-
-
     <style>
 
         .headcolor {
@@ -342,7 +334,7 @@
         <div class="side-content-wrap">
             <div class="sidebar-left open rtl-ps-none" data-perfect-scrollbar data-suppress-scroll-x="true">
                 <ul class="navigation-left">
-                    <li class="nav-item active">
+                    <li class="nav-item active" style="display:none;">
                         <a class="nav-item-hold" href="@Url.Action("Index","MerchantRechargeService", new {area= "Merchant" })">
                             <i class="fa fa-headset nav-icon"></i>
                             <span class="nav-text">Utility Services</span>
@@ -350,7 +342,7 @@
                         <div class="triangle"></div>
                     </li>
 
-                    <li class="nav-item" data-item="Money">
+                    <li class="nav-item" data-item="Money" style="display:none;">
                         <a class="nav-item-hold" href="#">
                             <i class="fa fa-rupee-sign nav-icon"></i>
                             <span class="nav-text">Money Remittance</span>
@@ -368,21 +360,21 @@
                     </li>
 
 
-                    <li class="nav-item">
+                    <li class="nav-item" style="display:none;">
                         <a class="nav-item-hold" href="@Url.Action("Index","MerchantCommissionList", new {area= "Merchant" })">
                             <i class="fa fa-coins nav-icon"></i>
                             <span class="nav-text">Merchant Commission List </span>
                         </a>
                         <div class="triangle"></div>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" style="display:none;">
                         <a class="nav-item-hold" href="@Url.Action("Index","MerchantRailApplication", new {area= "Merchant" })">
                             <i class="fa fa-subway nav-icon"></i>
                             <span class="nav-text">Rail Utility Application </span>
                         </a>
                         <div class="triangle"></div>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" style="display:none;">
                         <a class="nav-item-hold" href="@Url.Action("Index","MerchantFingerprintdevice", new {area= "Merchant" })">
                             <i class="fa fa-fingerprint  nav-icon"></i>
                             <span class="nav-text">Fingerprint Device Setting</span>
@@ -479,6 +471,7 @@
                             <span class="item-name">Flight return Details</span>
                         </a>
                     </li>*@
+                    
                     <li class="nav-item">
                         <a href="@Url.Action("BookedFlightInformaiton","MerchantFlightDetails", new {area= "Merchant" })">
                             <i class="fa fa-location-arrow nav-icon"></i>

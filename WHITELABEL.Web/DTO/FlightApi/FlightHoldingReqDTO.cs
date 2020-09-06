@@ -27,10 +27,10 @@ namespace WHITELABEL.Web.DTO.FlightApi
         public string LastName { get; set; }
         public string PassengerType { get; set; }
         public string DateOfBirth { get; set; }
-        public string PassportNo { get; set; }
-        public string PassportExpDate { get; set; }
-        public string PassportIssuingCountry { get; set; }
-        public string NationalityCountry { get; set; }
+        //public string PassportNo { get; set; }
+        //public string PassportExpDate { get; set; }
+        //public string PassportIssuingCountry { get; set; }
+        //public string NationalityCountry { get; set; }
     }
 
     public class HoldingPassengers

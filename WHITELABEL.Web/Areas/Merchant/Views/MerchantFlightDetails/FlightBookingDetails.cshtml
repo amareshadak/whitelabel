@@ -715,7 +715,7 @@
                                                             <input ng-model="psssenger.DateOfBirth" type="text" class="form-control inputMedium padLR5 placeholder DateofBirthVal" placeholder="dd/MM/yyyy">
                                                         </div>
                                                         <div class="col-md-5 col-sm-5 col-xs-12">
-                                                            <input ng-model="psssenger.PassportNo" type="text" class="form-control inputMedium padLR5 placeholder" placeholder="Passport Number">
+                                                            @*<input ng-model="psssenger.PassportNo" type="text" class="form-control inputMedium padLR5 placeholder" placeholder="Passport Number">*@
                                                         </div>
                                                     </div>
                                                 </div>
@@ -916,8 +916,12 @@
                                                 <td class="text-right">{{totalTaxAndCharges(fareDetails)}}/-</td>
                                             </tr>
                                             <tr>
-                                                <td>Additional Charges</td>
+                                                <td>Transactional Charges</td>
                                                 <td class="text-right">{{additionalAddedAmount}}/-</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Processing Charges</td>
+                                                <td class="text-right pull-right"><input type="text" class="form-control form-control-sm" style="text-align:right; width:70px" min="0"  ng-change="totalAmountCalculation(fareDetails[0].TotalAmount)" name="usermarkup" ng-model="userMarkup" onkeypress="return isNumber(event)"  /></td>
                                             </tr>
                                             <tr>
                                                 <td><b> Total Amount</b></td>
@@ -991,5 +995,12 @@
             changeYear: true
         });
     });
-    
+    function isNumber(evt) {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
+    }
 </script>

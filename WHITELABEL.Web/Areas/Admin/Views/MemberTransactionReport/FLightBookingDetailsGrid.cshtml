@@ -1,0 +1,47 @@
+﻿@using NonFactors.Mvc.Grid;
+@using WHITELABEL.Web.Helper;
+@model IEnumerable<WHITELABEL.Data.Models.TBL_FLIGHT_BOOKING_DETAILS>
+@{
+    ViewBag.Title = "FLightBookingDetailsGrid";
+    Layout = null;
+}
+
+
+@(Html
+                            .Grid(Model)
+                            .Build(columns =>
+                            {
+                                //columns.Add(model => model.ACC_NO).Titled("Sln");
+                                columns.Add(model => model.REF_NO).Titled("Ref No");
+                                columns.Add(model => model.PNR).Titled("PNR");
+                                //columns.Add(model => model.MEMBER_TYPE).Titled("Member Type");
+
+                                columns.Add(model => model.BOOKING_DATE).Titled("Trans Date").MultiFilterable(true);
+                                //columns.Add(model => model.AMOUNT).Titled("Amount");
+                                //columns.Add(model => model.DR_CR).Titled("Dr/Cr");
+                                columns.Add(model => model.AIRLINE_CODE).Titled("Airline Code");
+                                columns.Add(model => model.FLIGHT_NO).Titled("Flight No");
+                                columns.Add(model => model.FROM_AIRPORT).Titled("Source");
+                                columns.Add(model => model.TO_AIRPORT).Titled("Destination");
+                                columns.Add(model => (model.MAIN_CLASS == "Y" ? "Economy" : model.MAIN_CLASS == "C"? "Business": model.MAIN_CLASS == "F" ? "First Class" : "Premium Economy")).Titled("Flight Class");
+                                columns.Add(model => model.NO_OF_ADULT).Titled("Adult");
+                                columns.Add(model => model.NO_OF_CHILD).Titled("Child");
+                                columns.Add(model => model.NO_OF_INFANT).Titled("Infant");
+                                columns.Add(model => model.BOOKING_DATE).Titled("Trans Date").MultiFilterable(true);
+                                columns.Add(model => model.BOOKING_STATUS).Titled("Booking Status");
+
+                            })
+                            .Css("css-classes")
+                                        .AppendCss("table table-striped")
+                            //.RowCss(model => model.STATUS == "Decline" ? "danger" : model.STATUS == "Pending" ? "info" : "")
+                            .Empty("No data found")
+                            .Id("my-ajax-grid")
+                            .Pageable(pager =>
+                            {
+                                pager.PagesToDisplay = 30;
+                                pager.RowsPerPage = 30;
+                            })
+                            .Filterable()
+                            .Sortable()
+)
+

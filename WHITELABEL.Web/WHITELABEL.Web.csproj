@@ -444,7 +444,10 @@
     <Compile Include="DTO\FlightApi\BookedTicketCancellationDTO.cs" />
     <Compile Include="DTO\FlightApi\BookTicketResponsesDTO.cs" />
     <Compile Include="DTO\FlightApi\FlightBookingDTO.cs" />
+    <Compile Include="DTO\FlightApi\FlightCancellationHistoryResponseDTO.cs" />
+    <Compile Include="DTO\FlightApi\FlightCancellationRequestDTO.cs" />
     <Compile Include="DTO\FlightApi\FlightHoldingReqDTO.cs" />
+    <Compile Include="DTO\FlightApi\FlightSegmentDTO.cs" />
     <Compile Include="DTO\FlightApi\HoldBookingConfirmResponsesDTO.cs" />
     <Compile Include="DTO\FlightApi\TicketCancellationDTO.cs" />
     <Compile Include="Global.asax.cs">
@@ -479,7 +482,10 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\Admin\AdminHelperJS\DebitCreditJs\CreditWalletJS.js" />
+    <Content Include="Areas\Admin\AdminHelperJS\Angularjsfiles\app.js" />
+    <Content Include="Areas\Admin\AdminHelperJS\Angularjsfiles\flightBookingDetails.js" />
+    <Content Include="Areas\Admin\AdminHelperJS\Angularjsfiles\Services.js" />
+    <Content Include="Areas\Admin\AdminHelperJS\DebitCreditJs\Pendrive\CreditWalletJS.js" />
     <Content Include="Areas\Admin\AdminHelperJS\DebitCreditJs\Index.js" />
     <Content Include="Areas\Admin\AdminHelperJS\MemberApilevel\AutoSuggestion.js" />
     <Content Include="Areas\Admin\AdminHelperJS\MemberApilevel\ChannelLinkJs.js" />
@@ -2314,6 +2320,8 @@
     <Content Include="Areas\Merchant\Views\MerchantFlightDetails\BookedFlightInformaiton.cshtml" />
     <Content Include="Areas\Merchant\Views\MerchantFlightDetails\BookedFlightgridList.cshtml" />
     <Content Include="Areas\Merchant\Views\MerchantFlightDetails\RoundTripDetails.cshtml" />
+    <Content Include="Areas\Admin\Views\MemberTransactionReport\TotalFlightBookingHistory.cshtml" />
+    <Content Include="Areas\Admin\Views\MemberTransactionReport\FLightBookingDetailsGrid.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\dirPagination.js" />
