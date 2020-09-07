@@ -40,7 +40,7 @@
 
 
     $scope.filterFlightData = function (item) {
-        let returnValue = false;
+        let returnValue = true;
        
         let amount = Math.round(item[0].TotalAmount);
         returnValue = Math.round(amount) >= ($scope.lower_price_bound - $scope.additionalAddedAmount) && Math.round(amount) <= ($scope.upper_price_bound - $scope.additionalAddedAmount);
@@ -154,7 +154,7 @@
 
         const service = FlightServices.getFlightSingleSearchDetails(data);
         service.then(function (response) {
-            //debugger;
+
             const data = response.data;
             const FlightResponse = JSON.parse(data);
             const info = FlightResponse.GetFlightAvailibilityResponse;
@@ -175,14 +175,26 @@
             $scope.flightsearchResult = Object.keys(objFlightSearchResult).map(function (key) {
                 return objFlightSearchResult[key];
             });
-            debugger;
-            $scope.flightsearchResult = orderBy($scope.flightsearchResult, '[0].TotalAmount', false);
 
-            const maxPeak = $scope.FlightFareDetails.reduce((p, c) => Math.round(p.NetAmount) > Math.round(c.NetAmount) ? p : c);
-            const minPeak = $scope.FlightFareDetails.reduce((p, c) => Math.round(p.NetAmount) < Math.round(c.NetAmount) ? p : c);
+            $scope.flightsearchResult.sort(function (a, b) {
+                var valueA, valueB;
+                valueA = Math.round(a[0].TotalAmount); // Where 1 is your index, from your example
+                valueB = Math.round(b[0].TotalAmount);
+                if (valueA < valueB) {
+                    return -1;
+                }
+                else if (valueA > valueB) {
+                    return 1;
+                }
+                return 0;
+            });
 
-            $scope.minAmount = Math.round(minPeak.NetAmount) + $scope.additionalAddedAmount;
-            $scope.maxAmount = Math.round(maxPeak.NetAmount) + $scope.additionalAddedAmount;
+
+            const maxPeak = $scope.FlightFareDetails.reduce((p, c) => Math.round(p.TotalAmount) > Math.round(c.TotalAmount) ? p : c);
+            const minPeak = $scope.FlightFareDetails.reduce((p, c) => Math.round(p.TotalAmount) < Math.round(c.TotalAmount) ? p : c);
+
+            $scope.minAmount = Math.round(minPeak.TotalAmount) + $scope.additionalAddedAmount;
+            $scope.maxAmount = Math.round(maxPeak.TotalAmount) + $scope.additionalAddedAmount;
 
             $scope.lower_price_bound = $scope.minAmount;
             $scope.upper_price_bound = $scope.maxAmount;

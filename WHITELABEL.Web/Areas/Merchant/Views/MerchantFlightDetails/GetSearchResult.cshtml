@@ -700,6 +700,7 @@
                                                 <button id="submitSearchButton_srp"
                                                         ng-disabled="!fromAirportDetails.ID
                                                         || !toAirportDetails.ID
+                                                        || (tripType == '2' && !endDate)
                                                         || !startDate"
                                                         ng-click="submitSearch()"
                                                         class="button hpySrchEnb ipadButtonSpace width100 quicks" type="button">Search</button>
@@ -840,7 +841,7 @@
                                                 <li id="PRICE" class="curPointFlt"><span class="dF alignItemsCenter justifyCenter"><span class="fb ico11  hpyBlueLt ">PRICE</span><i class="ico13 icon-arrow2-up hpyBlueLt "></i></span></li>
                                             </ul>
                                         </div>
-                                        <div class="clr marginT10" data-cy="flightItem_CCUDEL20200624ESG:SG130:0" ng-repeat="itemval in flightsearchResult | filter: filterFlightData | limitTo:numberToDisplay" ng-cloak>
+                                        <div class="clr marginT10" data-cy="flightItem_CCUDEL20200624ESG:SG130:0" ng-repeat="itemval in flightsearchResult | filter: filterFlightData" ng-cloak>
                                             <div class="flexCol whiteBg brdrRd5 fltHpyRsltCard brdrRd5 marginT10">
                                                 <div class="fl width100 flexCol">
                                                     <div class="fl width100 dF padLR20 padT10">

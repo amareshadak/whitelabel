@@ -257,10 +257,14 @@
             $scope.deptureFlight = Object.keys(objdeptureFlightSearchResult).map(function (key) {
                 return objdeptureFlightSearchResult[key];
             });
+
+
             let objReturnFlightSearchResult = $filter('groupBy')(returnFlight, 'TrackNo');
             $scope.returnFlight = Object.keys(objReturnFlightSearchResult).map(function (key) {
                 return objReturnFlightSearchResult[key];
             });
+
+
             $scope.selectedDeptFlight = $scope.deptureFlight[0];
             $scope.selectedReturnFlight = $scope.returnFlight[0];
             $scope.selectDeptTrackNo = $scope.selectedDeptFlight[0].TrackNo;

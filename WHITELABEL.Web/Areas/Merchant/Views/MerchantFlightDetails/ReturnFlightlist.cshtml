@@ -867,6 +867,7 @@
                                                 <button id="submitSearchButton_srp"
                                                         ng-disabled="!fromAirportDetails.ID
                                                         || !toAirportDetails.ID
+                                                        || (tripType == '2' && !endDate)
                                                         || !startDate"
                                                         ng-click="submitSearch()"
                                                         class="button hpySrchEnb ipadButtonSpace width100 quicks" type="button">
