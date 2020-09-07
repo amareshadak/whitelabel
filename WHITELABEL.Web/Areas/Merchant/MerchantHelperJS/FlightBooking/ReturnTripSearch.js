@@ -273,11 +273,11 @@
 
             //const maxPeak = $scope.FlightFareDetails.reduce((p, c) => Math.round(p.NetAmount) > Math.round(c.NetAmount) ? p : c);
             //const minPeak = $scope.FlightFareDetails.reduce((p, c) => Math.round(p.NetAmount) < Math.round(c.NetAmount) ? p : c);
-            const maxPeak = $scope.DeptFlightFareDetails.reduce((p, c) => Math.round(p.NetAmount) > Math.round(c.NetAmount) ? p : c);
-            const minPeak = $scope.DeptFlightFareDetails.reduce((p, c) => Math.round(p.NetAmount) < Math.round(c.NetAmount) ? p : c);
+            const maxPeak = $scope.DeptFlightFareDetails.reduce((p, c) => Math.round(p.TotalAmount) > Math.round(c.TotalAmount) ? p : c);
+            const minPeak = $scope.DeptFlightFareDetails.reduce((p, c) => Math.round(p.TotalAmount) < Math.round(c.TotalAmount) ? p : c);
 
-            $scope.minAmount = Math.round(minPeak.NetAmount) + $scope.additionalAddedAmount;
-            $scope.maxAmount = Math.round(maxPeak.NetAmount) + $scope.additionalAddedAmount;
+            $scope.minAmount = Math.round(minPeak.TotalAmount) + $scope.additionalAddedAmount;
+            $scope.maxAmount = Math.round(maxPeak.TotalAmount) + $scope.additionalAddedAmount;
 
             $scope.lower_price_bound = $scope.minAmount;
             $scope.upper_price_bound = $scope.maxAmount;
@@ -285,11 +285,11 @@
             $scope.max = $scope.maxAmount;
             // for return fare
 
-            const ReturnmaxPeak = $scope.ReturnFlightFareDetails.reduce((p, c) => Math.round(p.NetAmount) > Math.round(c.NetAmount) ? p : c);
-            const ReturnminPeak = $scope.ReturnFlightFareDetails.reduce((p, c) => Math.round(p.NetAmount) < Math.round(c.NetAmount) ? p : c);
+            const ReturnmaxPeak = $scope.ReturnFlightFareDetails.reduce((p, c) => Math.round(p.TotalAmount) > Math.round(c.TotalAmount) ? p : c);
+            const ReturnminPeak = $scope.ReturnFlightFareDetails.reduce((p, c) => Math.round(p.TotalAmount) < Math.round(c.TotalAmount) ? p : c);
 
-            $scope.ReturnminAmount = Math.round(ReturnminPeak.NetAmount);
-            $scope.ReturnmaxAmount = Math.round(ReturnmaxPeak.NetAmount);
+            $scope.ReturnminAmount = Math.round(ReturnminPeak.TotalAmount);
+            $scope.ReturnmaxAmount = Math.round(ReturnmaxPeak.TotalAmount);
 
             $scope.Return_lower_price_bound = $scope.ReturnminAmount;
             $scope.Return_upper_price_bound = $scope.ReturnmaxAmount;
