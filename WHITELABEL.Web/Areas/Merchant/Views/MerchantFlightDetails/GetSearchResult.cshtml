@@ -844,12 +844,11 @@
                                             </ul>
                                         </div>
 
-                                        <div class="row p-2 mt-2" style="box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0.2), 0 0px 5px 2px rgba(0, 0, 0, 0.19)"
+                                        <div class="row mb-2" style="box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0.2), 0 0px 5px 2px rgba(0, 0, 0, 0.19)"
                                              @*ng-repeat="flight in flightsearchResult | filter: filterFlightData"*@
                                              ng-repeat="flight in flightsearchResult"
                                              ng-cloak>
-                                            <!-- <span> {{flight}}</span> -->
-
+                                           
                                             <div class="col-6">
                                                 <div class="row p-0">
                                                     <div class="col-4 p-1">
@@ -861,6 +860,8 @@
                                                                 <b> {{getAirlineName(flight[0].AirlineCode)}} </b>
                                                                 <br />
                                                                 <span>{{flight[0].AirlineCode}}-{{flight[0].FlightNo}}</span>
+                                                                <br />
+                                                                <span>Class: {{flight[0].FlightClass}}</span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -873,8 +874,7 @@
                                                         </span>
                                                         <br />
                                                         <span>{{getFormatDate(flight[0].DepDate)}}</span>
-                                                        <br />
-                                                        <span>Class: {{flight[0].FlightClass}}</span>
+                                                      
                                                     </div>
                                                     <div class="col-4 p-1">
                                                         <b>{{flight[flight.length - 1].ArrTime}}</b>
@@ -916,9 +916,12 @@
                                                     </div>
                                                     <div class="col-4 p-1 text-center">
                                                         <span>र {{getFloatNumber(flight[0].TotalAmount) + additionalAddedAmount}}</span>
-                                                        <button class="btn btn-lg btn-dark" style="width: 100px">
+                                                        <button class="btn btn-lg btn-dark" style="width: 100px"
+                                                                ng-click="getFlightDetails(AdultCount,ChildCount,InfantCount,flight[0].TrackNo,TripMode)"
+                                                                >
                                                             Book
                                                         </button>
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -926,12 +929,12 @@
                                             <div class="col-12">
                                                 <div class="row p-0">
                                                     <div class="col-2 p-1">
-                                                        <span class="d-block p-2 badge badge-info">
+                                                        <span class="badge badge-info">
                                                             {{(flight[0].HoldAllowed == 'Y' ? 'Hold Allowed' : 'Hold Not Allowed')}}
                                                         </span>
                                                     </div>
                                                     <div class="col-2 p-1">
-                                                        <span class="d-block p-2 badge badge-success">
+                                                        <span class="badge badge-success">
                                                             {{(flight[0].FareType == 'R' ? 'Refundable' : 'Non-Refundable')}}
                                                         </span>
                                                     </div>

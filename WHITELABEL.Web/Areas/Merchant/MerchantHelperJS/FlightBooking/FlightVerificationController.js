@@ -145,6 +145,7 @@
             $scope.detailsLoadingError = verifyFlightDetailResponse.Error;
             $scope.trackNumber = $scope.flightDetails[0].TrackNo;
 
+            console.log(verifyFlightDetailResponse)
            
 
 

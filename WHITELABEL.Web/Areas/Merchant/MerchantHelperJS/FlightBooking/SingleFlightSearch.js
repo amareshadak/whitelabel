@@ -251,9 +251,9 @@
             $scope.min = $scope.minAmount;
             $scope.max = $scope.maxAmount;
 
-            //const myObj = { Time: new Date(), Token: FlightSearchDetails };
-            //localStorage.setItem('searchResult', null);
-            //localStorage.setItem('SearchTraceDetails', JSON.stringify(myObj));
+            const myObj = { Time: new Date(), Token: '' };
+            localStorage.setItem('searchResult', null);
+            localStorage.setItem('SearchTraceDetails', JSON.stringify(myObj));
 
            
 
@@ -448,16 +448,19 @@
         return parseInt(value);
     }
 
+    function millisToMinutesAndSeconds(millis) {
+        var minutes = Math.floor(millis / 60000);
+        var seconds = ((millis % 60000) / 1000).toFixed(0);
+        return parseFloat(minutes); // + ":" + (seconds < 10 ? '0' : '') + seconds;
+    }
 
     $scope.getFlightDetails = function (Adult, Children, Infant, TrackNo, TripMode) {
+        debugger;
         var Tracevalue = JSON.parse(window.localStorage.getItem("SearchTraceDetails"));
-        var timevalue = new Date(Tracevalue.Time);
-        var TraceId = Tracevalue.Token;
-        const currDate = new Date();
-        const oldDate = timevalue;
 
-        var list = (currDate - oldDate) / 60000;
-        if (list <= 15) {
+        const diffInMilliseconds = Math.abs(new Date() - new Date(Tracevalue.Time));
+
+        if (millisToMinutesAndSeconds(diffInMilliseconds) <= 15) {
             //window.location.href = '/Merchant/MerchantFlightBooking/FlightBooking?BookingValue=' + item + '&token=' + TraceId + '&Passenger=' + Passenger + '&TripMode=' + TripMode + '&IsLCC=' + IsLCC;;
             window.location.href = '/Merchant/MerchantFlightDetails/FlightBookingDetails?TrackNo=' + TrackNo + '&PsgnAdult=' + Adult + '&PsgnChildren=' + Children + '&PsgnInfant=' + Infant + '&TripMode=' + TripMode;
         }
