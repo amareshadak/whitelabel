@@ -815,8 +815,8 @@
                                             <button class="btn btn-xs btn-default pull-right" style="padding:5px;font-size:x-small;font-weight:bold" ng-click="filterData.airlines = [];resetFilterAirlinesList()">Reset</button>
                                             <div class="clearfix"></div>
                                             <div class="checkboxer" ng-repeat="item in airlinesList">
-                                                <input type="checkbox" ng-model="item.selected">
-                                                <label for="check6"> {{item.name}} <img ng-hide="item.code == ''" ng-src="~/Content/static-airlines-master/logos/{{item.code}}.png" class="flightImagesNew" alt="flights"></label>
+                                                <input id="chkAirlineList{{$index}}" type="checkbox" ng-model="item.selected">
+                                                <label for="chkAirlineList{{$index}}"> {{item.name}} <img ng-hide="item.code == ''" ng-src="~/Content/static-airlines-master/logos/{{item.code}}.png" class="flightImagesNew" alt="flights"></label>
                                             </div>
                                             <!--.checkbox-->
 
@@ -831,7 +831,7 @@
                                 </div>
                                 <!--.col-->
 
-                                <div class="col-md-9 material-animate" infinite-scroll="loadMore()">
+                                <div class="col-md-9 material-animate">
                                     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
                                         <div class="row mb-2">
                                             <div class="col" title="Display net amount">
@@ -841,8 +841,29 @@
                                                 </button>
                                             </div>
                                         </div>
+                                      
+                                        <div class="row mb-2 p-1 bg-light" style="border-radius: 3px;">
+                                            <div class="col-2 text-center">
+                                                <span class="fb ico11">AIRLINE</span>
+                                            </div>
+                                            <div class="col-2">
+                                                <span class="fb ico11">DURATION</span>
+                                            </div>
+                                            <div class="col-2">
+                                                <span class="fb ico11">ARRIVAL</span>
+                                            </div>
+                                            <div class="col-2">
+                                                <span class="fb ico11">DURATION</span>
+                                            </div>
+                                            <div class="col-2">
+                                                <span class="fb ico11"></span>
+                                            </div>
+                                            <div class="col-2 text-center">
+                                                <span class="fb ico11">PRICE</span>
+                                            </div>
+                                        </div>
 
-                                        <div class="quicks">
+                                        <div class="quicks" style="display:none">
                                             <ul class="fltHpySrt ico12 dF justifyAround whiteBg pad10 brdrRd5" style="background-color:#ccc; padding:5px;">
                                                 <li id="DEPARTURE" class="curPointFlt"><span class="dF alignItemsCenter justifyCenter"><span class="fb ico11 "></span></span></li>
                                                 <li id="DEPARTURE" class="curPointFlt"><span class="dF alignItemsCenter justifyCenter"><span class="fb ico11 ">DEPARTURE</span></span></li>
@@ -856,7 +877,7 @@
 
                                         <div class="row mb-2" style="box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0.2), 0 0px 5px 2px rgba(0, 0, 0, 0.19)"
                                              @*ng-repeat="flight in flightsearchResult | filter: filterFlightData"*@
-                                             ng-repeat="flight in flightsearchResult"
+                                             ng-repeat="flight in flightsearchResult | filter: filterFlightData"
                                              ng-cloak>
 
                                             <div class="col-6">

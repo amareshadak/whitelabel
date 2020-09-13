@@ -1,7 +1,7 @@
 ﻿app.controller('SingleFlightSearchApiCall', ['FlightServices', '$scope', '$http', '$window', '$filter', 'orderByFilter', function (FlightServices, $scope, $http, $window, $filter, orderBy) {
 
 
-    $scope.additionalAddedAmount = 0;//parseFloat(document.getElementById('AIRADDITIONALAMOUNT').value);
+    $scope.additionalAddedAmount = parseFloat(document.getElementById('AIRADDITIONALAMOUNT').value);
     $scope.displayNetAmount = false;
     $scope.lower_price_bound = 0;
     $scope.upper_price_bound = 1000;
@@ -159,7 +159,14 @@
             const FlightResponse = JSON.parse(data);
 
 
-            $scope.airlinesList = FlightResponse.GetFlightAvailibilityResponse.AirlineList.map(item => {
+            //=========================== Store All Flight Information =============================//
+            $scope.flightDetails = FlightResponse.GetFlightAvailibilityResponse.FlightDetails;
+            $scope.fareDetails = FlightResponse.GetFlightAvailibilityResponse.FareDetails;
+            $scope.airlineList = FlightResponse.GetFlightAvailibilityResponse.AirlineList;
+            $scope.airportList = FlightResponse.GetFlightAvailibilityResponse.AirportList;
+
+            
+            $scope.airlinesList = $scope.airlineList.map(item => {
                 const container = {};
                 container.name = item.AirlineName;
                 container.code = item.AirlineCode;
@@ -167,11 +174,6 @@
                 return container;
             });
 
-            //=========================== Store All Flight Information =============================//
-            $scope.flightDetails = FlightResponse.GetFlightAvailibilityResponse.FlightDetails;
-            $scope.fareDetails = FlightResponse.GetFlightAvailibilityResponse.FareDetails;
-            $scope.airlineList = FlightResponse.GetFlightAvailibilityResponse.AirlineList;
-            $scope.airportList = FlightResponse.GetFlightAvailibilityResponse.AirportList;
 
             //================= Group by track number =============================//
             let objFlightSearchResult = $filter('groupBy')($scope.flightDetails, 'TrackNo');
