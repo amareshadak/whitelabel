@@ -3,7 +3,6 @@
     ViewBag.Title = "Flight Search List";
     Layout = "~/Areas/Merchant/Views/Shared/_RetailerLayout.cshtml";
 }
-
 <style>
     .fb {
         font-weight: bold;
@@ -834,6 +833,15 @@
 
                                 <div class="col-md-9 material-animate" infinite-scroll="loadMore()">
                                     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                                        <div class="row mb-2">
+                                            <div class="col" title="Display net amount">
+                                                <button ng-click="displayNetAmount = !displayNetAmount " class="btn btn-primary btn-sm pull-right" type="submit">
+                                                    <span ng-show="displayNetAmount"><i class="fa fa-eye" aria-hidden="true"></i></span>
+                                                    <span ng-hide="displayNetAmount"><i class="fa fa-eye-slash" aria-hidden="true"></i></span>
+                                                </button>
+                                            </div>
+                                        </div>
+
                                         <div class="quicks">
                                             <ul class="fltHpySrt ico12 dF justifyAround whiteBg pad10 brdrRd5" style="background-color:#ccc; padding:5px;">
                                                 <li id="DEPARTURE" class="curPointFlt"><span class="dF alignItemsCenter justifyCenter"><span class="fb ico11 "></span></span></li>
@@ -843,6 +851,8 @@
                                                 <li id="PRICE" class="curPointFlt"><span class="dF alignItemsCenter justifyCenter"><span class="fb ico11  hpyBlueLt ">PRICE</span><i class="ico13 icon-arrow2-up hpyBlueLt "></i></span></li>
                                             </ul>
                                         </div>
+
+
 
                                         <div class="row mb-2" style="box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0.2), 0 0px 5px 2px rgba(0, 0, 0, 0.19)"
                                              @*ng-repeat="flight in flightsearchResult | filter: filterFlightData"*@
@@ -915,11 +925,10 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-4 p-1 text-center">
-                                                        <span style=" font-size: larger; font-weight: bold;" class="ml-4">र {{getFloatNumber(flight[0].TotalAmount) + additionalAddedAmount}}</span>
-                                                        @*<button class="btn btn-lg btn-dark hidden" style="width: 100px"
-                                            ng-click="getFlightDetails(AdultCount,ChildCount,InfantCount,flight[0].TrackNo,TripMode)">
-                                        Book
-                                    </button>*@
+                                                        <span style="font-size: larger; font-weight: bold;text-decoration:{{ displayNetAmount ? 'line-through ' : 'node' }}" class="ml-4">र {{getFloatNumber(flight[0].TotalAmount) + additionalAddedAmount}}</span>
+                                                        <br />
+                                                        <span ng-show="displayNetAmount" style=" font-size: larger; font-weight: bold;" class="ml-4">र {{getNetFare(flight[0].SrNo) + additionalAddedAmount}}</span>
+
                                                         <input type="button" data-cy="bookBtn" value="BOOK" class="button fr fltbook fb widthF105 fb quicks"
                                                                ng-click="getFlightDetails(AdultCount,ChildCount,InfantCount,flight[0].TrackNo,TripMode)" />
 

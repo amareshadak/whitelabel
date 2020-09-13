@@ -2,7 +2,7 @@
 
 
     $scope.additionalAddedAmount = 0;//parseFloat(document.getElementById('AIRADDITIONALAMOUNT').value);
-
+    $scope.displayNetAmount = false;
     $scope.lower_price_bound = 0;
     $scope.upper_price_bound = 1000;
     $scope.min = 0;
@@ -402,6 +402,21 @@
         return 0;
     };
 
+    $scope.getNetFare = function (SrNo) {
+        if (SrNo) {
+            let fare = $scope.fareDetails.filter(function (item) {
+                return item.SrNo == SrNo;
+            });
+            if (fare) {
+                return parseFloat(fare[0].NetAmount);
+                    
+            }
+            else {
+                return 0;
+            }
+        }
+        return 0;
+    }
 
     $scope.getBaggagesInfo = function (SrNo) {
         if (SrNo) {
