@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -25,11 +26,21 @@ namespace WHITELABEL.Web.DTO.FlightApi
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string PassengerType { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string DateOfBirth { get; set; }
-        //public string PassportNo { get; set; }
-        //public string PassportExpDate { get; set; }
-        //public string PassportIssuingCountry { get; set; }
-        //public string NationalityCountry { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string PassportNo { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string PassportExpDate { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string PassportIssuingCountry { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string NationalityCountry { get; set; }
     }
 
     public class Passengers
@@ -90,6 +101,21 @@ namespace WHITELABEL.Web.DTO.FlightApi
         public string MerchantKey { get; set; }
         public string SaltKey { get; set; }
         public string IsTicketing { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string GSTNo { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string GSTEmailID { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string GSTCompanyName { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string GSTMobileNo { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string GSTAddress { get; set; }
     }
 
     public class FlightBookingRequestXml

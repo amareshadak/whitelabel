@@ -700,22 +700,23 @@
                                                                 <option value="Mrs">Mstr</option>
                                                             </select>
                                                         </div>
-                                                        <div class="col-md-5 col-sm-5 col-xs-12">
+                                                        <div class="col-md-3 col-sm-3 col-xs-12">
                                                             <input ng-model="psssenger.FirstName" type="text" class="form-control inputMedium padLR5 placeholder" placeholder="First Name/Given Name" value="">
                                                         </div>
-                                                        <div class="col-md-5 col-sm-5 col-xs-12">
+                                                        <div class="col-md-3 col-sm-3 col-xs-12">
                                                             <input ng-model="psssenger.LastName" type="text" class="form-control inputMedium padLR5 placeholder" placeholder="Last Name">
                                                         </div>
-
-
-                                                    </div>
-                                                    <div class="row" style="margin-top:20px">
-                                                        <div class="col-md-2 col-sm-2 col-xs-12"></div>
-                                                        <div class="col-md-5 col-sm-5 col-xs-12">
+                                                        <div class="col-md-3 col-sm-3 col-xs-12" ng-show="flightDetails[0].IsDOBMandatory == 'YES'">
                                                             <input ng-model="psssenger.DateOfBirth" type="text" class="form-control inputMedium padLR5 placeholder DateofBirthVal" placeholder="dd/MM/yyyy">
                                                         </div>
-                                                        <div class="col-md-5 col-sm-5 col-xs-12">
-                                                            @*<input ng-model="psssenger.PassportNo" type="text" class="form-control inputMedium padLR5 placeholder" placeholder="Passport Number">*@
+                                                        <div class="col-md-3 col-sm-3 col-xs-12" ng-show="flightDetails[0].IsPassportNoMandatory == 'YES'">
+                                                            <input ng-model="psssenger.PassportNo" type="text" class="form-control inputMedium padLR5 placeholder" placeholder="Passport Number">
+                                                        </div>
+                                                        <div class="col-md-3 col-sm-3 col-xs-12" ng-show="flightDetails[0].IsPassportExpDateMandatory == 'YES'">
+                                                            <input ng-model="psssenger.passportexpdate" type="text" class="form-control inputMedium padLR5 placeholder DateofBirthVal" placeholder="Passport expiry date (dd/MM/yyyy)">
+                                                        </div>
+                                                        <div class="col-md-3 col-sm-3 col-xs-12" ng-show="flightDetails[0].passportissuingcountry == 'YES'">
+                                                            <input ng-model="psssenger.passportissuingcountry" type="text" class="form-control inputMedium padLR5 placeholder DateofBirthVal" placeholder="Passport issuing countryCode">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -724,14 +725,28 @@
                                             <div class="fl width100 padLR10 greyBg borderBtm marginB5">
                                                 <hr />
                                                 <div class="padL30 fl width100" style="margin-bottom:5px">
+                                                    <div class="row mb-2" ng-show="flightDetails[0].IsGSTMandatory == 'YES'">
+                                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                                            <input type="email" ng-model="GSTNo" class="form-control inputMedium" placeholder="GST No">
+                                                        </div>
+                                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                                            <input type="email" ng-model="GSTEmailID" class="form-control inputMedium" placeholder="GST Email ID">
+                                                        </div>
+                                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                                            <input type="email" ng-model="GSTCompanyName" class="form-control inputMedium" placeholder="GST Company Name">
+                                                        </div>
+
+                                                    </div>
+                                                    <hr ng-show="flightDetails[0].IsGSTMandatory == 'YES'" />
+
                                                     <div class="row">
-                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                        <div class="col-md-4 col-sm-6 col-xs-12">
                                                             <input type="email" ng-model="emailAddress" class="form-control inputMedium" placeholder="Enter Email Id.">
                                                         </div>
-                                                        <div class="col-md-3 col-sm-3 col-xs-12">
+                                                        <div class="col-md-4 col-sm-3 col-xs-12">
                                                             <input type="text" ng-model="mobileNumber" class="form-control inputMedium" maxlength="10" placeholder="Mobile No.">
                                                         </div>
-                                                        <div class="col-md-3 col-sm-3 col-xs-12">
+                                                        <div class="col-md-4 col-sm-3 col-xs-12">
                                                             <input type="text" ng-model="altMobileNo" class="form-control inputMedium" maxlength="10" placeholder="Alternative Mobile No.">
                                                         </div>
                                                     </div>

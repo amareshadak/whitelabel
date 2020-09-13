@@ -848,7 +848,7 @@
                                              @*ng-repeat="flight in flightsearchResult | filter: filterFlightData"*@
                                              ng-repeat="flight in flightsearchResult"
                                              ng-cloak>
-                                           
+
                                             <div class="col-6">
                                                 <div class="row p-0">
                                                     <div class="col-4 p-1">
@@ -874,7 +874,7 @@
                                                         </span>
                                                         <br />
                                                         <span>{{getFormatDate(flight[0].DepDate)}}</span>
-                                                      
+
                                                     </div>
                                                     <div class="col-4 p-1">
                                                         <b>{{flight[flight.length - 1].ArrTime}}</b>
@@ -915,12 +915,13 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-4 p-1 text-center">
-                                                        <span>र {{getFloatNumber(flight[0].TotalAmount) + additionalAddedAmount}}</span>
-                                                        <button class="btn btn-lg btn-dark" style="width: 100px"
-                                                                ng-click="getFlightDetails(AdultCount,ChildCount,InfantCount,flight[0].TrackNo,TripMode)"
-                                                                >
-                                                            Book
-                                                        </button>
+                                                        <span style=" font-size: larger; font-weight: bold;" class="ml-4">र {{getFloatNumber(flight[0].TotalAmount) + additionalAddedAmount}}</span>
+                                                        @*<button class="btn btn-lg btn-dark hidden" style="width: 100px"
+                                            ng-click="getFlightDetails(AdultCount,ChildCount,InfantCount,flight[0].TrackNo,TripMode)">
+                                        Book
+                                    </button>*@
+                                                        <input type="button" data-cy="bookBtn" value="BOOK" class="button fr fltbook fb widthF105 fb quicks"
+                                                               ng-click="getFlightDetails(AdultCount,ChildCount,InfantCount,flight[0].TrackNo,TripMode)" />
 
                                                     </div>
                                                 </div>
@@ -939,7 +940,7 @@
                                                         </span>
                                                     </div>
                                                     <div class="col-2 p-1" ng-show="getFloatNumber(flight[0].AvailSeats)>0">
-                                                            {{flight[0].AvailSeats}} {{getFloatNumber(flight[0].AvailSeats) > 1 ? 'Seats' : 'seat'}} available
+                                                        {{flight[0].AvailSeats}} {{getFloatNumber(flight[0].AvailSeats) > 1 ? 'Seats' : 'seat'}} available
                                                     </div>
                                                     <div class="col">
                                                         <a href="#flight-details{{$index}}"
@@ -1050,7 +1051,16 @@
                                                          id="nav-baggages{{$index}}"
                                                          role="tabpanel"
                                                          aria-labelledby="nav-baggages-tab">
-                                                        {{getBaggagesInfo(flight[0].SrNo)}}
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                {{getBaggagesInfo(flight[0].SrNo)}}
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <button type="button" class="btn btn-sm btn-default" ng-click="showFareRules(flight[0].TrackNo)">Fare Rules</button>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1059,6 +1069,22 @@
                                 </div>
                                 <!--.col-->
                             </div>
+                            <!-- The Modal -->
+                            <div class="modal fade bd-example-modal-md" tabindex="-1" role="dialog"  id="modalFareRules" aria-labelledby="modalFareRules" aria-hidden="true">
+                                <div class="modal-dialog modal-md">
+                                    <div class="modal-content">
+                                        <!-- Modal Header -->
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">Fare Rules</h4>
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p id="pFareRules"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
                         </div>
                     </div>
                 </div>

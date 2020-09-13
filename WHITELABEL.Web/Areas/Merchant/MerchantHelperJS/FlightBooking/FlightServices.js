@@ -9,6 +9,16 @@
         return request;
     };
 
+    this.getFareRules = function (data) {
+        var request = $http({
+            method: "POST",
+            data: data,
+            url: "/Merchant/MerchantFlightDetails/GetFareDetails"
+        });
+        return request;
+    };
+
+
     this.getFlightReturnSearchDetails = function (data) {
         var request = $http({
             method: "POST",

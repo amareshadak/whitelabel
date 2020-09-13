@@ -41,7 +41,7 @@
 
     $scope.filterFlightData = function (item) {
         let returnValue = true;
-       
+
         let amount = Math.round(item[0].TotalAmount);
         returnValue = Math.round(amount) >= ($scope.lower_price_bound - $scope.additionalAddedAmount) && Math.round(amount) <= ($scope.upper_price_bound - $scope.additionalAddedAmount);
 
@@ -52,7 +52,7 @@
             || $scope.filterData.timeSlots.Night) && returnValue) {
 
             let checkValue = [];
-            let time =parseInt(item[0].DepTime.replace(':',''));
+            let time = parseInt(item[0].DepTime.replace(':', ''));
 
             if ($scope.filterData.timeSlots.EarlyMorning) { // 0 to 8
                 checkValue.push([0, 800]);
@@ -83,7 +83,7 @@
             }
             returnValue = check;
         }
-       
+
         if ($scope.filterData.stops != null && returnValue) {
             returnValue = item[0].Stops == $scope.filterData.stops;
         }
@@ -91,15 +91,15 @@
         if ($scope.filterData.refundable != null && returnValue) {
             returnValue = item[0].FareType == ($scope.filterData.refundable == 'true' ? 'R' : 'N');
         }
-      
+
         if ($scope.filterData.airlines.length > 0 && returnValue) {
             returnValue = $scope.filterData.airlines.includes(item[0].AirlineCode);
         }
-       
-       
+
+
 
         return returnValue;
-       
+
     };
 
     $scope.resetFilterAirlinesList = function () {
@@ -115,7 +115,7 @@
 
     $scope.LoadFlightSearch = function (Tripmode, FromCityCode, TOAirportCode, FromDate, ToDate, TravelType, Adult, Child, Infant) {
         //const data = { TrackNo: trackNo, TripMode: tripMode };
-        
+
         $scope.formdisplay = true;
         var Tripmode = Tripmode;
         var FromAirportsName = FromCityCode;
@@ -135,7 +135,7 @@
         $scope.AdultCount = Adult;
         $scope.ChildCount = Child;
         $scope.InfantCount = Infant;
-        
+
         const data = {
             Tripmode: Tripmode,
             FromAirportsName: FromAirportsName,
@@ -158,7 +158,7 @@
             const data = response.data;
             const FlightResponse = JSON.parse(data);
 
-            
+
             $scope.airlinesList = FlightResponse.GetFlightAvailibilityResponse.AirlineList.map(item => {
                 const container = {};
                 container.name = item.AirlineName;
@@ -166,7 +166,7 @@
                 container.selected = false;
                 return container;
             });
-            
+
             //=========================== Store All Flight Information =============================//
             $scope.flightDetails = FlightResponse.GetFlightAvailibilityResponse.FlightDetails;
             $scope.fareDetails = FlightResponse.GetFlightAvailibilityResponse.FareDetails;
@@ -204,12 +204,12 @@
                 return retVal;
             });
 
-            
+
             $scope.flightFareList = [];
-         
+
             //================== Preaper Main Flight List and Fare List ========================//
             for (let i = 0; i < $scope.flightsearchResult.length; i++) {
-            
+
                 const element = $scope.flightsearchResult[i];
                 let result = $scope.getSameFlightList(element);
                 let checkdata = $scope.flightDetails.filter(function (x) {
@@ -221,14 +221,14 @@
                 let fare = $scope.fareDetails.filter(function (item) {
                     return item.SrNo == checkdata[0].SrNo;
                 });
-                
+
                 $scope.flightFareList.push(fare[0])
             }
 
             //==================== Order By Amount =============================//
             $scope.flightsearchResult.sort(function (a, b) {
                 var valueA, valueB;
-                valueA = Math.round(a[0].TotalAmount); 
+                valueA = Math.round(a[0].TotalAmount);
                 valueB = Math.round(b[0].TotalAmount);
                 if (valueA < valueB) {
                     return -1;
@@ -255,7 +255,7 @@
             localStorage.setItem('searchResult', null);
             localStorage.setItem('SearchTraceDetails', JSON.stringify(myObj));
 
-           
+
 
         });
     }
@@ -291,7 +291,7 @@
             });
             return checkdata;
         }
-       
+
     };
 
     $scope.setSameFareFlight = function (trackNo, flightNo, index) {
@@ -418,9 +418,8 @@
         return 0;
     };
 
-  
-    $scope.loadFareDetails = function (srNo,adult,child,infant)
-    {
+
+    $scope.loadFareDetails = function (srNo, adult, child, infant) {
         var adlt = adult;
         let data = $scope.FlightFareDetails.filter(x => x.SrNo == srNo);
         var adultval = (adult = 0 ? 0 : adult);
@@ -431,7 +430,7 @@
         var FlightBaseFare = (parseFloat(data[0].AdultBaseFare)) + (parseFloat(data[0].ChildBaseFare)) + (parseFloat(data[0].InfantBaseFare));
         $scope.FlightTotalBasefare = FlightBaseFare;
         //var FlightTaxFare = (parseFloat(data[0].AdultTax) * adultval) + (parseFloat(data[0].ChildTax) * childval) + (parseFloat(data[0].InfantTax) * infantval);
-        var FlightTaxFare = (parseFloat(data[0].AdultTax)) + (parseFloat(data[0].ChildTax) ) + (parseFloat(data[0].InfantTax) );
+        var FlightTaxFare = (parseFloat(data[0].AdultTax)) + (parseFloat(data[0].ChildTax)) + (parseFloat(data[0].InfantTax));
         $scope.FlightTotalTaxfare = FlightTaxFare;
 
         var FlightCuteFare = (parseFloat(data[0].AdultCuteFee)) + (parseFloat(data[0].ChildCuteFee)) + (parseFloat(data[0].InfantCuteFee));
@@ -443,7 +442,7 @@
     }
 
 
-   
+
     $scope.parseNumber = function (value) {
         return parseInt(value);
     }
@@ -455,7 +454,7 @@
     }
 
     $scope.getFlightDetails = function (Adult, Children, Infant, TrackNo, TripMode) {
-        debugger;
+
         var Tracevalue = JSON.parse(window.localStorage.getItem("SearchTraceDetails"));
 
         const diffInMilliseconds = Math.abs(new Date() - new Date(Tracevalue.Time));
@@ -480,17 +479,16 @@
 
     }
 
-    $scope.timeConvert = function(n) {
+    $scope.timeConvert = function (n) {
         var num = n;
         var hours = (num / 60);
         var rhours = Math.floor(hours);
         var minutes = (hours - rhours) * 60;
         var rminutes = Math.round(minutes);
-        return  rhours + "h " + rminutes + "m";
+        return rhours + "h " + rminutes + "m";
     }
 
-    $scope.calculateDuration = function(item)
-    {
+    $scope.calculateDuration = function (item) {
         const firstDate = item[0].DepDate;
         const firstTime = item[0].DepTime;
         const lastDate = item[item.length - 1].ArrDate;
@@ -503,5 +501,25 @@
         const lastDateTime = new Date(lastDateArray[2], lastDateArray[1], lastDateArray[0], lastTimeArray[0], lastTimeArray[1]);
         const totalMinute = diff_minutes(lastDateTime, firstDateTime);
         return $scope.timeConvert(totalMinute);
+    }
+    function nl2br(str, is_xhtml) {
+        var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
+        return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
+    }
+
+    $scope.showFareRules = function (trackNo) {
+        const data = { TrackNo: trackNo };
+        const service = FlightServices.getFareRules(data);
+        service.then(function (response) {
+            const responce = response.data;
+            const fareRules = JSON.parse(responce);
+
+            $scope.fareRules = fareRules.GetFareRuleResponse.Farerules[0];
+            $('#pFareRules').html('');
+            $('#pFareRules').html(nl2br($scope.fareRules))
+
+            $('#modalFareRules').modal('show');
+
+        });
     }
 }]);

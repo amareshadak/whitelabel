@@ -1,6 +1,7 @@
 ﻿app.controller('FlightVerificationController', ['FlightServices', '$scope', '$http', '$window', function (FlightServices, $scope, $http, $window) {
     
-    $scope.additionalAddedAmount = parseFloat(document.getElementById('AIRADDITIONALAMOUNT').value);
+    $scope.additionalAddedAmount = 0;// parseFloat(document.getElementById('AIRADDITIONALAMOUNT').value);
+
     $scope.adult = 0;
     $scope.child = 0;
     $scope.infant = 0;
@@ -24,10 +25,10 @@
         "LastName": "",
         "PassengerType": "",
         "DateOfBirth": "",
-        //"PassportNo": "",
-        //"PassportExpDate": "",
-        //"PassportIssuingCountry": "IND",
-        //"NationalityCountry": "IND",
+        "passportno": "",
+        "passportexpdate": "",
+        "passportissuingcountry": "",
+        "nationalitycountry": "",
         "label": ""
     };
 
@@ -76,11 +77,15 @@
                         }
                     ]
                 },
-                "TotalAmount": "",
                 "MerchantCode": "PAY9zJhspxq7m",
                 "MerchantKey": "eSpbcYMkPoZYFPcE8FnZ",
-                "SaltKey": "WHJIIcNjVXaZj03TnDme", 
-                "IsTicketing": "Yes"
+                "SaltKey": "WHJIIcNjVXaZj03TnDme",
+                "IsTicketing": "Yes",
+                "GSTNo": "",
+                "GSTEmailID": "",
+                "GSTCompanyName": "",
+                "GSTMobileNo": "",
+                "GSTAddress": ""
             }
         }
     };
@@ -134,7 +139,7 @@
         const data = { TrackNo: trackNo, TripMode: tripMode };
         const service = FlightServices.getFlightVerificationDetails(data);
         service.then(function (response) {
-            debugger;
+      
             const data = response.data;
             const verifyFlightDetailResponse = JSON.parse(data).VerifyFlightDetailResponse;
             const flightDetails = verifyFlightDetailResponse.FlightDetails;
@@ -269,14 +274,17 @@
         $scope.bookingRequestObj.RequestXml.BookTicketRequest.MobileNo = $scope.mobileNumber;
         $scope.bookingRequestObj.RequestXml.BookTicketRequest.AltMobileNo = $scope.altMobileNo;
         $scope.bookingRequestObj.RequestXml.BookTicketRequest.Email = $scope.emailAddress;
+
+        $scope.bookingRequestObj.RequestXml.BookTicketRequest.GSTNo = $scope.GSTNo;
+        $scope.bookingRequestObj.RequestXml.BookTicketRequest.GSTEmailID = $scope.GSTEmailID;
+        $scope.bookingRequestObj.RequestXml.BookTicketRequest.GSTCompanyName = $scope.GSTCompanyName;
+        $scope.bookingRequestObj.RequestXml.BookTicketRequest.GSTMobileNo = $scope.GSTMobileNo;
+        $scope.bookingRequestObj.RequestXml.BookTicketRequest.GSTAddress = $scope.GSTAddress;
+
         $scope.bookingRequestObj.RequestXml.BookTicketRequest.Passengers.Passenger = $scope.passengers;
         $scope.bookingRequestObj.RequestXml.BookTicketRequest.Segments.Segment = $scope.segments;
         $scope.bookingRequestObj.RequestXml.BookTicketRequest.AdditionalServices.AdditionalService = $scope.additionaServices.filter(function (x) { return x.IsSelected; });
         $scope.bookingRequestObj.RequestXml.BookTicketRequest.TotalAmount = $scope.TotalAmount;
-
-        // console.log(JSON.stringify($scope.bookingRequestObj))
-        // const reqObj = { "RequestXml": { "Authenticate": { "InterfaceCode": "", "InterfaceAuthKey": "", "AgentCode": "", "Password": "" }, "BookTicketRequest": { "TrackNo": "0$48957|4|27AO", "MobileNo": "9879879846", "AltMobileNo": "9549879849", "Email": "amareshadak@gmail.com", "Address": "", "ClientRequestID": "", "Passengers": { "Passenger": [{ "PaxSeqNo": 1, "Title": "Mr", "FirstName": "Amaresh", "LastName": "Adak", "PassengerType": "A", "DateOfBirth": "10/04/1991", "PassportNo": "RTTTTGGBGB56351", "PassportExpDate": "", "PassportIssuingCountry": "IND", "NationalityCountry": "IND", "label": "Adult 1", "$$hashKey": "object:3" }] }, "Segments": { "Segment": [{ "TrackNo": "0$48957|4|27AO", "SegmentSeqNo": 1, "AirlineCode": "UK", "FlightNo": "720", "FromAirportCode": "CCU", "ToAirportCode": "DEL", "DepDate": "16/08/2020", "DepTime": "07:10", "ArrDate": "16/08/2020", "ArrTime": "09:35", "FlightClass": "Q", "MainClass": "Y" }, { "TrackNo": "0$48957|4|27AO", "SegmentSeqNo": 2, "AirlineCode": "UK", "FlightNo": "1400", "FromAirportCode": "DEL", "ToAirportCode": "BOM", "DepDate": "16/08/2020", "DepTime": "13:00", "ArrDate": "16/08/2020", "ArrTime": "15:10", "FlightClass": "Q", "MainClass": "Y" }] }, "AdditionalServices": { "AdditionalService": [] }, "TotalAmount": "9895", "MerchantCode": "PAY9zJhspxq7m", "MerchantKey": "eSpbcYMkPoZYFPcE8FnZ", "SaltKey": "WHJIIcNjVXaZj03TnDme", "IsTicketing": "Yes" } } };
-        // console.log(reqObj);
 
         const req = { req: JSON.stringify($scope.bookingRequestObj), userMarkup: $scope.userMarkup, FlightAmt: $scope.TotalAmount, TripMode:'O'};
         const service = FlightServices.getFlightBookeServices(req);

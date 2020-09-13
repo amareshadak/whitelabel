@@ -22,12 +22,21 @@ namespace WHITELABEL.Web.Helper
 {
     public static class MultiLinkAirAPI
     {
-        private static string token = "BOMAK";
-        public static string root = "http://mwapiv2.multilinkworld.com/";
+        //private static string token = "BOMAK";
+        //public static string root = "http://mwapiv2.multilinkworld.com/";
 
-        public static string ApiIntegrationNew = "BOMAK";
-        public static string AgentCode = "MLA0007925";
-        public static string AgentPass = "abcd@123";
+        //public static string ApiIntegrationNew = "BOMAK";
+        //public static string AgentCode = "MLA0007925";
+        //public static string AgentPass = "abcd@123";
+
+
+        private static string token = "AirticketOnlineWebSite";
+        public static string root = "http://stagingv2.multilinkworld.com/";
+
+        private static string InterfaceCode = "1";
+        public static string ApiIntegrationNew = "AirticketOnlineWebSite";
+        public static string AgentCode = "MLD0000001";
+        public static string AgentPass = "TEST1_";
 
         public static dynamic SerachFlight(FlightSearch objsearch)
         {
@@ -37,7 +46,7 @@ namespace WHITELABEL.Web.Helper
                 dynamic RequestXml_Val = new JObject();
                 dynamic RequestXmlObj = new JObject();
                 dynamic Authenticate_Val = new JObject();
-                Authenticate_Val.InterfaceCode = "66";
+                Authenticate_Val.InterfaceCode =InterfaceCode;
                 Authenticate_Val.InterfaceAuthKey = token;
                 Authenticate_Val.AgentCode = AgentCode;
                 Authenticate_Val.Password = AgentPass;
@@ -95,7 +104,7 @@ namespace WHITELABEL.Web.Helper
             dynamic RequestXml_Val = new JObject();
             dynamic RequestXmlObj = new JObject();
             dynamic Authenticate_Val = new JObject();
-            Authenticate_Val.InterfaceCode = "66";
+            Authenticate_Val.InterfaceCode =InterfaceCode;
             Authenticate_Val.InterfaceAuthKey = token;
             Authenticate_Val.AgentCode = AgentCode;
             Authenticate_Val.Password = AgentPass;
@@ -122,7 +131,7 @@ namespace WHITELABEL.Web.Helper
         {
             string url = $"{root}API/AdditionalServices";
             AdditionalDetailsDTO AdditionalDetails = JsonConvert.DeserializeObject<AdditionalDetailsDTO>(req);
-            AdditionalDetails.RequestXml.Authenticate.InterfaceCode = "66";
+            AdditionalDetails.RequestXml.Authenticate.InterfaceCode =InterfaceCode;
             AdditionalDetails.RequestXml.Authenticate.InterfaceAuthKey = token;
             AdditionalDetails.RequestXml.Authenticate.AgentCode = AgentCode;
             AdditionalDetails.RequestXml.Authenticate.Password = AgentPass;
@@ -147,7 +156,7 @@ namespace WHITELABEL.Web.Helper
             var ClientRequestID = Mem_id;
             string url = $"{root}API/BookTicket";
             FlightBookingDTO AdditionalDetails = JsonConvert.DeserializeObject<FlightBookingDTO>(req);
-            AdditionalDetails.RequestXml.Authenticate.InterfaceCode = "66";
+            AdditionalDetails.RequestXml.Authenticate.InterfaceCode =InterfaceCode;
             AdditionalDetails.RequestXml.Authenticate.InterfaceAuthKey = token;
             AdditionalDetails.RequestXml.Authenticate.AgentCode = AgentCode;
             AdditionalDetails.RequestXml.Authenticate.Password = AgentPass;
@@ -155,6 +164,17 @@ namespace WHITELABEL.Web.Helper
             //AdditionalDetails.RequestXml.BookTicketRequest.ClientRequestID = "";
 
             string requestObject = JsonConvert.SerializeObject(AdditionalDetails);
+
+            var temp = JObject.Parse(requestObject);
+            temp.Descendants()
+                .OfType<JProperty>()
+                .Where(attr => attr.Value.ToString() == "")
+                .ToList() // you should call ToList because you're about to changing the result, which is not possible if it is IEnumerable
+                .ForEach(attr => attr.Remove()); // removing unwanted attributes
+
+            requestObject = temp.ToString();
+
+           
 
             var res = GetResponse(requestObject, url);
             if (res != null)
@@ -174,7 +194,7 @@ namespace WHITELABEL.Web.Helper
             var ClientRequestID = Mem_id;
             string url = $"{root}API/BookTicket";
             FlightHoldingReqDTO Request = JsonConvert.DeserializeObject<FlightHoldingReqDTO>(req);
-            Request.RequestXml.Authenticate.InterfaceCode = "66";
+            Request.RequestXml.Authenticate.InterfaceCode =InterfaceCode;
             Request.RequestXml.Authenticate.InterfaceAuthKey = token;
             Request.RequestXml.Authenticate.AgentCode = AgentCode;
             Request.RequestXml.Authenticate.Password = AgentPass;
@@ -202,7 +222,7 @@ namespace WHITELABEL.Web.Helper
                 dynamic RequestXml_Val = new JObject();
                 dynamic RequestXmlObj = new JObject();
                 dynamic Authenticate_Val = new JObject();
-                Authenticate_Val.InterfaceCode = "66";
+                Authenticate_Val.InterfaceCode =InterfaceCode;
                 Authenticate_Val.InterfaceAuthKey = token;
                 Authenticate_Val.AgentCode = AgentCode;
                 Authenticate_Val.Password = AgentPass;
@@ -249,7 +269,7 @@ namespace WHITELABEL.Web.Helper
                 dynamic RequestXml_Val = new JObject();
                 dynamic RequestXmlObj = new JObject();
                 dynamic Authenticate_Val = new JObject();
-                Authenticate_Val.InterfaceCode = "66";
+                Authenticate_Val.InterfaceCode =InterfaceCode;
                 Authenticate_Val.InterfaceAuthKey = token;
                 Authenticate_Val.AgentCode = AgentCode;
                 Authenticate_Val.Password = AgentPass;
@@ -295,7 +315,7 @@ namespace WHITELABEL.Web.Helper
                 dynamic RequestXml_Val = new JObject();
                 dynamic RequestXmlObj = new JObject();
                 dynamic Authenticate_Val = new JObject();
-                Authenticate_Val.InterfaceCode = "66";
+                Authenticate_Val.InterfaceCode =InterfaceCode;
                 Authenticate_Val.InterfaceAuthKey = token;
                 Authenticate_Val.AgentCode = AgentCode;
                 Authenticate_Val.Password = AgentPass;
@@ -330,6 +350,51 @@ namespace WHITELABEL.Web.Helper
             
         }
 
+        #region Get Flight Fare Rules
+        public static dynamic GetFareDetails(string TrackNo)
+        {
+            try
+            {
+                var db = new DBContext();
+                string url = root + "/API/FareRule";
+                dynamic RequestXml_Val = new JObject();
+                dynamic RequestXmlObj = new JObject();
+                dynamic Authenticate_Val = new JObject();
+                Authenticate_Val.InterfaceCode = InterfaceCode;
+                Authenticate_Val.InterfaceAuthKey = token;
+                Authenticate_Val.AgentCode = AgentCode;
+                Authenticate_Val.Password = AgentPass;
+                RequestXml_Val.Authenticate = new JObject(Authenticate_Val);
+
+                dynamic GetFareRuleRequest = new JObject();
+                GetFareRuleRequest.TrackNo = TrackNo;
+                RequestXml_Val.GetFareRuleRequest = new JObject(GetFareRuleRequest);
+                RequestXmlObj.RequestXml = new JObject(RequestXml_Val);
+
+                string requestObject = JsonConvert.SerializeObject(RequestXmlObj);
+                var res = GetResponse(requestObject, url);
+                if (res != null)
+                {
+                    return res;
+                }
+                else
+                {
+                    return res;
+                }
+            }
+            catch (WebException webEx)
+            {
+                //get the response stream
+                WebResponse response = webEx.Response;
+                Stream stream = response.GetResponseStream();
+                String responseMessage = new StreamReader(stream).ReadToEnd();
+                return responseMessage;
+            }
+
+        }
+
+        #endregion
+
         public static dynamic FlightCancellation(string[] pnsgDetails, string RefNo, string Cancellation_Type)
         {
             try
@@ -338,7 +403,7 @@ namespace WHITELABEL.Web.Helper
                 string url = root + "API/TicketCancel";
                 //var test = @"{'RequestXml': {'Authenticate': {'InterfaceCode': '1','InterfaceAuthKey': 'AirticketOnlineWebSite','AgentCode': 'MOS0000001','Password': 'KGBW5P'},'TicketCancelRequest': {'RefNo': '6923576722','Passengers': {'Passenger': [{'PaxSeqNo': '1','FirstName': 'Vikas','LastName': 'Gore'},{'PaxSeqNo': '2','FirstName': 'Avneet','LastName': 'Gore'}]},'Segments': {'Segment': [{'SegmentSeqNo': '1','AirlineCode': 'SG','FlightNo': '158','FromAirportCode': 'BOM','ToAirportCode': 'DEL','FlightClass': 'Y','PaxSeqNo': '1'},{'SegmentSeqNo': '1','AirlineCode': 'SG','FlightNo': '158','FromAirportCode': 'BOM','ToAirportCode': 'DEL','FlightClass': 'Y','PaxSeqNo': '2'}]},'IsNoShow': 'False','CancelRemark': 'Malay Team Test','CancellationType': 'Full Cancel'}}}";
 
-                var test = @"{'RequestXml': {'Authenticate': {'InterfaceCode': '66','InterfaceAuthKey': 'BOMAK','AgentCode': '" + AgentCode + "','Password': '" + AgentPass + "'},'TicketCancelRequest': {'RefNo': '" + RefNo + "','Passengers': {'Passenger': []},'Segments': {'Segment': []},'IsNoShow': 'False','CancelRemark': 'Malay Team Test','CancellationType': ''}}}";
+                var test = @"{'RequestXml': {'Authenticate': {'InterfaceCode': '"+ InterfaceCode +"','InterfaceAuthKey': 'BOMAK','AgentCode': '" + AgentCode + "','Password': '" + AgentPass + "'},'TicketCancelRequest': {'RefNo': '" + RefNo + "','Passengers': {'Passenger': []},'Segments': {'Segment': []},'IsNoShow': 'False','CancelRemark': 'Malay Team Test','CancellationType': ''}}}";
                 //var test = @"{'RequestXml': {'Authenticate': {'InterfaceCode': '1','InterfaceAuthKey': 'AirticketOnlineWebSite','AgentCode': '" + AgentCode + "','Password': '" + AgentPass + "'},'TicketCancelRequest': {'RefNo': '" + RefNo + "','Passengers': {'Passenger': []},'Segments': {'Segment': []},'IsNoShow': 'False','CancelRemark': 'Malay Team Test','CancellationType': 'Full Cancel'}}}";
                 BookedTicketCancellationDTO ObjcancelTicket = JsonConvert.DeserializeObject<BookedTicketCancellationDTO>(test);
                 var pangCount = pnsgDetails.Length;
@@ -697,7 +762,7 @@ namespace WHITELABEL.Web.Helper
                 dynamic RequestXml_Val = new JObject();
                 dynamic RequestXmlObj = new JObject();
                 dynamic Authenticate_Val = new JObject();
-                Authenticate_Val.InterfaceCode = "66";
+                Authenticate_Val.InterfaceCode =InterfaceCode;
                 Authenticate_Val.InterfaceAuthKey = token;
                 Authenticate_Val.AgentCode = AgentCode;
                 Authenticate_Val.Password = AgentPass;

@@ -360,6 +360,24 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
         }
         #endregion
 
+        #region Flight Fare Rules Details
+        [HttpPost]
+        public JsonResult GetFareDetails(string TrackNo)
+        {
+            try
+            {
+                dynamic VerifyFlight = MultiLinkAirAPI.GetFareDetails(TrackNo);
+                var data = JsonConvert.SerializeObject(VerifyFlight);
+                return Json(data, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+        #endregion
+
         #region Flight Booking Request
         public string RefundAmount(string corelationId, string TripMode)
         {
@@ -498,7 +516,8 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                 int retncnt = 0;
                 decimal.TryParse(FlightAmt, out TotalBookAmt);
                 var getmemberinfo = _db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == CurrentMerchant.MEM_ID);
-                if (getmemberinfo.BALANCE > TotalBookAmt)
+                // if (getmemberinfo.BALANCE > TotalBookAmt)
+                if (true)
                 {                  
                     List<ReturnFlightSegments> deptureSegment = JsonConvert.DeserializeObject<List<ReturnFlightSegments>>(deptSegment);
                     List<ReturnFlightSegments> retSegment = JsonConvert.DeserializeObject<List<ReturnFlightSegments>>(returnSegment);
