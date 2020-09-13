@@ -516,8 +516,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                 int retncnt = 0;
                 decimal.TryParse(FlightAmt, out TotalBookAmt);
                 var getmemberinfo = _db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == CurrentMerchant.MEM_ID);
-                // if (getmemberinfo.BALANCE > TotalBookAmt)
-                if (true)
+                if (getmemberinfo.BALANCE > TotalBookAmt)
                 {                  
                     List<ReturnFlightSegments> deptureSegment = JsonConvert.DeserializeObject<List<ReturnFlightSegments>>(deptSegment);
                     List<ReturnFlightSegments> retSegment = JsonConvert.DeserializeObject<List<ReturnFlightSegments>>(returnSegment);
