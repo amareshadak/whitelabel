@@ -1,6 +1,6 @@
 ﻿app.controller('FlightVerificationController', ['FlightServices', '$scope', '$http', '$window', function (FlightServices, $scope, $http, $window) {
     
-    $scope.additionalAddedAmount = 0;// parseFloat(document.getElementById('AIRADDITIONALAMOUNT').value);
+    $scope.additionalAddedAmount = parseFloat(document.getElementById('AIRADDITIONALAMOUNT').value);
 
     $scope.adult = 0;
     $scope.child = 0;
@@ -269,7 +269,11 @@
         return hours + " hr " + minutes + " m";
     }
 
-    $scope.bookFlightRequest = function () {        
+    $scope.bookFlightRequest = function (isFormInvalid) {     
+        if (isFormInvalid) {
+            return false;
+        }
+
         $scope.bookingRequestObj.RequestXml.BookTicketRequest.TrackNo = $scope.trackNumber;
         $scope.bookingRequestObj.RequestXml.BookTicketRequest.MobileNo = $scope.mobileNumber;
         $scope.bookingRequestObj.RequestXml.BookTicketRequest.AltMobileNo = $scope.altMobileNo;
@@ -356,14 +360,26 @@
 
     $scope.holdingFlightRequest = function () {
 
+        if (isFormInvalid) {
+            return false;
+        }
+
         $scope.bookingRequestObj.RequestXml.BookTicketRequest.TrackNo = $scope.trackNumber;
         $scope.bookingRequestObj.RequestXml.BookTicketRequest.MobileNo = $scope.mobileNumber;
         $scope.bookingRequestObj.RequestXml.BookTicketRequest.AltMobileNo = $scope.altMobileNo;
         $scope.bookingRequestObj.RequestXml.BookTicketRequest.Email = $scope.emailAddress;
+
+        $scope.bookingRequestObj.RequestXml.BookTicketRequest.GSTNo = $scope.GSTNo;
+        $scope.bookingRequestObj.RequestXml.BookTicketRequest.GSTEmailID = $scope.GSTEmailID;
+        $scope.bookingRequestObj.RequestXml.BookTicketRequest.GSTCompanyName = $scope.GSTCompanyName;
+        $scope.bookingRequestObj.RequestXml.BookTicketRequest.GSTMobileNo = $scope.GSTMobileNo;
+        $scope.bookingRequestObj.RequestXml.BookTicketRequest.GSTAddress = $scope.GSTAddress;
+
         $scope.bookingRequestObj.RequestXml.BookTicketRequest.Passengers.Passenger = $scope.passengers;
         $scope.bookingRequestObj.RequestXml.BookTicketRequest.Segments.Segment = $scope.segments;
         $scope.bookingRequestObj.RequestXml.BookTicketRequest.AdditionalServices.AdditionalService = $scope.additionaServices.filter(function (x) { return x.IsSelected; });
         $scope.bookingRequestObj.RequestXml.BookTicketRequest.TotalAmount = $scope.TotalAmount;
+
         if ($scope.flightDetails[0].HoldAllowed == 'Y') {
             $scope.bookingRequestObj.RequestXml.BookTicketRequest.HoldAllowed = 'Y';
             $scope.bookingRequestObj.RequestXml.BookTicketRequest.HoldCharge = $scope.flightDetails[0].HoldCharges;
