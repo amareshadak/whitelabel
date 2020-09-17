@@ -482,10 +482,7 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\Admin\AdminHelperJS\Angularjsfiles\app.js" />
-    <Content Include="Areas\Admin\AdminHelperJS\Angularjsfiles\flightBookingDetails.js" />
-    <Content Include="Areas\Admin\AdminHelperJS\Angularjsfiles\Services.js" />
-    <Content Include="Areas\Admin\AdminHelperJS\DebitCreditJs\Pendrive\CreditWalletJS.js" />
+    <Content Include="Areas\Admin\AdminHelperJS\DebitCreditJs\CreditWalletJS.js" />
     <Content Include="Areas\Admin\AdminHelperJS\DebitCreditJs\Index.js" />
     <Content Include="Areas\Admin\AdminHelperJS\MemberApilevel\AutoSuggestion.js" />
     <Content Include="Areas\Admin\AdminHelperJS\MemberApilevel\ChannelLinkJs.js" />

@@ -81,6 +81,11 @@
         public string API_REQUEST { get; set; }
         public string Cancellation_status { get; set; }
         public int? STOPAGE { get; set; }
+        public string COMPANY_GST_NO { get; set; }
+        public string COMPANY_NAME { get; set; }
+        public string COMPANY_EMAIL_ID { get; set; }
+        public string COMPANY_MOBILE { get; set; }
+        public string COMPANY_GST_ADDRESS { get; set; }
         [NotMapped]
         public string FROM_DATE { get; set; }
         [NotMapped]

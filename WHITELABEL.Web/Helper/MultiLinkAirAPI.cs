@@ -30,13 +30,22 @@ namespace WHITELABEL.Web.Helper
         //public static string AgentPass = "abcd@123";
 
 
-        private static string token = "AirticketOnlineWebSite";
-        public static string root = "http://stagingv2.multilinkworld.com/";
+        //private static string token = "AirticketOnlineWebSite";
+        //public static string root = "http://stagingv2.multilinkworld.com/";
 
-        private static string InterfaceCode = "1";
-        public static string ApiIntegrationNew = "AirticketOnlineWebSite";
-        public static string AgentCode = "MLD0000001";
-        public static string AgentPass = "TEST1_";
+        //private static string InterfaceCode = "1";
+        //public static string ApiIntegrationNew = "AirticketOnlineWebSite";
+        //public static string AgentCode = "MLD0000001";
+        //public static string AgentPass = "TEST1_";
+        private static string token = System.Configuration.ConfigurationManager.AppSettings["token"];
+        private static string root = System.Configuration.ConfigurationManager.AppSettings["rootURL"];
+        private static string InterfaceCode = System.Configuration.ConfigurationManager.AppSettings["InterfaceCode"];
+        private static string ApiIntegrationNew = System.Configuration.ConfigurationManager.AppSettings["ApiIntegrationNew"];
+        private static string AgentCode = System.Configuration.ConfigurationManager.AppSettings["AgentCode"];
+        private static string AgentPass = System.Configuration.ConfigurationManager.AppSettings["AgentPass"];
+        private static string MerchantCode = System.Configuration.ConfigurationManager.AppSettings["MerchantCode"];
+        private static string MerchantKey = System.Configuration.ConfigurationManager.AppSettings["MerchantKey"];
+        private static string SaltKey = System.Configuration.ConfigurationManager.AppSettings["SaltKey"];
 
         public static dynamic SerachFlight(FlightSearch objsearch)
         {
@@ -97,7 +106,6 @@ namespace WHITELABEL.Web.Helper
                 return responseMessage;
             }
         }
-
         public static dynamic VerifyFlightDetails(string TrackNo, string TripMode)
         {
             string url = root + "API/VerifyFlightDetail";
@@ -124,9 +132,6 @@ namespace WHITELABEL.Web.Helper
                 return res;
             }
         }
-
-
-
         public static dynamic GetAdditionalFlightDetails(string req)
         {
             string url = $"{root}API/AdditionalServices";
@@ -148,7 +153,6 @@ namespace WHITELABEL.Web.Helper
                 return res;
             }
         }
-
         public static dynamic BookedFlightTicket(string req,string Mem_id)
         //public static dynamic BookedFlightTicket(string req)
         {           
@@ -186,7 +190,6 @@ namespace WHITELABEL.Web.Helper
                 return res;
             }
         }
-
         public static dynamic HoldingFlightTicket(string req, string Mem_id)
         //public static dynamic BookedFlightTicket(string req)
         {
@@ -213,7 +216,6 @@ namespace WHITELABEL.Web.Helper
                 return res;
             }
         }
-
         public static dynamic GetTicketInformation(string refId, string GDSPNR, string AirlinePNR, string ClientRequestID, string BookingFromDate, string BookingToDate)
         {
             try
@@ -259,8 +261,6 @@ namespace WHITELABEL.Web.Helper
             }
 
         }
-
-
         public static dynamic printBookTicket(string refId,string GDSPNR,string AirlinePNR,string ClientRequestID,string BookingFromDate,string BookingToDate)
         {
             try
@@ -306,7 +306,6 @@ namespace WHITELABEL.Web.Helper
             }
             
         }
-
         public static dynamic HoldTicketConfrim(string refId, string  ClientRequestID)
         {
             try
@@ -323,9 +322,12 @@ namespace WHITELABEL.Web.Helper
                 dynamic HoldBookingConfirmRequest_val = new JObject();
                 HoldBookingConfirmRequest_val.RefNo = refId;
                 HoldBookingConfirmRequest_val.ClientRequestID = ClientRequestID;
-                HoldBookingConfirmRequest_val.MerchantCode = "PAY9zJhspxq7m";
-                HoldBookingConfirmRequest_val.MerchantKey = "eSpbcYMkPoZYFPcE8FnZ";
-                HoldBookingConfirmRequest_val.SaltKey = "WHJIIcNjVXaZj03TnDme";                
+                HoldBookingConfirmRequest_val.MerchantCode = MerchantCode;
+                HoldBookingConfirmRequest_val.MerchantKey = MerchantKey;
+                HoldBookingConfirmRequest_val.SaltKey = SaltKey;
+                //HoldBookingConfirmRequest_val.MerchantCode = "PAY9zJhspxq7m";
+                //HoldBookingConfirmRequest_val.MerchantKey = "eSpbcYMkPoZYFPcE8FnZ";
+                //HoldBookingConfirmRequest_val.SaltKey = "WHJIIcNjVXaZj03TnDme";                
                 RequestXml_Val.HoldBookingConfirmRequest = new JObject(HoldBookingConfirmRequest_val);
                 RequestXmlObj.RequestXml = new JObject(RequestXml_Val);
                 string SearchparamValue = JsonConvert.SerializeObject(RequestXmlObj);
@@ -349,7 +351,6 @@ namespace WHITELABEL.Web.Helper
             }
             
         }
-
         #region Get Flight Fare Rules
         public static dynamic GetFareDetails(string TrackNo)
         {
@@ -392,9 +393,7 @@ namespace WHITELABEL.Web.Helper
             }
 
         }
-
         #endregion
-
         public static dynamic FlightCancellation(string[] pnsgDetails, string RefNo, string Cancellation_Type)
         {
             try
@@ -403,7 +402,7 @@ namespace WHITELABEL.Web.Helper
                 string url = root + "API/TicketCancel";
                 //var test = @"{'RequestXml': {'Authenticate': {'InterfaceCode': '1','InterfaceAuthKey': 'AirticketOnlineWebSite','AgentCode': 'MOS0000001','Password': 'KGBW5P'},'TicketCancelRequest': {'RefNo': '6923576722','Passengers': {'Passenger': [{'PaxSeqNo': '1','FirstName': 'Vikas','LastName': 'Gore'},{'PaxSeqNo': '2','FirstName': 'Avneet','LastName': 'Gore'}]},'Segments': {'Segment': [{'SegmentSeqNo': '1','AirlineCode': 'SG','FlightNo': '158','FromAirportCode': 'BOM','ToAirportCode': 'DEL','FlightClass': 'Y','PaxSeqNo': '1'},{'SegmentSeqNo': '1','AirlineCode': 'SG','FlightNo': '158','FromAirportCode': 'BOM','ToAirportCode': 'DEL','FlightClass': 'Y','PaxSeqNo': '2'}]},'IsNoShow': 'False','CancelRemark': 'Malay Team Test','CancellationType': 'Full Cancel'}}}";
 
-                var test = @"{'RequestXml': {'Authenticate': {'InterfaceCode': '"+ InterfaceCode +"','InterfaceAuthKey': 'BOMAK','AgentCode': '" + AgentCode + "','Password': '" + AgentPass + "'},'TicketCancelRequest': {'RefNo': '" + RefNo + "','Passengers': {'Passenger': []},'Segments': {'Segment': []},'IsNoShow': 'False','CancelRemark': 'Malay Team Test','CancellationType': ''}}}";
+                var test = @"{'RequestXml': {'Authenticate': {'InterfaceCode': '"+ InterfaceCode +"','InterfaceAuthKey': '"+ token + "','AgentCode': '" + AgentCode + "','Password': '" + AgentPass + "'},'TicketCancelRequest': {'RefNo': '" + RefNo + "','Passengers': {'Passenger': []},'Segments': {'Segment': []},'IsNoShow': 'False','CancelRemark': 'Malay Team Test','CancellationType': ''}}}";
                 //var test = @"{'RequestXml': {'Authenticate': {'InterfaceCode': '1','InterfaceAuthKey': 'AirticketOnlineWebSite','AgentCode': '" + AgentCode + "','Password': '" + AgentPass + "'},'TicketCancelRequest': {'RefNo': '" + RefNo + "','Passengers': {'Passenger': []},'Segments': {'Segment': []},'IsNoShow': 'False','CancelRemark': 'Malay Team Test','CancellationType': 'Full Cancel'}}}";
                 BookedTicketCancellationDTO ObjcancelTicket = JsonConvert.DeserializeObject<BookedTicketCancellationDTO>(test);
                 var pangCount = pnsgDetails.Length;
@@ -649,7 +648,6 @@ namespace WHITELABEL.Web.Helper
             }
 
         }
-
         //public static dynamic FlightCancellation(string[] pnsgDetails, string RefNo,string Cancellation_Type)
         //{
         //    try
@@ -749,7 +747,6 @@ namespace WHITELABEL.Web.Helper
         //    }
 
         //}
-
         public static dynamic FlightCancellationHistory(string CancelReqNo, string RefNo,string AirPNR)
         {
             try
@@ -813,10 +810,6 @@ namespace WHITELABEL.Web.Helper
             }
 
         }
-
-
-
-
         public static dynamic GetResponse(string requestData, string url)
         {
             string responseXML = string.Empty;

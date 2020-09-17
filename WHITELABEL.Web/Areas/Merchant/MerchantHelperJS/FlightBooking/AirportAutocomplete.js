@@ -90,9 +90,9 @@ app.controller('AirportAutocompleteController', function ($scope, $http, $window
     $scope.formdisplay = true;
     $scope.airlineList = new Array();
     //event fires when click on textbox  From AirportName
-    $scope.SelectedAirport = function (selected) {
+    $scope.SelectedAirport = function (selected) {        
         if (selected) {
-            $scope.SelectedAirport = selected.originalObject;
+            $scope.SelectedAirport = selected.originalObject;            
             //alert($scope.SelectedAirport);
         }
     }
