@@ -35,6 +35,8 @@
         public string FROM_AIRPORT { get; set; }
         public string TO_AIRPORT { get; set; }
         public string CANCEL_STATUS { get; set; }
+        public string PASSPORT { get; set; }
+        public string CANCELLATION_REMARTK { get; set; }
 
     }
 }

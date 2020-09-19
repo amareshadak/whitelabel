@@ -62,6 +62,9 @@
                                             <td>Total Amount </td>
                                             <td>Baggage</td>
                                             <td>OP Mode</td>
+                                            <td>Company GST No</td>
+                                            <td>Company Name</td>
+                                            <td>Company Mobile No</td>
                                             <td>Cancellation Status </td>
                                             <td>Booking Status</td>
                                             <td>Check Booking Status</td>
@@ -113,6 +116,9 @@
                                             <td><span>{{m.TOTAL_FLIGHT_AMT}}</span></td>
                                             <td><span>{{m.TOTAL_BAGGAGE_ALLOWES}}</span></td>
                                             <td><span>{{m.OP_MODE}}</span></td>
+                                            <td><span>{{m.COMPANY_GST_NO}}</span></td>
+                                            <td><span>{{m.COMPANY_NAME}}</span></td>
+                                            <td><span>{{m.COMPANY_MOBILE}}</span></td>
                                             <td>
                                                 <span class="badge badge-{{m.Cancellation_status=='Fully Cancelled'?'danger' : m.Cancellation_status=='Partially Cancelled'?'warning':'warning'}}" style="color:white;font-size:small;width:106px">{{m.Cancellation_status}}</span>
                                             </td>

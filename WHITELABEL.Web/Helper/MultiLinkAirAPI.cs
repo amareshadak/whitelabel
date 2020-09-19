@@ -206,6 +206,15 @@ namespace WHITELABEL.Web.Helper
 
             string requestObject = JsonConvert.SerializeObject(Request);
 
+            var temp = JObject.Parse(requestObject);
+            temp.Descendants()
+                .OfType<JProperty>()
+                .Where(attr => attr.Value.ToString() == "")
+                .ToList() // you should call ToList because you're about to changing the result, which is not possible if it is IEnumerable
+                .ForEach(attr => attr.Remove()); // removing unwanted attributes
+
+            requestObject = temp.ToString();
+
             var res = GetResponse(requestObject, url);
             if (res != null)
             {

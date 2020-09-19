@@ -358,7 +358,7 @@
     };
 
 
-    $scope.holdingFlightRequest = function () {
+    $scope.holdingFlightRequest = function (isFormInvalid) {
 
         if (isFormInvalid) {
             return false;

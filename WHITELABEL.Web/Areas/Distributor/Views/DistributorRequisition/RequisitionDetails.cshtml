@@ -195,21 +195,24 @@
     </div>
     <script>
      $(document).ready(function () {
-
+         $('#txtRequestDate').datepicker({
+             dateFormat: "yy-mm-dd",
+             uiLibrary: 'bootstrap4'
+         });
          window.setTimeout(function () {
              $("#informationMessage").fadeOut('slow');
          }, 3000);
      });
-        $(function () {
-            $('#txtRequestDate').datepicker({
-                format: "dd-MM-yyyy",
-                language: "es",
-                autoclose: true,
-                todayHighlight: true,
-                changeMonth: true,
-                changeYear: true
-            });
-        });
+        //$(function () {
+        //    $('#txtRequestDate').datepicker({
+        //        format: "dd-MM-yyyy",
+        //        language: "es",
+        //        autoclose: true,
+        //        todayHighlight: true,
+        //        changeMonth: true,
+        //        changeYear: true
+        //    });
+        //});
         function restrictMinus(e) {
             var drpCatEarnning = document.getElementById('drpCatEarnning');
 

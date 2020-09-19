@@ -87,26 +87,36 @@
 }
 
     <script type="text/javascript">
-    $(function () {
-        $('#txtFromDate').datepicker({
-            format: "yyyy-MM-dd",
-            language: "es",
-            autoclose: true,
-            todayHighlight: true,
-            changeMonth: true,
-            changeYear: true
+        $(document).ready(function () {
+            $('#txtFromDate').datepicker({
+                dateFormat: "yy-mm-dd",
+                uiLibrary: 'bootstrap4'
+            });
+            $('#txtToDate').datepicker({
+                dateFormat: "yy-mm-dd",
+                uiLibrary: 'bootstrap4'
+            });
         });
-    });
-    $(function () {
-        $('#txtToDate').datepicker({
-            format: "yyyy-MM-dd",
-            language: "es",
-            autoclose: true,
-            todayHighlight: true,
-            changeMonth: true,
-            changeYear: true
-        });
-    });
+    //$(function () {
+    //    $('#txtFromDate').datepicker({
+    //        format: "yyyy-MM-dd",
+    //        language: "es",
+    //        autoclose: true,
+    //        todayHighlight: true,
+    //        changeMonth: true,
+    //        changeYear: true
+    //    });
+    //});
+    //$(function () {
+    //    $('#txtToDate').datepicker({
+    //        format: "yyyy-MM-dd",
+    //        language: "es",
+    //        autoclose: true,
+    //        todayHighlight: true,
+    //        changeMonth: true,
+    //        changeYear: true
+    //    });
+    //});
 
     $("#btnSearchDAteWise").on("click", function () {
         var Date_From = $('#txtFromDate').val();

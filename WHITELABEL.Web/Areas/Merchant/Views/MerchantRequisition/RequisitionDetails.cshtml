@@ -355,17 +355,21 @@
         //$('#div_DIstributor').show();
         //$('#div_WhiteLabel').hide();
         DisplayButton();
-    })
-    $(function () {
         $('#txtRequestDate').datepicker({
-            format: "dd-MM-yyyy",
-            language: "es",
-            autoclose: true,
-            todayHighlight: true,
-            changeMonth: true,
-            changeYear: true
+            dateFormat: "yy-mm-dd",
+            uiLibrary: 'bootstrap4'
         });
-    });
+    })
+    //$(function () {
+    //    $('#txtRequestDate').datepicker({
+    //        format: "dd-MM-yyyy",
+    //        language: "es",
+    //        autoclose: true,
+    //        todayHighlight: true,
+    //        changeMonth: true,
+    //        changeYear: true
+    //    });
+    //});
 
     //function DisplayButton() {
     //    var DistributorchkYes = document.getElementById("checkRequisitionTypeDist");

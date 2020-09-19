@@ -86,6 +86,12 @@
         public string COMPANY_EMAIL_ID { get; set; }
         public string COMPANY_MOBILE { get; set; }
         public string COMPANY_GST_ADDRESS { get; set; }
+        public decimal? PUBLISH_FARE { get; set; }
+        public decimal? NET_FARE { get; set; }
+        public decimal? NET_TOTAL_FARE { get; set; }
+        public string CANCELLATION_REMARK { get; set; }
+        public bool? RESCHEDULE_FARE { get; set; }
+        public string RESCHEDULE_REMARK { get; set; }
         [NotMapped]
         public string FROM_DATE { get; set; }
         [NotMapped]

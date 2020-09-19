@@ -237,14 +237,21 @@
 }
 
 <script>
-    $(function () {
-            $('#txtRequestDate').datepicker({
-                format: "dd-MM-yyyy",
-                language: "es",
-                autoclose: true,
-                todayHighlight: true,
-                changeMonth: true,
-                changeYear: true
-            });
+    $(document).ready(function () {
+        $('#txtRequestDate').datepicker({
+            dateFormat: "yy-mm-dd",
+            uiLibrary: 'bootstrap4'
         });
+        
+    });
+    //$(function () {
+    //        $('#txtRequestDate').datepicker({
+    //            format: "dd-MM-yyyy",
+    //            language: "es",
+    //            autoclose: true,
+    //            todayHighlight: true,
+    //            changeMonth: true,
+    //            changeYear: true
+    //        });
+    //    });
 </script>
