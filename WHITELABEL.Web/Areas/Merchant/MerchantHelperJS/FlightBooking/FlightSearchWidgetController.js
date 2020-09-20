@@ -78,7 +78,7 @@
     $scope.initSetSearchValue = function () {
 
         $timeout(function () {
-            debugger;
+            
             const data = localStorage.getItem('SEARCH_FLIGHT_DATA');
             if (data) {
                 const searchObj = JSON.parse(data);

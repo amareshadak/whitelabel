@@ -417,14 +417,7 @@
     }
 
     $scope.RoundtripgetFlightDetails = function (Adult, Children, Infant, TrackNo, TripMode) {
-        //
-        //var Tracevalue = JSON.parse(window.localStorage.getItem("SearchTraceDetails"));
-        //var timevalue = new Date(Tracevalue.Time);
-        //var TraceId = Tracevalue.Token;
-        //const currDate = new Date();
-        //const oldDate = timevalue;
         window.location.href = '/Merchant/MerchantFlightDetails/FlightBookingDetails?TrackNo=' + TrackNo + '&PsgnAdult=' + Adult + '&PsgnChildren=' + Children + '&PsgnInfant=' + Infant + '&TripMode=' + TripMode;
-
     };
 
     $scope.AddTotalAmount = function (DerpAmt, RetAmt) {
@@ -518,4 +511,80 @@
         return 0;
     }
 
+
+    //================= Common =====================//
+    $scope.getAirlineName = function (code) {
+        let data = $scope.airlineList.filter(function (x) {
+            return x.AirlineCode == code;
+        });
+
+        return data[0].AirlineName;
+    };
+
+    $scope.getAirportName = function (code) {
+        let data = $scope.airportList.filter(function (x) {
+            return x.AirportCode == code;
+        });
+
+        return data[0].AirportName;
+    };
+
+    $scope.getFormatDate = function (date) {
+        let splitDate = date.split("/");
+        return moment(`${splitDate[1]}/${splitDate[0]}/${splitDate[2]}`).format(
+            "ddd D MMM YY"
+        );
+    };
+
+    function diff_minutes(dt2, dt1) {
+
+        var diff = (dt2.getTime() - dt1.getTime()) / 1000;
+        diff /= 60;
+        return Math.abs(Math.round(diff));
+
+    }
+
+    $scope.timeConvert = function (n) {
+        var num = n;
+        var hours = (num / 60);
+        var rhours = Math.floor(hours);
+        var minutes = (hours - rhours) * 60;
+        var rminutes = Math.round(minutes);
+        return rhours + "h " + rminutes + "m";
+    }
+
+    $scope.calculateDuration = function (item) {
+        const firstDate = item[0].DepDate;
+        const firstTime = item[0].DepTime;
+        const lastDate = item[item.length - 1].ArrDate;
+        const lastTime = item[item.length - 1].ArrTime;
+        const firstDateArray = firstDate.split('/');
+        const firstTimeArray = firstTime.split(':');
+        const lastDateArray = lastDate.split('/');
+        const lastTimeArray = lastTime.split(':');
+        const firstDateTime = new Date(firstDateArray[2], firstDateArray[1], firstDateArray[0], firstTimeArray[0], firstTimeArray[1]);
+        const lastDateTime = new Date(lastDateArray[2], lastDateArray[1], lastDateArray[0], lastTimeArray[0], lastTimeArray[1]);
+        const totalMinute = diff_minutes(lastDateTime, firstDateTime);
+        return $scope.timeConvert(totalMinute);
+    }
+    function nl2br(str, is_xhtml) {
+        var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
+        return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
+    }
+
+    $scope.showFareRules = function (trackNo) {
+        const data = { TrackNo: trackNo };
+        const service = FlightServices.getFareRules(data);
+        service.then(function (response) {
+            const responce = response.data;
+            const fareRules = JSON.parse(responce);
+
+            $scope.fareRules = fareRules.GetFareRuleResponse.Farerules[0];
+            $('#pFareRules').html('');
+            $('#pFareRules').html(nl2br($scope.fareRules))
+
+            $('#modalFareRules').modal('show');
+
+        });
+    }
 }]);
