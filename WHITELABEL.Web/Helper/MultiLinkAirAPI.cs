@@ -819,6 +819,41 @@ namespace WHITELABEL.Web.Helper
             }
 
         }
+
+
+        public static dynamic GetMultilinkBalance()
+        {
+            string url = root + "API/GetBalance";
+            dynamic RequestXml_Val = new JObject();
+            dynamic RequestXmlObj = new JObject();
+            dynamic Authenticate_Val = new JObject();
+            Authenticate_Val.InterfaceCode = InterfaceCode;
+            Authenticate_Val.InterfaceAuthKey = token;
+            Authenticate_Val.AgentCode = AgentCode;
+            Authenticate_Val.Password = AgentPass;
+
+            RequestXml_Val.Authenticate = new JObject(Authenticate_Val);
+
+            dynamic GetBalanceRequest_Val = new JObject();
+            GetBalanceRequest_Val.MerchantCode = MerchantCode;
+            GetBalanceRequest_Val.Key = MerchantKey;
+            GetBalanceRequest_Val.SaltKey = SaltKey;
+
+            RequestXml_Val.GetBalanceRequest = new JObject(GetBalanceRequest_Val);
+
+            RequestXmlObj.RequestXml = new JObject(RequestXml_Val);
+            string SearchparamValue = JsonConvert.SerializeObject(RequestXmlObj);
+            var res = GetResponse(SearchparamValue, url);
+            if (res != null)
+            {
+                return res;
+            }
+            else
+            {
+                return res;
+            }
+        }
+
         public static dynamic GetResponse(string requestData, string url)
         {
             string responseXML = string.Empty;

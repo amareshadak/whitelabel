@@ -127,6 +127,7 @@
 
             <div style="margin: auto"></div>
             <div class="header-part-right">
+                <div style="padding-top:10px;"><span style="color:black; font-weight:bold;">Multilink API Balance: <label id="txtMultilinkBal">0.00</label> </span></div> &nbsp;&nbsp;&nbsp;
                 <div style="padding-top:10px;"><span style="color:black; font-weight:bold;">Available Balance: <label id="txtAvailableBal"></label> </span>   <a href="#" onclick="CheckAdminAvailableBalance()" style="margin-left:10px;margin-right:20px;"><i class="fa fa-redo"></i></a></div>
 
                 <div class="dropdown">
@@ -725,6 +726,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
             CheckAdminAvailableBalance();
+            checkMultilinkBalance();
         });
 
         function CheckAdminAvailableBalance() {
@@ -751,6 +753,29 @@
                 }
             });
         }
+
+        function checkMultilinkBalance() {
+              $.ajax({
+                  url: "/WhiteLevelAdmin/MultiLinkApiBalance?area=Admin",
+                cache: false,
+                type: "get",
+                datatype: "json",
+                  success: function (data) {
+                      try {
+                          let balance = JSON.parse(data).GetBalanceResponse.Balance[0].AccountBalance;
+                          document.getElementById('txtMultilinkBal').innerHTML = balance;
+                      } catch (e) {
+                          document.getElementById('txtMultilinkBal').innerHTML = 0.00;
+                      }
+                },
+                error: function (xhr, status, error) {
+                    console.log(status);
+                }
+              });
+
+        }
+
+       
     </script>
 </body>
 </html>

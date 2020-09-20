@@ -411,6 +411,13 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
         //    return View();
         //}
 
+        [HttpGet]
+        public JsonResult MultiLinkApiBalance()
+        {
+            var balance = MultiLinkAirAPI.GetMultilinkBalance();
+            return Json(balance.ToString(), JsonRequestBehavior.AllowGet);
+        }
+
         public static class ClientHelper
         {
             public static HttpClient GetClient()
