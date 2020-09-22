@@ -139,7 +139,7 @@
                                 <div class="form-group row">
                                     <label class="control-label col-md-3">Member Role</label>
                                     <div class="col-md-9">
-                                        @Html.DropDownListFor(model => model.MEMBER_ROLE, new SelectList((ViewBag.RoleDetails) as SelectList, "Value", "Text"), "Select Role", new { id = "RoleDetails", @class = "form-control" })  @*, @class = "selecter"*@
+                                        @Html.DropDownListFor(model => model.MEMBER_ROLE, new SelectList((ViewBag.RoleDetails) as SelectList, "Value", "Text"),  new { id = "RoleDetails", @class = "form-control" })  @*, @class = "selecter"*@
                                         <span class="help-block"><small>@Html.ValidationMessageFor(model => model.MEMBER_ROLE, "", new { @class = "text-danger" })</small></span>
                                     </div>
                                 </div>
@@ -292,7 +292,7 @@
                                                 @Html.EditorFor(model => model.SECURITY_PIN_MD5, new { htmlAttributes = new { @class = "form-control", @placeholder = "XXXX", @autocomplete = "off", id = "password" } })
                                             </div>
 
-                                            <span class="help-block"><small>@Html.ValidationMessageFor(model => model.SECURITY_PIN_MD5, "", new { @class = "text-danger" })</small></span>
+                                            @*<span class="help-block"><small>@Html.ValidationMessageFor(model => model.SECURITY_PIN_MD5, "", new { @class = "text-danger" })</small></span>*@
                                         </div>
                                     </div>
                                 </div>
@@ -321,7 +321,7 @@
                                             <div class="input-wrapper">
                                                 @Html.DropDownListFor(model => model.GST_FLAG, new SelectList((ViewBag.GSTValue) as SelectList, "Value", "Text"), "Select GST", new { id = "txtGSTID", @class = "form-control" })
                                             </div>
-                                            <span class="help-block"><small>@Html.ValidationMessageFor(model => model.MEMBER_MOBILE, "", new { @class = "text-danger" })</small></span>
+                                            @*<span class="help-block"><small>@Html.ValidationMessageFor(model => model.GST_FLAG, "", new { @class = "text-danger" })</small></span>*@
                                         </div>
                                     </div>
                                 </div>

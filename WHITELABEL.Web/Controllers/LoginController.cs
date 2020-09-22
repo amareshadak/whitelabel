@@ -465,6 +465,7 @@ namespace WHITELABEL.Web.Controllers
                                         Session["MerchantUserId"] = MerchantGetMember.MEM_ID;
                                        
                                         Session["MerchantUserName"] = MerchantGetMember.UName;
+                                        Session["MerchantCompanyName"] = MerchantGetMember.COMPANY;
                                         Session["UserType"] = "Merchant";
                                         Session["CreditLimitAmt"] = MerchantGetMember.CREDIT_LIMIT.ToString().Replace(".00", "").Trim();
                                         Session["ReservedCreditLimitAmt"] = MerchantGetMember.RESERVED_CREDIT_LIMIT.ToString().ToString().Replace(".00", "").Trim();

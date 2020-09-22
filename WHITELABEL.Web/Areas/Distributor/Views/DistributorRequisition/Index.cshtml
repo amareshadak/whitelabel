@@ -179,13 +179,18 @@
 
 
 <script type="text/javascript">
+    const currentYear = (new Date).getFullYear();
+    const currentMonth = (new Date).getMonth();
+    const currentDay = (new Date).getDate();
     $(document).ready(function () {
         $('#txtFromDate').datepicker({
             dateFormat: "yy-mm-dd",
+            maxDate: new Date(currentYear, currentMonth, currentDay),
             uiLibrary: 'bootstrap4'
         });
         $('#txtToDate').datepicker({
             dateFormat: "yy-mm-dd",
+            maxDate: new Date(currentYear, currentMonth, currentDay),
             uiLibrary: 'bootstrap4'
         });
     });

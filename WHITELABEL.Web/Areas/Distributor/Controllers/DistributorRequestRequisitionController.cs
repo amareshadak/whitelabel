@@ -414,6 +414,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                     var translist =await db.TBL_BALANCE_TRANSFER_LOGS.Where(x => x.SLN == objval.SLN).FirstOrDefaultAsync();
                     if (translist != null)
                     {
+                        var getsuperior = db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == whiteleveluser.INTRODUCER);
                         translist.REQUEST_DATE = Convert.ToDateTime(objval.REQUEST_DATE);
                         translist.REQUEST_TIME = System.DateTime.Now;
                         translist.BANK_ACCOUNT = objval.BANK_ACCOUNT;
@@ -426,6 +427,9 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                         translist.FromUser = "test";
                         db.Entry(translist).State = System.Data.Entity.EntityState.Modified;
                        await db.SaveChangesAsync();
+                        EmailHelper objsms = new EmailHelper();
+                        string Regmsg = "Hi " + whiteleveluser.MEM_UNIQUE_ID + " \r\n. You have successfully updated requisition of amount:- " + objval.AMOUNT + " to " + getsuperior.MEM_UNIQUE_ID + ".\r\n Regards\r\n BOOM Travels";
+                        objsms.SendUserEmail(whiteleveluser.EMAIL_ID, "Your requisition update successfully.", Regmsg);
                         //return RedirectToAction("Index");
                     }
                     else
@@ -433,6 +437,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                         var checkrefNo = db.TBL_BALANCE_TRANSFER_LOGS.Where(x => x.REFERENCE_NO == objval.REFERENCE_NO).FirstOrDefault();
                         if (checkrefNo != null)
                         {
+                            var getsuperior = db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == whiteleveluser.INTRODUCER);
                             checkrefNo.REQUEST_DATE = objval.REQUEST_DATE;
                             checkrefNo.REQUEST_TIME = System.DateTime.Now;
                             checkrefNo.BANK_ACCOUNT = objval.BANK_ACCOUNT;
@@ -445,9 +450,13 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                             checkrefNo.INSERTED_BY = MemberCurrentUser.MEM_ID;
                             db.Entry(checkrefNo).State = System.Data.Entity.EntityState.Modified;
                             await db.SaveChangesAsync();
+                            EmailHelper objsms = new EmailHelper();
+                            string Regmsg = "Hi " + whiteleveluser.MEM_UNIQUE_ID + " \r\n. You have successfully updated requisition of amount:- " + objval.AMOUNT + " to " + getsuperior.MEM_UNIQUE_ID + ".\r\n Regards\r\n BOOM Travels";
+                            objsms.SendUserEmail(whiteleveluser.EMAIL_ID, "Your requisition update successfully.", Regmsg);
                         }
                         else
                         {
+                            var getsuperior = db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == whiteleveluser.INTRODUCER);
                             //long fromuser = long.Parse(objval.FromUser);
                             long fromuser = long.Parse(whiteleveluser.INTRODUCER.ToString());
                             objval.TransactionID = fromuser + "" + MemberCurrentUser.MEM_ID + DateTime.Now.ToString("yyyyMMdd") + "" + DateTime.Now.ToString("HHMMss");
@@ -464,6 +473,9 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                             objval.INSERTED_BY = MemberCurrentUser.MEM_ID;
                             db.TBL_BALANCE_TRANSFER_LOGS.Add(objval);
                             await db.SaveChangesAsync();
+                            EmailHelper objsms = new EmailHelper();
+                            string Regmsg = "Hi " + whiteleveluser.MEM_UNIQUE_ID + " \r\n. You have successfully send requisition of amount:- " + objval.AMOUNT + " to " + getsuperior.MEM_UNIQUE_ID + ".\r\n Regards\r\n BOOM Travels";
+                            objsms.SendUserEmail(whiteleveluser.EMAIL_ID, "Your requisition send successfully.", Regmsg);
                             //return RedirectToAction("Index");
                         }
                     }

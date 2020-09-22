@@ -250,6 +250,10 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                             value.BLOCKED_BALANCE = value.BLOCKED_BALANCE;
                             value.BALANCE = value.BLOCKED_BALANCE;
                         }
+                        string GetUniqueNo = String.Format("{0:d5}", (DateTime.Now.Ticks / 10) % 10000);
+                        string UniqId = "BMT" + GetUniqueNo;
+                        value.UName = UniqId;
+                        value.MEM_UNIQUE_ID = UniqId;
                         value.AADHAAR_NO = value.AADHAAR_NO;
                         value.PAN_NO = value.PAN_NO;
                         value.EMAIL_ID = value.EMAIL_ID.ToLower();
@@ -263,8 +267,24 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                         value.CREATED_BY = MemberCurrentUser.MEM_ID;
                         //value.CREATED_BY = CurrentUser.USER_ID;
                         value.LAST_MODIFIED_DATE = System.DateTime.Now;
-                        value.GST_MODE = 1;
-                        value.TDS_MODE = 1;
+                        if (value.GST_FLAG != null)
+                        {
+                            value.GST_MODE = 1;
+                        }
+                        else
+                        {
+                            value.GST_MODE = 0;
+                        }
+                        if (value.TDS_FLAG != null)
+                        {
+                            value.TDS_MODE = 1;
+                        }
+                        else
+                        {
+                            value.TDS_MODE = 0;
+                        }
+                        //value.GST_MODE = 1;
+                        //value.TDS_MODE = 1;
                         value.DUE_CREDIT_BALANCE = 0;
                         value.CREDIT_BALANCE = 0;
                         value.IS_TRAN_START = true;
@@ -319,6 +339,9 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                             await db.SaveChangesAsync();
                         }
                         ViewBag.savemsg = "Data Saved Successfully";
+                        EmailHelper objsms = new EmailHelper();
+                        string Regmsg ="Hi "+value.MEM_UNIQUE_ID+ "\r\n Welcome to BOOM Travels.\r\n.Your User Name:- "+ UniqId + ".\n\r Your Password:- "+value.User_pwd+ ".\r\nRegards\r\nBoom Travels";
+                        objsms.SendUserEmail(value.EMAIL_ID, "Welome BOOM Travels", Regmsg);
                         Session["msg"] = "Data Saved Successfully";
                         //ContextTransaction.Commit();
                     }
@@ -382,6 +405,22 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                         CheckUser.BALANCE = value.BLOCKED_BALANCE;
                         CheckUser.DUE_CREDIT_BALANCE = 0;
                         CheckUser.CREDIT_BALANCE = 0;
+                        if (CheckUser.GST_FLAG != null)
+                        {
+                            CheckUser.GST_MODE = 1;
+                        }
+                        else
+                        {
+                            CheckUser.GST_MODE = 0;
+                        }
+                        if (CheckUser.TDS_FLAG != null)
+                        {
+                            CheckUser.TDS_MODE = 1;
+                        }
+                        else
+                        {
+                            CheckUser.TDS_MODE = 0;
+                        }
                         CheckUser.IS_TRAN_START = true;
                         CheckUser.OPTIONAL_EMAIL_ID = value.OPTIONAL_EMAIL_ID;
                         CheckUser.SEC_OPTIONAL_EMAIL_ID = value.SEC_OPTIONAL_EMAIL_ID;
@@ -392,6 +431,9 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                         await db.SaveChangesAsync();
                         ViewBag.savemsg = "Data Updated Successfully";
                         Session["msg"] = "Data Updated Successfully";
+                        EmailHelper objsms = new EmailHelper();
+                        string Regmsg = "Hi "+ CheckUser.MEM_UNIQUE_ID + " \r\n. Your profile information is updated successfully.\r\n Regards\r\n BOOM Travels";
+                        objsms.SendUserEmail(value.EMAIL_ID, "Your Profile is Updated.", Regmsg);
                     }
                     //throw new Exception();
                     ContextTransaction.Commit();
@@ -831,7 +873,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                     long DistId = 0;
                     //long.TryParse(DistributorId, out DistId);
                     //var MerchantList = db.TBL_MASTER_MEMBER.Where(x => x.INTRODUCER == DistId && x.UNDER_WHITE_LEVEL == MemberCurrentUser.MEM_ID && x.MEMBER_ROLE == 5).OrderByDescending(x => x.JOINING_DATE).ToList();
-                    var MerchantList = db.TBL_MASTER_MEMBER.Where(x => x.UName.StartsWith(SearchVal) || x.MEMBER_MOBILE.StartsWith(SearchVal) || x.MEMBER_NAME.StartsWith(SearchVal) || x.COMPANY.StartsWith(SearchVal) || x.COMPANY_GST_NO.StartsWith(SearchVal) || x.ADDRESS.StartsWith(SearchVal) || x.CITY.StartsWith(SearchVal) || x.PIN.StartsWith(SearchVal) || x.EMAIL_ID.StartsWith(SearchVal) || x.AADHAAR_NO.StartsWith(SearchVal) || x.PAN_NO.StartsWith(SearchVal) || x.RAIL_ID.StartsWith(SearchVal) || x.FACEBOOK_ID.StartsWith(SearchVal) || x.WEBSITE_NAME.StartsWith(SearchVal) || x.MEM_UNIQUE_ID.StartsWith(SearchVal)).ToList();
+                    var MerchantList = db.TBL_MASTER_MEMBER.Where(x =>x.ACTIVE_MEMBER==true && (x.UName.StartsWith(SearchVal) || x.MEMBER_MOBILE.StartsWith(SearchVal) || x.MEMBER_NAME.StartsWith(SearchVal) || x.COMPANY.StartsWith(SearchVal) || x.COMPANY_GST_NO.StartsWith(SearchVal) || x.ADDRESS.StartsWith(SearchVal) || x.CITY.StartsWith(SearchVal) || x.PIN.StartsWith(SearchVal) || x.EMAIL_ID.StartsWith(SearchVal) || x.AADHAAR_NO.StartsWith(SearchVal) || x.PAN_NO.StartsWith(SearchVal) || x.RAIL_ID.StartsWith(SearchVal) || x.FACEBOOK_ID.StartsWith(SearchVal) || x.WEBSITE_NAME.StartsWith(SearchVal) || x.MEM_UNIQUE_ID.StartsWith(SearchVal))).ToList().Select(c=>c.ACTIVE_MEMBER==true);
                     return PartialView("AllMerchantInformationGrid", MerchantList);
                 }
                 else

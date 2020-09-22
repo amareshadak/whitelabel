@@ -20,4 +20,5 @@
         [NotMapped]
         public string From_Member_Name { get; set; }
     }
+    
 }

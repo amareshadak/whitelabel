@@ -277,8 +277,8 @@
                     <div class="col-md-8 row"><div style="text-align:left" class="col-md-6"><b>@Session["MERCHANTCompanyName"]</b></div> <div class="col-md-5" style="color:red;font-weight:bold; padding-top:3px; text-align:left; border:1px solid #ccc; float:right; padding:5px; background-color:#d4d4d4; border-radius:5px"><span style=" border-right:1px solid #ccc; margin-right:5px;">CRL <i class="fas fa-rupee-sign" style="padding:0 10px;"></i> </span><label id="txtDistCreditLimitAmt"></label> </div></div>
                     <div class="col-md-4"><div style="color:green; font-weight:bold; padding-top:3px;  text-align:left; border:1px solid #ccc; float:left; padding:5px; background-color:#d4d4d4; border-radius:5px"><span style=" border-right:1px solid #ccc; margin-right:5px;">PCL <i class="fas fa-rupee-sign" style="padding:0 10px;"></i></span><label id="txtDistReservedCreditLimitAmt"></label></div></div>
                 </div>
-                <div class="col-md-12 row">
-                    <span style="font-size:12px; color:red; display:none;"> <b>This portal under testing check your exect balance in Partner Portal.</b></span>
+                <div class="col-md-12 row"  >
+                    <span style="font-size:14px;padding-left: 500px;" > <b>@*This portal under testing check your exect balance in Partner Portal.*@ @Session["MerchantCompanyName"]</b></span>
                 </div>
 
             </div>
@@ -551,6 +551,12 @@
                         <a href="@Url.Action("RDSPasswordChange","MerchantPasswordChange", new {area= "Merchant" })">
                             <i class="fa fa-location-arrow nav-icon"></i>
                             <span class="item-name">Change RDS Password</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("EasebuzzPaymentGateway","MerchantRequisition", new {area= "Merchant" })">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name">Easebuzz Payment Gateway</span>
                         </a>
                     </li>
                 </ul>

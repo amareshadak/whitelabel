@@ -355,8 +355,12 @@
         //$('#div_DIstributor').show();
         //$('#div_WhiteLabel').hide();
         DisplayButton();
+        const currentYear = (new Date).getFullYear();
+        const currentMonth = (new Date).getMonth();
+        const currentDay = (new Date).getDate();
         $('#txtRequestDate').datepicker({
             dateFormat: "yy-mm-dd",
+            maxDate: new Date(currentYear, currentMonth, currentDay),
             uiLibrary: 'bootstrap4'
         });
     })

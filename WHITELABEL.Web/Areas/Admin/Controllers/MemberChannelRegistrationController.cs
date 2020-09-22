@@ -369,6 +369,10 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                         objsupermem.BLOCKED_BALANCE = objsupermem.BLOCKED_BALANCE;
                         objsupermem.BALANCE = objsupermem.BLOCKED_BALANCE;
                     }
+                    string GetUniqueNo = String.Format("{0:d5}", (DateTime.Now.Ticks / 10) % 10000);
+                    string UniqId = "BMT" + GetUniqueNo;
+                    objsupermem.UName = UniqId;
+                    objsupermem.MEM_UNIQUE_ID = UniqId;
                     objsupermem.EMAIL_ID = objsupermem.EMAIL_ID.ToLower();
                     objsupermem.UNDER_WHITE_LEVEL = MemberCurrentUser.MEM_ID;
                     objsupermem.INTRODUCER = MemberCurrentUser.MEM_ID;
@@ -381,8 +385,23 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                     objsupermem.CREATED_BY = MemberCurrentUser.MEM_ID;
                     //objsupermem.CREATED_BY = CurrentUser.USER_ID;
                     objsupermem.LAST_MODIFIED_DATE = System.DateTime.Now;
-                    objsupermem.GST_MODE = 1;
-                    objsupermem.TDS_MODE = 1;
+                    if (objsupermem.GST_FLAG != null)
+                    {
+                        objsupermem.GST_MODE = 1;
+                    }
+                    else
+                    {
+                        objsupermem.GST_MODE = 0;
+                    }
+                    if (objsupermem.TDS_FLAG != null)
+                    {
+                        objsupermem.TDS_MODE = 1;
+                    }
+                    else
+                    {
+                        objsupermem.TDS_MODE = 0;
+                    }
+                        
                     objsupermem.DUE_CREDIT_BALANCE = 0;
                     objsupermem.CREDIT_BALANCE = 0;
                     objsupermem.IS_TRAN_START = true;
@@ -441,6 +460,9 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                     //ContextTransaction.Commit();
                     //throw new Exception();
                     ContextTransaction.Commit();
+                    EmailHelper objsms = new EmailHelper();
+                    string Regmsg = "Hi " + objsupermem.MEM_UNIQUE_ID + "\r\n Welcome to BOOM Travels.\r\n.Your User Name:- " + UniqId + ".\n\r Your Password:- " + objsupermem.User_pwd + ".\r\nRegards\r\nBoom Travels";
+                    objsms.SendUserEmail(objsupermem.EMAIL_ID, "Welome BOOM Travels", Regmsg);
                     return Json("Distributor Added Successfully", JsonRequestBehavior.AllowGet);
                 }
                 catch (Exception ex)
@@ -469,8 +491,19 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 model.UName = UniqId;
                 var StateName = db.TBL_STATES.ToList();
                 ViewBag.StateNameList = new SelectList(StateName, "STATEID", "STATENAME");
-                var DistributorList = db.TBL_MASTER_MEMBER.Where(x => x.UNDER_WHITE_LEVEL == MemberCurrentUser.MEM_ID && x.MEMBER_ROLE == 4).ToList();
-                ViewBag.DistributorList = new SelectList(DistributorList, "MEM_ID", "UName");
+                //var DistributorList = db.TBL_MASTER_MEMBER.Where(x => x.UNDER_WHITE_LEVEL == MemberCurrentUser.MEM_ID && x.MEMBER_ROLE == 4).ToList();
+                var DistributorList = (from x in db.TBL_MASTER_MEMBER
+                                       where x.UNDER_WHITE_LEVEL == MemberCurrentUser.MEM_ID && x.MEMBER_ROLE == 4
+                                       select new
+                                       {
+                                           MEM_ID = x.MEM_ID,
+                                           UName = x.MEMBER_NAME + "-" + x.MEM_UNIQUE_ID + "-" + x.MEMBER_MOBILE
+                                       }).AsEnumerable().Select(z => new ViewDropdownConcatinationDetails
+                                       {
+                                           MEM_ID = z.MEM_ID,
+                                           MEmberNameName = z.UName
+                                       }).ToList().Distinct();
+                ViewBag.DistributorList = new SelectList(DistributorList, "MEM_ID", "MEmberNameName");
                 var memberrole = db.TBL_MASTER_MEMBER_ROLE.Where(x => x.ROLE_NAME == "RETAILER").ToList();
                 ViewBag.RoleDetails = new SelectList(memberrole, "ROLE_ID", "ROLE_NAME");
                 var GSTValueID = db.TBL_TAX_MASTERS.Where(x => x.TAX_NAME == "GST").ToList();
@@ -546,6 +579,10 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                         objsupermem.BLOCKED_BALANCE = objsupermem.BLOCKED_BALANCE;
                         objsupermem.BALANCE = objsupermem.BLOCKED_BALANCE;
                     }
+                    string GetUniqueNo = String.Format("{0:d5}", (DateTime.Now.Ticks / 10) % 10000);
+                    string UniqId = "BMT" + GetUniqueNo;
+                    objsupermem.UName = UniqId;
+                    objsupermem.MEM_UNIQUE_ID = UniqId;
                     objsupermem.EMAIL_ID = objsupermem.EMAIL_ID.ToLower();
                     objsupermem.UNDER_WHITE_LEVEL = MemberCurrentUser.MEM_ID;
                     objsupermem.INTRODUCER = objsupermem.DISTRIBUTOR_ID;
@@ -558,8 +595,24 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                     objsupermem.CREATED_BY = MemberCurrentUser.MEM_ID;
                     //objsupermem.CREATED_BY = CurrentUser.USER_ID;
                     objsupermem.LAST_MODIFIED_DATE = System.DateTime.Now;
-                    objsupermem.GST_MODE = 1;
-                    objsupermem.TDS_MODE = 1;
+                    if (objsupermem.GST_FLAG != null)
+                    {
+                        objsupermem.GST_MODE = 1;
+                    }
+                    else
+                    {
+                        objsupermem.GST_MODE = 0;
+                    }
+                    if (objsupermem.TDS_FLAG != null)
+                    {
+                        objsupermem.TDS_MODE = 1;
+                    }
+                    else
+                    {
+                        objsupermem.TDS_MODE = 0;
+                    }
+                    //objsupermem.GST_MODE = 1;
+                    //objsupermem.TDS_MODE = 1;
                     objsupermem.DUE_CREDIT_BALANCE = 0;
                     objsupermem.CREDIT_BALANCE = 0;
                     objsupermem.IS_TRAN_START = true;
@@ -618,6 +671,9 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                     //ContextTransaction.Commit();
                     //throw new Exception();
                     ContextTransaction.Commit();
+                    EmailHelper objsms = new EmailHelper();
+                    string Regmsg = "Hi " + objsupermem.MEM_UNIQUE_ID + "\r\n Welcome to BOOM Travels.\r\n.Your User Name:- " + UniqId + ".\n\r Your Password:- " + objsupermem.User_pwd + ".\r\nRegards\r\nBoom Travels";
+                    objsms.SendUserEmail(objsupermem.EMAIL_ID, "Welome BOOM Travels", Regmsg);
                     return Json("Merchant Added Successfully", JsonRequestBehavior.AllowGet);
                 }
                 catch (Exception ex)

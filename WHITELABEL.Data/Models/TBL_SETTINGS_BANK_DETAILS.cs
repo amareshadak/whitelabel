@@ -16,7 +16,7 @@
         [Required]
         [Display(Name = "Ifsc")]
         [MaxLength(15, ErrorMessage = "IFSC Code not greater then 15 digit")]
-        [MinLength(11, ErrorMessage = "IFSC Code not less then 11 digit")]
+        [MinLength(5, ErrorMessage = "IFSC Code not less then 5 digit")]
         [RegularExpression("^[0-9a-zA-Z ]+$", ErrorMessage = "Enter valid user name")]
         public string IFSC { get; set; }
         [MaxLength(15, ErrorMessage = "MICR Code not greater then 15 digit")]
@@ -53,8 +53,8 @@
         [Required]
         [Display(Name = "Account No")]
         [MaxLength(15, ErrorMessage = "Account no not greater then 15 digit")]
-        [MinLength(11, ErrorMessage = "Account no not greater then 15 digit")]
-        [RegularExpression("^[0-9]*$", ErrorMessage = "Account no must be number")]
+        //[MinLength(2, ErrorMessage = "Account no not greater then 2 digit")]
+        //[RegularExpression("^[0-9]*$", ErrorMessage = "Account no must be number")]
         public string ACCOUNT_NO { get; set; }
         [NotMapped]
         public string UserName { get; set; }

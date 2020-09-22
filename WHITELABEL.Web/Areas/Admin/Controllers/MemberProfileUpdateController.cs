@@ -159,6 +159,9 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                         changepass.PIN = objval.PIN;                        
                         db.Entry(changepass).State = System.Data.Entity.EntityState.Modified;
                         await db.SaveChangesAsync();
+                        EmailHelper objsms = new EmailHelper();
+                        string Regmsg = "Hi " + changepass.MEM_UNIQUE_ID + " \r\n. You have successfully update your profile.\r\n Regards\r\n BOOM Travels";
+                        objsms.SendUserEmail(changepass.EMAIL_ID, "Your profile is update successfully.", Regmsg);
                     }
 
                     //throw new Exception();

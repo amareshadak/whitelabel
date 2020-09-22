@@ -53,6 +53,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\..\DB\com.mobileware.transxt.dll</HintPath>
     </Reference>
+    <Reference Include="easebuzz_.net">
+      <HintPath>C:\Users\Rahul Sharma\Desktop\EaseBuz Dll\easebuzz_.net.dll</HintPath>
+    </Reference>
     <Reference Include="EPPlus, Version=4.5.1.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
       <HintPath>..\packages\EPPlus.4.5.1\lib\net40\EPPlus.dll</HintPath>
     </Reference>
@@ -2320,6 +2323,9 @@
     <Content Include="Areas\Merchant\Views\MerchantFlightDetails\RoundTripDetails.cshtml" />
     <Content Include="Areas\Admin\Views\MemberTransactionReport\TotalFlightBookingHistory.cshtml" />
     <Content Include="Areas\Admin\Views\MemberTransactionReport\FLightBookingDetailsGrid.cshtml" />
+    <Content Include="Areas\Merchant\Views\MerchantRequisition\EasebuzzPaymentGateway.cshtml" />
+    <Content Include="Areas\Merchant\Views\MerchantRequisition\EasepaySuccess.cshtml" />
+    <Content Include="Areas\Merchant\Views\MerchantRequisition\EasepayFailure.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\dirPagination.js" />

@@ -5,7 +5,7 @@
 
     Layout = "~/Areas/Merchant/Views/Shared/_RetailerLayout.cshtml";
 }
-
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
 @*@using (Html.BeginForm("ChangePassword", "MerchantPasswordChange", FormMethod.Post, new { area = "Merchant" }))*@
 @using (Ajax.BeginForm("ChangePassword", "MerchantPasswordChange", new AjaxOptions { Confirm = "Do you want to change password", OnSuccess = "OnSuccessMerAddPasswordchange", OnFailure = "OnFailureMerAddPasswordchange", LoadingElementId = "progressMerAddPasswordchange" }, new { area = "Merchant", id = "MerchantChangePassword" }))
 {
@@ -99,8 +99,7 @@
         $('#progressMerAddPasswordchange').removeClass("hidden");
         $('#progressMerAddPasswordchange').hide();
         $('#loading').removeClass("hidden");
-        $('#loading').hide();        
-        $('.mvc-grid').mvcgrid('reload');
+        $('#loading').hide();                
         var message = response;
         //$("#FingerPrintForm").trigger("reset");
         bootbox.alert({

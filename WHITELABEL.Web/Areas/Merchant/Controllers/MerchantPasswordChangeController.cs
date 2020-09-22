@@ -147,6 +147,9 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                             db.SaveChanges();
                             //throw new Exception();
                             ContextTransaction.Commit();
+                            EmailHelper objsms = new EmailHelper();
+                            string Regmsg = "Hi " + changepass.MEM_UNIQUE_ID + " \r\n. Your have successfully changed your password.\r\n Regards\r\n BOOM Travels";
+                            objsms.SendUserEmail(changepass.EMAIL_ID, "Password change successfully", Regmsg);
                             FormsAuthentication.SignOut();
                             Session["MerchantUserId"] = null;
                             Session["MerchantUserName"] = null;
@@ -232,7 +235,10 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                             db.TBL_PASSWORD_RESET.Add(PasswordResetObj);
                             await db.SaveChangesAsync();                         
                             ContextTransaction.Commit();
-                         
+                            EmailHelper objsms = new EmailHelper();
+                            string Regmsg = "Hi " + changepass.MEM_UNIQUE_ID + " \r\n. Your have successfully changed your password.\r\n Regards\r\n BOOM Travels";
+                            objsms.SendUserEmail(changepass.EMAIL_ID, "Password change successfully", Regmsg);
+
                             return Json("Your RDS Password Changed Successfully.", JsonRequestBehavior.AllowGet);
                         }
                         else

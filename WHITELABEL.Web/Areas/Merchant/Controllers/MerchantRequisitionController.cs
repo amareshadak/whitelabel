@@ -18,6 +18,9 @@ using System.Data.Entity;
 using log4net;
 using System.Threading;
 using System.Globalization;
+using easebuzz_.net;
+using System.Text;
+using System.Security.Cryptography;
 
 namespace WHITELABEL.Web.Areas.Merchant.Controllers
 {
@@ -435,6 +438,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                     var translist = await db.TBL_BALANCE_TRANSFER_LOGS.Where(x => x.SLN == objval.SLN).FirstOrDefaultAsync();
                     if (translist != null)
                     {
+                        var getsuperior = db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == translist.TO_MEMBER);
                         translist.REQUEST_DATE = Convert.ToDateTime(objval.REQUEST_DATE);
                         
                         translist.REQUEST_TIME = System.DateTime.Now;
@@ -449,6 +453,9 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                         translist.REF_NO = objval.RequisitionSendTO;
                         db.Entry(translist).State = System.Data.Entity.EntityState.Modified;
                         await db.SaveChangesAsync();
+                        EmailHelper objsms = new EmailHelper();
+                        string Regmsg = "Hi " + whiteleveluser.MEM_UNIQUE_ID + " \r\n. You have successfully updated requisition of amount:- "+ objval.AMOUNT+" to "+ getsuperior.MEM_UNIQUE_ID + ".\r\n Regards\r\n BOOM Travels";
+                        objsms.SendUserEmail(whiteleveluser.EMAIL_ID, "Your requisition update successfully.", Regmsg);
                         //return RedirectToAction("Index");
                     }
                     else
@@ -463,7 +470,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                         {
                             fromuser = long.Parse(whiteleveluser.UNDER_WHITE_LEVEL.ToString());
                         }
-                     
+                        var getsuperior = db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == fromuser);
                         objval.TransactionID = fromuser + "" + CurrentMerchant.MEM_ID + DateTime.Now.ToString("yyyyMMdd") + "" + DateTime.Now.ToString("HHMMss");
                         objval.TO_MEMBER = fromuser;
                         objval.FROM_MEMBER = CurrentMerchant.MEM_ID;
@@ -479,6 +486,9 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                         objval.REF_NO = objval.RequisitionSendTO;
                         db.TBL_BALANCE_TRANSFER_LOGS.Add(objval);
                         await db.SaveChangesAsync();
+                        EmailHelper objsms = new EmailHelper();
+                        string Regmsg = "Hi " + whiteleveluser.MEM_UNIQUE_ID + " \r\n. You have successfully send requisition of amount:- " + objval.AMOUNT + " to " + getsuperior.MEM_UNIQUE_ID + ".\r\n Regards\r\n BOOM Travels";
+                        objsms.SendUserEmail(whiteleveluser.EMAIL_ID, "Your requisition send successfully.", Regmsg);
                         //return RedirectToAction("Index");
                     }
                     ContextTransaction.Commit();
@@ -540,7 +550,9 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                                          select new
                                          {
                                              MEM_ID = (x.BANK + "-" + x.ACCOUNT_NO),
-                                             UName = (x.BANK + "-" + x.ACCOUNT_NO)
+                                             //UName = (x.BANK + "-" + x.ACCOUNT_NO)
+                                             //UName = (x.BANK + " AC - " + x.ACCOUNT_NO + "- IFSC - " + x.IFSC)
+                                             UName = (x.BANK == "CASH - TO - OFFICE" ? "CASH - TO - OFFICE" : (x.BANK + " AC - " + x.ACCOUNT_NO + "- IFSC - " + x.IFSC))
                                          }).AsEnumerable().Select(z => new MemberView
                                          {
                                              IDValue = z.MEM_ID.ToString(),
@@ -557,7 +569,9 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                                          select new
                                          {
                                              MEM_ID = (x.BANK + "-" + x.ACCOUNT_NO),
-                                             UName = (x.BANK + "-" + x.ACCOUNT_NO)
+                                             //UName = (x.BANK + "-" + x.ACCOUNT_NO)
+                                             //UName = (x.BANK + " AC - " + x.ACCOUNT_NO + "- IFSC - " + x.IFSC)
+                                             UName = (x.BANK == "CASH - TO - OFFICE" ? "CASH - TO - OFFICE" : (x.BANK + " AC - " + x.ACCOUNT_NO + "- IFSC - " + x.IFSC))
                                          }).AsEnumerable().Select(z => new MemberView
                                          {
                                              IDValue = z.MEM_ID.ToString(),
@@ -592,6 +606,195 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
             }
 
             
+        }
+
+        public ActionResult EasebuzzPaymentGateway()
+        {
+            return View();
+        }
+        public string Easebuzz_Generatehash512(string text)
+        {
+
+            byte[] message = Encoding.UTF8.GetBytes(text);
+
+            UnicodeEncoding UE = new UnicodeEncoding();
+            byte[] hashValue;
+            SHA512Managed hashString = new SHA512Managed();
+            string hex = "";
+            hashValue = hashString.ComputeHash(message);
+            foreach (byte x in hashValue)
+            {
+                hex += String.Format("{0:x2}", x);
+            }
+            return hex;
+
+        }
+
+        public ActionResult EasepaySuccess()
+        {
+            var db = new DBContext();
+            try
+            {
+                string salt = System.Configuration.ConfigurationSettings.AppSettings["EaseBuzzSaltKey"];
+                string Key = System.Configuration.ConfigurationSettings.AppSettings["EaseBuzzKey"];
+                //string env = System.Configuration.ConfigurationSettings.AppSettings["EaseBuzzEnviroment"];
+                //string salt = "4NGY1NYJJP";
+                //string Key = "W8A3NHRAWY";
+                
+
+                string[] merc_hash_vars_seq;
+                string merc_hash_string = string.Empty;
+                string merc_hash = string.Empty;
+                string order_id = string.Empty;
+                string hash_seq = "key|txnid|amount|productinfo|firstname|email|udf1|udf2|udf3|udf4|udf5|udf6|udf7|udf8|udf9|udf10";
+                merc_hash_vars_seq = hash_seq.Split('|');
+                Array.Reverse(merc_hash_vars_seq);
+                merc_hash_string = salt + "|" + Request.Form["status"];
+                foreach (string merc_hash_var in merc_hash_vars_seq)
+                {
+                    merc_hash_string += "|";
+                    merc_hash_string = merc_hash_string + (Request.Form[merc_hash_var] != null ? Request.Form[merc_hash_var] : "");
+                }
+                merc_hash = Easebuzz_Generatehash512(merc_hash_string).ToLower();
+                if (merc_hash != Request.Form["hash"])
+                {
+                    Response.Write("Hash value did not matched");
+                    ViewBag.messagevalue = "Hash value did not matched";
+                }
+                else
+                {
+                    order_id = Request.Form["txnid"];
+                    //Response.Write("value matched");
+                    if (Request.Form["status"] == "success")
+                    {
+                        //Response.Write(Request.Form);
+                        ViewBag.messagevalue = Request.Form;
+                        //string Responseval = ViewBag.messagevalue;
+                        ViewBag.TXnStatus = Request.Form["status"];
+                        ViewBag.txnid = Request.Form["txnid"];
+                        ViewBag.txnAmt =Request.Form["amount"];                        
+                        //TBL_PAYMENT_GATEWAY_RESPONSE objres = new TBL_PAYMENT_GATEWAY_RESPONSE()
+                        //{
+                        //    MEM_ID=0,
+                        //    EASEBUZZ_RESPONSE= Responseval,
+                        //    EXECUTE_DATE =DateTime.Now,
+                        //    STATUS="SUCCESS"
+                        //};
+                        //db.TBL_PAYMENT_GATEWAY_RESPONSE.Add(objres);
+                        //db.SaveChanges();
+                    }
+                    else
+                    {
+                        //Response.Write(Request.Form);
+                        ViewBag.messagevalue = Request.Form;
+                        //string Res = Convert.ToString(Request.Form);
+                        //string Responseval = ViewBag.messagevalue;
+                        ViewBag.TXnStatus = Request.Form["status"];
+                        ViewBag.txnid = Request.Form["txnid"];
+                        ViewBag.txnAmt = Request.Form["amount"];
+                        //TBL_PAYMENT_GATEWAY_RESPONSE objres = new TBL_PAYMENT_GATEWAY_RESPONSE()
+                        //{
+                        //    MEM_ID = 0,
+                        //    EASEBUZZ_RESPONSE = Responseval,
+                        //    EXECUTE_DATE = DateTime.Now,
+                        //    STATUS = "FAILURE"
+                        //};
+                        //db.TBL_PAYMENT_GATEWAY_RESPONSE.Add(objres);
+                        //db.SaveChanges();
+                    }
+                    //Hash value did not matched
+                }
+            }
+            catch (Exception ex)
+            {
+                Response.Write("<span style='color:red'>" + ex.Message + "</span>");
+
+            }
+            return View();
+        }
+        public ActionResult EasepayFailure()
+        {
+            try
+            {
+                string salt = "4NGY1NYJJP";
+                string Key = "W8A3NHRAWY";
+
+                string[] merc_hash_vars_seq;
+                string merc_hash_string = string.Empty;
+                string merc_hash = string.Empty;
+                string order_id = string.Empty;
+                string hash_seq = "key|txnid|amount|productinfo|firstname|email|udf1|udf2|udf3|udf4|udf5|udf6|udf7|udf8|udf9|udf10";
+                merc_hash_vars_seq = hash_seq.Split('|');
+                Array.Reverse(merc_hash_vars_seq);
+                merc_hash_string = salt + "|" + Request.Form["status"];
+                foreach (string merc_hash_var in merc_hash_vars_seq)
+                {
+                    merc_hash_string += "|";
+                    merc_hash_string = merc_hash_string + (Request.Form[merc_hash_var] != null ? Request.Form[merc_hash_var] : "");
+                }
+                merc_hash = Easebuzz_Generatehash512(merc_hash_string).ToLower();
+                if (merc_hash != Request.Form["hash"])
+                {
+                    Response.Write("Hash value did not matched");
+                    ViewBag.messagevalue = "Hash value did not matched";
+                }
+                else
+                {
+                    order_id = Request.Form["txnid"];
+                    //Response.Write("value matched");
+                    if (Request.Form["status"] == "success")
+                    {
+                        Response.Write(Request.Form);
+                        ViewBag.messagevalue = Request.Form;
+                    }
+                    else
+                    {
+                        Response.Write(Request.Form);
+                        ViewBag.messagevalue = Request.Form;
+                    }
+                    //Hash value did not matched
+                }
+            }
+            catch (Exception ex)
+            {
+                Response.Write("<span style='color:red'>" + ex.Message + "</span>");
+
+            }
+            return View();
+        }
+        [HttpPost]
+        public ActionResult CallEasebuzzAPI()
+        {
+
+            string salt = System.Configuration.ConfigurationSettings.AppSettings["EaseBuzzSaltKey"];
+            string Key = System.Configuration.ConfigurationSettings.AppSettings["EaseBuzzKey"];
+            string env = System.Configuration.ConfigurationSettings.AppSettings["EaseBuzzEnviroment"];
+            //string salt = "4NGY1NYJJP";
+            // string Key = "W8A3NHRAWY";
+            //string env = "test";
+            string COrelationID = Settings.GetUniqueKey(CurrentMerchant.MEM_ID.ToString());
+            var db = new DBContext();
+            var memberinfo = db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == CurrentMerchant.MEM_ID);
+            string amount = "100";
+            string firstname = memberinfo.MEMBER_NAME.Trim();
+            string email = memberinfo.EMAIL_ID.Trim();
+            string phone = memberinfo.MEMBER_MOBILE.Trim();
+            string productinfo = "Easebuzz payment integration text";
+            string surl = "http://b2b.boomtravels.com/Merchant/MerchantRequisition/EasepaySuccess";
+            string furl = "http://b2b.boomtravels.com/Merchant/MerchantRequisition/EasepaySuccess";
+            //string surl = "http://localhost:56049/Merchant/MerchantRequisition/EasepaySuccess";
+            //string furl = "http://localhost:56049/Merchant/MerchantRequisition/EasepayFailure";
+            string Txnid = COrelationID.Trim();
+            string UDF1 = "";
+            string UDF2 = "";
+            string UDF3 = "";
+            string UDF4 = "";
+            string UDF5 = "";
+            string Show_payment_mode = "";
+            Easebuzz t = new Easebuzz(salt, Key, env);
+            string strForm = t.initiatePaymentAPI(amount, firstname, email, phone, productinfo, surl, furl, Txnid, UDF1, UDF2, UDF3, UDF4, UDF5, Show_payment_mode);
+            return Content(strForm, System.Net.Mime.MediaTypeNames.Text.Html);
+            //return View();
         }
     }
 }

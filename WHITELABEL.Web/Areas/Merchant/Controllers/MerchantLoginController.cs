@@ -118,6 +118,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                 FormsAuthentication.SignOut();
                 Session["MerchantUserId"] = null;
                 Session["MerchantUserName"] = null;
+                Session["MerchantCompanyName"] = null;
                 Session["ReservedCreditLimitAmt"] = null;
                 Session["MerchantRailID"] = null;
                 Session["DistributorUserName"] = null;
@@ -126,6 +127,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                 Session.Clear();
                 Session.Remove("MerchantUserId");
                 Session.Remove("MerchantUserName");
+                Session.Remove("MerchantCompanyName");
                 Session.Remove("MerchantRailID");
                 Session.Remove("CreditLimitAmt");
                 Session.Remove("ReservedCreditLimitAmt");

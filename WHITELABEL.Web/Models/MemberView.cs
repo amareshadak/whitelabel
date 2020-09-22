@@ -23,4 +23,9 @@
         public string TransDate { get; set; }
         public string TransUserName { get; set; }
     }
+    public class ViewDropdownConcatinationDetails
+    {
+        public long MEM_ID { get; set; }
+        public string MEmberNameName { get; set; }
+    }
 }

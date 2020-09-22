@@ -274,6 +274,10 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                         }
                         //string GetUniqueNo = String.Format("{0:d5}", (DateTime.Now.Ticks / 10) % 10000);
                         //string UniqId = "TIQ" + GetUniqueNo;
+                        string GetUniqueNo = String.Format("{0:d5}", (DateTime.Now.Ticks / 10) % 10000);
+                        string UniqId = "BMT" + GetUniqueNo;
+                        value.UName = UniqId;
+                        value.MEM_UNIQUE_ID = UniqId;
                         value.AADHAAR_NO = value.AADHAAR_NO;
                         value.PAN_NO = value.PAN_NO;
                         value.EMAIL_ID = value.EMAIL_ID.ToLower();
@@ -287,8 +291,24 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                         value.CREATED_BY = MemberCurrentUser.MEM_ID;
                         //value.CREATED_BY = CurrentUser.USER_ID;
                         value.LAST_MODIFIED_DATE = System.DateTime.Now;
-                        value.GST_MODE = 1;
-                        value.TDS_MODE = 1;
+                        if (value.GST_FLAG != null)
+                        {
+                            value.GST_MODE = 1;
+                        }
+                        else
+                        {
+                            value.GST_MODE = 0;
+                        }
+                        if (value.TDS_FLAG != null)
+                        {
+                            value.TDS_MODE = 1;
+                        }
+                        else
+                        {
+                            value.TDS_MODE = 0;
+                        }
+                        //value.GST_MODE = 1;
+                        //value.TDS_MODE = 1;
                         value.DUE_CREDIT_BALANCE = 0;
                         value.CREDIT_BALANCE = 0;
                         value.IS_TRAN_START = true;
@@ -344,6 +364,9 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                         }
                         ViewBag.savemsg = "Data Saved Successfully";
                         Session["msg"] = "Data Saved Successfully";
+                        EmailHelper objsms = new EmailHelper();
+                        string Regmsg = "Hi " + value.MEM_UNIQUE_ID + "\r\n Welcome to BOOM Travels.\r\n.Your User Name:- " + UniqId + ".\n\r Your Password:- " + value.User_pwd + ".\r\nRegards\r\nBoom Travels";
+                        objsms.SendUserEmail(value.EMAIL_ID, "Welome BOOM Travels", Regmsg);
                         //ContextTransaction.Commit();
                     }
                     else
@@ -402,6 +425,22 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                         CheckUser.ADDRESS = value.ADDRESS;
                         CheckUser.CITY = value.CITY;
                         CheckUser.PIN = value.PIN;
+                        if (CheckUser.GST_FLAG != null)
+                        {
+                            CheckUser.GST_MODE = 1;
+                        }
+                        else
+                        {
+                            CheckUser.GST_MODE = 0;
+                        }
+                        if (CheckUser.TDS_FLAG != null)
+                        {
+                            CheckUser.TDS_MODE = 1;
+                        }
+                        else
+                        {
+                            CheckUser.TDS_MODE = 0;
+                        }
                         //CheckUser.EMAIL_ID = value.EMAIL_ID;
                         CheckUser.SECURITY_PIN_MD5 = value.SECURITY_PIN_MD5;
                         CheckUser.BLOCKED_BALANCE = value.BLOCKED_BALANCE;
@@ -415,6 +454,9 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                         CheckUser.OLD_MEMBER_ID = value.OLD_MEMBER_ID;
                         db.Entry(CheckUser).State = System.Data.Entity.EntityState.Modified;
                         await db.SaveChangesAsync();
+                        EmailHelper objsms = new EmailHelper();
+                        string Regmsg = "Hi " + CheckUser.MEM_UNIQUE_ID + " \r\n. Your profile information is updated successfully.\r\n Regards\r\n BOOM Travels";
+                        objsms.SendUserEmail(value.EMAIL_ID, "Your Profile is Updated.", Regmsg);
                         ViewBag.savemsg = "Data Updated Successfully";
                         Session["msg"] = "Data Updated Successfully";
                     }

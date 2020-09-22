@@ -116,6 +116,7 @@
     <Compile Include="Models\TBL_NOTIFICATION_SETTING.cs" />
     <Compile Include="Models\TBL_OPERATOR_MASTER.cs" />
     <Compile Include="Models\TBL_PASSWORD_RESET.cs" />
+    <Compile Include="Models\TBL_PAYMENT_GATEWAY_RESPONSE.cs" />
     <Compile Include="Models\TBL_RAIL_AGENTS_COMMISSION.cs" />
     <Compile Include="Models\TBL_RAIL_AGENT_INFORMATION.cs" />
     <Compile Include="Models\TBL_RAIL_DSC_INFORMATION.cs" />

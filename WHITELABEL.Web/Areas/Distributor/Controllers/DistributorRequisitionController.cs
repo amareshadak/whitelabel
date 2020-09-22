@@ -376,7 +376,8 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                                select new
                                                {
                                                    BankID = x.SL_NO,
-                                                   BankName = (x.BANK + "-" + x.ACCOUNT_NO)
+                                                   //BankName = (x.BANK + "-" + x.ACCOUNT_NO)
+                                                   BankName = (x.BANK == "CASH - TO - OFFICE" ? "CASH - TO - OFFICE" : (x.BANK + " AC - " + x.ACCOUNT_NO + "- IFSC - " + x.IFSC))
                                                }).AsEnumerable().Select(z => new ViewBankDetails
                                                {
                                                    BankID = z.BankID.ToString(),
@@ -411,7 +412,8 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                                select new
                                                {
                                                    //BankID = x.SL_NO,
-                                                   BankName = (x.BANK + "-" + x.ACCOUNT_NO)
+                                                   //BankName = (x.BANK + "-" + x.ACCOUNT_NO)
+                                                   BankName = (x.BANK == "CASH - TO - OFFICE" ? "CASH - TO - OFFICE" : (x.BANK + " AC - " + x.ACCOUNT_NO + "- IFSC - " + x.IFSC))
                                                }).AsEnumerable().Select(z => new ViewBankDetails
                                                {
                                                    //BankID = z.BankID.ToString(),
@@ -468,6 +470,8 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                         var translist = await db.TBL_BALANCE_TRANSFER_LOGS.Where(x => x.SLN == objval.SLN).FirstOrDefaultAsync();
                         if (translist != null)
                         {
+                            var getsuperior = db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == translist.FROM_MEMBER);
+                            var GetDistributor = db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == translist.TO_MEMBER);
                             translist.REQUEST_DATE = Convert.ToDateTime(objval.REQUEST_DATE);
                             translist.REQUEST_TIME = System.DateTime.Now;
                             translist.BANK_ACCOUNT = objval.BANK_ACCOUNT;
@@ -480,6 +484,9 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                             translist.INSERTED_BY = MemberCurrentUser.MEM_ID;
                             db.Entry(translist).State = System.Data.Entity.EntityState.Modified;
                             await db.SaveChangesAsync();
+                            EmailHelper objsms = new EmailHelper();
+                            string Regmsg = "Hi " + getsuperior.MEM_UNIQUE_ID + " \r\n. Your distributor ("+ GetDistributor.MEM_UNIQUE_ID + ") have successfully updated requisition of amount:- " + objval.AMOUNT + ".\r\n Regards\r\n BOOM Travels";
+                            objsms.SendUserEmail(checkAvailableMember.EMAIL_ID, "Your requisition update successfully.", Regmsg);
                             //return RedirectToAction("Index");
                         }
                         else
@@ -487,6 +494,8 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                             var checkrefNo = db.TBL_BALANCE_TRANSFER_LOGS.Where(x => x.REFERENCE_NO == objval.REFERENCE_NO).FirstOrDefault();
                             if (checkrefNo != null)
                             {
+                                var getsuperior = db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == translist.FROM_MEMBER);
+                                var GetDistributor = db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == translist.TO_MEMBER);
                                 checkrefNo.REQUEST_DATE = objval.REQUEST_DATE;
                                 checkrefNo.REQUEST_TIME = System.DateTime.Now;
                                 checkrefNo.BANK_ACCOUNT = objval.BANK_ACCOUNT;
@@ -499,11 +508,16 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                 checkrefNo.INSERTED_BY = MemberCurrentUser.MEM_ID;
                                 db.Entry(checkrefNo).State = System.Data.Entity.EntityState.Modified;
                                 await db.SaveChangesAsync();
+                                EmailHelper objsms = new EmailHelper();
+                                string Regmsg = "Hi " + getsuperior.MEM_UNIQUE_ID + " \r\n. Your distributor (" + GetDistributor.MEM_UNIQUE_ID + ") have successfully updated requisition of amount:- " + objval.AMOUNT + ".\r\n Regards\r\n BOOM Travels";
+                                objsms.SendUserEmail(checkAvailableMember.EMAIL_ID, "Your requisition update successfully.", Regmsg);
                             }
                             else
                             {
                                 //long fromuser = long.Parse(objval.FromUser);
                                 long fromuser = objval.FROM_MEMBER;
+                                var getsuperior = db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == fromuser);
+                                var GetDistributor = db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == translist.TO_MEMBER);
                                 objval.TransactionID = MemberCurrentUser.MEM_ID + "" + fromuser + DateTime.Now.ToString("yyyyMMdd") + "" + DateTime.Now.ToString("HHMMss");
                                 objval.TO_MEMBER = MemberCurrentUser.MEM_ID;
                                 objval.FROM_MEMBER = fromuser;
@@ -518,6 +532,9 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                 objval.INSERTED_BY = MemberCurrentUser.MEM_ID;
                                 db.TBL_BALANCE_TRANSFER_LOGS.Add(objval);
                                 await db.SaveChangesAsync();
+                                EmailHelper objsms = new EmailHelper();
+                                string Regmsg = "Hi " + getsuperior.MEM_UNIQUE_ID + " \r\n. Your distributor (" + GetDistributor.MEM_UNIQUE_ID + ") have successfully added requisition of amount:- " + objval.AMOUNT + ".\r\n Regards\r\n BOOM Travels";
+                                objsms.SendUserEmail(checkAvailableMember.EMAIL_ID, "Your requisition added successfully.", Regmsg);
                                 //return RedirectToAction("Index");
                             }
                         }
@@ -780,6 +797,9 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                             db.TBL_ACCOUNTS.Add(MERCH_objACCOUNT);
                             await db.SaveChangesAsync();
                             ContextTransaction.Commit();
+                            EmailHelper emailhelper = new EmailHelper();                       
+                            string mailbody = "Hi " + Merchant_Info.UName + ",<p>Your requisition has been approve of amount "+ Trans_Req_Amount + " by distributor ("+ Distributor_Info.MEM_UNIQUE_ID + ").</p>";
+                            emailhelper.SendUserEmail(Merchant_Info.EMAIL_ID, "Requisition Approve", mailbody);
                             return Json("Transaction Approve.", JsonRequestBehavior.AllowGet);
                         }
                         else
@@ -950,6 +970,9 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                     //db.TBL_MEMBER_CREDIT_ACCOUNT_LOGS.Add(MEM_CREDIT_ACNT_LOGS);
                                     await db.SaveChangesAsync();
                                     ContextTransaction.Commit();
+                                    EmailHelper emailhelper = new EmailHelper();
+                                    string mailbody = "Hi " + Merchant_Info.UName + ",<p>Your requisition has been approve of amount " + Trans_Req_Amount + " by distributor (" + Distributor_Info.MEM_UNIQUE_ID + ").</p>";
+                                    emailhelper.SendUserEmail(Merchant_Info.EMAIL_ID, "Requisition Approve", mailbody);
                                     return Json("Transaction Approve.", JsonRequestBehavior.AllowGet);
                                 }
                                 else
@@ -1117,6 +1140,9 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                 //db.TBL_MEMBER_CREDIT_ACCOUNT_LOGS.Add(MEM_CREDIT_ACNT_LOGS);
                                 await db.SaveChangesAsync();
                                 ContextTransaction.Commit();
+                                EmailHelper emailhelper = new EmailHelper();
+                                string mailbody = "Hi " + Merchant_Info.UName + ",<p>Your requisition has been approve of amount " + Trans_Req_Amount + " by distributor (" + Distributor_Info.MEM_UNIQUE_ID + ").</p>";
+                                emailhelper.SendUserEmail(Merchant_Info.EMAIL_ID, "Requisition Approve", mailbody);
                                 return Json("Transaction Approve.", JsonRequestBehavior.AllowGet);
                             }
                             else
@@ -1315,6 +1341,9 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                     //db.TBL_MEMBER_CREDIT_ACCOUNT_LOGS.Add(MEM_CREDIT_ACNT_LOGS);
                                     await db.SaveChangesAsync();
                                     ContextTransaction.Commit();
+                                    EmailHelper emailhelper = new EmailHelper();
+                                    string mailbody = "Hi " + Merchant_Info.UName + ",<p>Your requisition has been approve of amount " + Trans_Req_Amount + " by distributor (" + Distributor_Info.MEM_UNIQUE_ID + ").</p>";
+                                    emailhelper.SendUserEmail(Merchant_Info.EMAIL_ID, "Requisition Approve", mailbody);
                                     return Json("Transaction Approve.", JsonRequestBehavior.AllowGet);
                                 }
                                 else
@@ -1486,6 +1515,9 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                 db.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION.Add(OBJMERCHANTCREDIT_VAL);
                                 await db.SaveChangesAsync();
                                 ContextTransaction.Commit();
+                                EmailHelper emailhelper = new EmailHelper();
+                                string mailbody = "Hi " + Merchant_Info.UName + ",<p>Your requisition has been approve of amount " + Trans_Req_Amount + " by distributor (" + Distributor_Info.MEM_UNIQUE_ID + ").</p>";
+                                emailhelper.SendUserEmail(Merchant_Info.EMAIL_ID, "Requisition Approve", mailbody);
                                 return Json("Transaction Approve.", JsonRequestBehavior.AllowGet);
                             }
                             else
@@ -1651,6 +1683,9 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                 db.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION.Add(OBJMERCHANTCREDIT_VAL);
                                 await db.SaveChangesAsync();
                                 ContextTransaction.Commit();
+                                EmailHelper emailhelper = new EmailHelper();
+                                string mailbody = "Hi " + Merchant_Info.UName + ",<p>Your requisition has been approve of amount " + Trans_Req_Amount + " by distributor (" + Distributor_Info.MEM_UNIQUE_ID + ").</p>";
+                                emailhelper.SendUserEmail(Merchant_Info.EMAIL_ID, "Requisition Approve", mailbody);
                                 return Json("Transaction Approve.", JsonRequestBehavior.AllowGet);
                             }
 

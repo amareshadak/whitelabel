@@ -72,8 +72,8 @@
         [Column("PASSWORD_MD5")]
         public string User_pwd { get; set; }
 
-        [Required]        
-        [Display(Name = "Security Pin")]
+        //[Required]        
+        //[Display(Name = "Security Pin")]
         [StringLength(4, ErrorMessage = "Security must be 4 digit")]
         [RegularExpression("^[0-9]*$", ErrorMessage = "Enter only Numeric Value")]
         public string SECURITY_PIN_MD5 { get; set; }
@@ -108,15 +108,15 @@
         public long? DELETED_BY { get; set; }
         public string RAIL_ID { get; set; }
         public string RAIL_PWD { get; set; }
-        public int GST_MODE { get; set;}
-        public int TDS_MODE { get; set; }
+        public int? GST_MODE { get; set;}
+        public int? TDS_MODE { get; set; }
         //[Required(ErrorMessage = "GST No is required")]
         //[RegularExpression("^[0-9a-zA-Z ]+$", ErrorMessage = "Enter valid GST No")]
         //[MaxLength(15, ErrorMessage = "GST No is not greater then 15 digit")]
         //[MinLength(10, ErrorMessage = "GST No is not less then 10 digit")]
         public string COMPANY_GST_NO { get; set; }
-        public long GST_FLAG { get; set; }
-        public long TDS_FLAG { get; set; }
+        public long? GST_FLAG { get; set; }
+        public long? TDS_FLAG { get; set; }
         public string LOGO { get; set; }
         public string LOGO_STYLE { get; set; }
         public decimal? CREDIT_BALANCE { get; set; }
