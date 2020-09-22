@@ -1,0 +1,12 @@
+﻿
+@{
+    ViewBag.Title = "EasebuzzPaymentGateway";
+    Layout = "~/Areas/Merchant/Views/Shared/_RetailerLayout.cshtml";
+}
+
+<h2>EasebuzzPaymentGateway</h2>
+
+@using (Html.BeginForm("CallEasebuzzAPI", "MerchantRequisition", FormMethod.Post, new { area = "Merchant" }))
+{
+    <input type="submit" value="Update" class="btn btn-primary" />
+}
