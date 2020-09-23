@@ -359,6 +359,28 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
         }
         #endregion
 
+        #region Round Trip Flight Details Verification
+        [HttpPost]
+        public JsonResult GetRoundTripFlightVerificationDetails(string outBoundTrackNo, string inBoundTrackNo, string TripMode)
+        {
+            try
+            {
+
+                dynamic outBoundResponce = MultiLinkAirAPI.VerifyFlightDetails(outBoundTrackNo, TripMode);
+                dynamic inBoundResponce = MultiLinkAirAPI.VerifyFlightDetails(inBoundTrackNo, TripMode);
+                var outBoundData = JsonConvert.SerializeObject(outBoundResponce);
+                var inBoundData = JsonConvert.SerializeObject(inBoundResponce);
+                return Json(new { outBoundData, inBoundData }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+        }
+        #endregion
+
         #region Flight Additional Services
         [HttpPost]
         public JsonResult GetFlightAdditionalDetails(string req)

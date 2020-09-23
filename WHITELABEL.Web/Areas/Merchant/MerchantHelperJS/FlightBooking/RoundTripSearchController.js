@@ -977,7 +977,7 @@
         if (DerpAmt.length > 0 && RetAmt.length > 0) {
             let TotalAmt = 0;
             if (DerpAmt[0].TotalAmount && RetAmt[0].TotalAmount != undefined) {
-                TotalAmt = parseFloat(DerpAmt[0].TotalAmount) + parseFloat(RetAmt[0].TotalAmount) + $scope.additionalAddedAmount;
+                TotalAmt = parseFloat(DerpAmt[0].TotalAmount) + parseFloat(RetAmt[0].TotalAmount) + ($scope.additionalAddedAmount == 0 ? 0 : ($scope.additionalAddedAmount * 2));
             }
             else {
                 TotalAmt = 0;

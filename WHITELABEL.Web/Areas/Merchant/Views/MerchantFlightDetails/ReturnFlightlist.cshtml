@@ -932,7 +932,7 @@
 
                     <div class="card" style="width:100%;" ng-controller="RoundTripSearchController" ng-init="LoadFlightSearch('@ViewBag.Tripmode','@ViewBag.FromCityCode','@ViewBag.TOAirportCode','@ViewBag.FromDate','@ViewBag.ToDate','@ViewBag.TravelType','@ViewBag.Adult','@ViewBag.Child','@ViewBag.Infant')" id="AirportAutocompleteController">
                         <div class="card-body">
-                            <div class="row">
+                            <div class="row" style="display:none">
                                 <!--.col-->
                                 <div class="row col-md-12" style="padding-bottom:40px;">
                                     <div class="accordion" id="accordionRightIcon" style="width:100%">
@@ -942,17 +942,49 @@
                                             </div>
                                             <div class="collapse show" id="accordion-item-icons-1" data-parent="#accordionRightIcon">
                                                 <div class="card-body">
-                                                    <div class="row m-0 p-2">
+                                                    <div class="row m-0 p-0">
+                                                        <div class="col-md-3 p-0">
+                                                            <div class="form-group">
+                                                                <label>Departure Price range:</label>
+                                                                <div class="clearfix"></div>
+                                                                <span class="badge badge-dark pull-left" ng-cloak>{{lower_price_bound}}</span>
+                                                                <span class="badge badge-dark pull-right" ng-cloak>{{upper_price_bound}}</span>
+                                                                <div class="clearfix"></div>
+                                                                <slider floor="{{min}}" ceiling="{{max}}" ng-model-low="lower_price_bound" ng-model-high="upper_price_bound"></slider>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label>Return Price range:</label>
+                                                                <div class="clearfix"></div>
+                                                                <span class="badge badge-dark pull-left" ng-cloak>{{Return_lower_price_bound}}</span>
+                                                                <span class="badge badge-dark pull-right" ng-cloak>{{Return_upper_price_bound}}</span>
+                                                                <div class="clearfix"></div>
+                                                                <slider floor="{{Return_min}}" ceiling="{{Return_max}}" ng-model-low="Return_lower_price_bound" ng-model-high="Return_upper_price_bound"></slider>
+                                                            </div>
+                                                        </div>
+
+
+
+
                                                         <div class="col-md-4 p-2">
                                                             <div class="control-group">
                                                                 <div class="controls">
                                                                     <label>Depart on</label>
                                                                     <div>
-                                                                        <button type="button" class="btn btn-{{filterData.timeSlots.EarlyMorning ? 'primary':'default'}}" ng-model="filterData.timeSlots.EarlyMorning" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">12am - 8am</button>
-                                                                        <button type="button" class="btn btn-{{filterData.timeSlots.Morning ? 'primary':'default'}}" ng-model="filterData.timeSlots.Morning" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">8am - 12pm</button>
-                                                                        <button type="button" class="btn btn-{{filterData.timeSlots.MidDay ? 'primary':'default'}}" ng-model="filterData.timeSlots.MidDay" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">12pm - 4pm</button>
-                                                                        <button type="button" class="btn btn-{{filterData.timeSlots.Evening ? 'primary':'default'}}" ng-model="filterData.timeSlots.Evening" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">4pm - 8pm</button>
-                                                                        <button type="button" class="btn btn-{{filterData.timeSlots.Night ? 'primary':'default'}}" ng-model="filterData.timeSlots.Night" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">8pm - 12am</button>
+                                                                        <button type="button" class="btn mb-1 btn-sm btn-{{filterData.timeSlots.EarlyMorning ? 'primary':'default'}}" ng-model="filterData.timeSlots.EarlyMorning" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">12am - 8am</button>
+                                                                        <button type="button" class="btn mb-1 btn-sm btn-{{filterData.timeSlots.Morning ? 'primary':'default'}}" ng-model="filterData.timeSlots.Morning" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">8am - 12pm</button>
+                                                                        <button type="button" class="btn mb-1 btn-sm btn-{{filterData.timeSlots.MidDay ? 'primary':'default'}}" ng-model="filterData.timeSlots.MidDay" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">12pm - 4pm</button>
+                                                                        <button type="button" class="btn mb-1 btn-sm btn-{{filterData.timeSlots.Evening ? 'primary':'default'}}" ng-model="filterData.timeSlots.Evening" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">4pm - 8pm</button>
+                                                                        <button type="button" class="btn mb-1 btn-sm btn-{{filterData.timeSlots.Night ? 'primary':'default'}}" ng-model="filterData.timeSlots.Night" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">8pm - 12am</button>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="controls">
+                                                                    <label>Depart on</label>
+                                                                    <div>
+                                                                        <button type="button" class="btn mb-1 btn-sm btn-{{filterData.timeSlots.EarlyMorning ? 'primary':'default'}}" ng-model="filterData.timeSlots.EarlyMorning" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">12am - 8am</button>
+                                                                        <button type="button" class="btn mb-1 btn-sm btn-{{filterData.timeSlots.Morning ? 'primary':'default'}}" ng-model="filterData.timeSlots.Morning" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">8am - 12pm</button>
+                                                                        <button type="button" class="btn mb-1 btn-sm btn-{{filterData.timeSlots.MidDay ? 'primary':'default'}}" ng-model="filterData.timeSlots.MidDay" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">12pm - 4pm</button>
+                                                                        <button type="button" class="btn mb-1 btn-sm btn-{{filterData.timeSlots.Evening ? 'primary':'default'}}" ng-model="filterData.timeSlots.Evening" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">4pm - 8pm</button>
+                                                                        <button type="button" class="btn mb-1 btn-sm btn-{{filterData.timeSlots.Night ? 'primary':'default'}}" ng-model="filterData.timeSlots.Night" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">8pm - 12am</button>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -965,28 +997,17 @@
                                                                         @*{{filterRetrunData.timeSlots}}*@
                                                                     </label>
                                                                     <div>
-                                                                        <button type="button" class="btn btn-{{filterRetrunData.timeSlots.EarlyMorning ? 'primary':'default'}}" ng-model="filterRetrunData.timeSlots.EarlyMorning" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">12am - 8am</button>
-                                                                        <button type="button" class="btn btn-{{filterRetrunData.timeSlots.Morning ? 'primary':'default'}}" ng-model="filterRetrunData.timeSlots.Morning" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">8am - 12pm</button>
-                                                                        <button type="button" class="btn btn-{{filterRetrunData.timeSlots.MidDay ? 'primary':'default'}}" ng-model="filterRetrunData.timeSlots.MidDay" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">12pm - 4pm</button>
-                                                                        <button type="button" class="btn btn-{{filterRetrunData.timeSlots.Evening ? 'primary':'default'}}" ng-model="filterRetrunData.timeSlots.Evening" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">4pm - 8pm</button>
-                                                                        <button type="button" class="btn btn-{{filterRetrunData.timeSlots.Night ? 'primary':'default'}}" ng-model="filterRetrunData.timeSlots.Night" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">8pm - 12am</button>
+                                                                        <button type="button" class="btn mb-1 btn-{{filterRetrunData.timeSlots.EarlyMorning ? 'primary':'default'}}" ng-model="filterRetrunData.timeSlots.EarlyMorning" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">12am - 8am</button>
+                                                                        <button type="button" class="btn mb-1 btn-{{filterRetrunData.timeSlots.Morning ? 'primary':'default'}}" ng-model="filterRetrunData.timeSlots.Morning" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">8am - 12pm</button>
+                                                                        <button type="button" class="btn mb-1 btn-{{filterRetrunData.timeSlots.MidDay ? 'primary':'default'}}" ng-model="filterRetrunData.timeSlots.MidDay" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">12pm - 4pm</button>
+                                                                        <button type="button" class="btn mb-1 btn-{{filterRetrunData.timeSlots.Evening ? 'primary':'default'}}" ng-model="filterRetrunData.timeSlots.Evening" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">4pm - 8pm</button>
+                                                                        <button type="button" class="btn mb-1 btn-{{filterRetrunData.timeSlots.Night ? 'primary':'default'}}" ng-model="filterRetrunData.timeSlots.Night" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">8pm - 12am</button>
                                                                     </div>
                                                                 </div>
                                                             </div>
 
                                                         </div>
-                                                        <div class="col-md-4 p-2">
-                                                            <div class="form-group">
-                                                                <label>Departure Price range:</label>
-                                                                @*<button class="btn btn-xs btn-default pull-right" style="padding:5px;font-size:x-small;font-weight:bold" ng-click="lower_price_bound = min; upper_price_bound = max;">Reset</button>*@
-                                                                <div class="clearfix"></div>
 
-                                                                <span class="badge badge-dark pull-left" ng-cloak>{{lower_price_bound}}</span>
-                                                                <span class="badge badge-dark pull-right" ng-cloak>{{upper_price_bound}}</span>
-                                                                <div class="clearfix"></div>
-                                                                <slider floor="{{min}}" ceiling="{{max}}" ng-model-low="lower_price_bound" ng-model-high="upper_price_bound"></slider>
-                                                            </div>
-                                                        </div>
                                                         <div class="col-md-4 p-2">
                                                             Stops
                                                             <div class="clearfix"></div>
@@ -1002,47 +1023,22 @@
 
                                                             @*<button class="btn btn-xs btn-default pull-right" style="padding:5px;font-size:x-small;font-weight:bold" ng-click="filterData.airlines = [];resetFilterAirlinesList()">Reset</button>*@
                                                             @*<div class="clearfix"></div>
-                                    <br />
-                                    <div class="checkboxer" ng-repeat="item in airlinesList">
-                                        <input type="checkbox" ng-model="item.selected">
-                                        <label for="check6"> {{item.name}} <img ng-hide="item.code == ''" ng-src="~/Content/static-airlines-master/logos/{{item.code}}.png" class="flightImagesNew" alt="flights"></label>
-                                    </div>*@
+            <br />
+            <div class="checkboxer" ng-repeat="item in airlinesList">
+                <input type="checkbox" ng-model="item.selected">
+                <label for="check6"> {{item.name}} <img ng-hide="item.code == ''" ng-src="~/Content/static-airlines-master/logos/{{item.code}}.png" class="flightImagesNew" alt="flights"></label>
+            </div>*@
                                                             @*<div id="news-slider2" class="owl-carousel" ng-repeat="item in airlinesList">
-                                                                <div class="post-slide2">
-                                                                    <div class="post-img">
-                                                                        <input type="checkbox" ng-model="item.selected" value="" id="check6">
-                                                                        <label for="check6"><img ng-hide="item.code == ''" ng-src="~/Content/static-airlines-master/logos/{{item.code}}.png" class="flightImagesNew" alt="flights"><br />{{item.name}}</label>
-                                                                    </div>
-                                                                </div>
-                                                            </div>*@
+                <div class="post-slide2">
+                    <div class="post-img">
+                        <input type="checkbox" ng-model="item.selected" value="" id="check6">
+                        <label for="check6"><img ng-hide="item.code == ''" ng-src="~/Content/static-airlines-master/logos/{{item.code}}.png" class="flightImagesNew" alt="flights"><br />{{item.name}}</label>
+                    </div>
+                </div>
+            </div>*@
                                                             <!--.checkbox-->
                                                         </div>
-                                                        <div class="col-md-4 p-2">
-                                                            <div class="form-group">
-                                                                <label>Return Price range:</label>
-                                                                @*<button class="btn btn-xs btn-default pull-right" style="padding:5px;font-size:x-small;font-weight:bold" ng-click="lower_price_bound = min; upper_price_bound = max;">Reset</button>*@
-                                                                <div class="clearfix"></div>
-
-                                                                <span class="badge badge-dark pull-left" ng-cloak>{{Return_lower_price_bound}}</span>
-                                                                <span class="badge badge-dark pull-right" ng-cloak>{{Return_upper_price_bound}}</span>
-                                                                <div class="clearfix"></div>
-                                                                <slider floor="{{Return_min}}" ceiling="{{Return_max}}" ng-model-low="Return_lower_price_bound" ng-model-high="Return_upper_price_bound"></slider>
-                                                                @*<label>Trip duration:</label>
-                                        <div id="extra-small-slider-circle-filled" class="circle-filled slider-default slider-extra-small slider-custom noUi-target noUi-ltr noUi-horizontal" style="margin-top:10px;">
-
-                                            <div class="noUi-base">
-                                                <div class="noUi-origin" style="left: 14.2857%;">
-                                                    <div class="noUi-handle noUi-handle-lower" data-handle="0" tabindex="0" role="slider" aria-orientation="horizontal" aria-valuemin="0.0" aria-valuemax="71.4" aria-valuenow="14.3" aria-valuetext="20.00" style="z-index: 5;"></div>
-                                                </div>
-                                                <div class="noUi-connect" style="left: 14.2857%; right: 28.5714%;"></div>
-
-                                                <div class="noUi-origin" style="left: 71.4286%;">
-                                                    <div class="noUi-handle noUi-handle-upper" data-handle="1" tabindex="0" role="slider" aria-orientation="horizontal" aria-valuemin="14.3" aria-valuemax="100.0" aria-valuenow="71.4" aria-valuetext="60.00" style="z-index: 4;"></div>
-                                                </div>
-                                            </div>
-                                        </div>*@
-                                                            </div>
-                                                        </div>
+                                                       
                                                     </div>
                                                 </div>
                                             </div>
@@ -1164,6 +1160,7 @@
                                         <div data-cy="flightItem_CCUDEL20200710ESG:SG3281SG903:0">
                                             <div class="row mb-2" style="box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0.2), 0 0px 5px 2px rgba(0, 0, 0, 0.19)"
                                                  ng-repeat="flight in deptureFlight | filter : filterDeptFlightData1"
+                                                 ng-show="selectedDeptFlight.length > 0 && selectedReturnFlight.length > 0"
                                                  ng-cloak>
 
                                                 <div class="col-7 p-1">
@@ -1386,9 +1383,10 @@
                                                 <li id="PRICE" class="curPointFlt"><span class="dF alignItemsCenter justifyCenter"><span class="fb ico11  hpyBlueLt ">PRICE</span><i class="ico13 icon-arrow2-up hpyBlueLt "></i></span></li>
                                             </ul>
                                         </div>
-                                        <div data-cy="flightItem_CCUDEL20200710ESG:SG3281SG903:0">
+                                        <div data-cy="flightItem_CCUDEL20200710ESG:SG3281SG903:0" >
                                             <div class="row mb-2" style="box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0.2), 0 0px 5px 2px rgba(0, 0, 0, 0.19)"
                                                  ng-repeat="flight in returnFlight"
+                                                 ng-show="selectedDeptFlight.length > 0 && selectedReturnFlight.length > 0"
                                                  ng-cloak>
 
                                                 <div class="col-7 p-1">

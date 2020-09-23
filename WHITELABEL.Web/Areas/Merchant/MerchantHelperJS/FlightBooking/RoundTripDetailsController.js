@@ -1,5 +1,6 @@
 ﻿app.controller('RoundTripDetailsController', ['FlightServices', '$scope', '$http', '$window', function (FlightServices, $scope, $http, $window) {
     $scope.additionalAddedAmount = parseFloat(document.getElementById('AIRADDITIONALAMOUNT').value);
+
     $scope.adult = 0;
     $scope.child = 0;
     $scope.infant = 0;
@@ -147,28 +148,39 @@
     
 
     $scope.loadFlightDetails = function (trackNo, tripMode) {
-        const data = { TrackNo: trackNo, TripMode: tripMode };
-        const service = FlightServices.getFlightVerificationDetails(data);
+        const track = trackNo.split(',');
+        const outBound = track[0];
+        const inBound = track[1];
+
+
+
+
+
+        const data = { outBoundTrackNo: outBound, inBoundTrackNo: inBound, TripMode: tripMode };
+        const service = FlightServices.getRoundTripFlightVerificationDetails(data);
         service.then(function (response) {
-           
+
             const data = response.data;
-            const verifyFlightDetailResponse = JSON.parse(data).VerifyFlightDetailResponse;
-            const flightDetails = verifyFlightDetailResponse.FlightDetails;
+            const outBoundFlight = JSON.parse(data.outBoundData).VerifyFlightDetailResponse.FlightDetails;
+            const inBoundFlight = JSON.parse(data.inBoundData).VerifyFlightDetailResponse.FlightDetails;
 
 
-            $scope.deptureFlight = flightDetails.filter(x => x.SrNo.charAt(x.SrNo.length - 1) === 'O');
-            $scope.returnFlight = flightDetails.filter(x => x.SrNo.charAt(x.SrNo.length - 1) === 'R');
+            console.log(outBoundFlight);
+            console.log(inBoundFlight);
 
-            debugger;
+            $scope.deptureFlight = outBoundFlight;// flightDetails.filter(x => x.SrNo.charAt(x.SrNo.length - 1) === 'O');
+            $scope.returnFlight = inBoundFlight;// flightDetails.filter(x => x.SrNo.charAt(x.SrNo.length - 1) === 'R');
 
-            const fareDetails = verifyFlightDetailResponse.FareDetails;
-            $scope.deptureFareDetails = fareDetails[0];
-            $scope.returnFareDetails = fareDetails[1];
+            // debugger;
+
+            const fareDetails = JSON.parse(data.outBoundData).VerifyFlightDetailResponse.FareDetails;
+            $scope.deptureFareDetails = JSON.parse(data.outBoundData).VerifyFlightDetailResponse.FareDetails[0];
+            $scope.returnFareDetails = JSON.parse(data.inBoundData).VerifyFlightDetailResponse.FareDetails[0];
             $scope.setTotalFare();
 
             $scope.TotalAmount = parseFloat($scope.deptureFareDetails.TotalAmount) + parseFloat($scope.returnFareDetails.TotalAmount);
-            $scope.flightDetails = flightDetails;
-            $scope.fareDetails = fareDetails;
+            // $scope.flightDetails = flightDetails;
+            // $scope.fareDetails = fareDetails;
             $scope.detailsLoadingError = verifyFlightDetailResponse.Error;
             $scope.trackNumber = $scope.deptureFlight[0].TrackNo + ',' + $scope.returnFlight[0].TrackNo;
 
@@ -182,9 +194,12 @@
         });
     }
 
+    $scope.outBoundSegment = [];
+    $scope.inBoundSegment = [];
+
     $scope.loadSegment = function () {
         let SegmentSeqNo = 1;
-        angular.forEach($scope.flightDetails, function (value, key) {
+        angular.forEach($scope.returnFlight, function (value, key) {
             let data = {
                 "TrackNo": value.TrackNo,
                 "SegmentSeqNo": SegmentSeqNo,
@@ -199,9 +214,28 @@
                 "FlightClass": value.FlightClass,
                 "MainClass": value.MainClass
             };
+            $scope.outBoundSegment.push(data);
+            SegmentSeqNo++;
+        });
 
-            $scope.segments.push(data);
 
+        SegmentSeqNo = 1;
+        angular.forEach($scope.deptureFlight, function (value, key) {
+            let data = {
+                "TrackNo": value.TrackNo,
+                "SegmentSeqNo": SegmentSeqNo,
+                "AirlineCode": value.AirlineCode,
+                "FlightNo": value.FlightNo,
+                "FromAirportCode": value.FromAirportCode,
+                "ToAirportCode": value.ToAirportCode,
+                "DepDate": value.DepDate,
+                "DepTime": value.DepTime,
+                "ArrDate": value.ArrDate,
+                "ArrTime": value.ArrTime,
+                "FlightClass": value.FlightClass,
+                "MainClass": value.MainClass
+            };
+            $scope.inBoundSegment.push(data);
             SegmentSeqNo++;
         });
 
@@ -301,9 +335,6 @@
         $scope.bookingRequestObj.RequestXml.BookTicketRequest.AdditionalServices.AdditionalService = $scope.additionaServices.filter(function (x) { return x.IsSelected; });
         $scope.bookingRequestObj.RequestXml.BookTicketRequest.TotalAmount = $scope.TotalAmount;
 
-        // console.log(JSON.stringify($scope.bookingRequestObj))
-        // const reqObj = { "RequestXml": { "Authenticate": { "InterfaceCode": "", "InterfaceAuthKey": "", "AgentCode": "", "Password": "" }, "BookTicketRequest": { "TrackNo": "0$48957|4|27AO", "MobileNo": "9879879846", "AltMobileNo": "9549879849", "Email": "amareshadak@gmail.com", "Address": "", "ClientRequestID": "", "Passengers": { "Passenger": [{ "PaxSeqNo": 1, "Title": "Mr", "FirstName": "Amaresh", "LastName": "Adak", "PassengerType": "A", "DateOfBirth": "10/04/1991", "PassportNo": "RTTTTGGBGB56351", "PassportExpDate": "", "PassportIssuingCountry": "IND", "NationalityCountry": "IND", "label": "Adult 1", "$$hashKey": "object:3" }] }, "Segments": { "Segment": [{ "TrackNo": "0$48957|4|27AO", "SegmentSeqNo": 1, "AirlineCode": "UK", "FlightNo": "720", "FromAirportCode": "CCU", "ToAirportCode": "DEL", "DepDate": "16/08/2020", "DepTime": "07:10", "ArrDate": "16/08/2020", "ArrTime": "09:35", "FlightClass": "Q", "MainClass": "Y" }, { "TrackNo": "0$48957|4|27AO", "SegmentSeqNo": 2, "AirlineCode": "UK", "FlightNo": "1400", "FromAirportCode": "DEL", "ToAirportCode": "BOM", "DepDate": "16/08/2020", "DepTime": "13:00", "ArrDate": "16/08/2020", "ArrTime": "15:10", "FlightClass": "Q", "MainClass": "Y" }] }, "AdditionalServices": { "AdditionalService": [] }, "TotalAmount": "9895", "MerchantCode": "PAY9zJhspxq7m", "MerchantKey": "eSpbcYMkPoZYFPcE8FnZ", "SaltKey": "WHJIIcNjVXaZj03TnDme", "IsTicketing": "Yes" } } };
-        // console.log(reqObj);
 
         const req = { req: JSON.stringify($scope.bookingRequestObj), userMarkup: $scope.userMarkup, FlightAmt: $scope.TotalAmount, TripMode: 'R', deptSegment: JSON.stringify($scope.deptureFlight), returnSegment: JSON.stringify($scope.returnFlight) };
         const service = FlightServices.getFlightBookeServices(req);

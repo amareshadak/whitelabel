@@ -37,6 +37,16 @@
         return request;
     };
 
+
+    this.getRoundTripFlightVerificationDetails = function (data) {
+        var request = $http({
+            method: "POST",
+            data: data,
+            url: "/Merchant/MerchantFlightDetails/GetRoundTripFlightVerificationDetails"
+        });
+        return request;
+    };
+
     this.getAdditionalServices = function (data) {
         var request = $http({
             method: "POST",
