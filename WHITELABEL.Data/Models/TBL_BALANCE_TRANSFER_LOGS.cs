@@ -80,5 +80,7 @@
         public string TO_DATE { get; set; }
         [NotMapped]
         public string CompanyName { get; set; }
+        [NotMapped]
+        public bool checkboxBilldesk { get; set; }
     }
 }

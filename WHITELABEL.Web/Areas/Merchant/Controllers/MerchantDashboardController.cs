@@ -9,6 +9,7 @@ using WHITELABEL.Web.Models;
 using WHITELABEL.Web.Helper;
 using WHITELABEL.Web.ServiceApi.RECHARGE.PORTIQUE;
 using System.Web.Security;
+using easebuzz_.net;
 
 namespace WHITELABEL.Web.Areas.Merchant.Controllers
 {
@@ -97,6 +98,23 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
             if (Session["MerchantUserId"] != null)
             {
                 initpage();
+
+                //if ((TempData["EaseBuzzResponse"]) != null)
+                //{
+                //    ViewBag.IsShowPrintTicket = TempData["EaseBuzzResponse"];
+
+                //    ViewBag.TXnStatus = TempData["TXnStatus"];
+                //    ViewBag.txnid = TempData["txnid"];
+                //    ViewBag.txnAmt = TempData["txnAmt"];
+                //}
+                //else
+                //{
+                //    ViewBag.IsShowPrintTicket = "";
+                //    ViewBag.TXnStatus = "";
+                //    ViewBag.txnid ="";
+                //    ViewBag.txnAmt = "";
+                //}
+                return View();
                 //var db = new DBContext();
                 //var availablebal = db.TBL_MASTER_MEMBER.Where(x => x.MEM_ID == CurrentMerchant.MEM_ID).FirstOrDefault();
                 //if (availablebal != null)
@@ -124,7 +142,6 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                 //    string UserIdVal = Decrypt.DecryptMe(UserID);
                 //    string UserName = userinfo[1];
                 //}
-                return View();
             }
             else
             {
@@ -216,6 +233,49 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
             catch (Exception ex)
             {
                 return Json("");
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public ActionResult EaseBuzzRechargeWallet()
+        {
+            initpage();
+            try
+            {
+                string salt = System.Configuration.ConfigurationSettings.AppSettings["EaseBuzzSaltKey"];
+                string Key = System.Configuration.ConfigurationSettings.AppSettings["EaseBuzzKey"];
+                string env = System.Configuration.ConfigurationSettings.AppSettings["EaseBuzzEnviroment"];
+                //string salt = "4NGY1NYJJP";
+                // string Key = "W8A3NHRAWY";
+                //string env = "test";
+                string COrelationID = Settings.GetUniqueKey(CurrentMerchant.MEM_ID.ToString());
+                var db = new DBContext();
+                var memberinfo = db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == CurrentMerchant.MEM_ID);
+                string amount = "100";
+                string firstname = memberinfo.MEMBER_NAME.Trim();
+                string email = memberinfo.EMAIL_ID.Trim();
+                string phone = memberinfo.MEMBER_MOBILE.Trim();
+                string productinfo = "Easebuzz payment integration text";
+                string surl = "http://b2b.boomtravels.com/Merchant/MerchantRequisition/EasepaySuccess";
+                string furl = "http://b2b.boomtravels.com/Merchant/MerchantRequisition/EasepaySuccess";
+                //string surl = "http://localhost:56049/Merchant/MerchantRequisition/EasepaySuccess";
+                //string furl = "http://localhost:56049/Merchant/MerchantRequisition/EasepayFailure";
+                string Txnid = COrelationID.Trim();
+                string UDF1 = "";
+                string UDF2 = "";
+                string UDF3 = "";
+                string UDF4 = "";
+                string UDF5 = "";
+                string Show_payment_mode = "";
+                Easebuzz t = new Easebuzz(salt, Key, env);
+                string strForm = t.initiatePaymentAPI(amount, firstname, email, phone, productinfo, surl, furl, Txnid, UDF1, UDF2, UDF3, UDF4, UDF5, Show_payment_mode);
+                return Content(strForm, System.Net.Mime.MediaTypeNames.Text.Html);
+                //return Json(walletamount, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json("please try again later", JsonRequestBehavior.AllowGet);
                 throw ex;
             }
         }

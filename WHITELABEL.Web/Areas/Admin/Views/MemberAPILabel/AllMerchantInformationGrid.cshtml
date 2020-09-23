@@ -24,8 +24,9 @@
                                                 columns.Add(model => model.BALANCE).Titled("Balance").Filterable(true).Sortable(true);
                                                 columns.Add(model => model.CREDIT_LIMIT).Titled("Credit Limit").Filterable(true).Sortable(true);
                                                 columns.Add(model => model.RESERVED_CREDIT_LIMIT).Titled("Reserved Credit Limit").Filterable(true).Sortable(true);
-
                                                 columns.Add(model => model.SECURITY_PIN_MD5).Titled("M Pin").Filterable(true).Sortable(true);
+                                                columns.Add(model => model.MEM_ID).Encoded(false).Filterable(false).Sortable(false).Titled("Edit")
+                                           .RenderedAs(model => "<div>&nbsp;<a href='" + @Url.Action("EditMerchant", "MemberAPILabel", new { area = "Admin", memid = Encrypt.EncryptMe(model.MEM_ID.ToString()) }) + "' Title='Edit' style='margin-right:10px;'><i class='fa fa-edit'></i></a></div>");
                                                 columns.Add(model => model.MEM_ID).Encoded(false).Filterable(false).Sortable(false).Titled("Action")
                                    .RenderedAs(model => "<a href='javascript:void(0)' onclick='MemberStatus(\"" + model.MEM_ID + "\",\"" + model.ACTIVE_MEMBER + "\");return 0;' title='" + (model.ACTIVE_MEMBER == true ? "Active" : "Deactive") + "'>" + (model.ACTIVE_MEMBER == true ? "<span style='color:green;'><i class='fa fa-toggle-on fa-2x'></i></span>" : "<span style='color:red;'><i class='fa fa-toggle-off fa-2x'></i></span>") + "</a>");
                                             })

@@ -74,6 +74,7 @@ function updateStatus(transid,PaymentTrnDetails) {
         },
         callback: function (result) {
             if (result) {
+                $('#progressRequisition').show();
                 //var trandate = $("#TransactionDate").val();
                 //var TransationStatus = $("#TransationStatus").val();
                 var TransationStatus = "1";
@@ -105,6 +106,7 @@ function updateStatus(transid,PaymentTrnDetails) {
                     beforeSend: function () {
                     },
                     success: function (data) {
+                        $('#progressRequisition').hide();
                         var messageval = data;
                         $('.mvc-grid').mvcgrid('reload');
                         $(".overlaydiv").fadeOut("slow");
@@ -335,6 +337,7 @@ function getvalue(transid) {
             $('#sln').val(traninfo.data.SLN);
             $("#BankDetails").val(traninfo.data.BANK_ACCOUNT);
             $("#Amount").val(traninfo.data.AMOUNT);
+            $("#txnBankPaymentDetails").val(traninfo.data.REFERENCE_NO);
             //document.getElementById("username").innerHTML = traninfo.data.AMOUNT;
         }
         else {

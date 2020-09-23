@@ -953,10 +953,10 @@ namespace WHITELABEL.Web.Controllers
                 var model = new TBL_MASTER_MEMBER();
                 //string GetUniqueNo = String.Format("{0:d9}", (DateTime.Now.Ticks / 10) % 10000);
                 string GetUniqueNo = String.Format("{0:d5}", (DateTime.Now.Ticks / 10) % 10000);
-                string UniqId = "TIQ" + GetUniqueNo;
+                string UniqId = "BMT" + GetUniqueNo;
 
                 ViewBag.StateNameList = new SelectList(StateName, "STATEID", "STATENAME");                
-                var memberrole = db.TBL_MASTER_MEMBER_ROLE.Where(x => x.ROLE_NAME == "RETAILER").ToList();
+                var memberrole = db.TBL_MASTER_MEMBER_ROLE.Where(x => x.ROLE_ID == 4 || x.ROLE_ID==5).ToList();
                 ViewBag.RoleDetails = new SelectList(memberrole, "ROLE_ID", "ROLE_NAME");
                 var GSTValueID = db.TBL_TAX_MASTERS.Where(x => x.TAX_NAME == "GST").ToList();
                 ViewBag.GSTValue = new SelectList(GSTValueID, "SLN", "TAX_NAME");
@@ -972,17 +972,17 @@ namespace WHITELABEL.Web.Controllers
             }
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]        
+        [ValidateAntiForgeryToken]
         public async Task<JsonResult> POSTADDMerchant(TBL_MASTER_MEMBER objsupermem)
-        {            
+        {
             var db = new DBContext();
             using (System.Data.Entity.DbContextTransaction ContextTransaction = db.Database.BeginTransaction())
             {
                 try
                 {
                     var checkEmail = db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.EMAIL_ID == objsupermem.EMAIL_ID);
-                    //if (checkEmail == null)
-                    //{
+                    if (checkEmail == null)
+                    {
                         ////string GetUniqueNo = String.Format("{0:d9}", (DateTime.Now.Ticks / 10) % 10000);
                         //string GetUniqueNo = String.Format("{0:d5}", (DateTime.Now.Ticks / 10) % 10000);
                         //string UniqId = "TIQ" + GetUniqueNo;
@@ -1012,7 +1012,7 @@ namespace WHITELABEL.Web.Controllers
                         }
                         objsupermem.EMAIL_ID = objsupermem.EMAIL_ID.ToLower();
                         objsupermem.UNDER_WHITE_LEVEL = logochecking.mem_id;
-                        objsupermem.INTRODUCER = objsupermem.DISTRIBUTOR_ID;
+                        objsupermem.INTRODUCER = 0;
                         //objsupermem.BLOCKED_BALANCE = 0;
                         objsupermem.ACTIVE_MEMBER = true;
                         objsupermem.IS_DELETED = false;
@@ -1022,8 +1022,24 @@ namespace WHITELABEL.Web.Controllers
                         objsupermem.CREATED_BY = logochecking.mem_id;
                         //objsupermem.CREATED_BY = CurrentUser.USER_ID;
                         objsupermem.LAST_MODIFIED_DATE = System.DateTime.Now;
-                        objsupermem.GST_MODE = 1;
-                        objsupermem.TDS_MODE = 1;
+                        //objsupermem.GST_MODE = 1;
+                        //objsupermem.TDS_MODE = 1;
+                        if (objsupermem.GST_FLAG != null)
+                        {
+                            objsupermem.GST_MODE = 1;
+                        }
+                        else
+                        {
+                            objsupermem.GST_MODE = 0;
+                        }
+                        if (objsupermem.TDS_FLAG != null)
+                        {
+                            objsupermem.TDS_MODE = 1;
+                        }
+                        else
+                        {
+                            objsupermem.TDS_MODE = 0;
+                        }
                         objsupermem.DUE_CREDIT_BALANCE = 0;
                         objsupermem.CREDIT_BALANCE = 0;
                         objsupermem.IS_TRAN_START = true;
@@ -1039,11 +1055,6 @@ namespace WHITELABEL.Web.Controllers
 
                         await db.SaveChangesAsync();
                         long? intIdt = db.TBL_MASTER_MEMBER.Max(u => (long?)u.MEM_ID);
-
-                        
-
-
-
                         var servlist = await db.TBL_SETTINGS_SERVICES_MASTER.ToListAsync();
                         foreach (var lst in servlist)
                         {
@@ -1057,16 +1068,16 @@ namespace WHITELABEL.Web.Controllers
                             await db.SaveChangesAsync();
                         }
                         ContextTransaction.Commit();
-                        return Json("Merchant Added Successfully", JsonRequestBehavior.AllowGet);
-                    //}
-                    //else
-                    //{
-                    //    return Json("Email Id is already exists. Please enter another email id.!!!", JsonRequestBehavior.AllowGet);
-                    //}  
+                        return Json("You have joined successfully in Boom Travels", JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        return Json("Email Id is already exists. Please enter another email id.!!!", JsonRequestBehavior.AllowGet);
+                    }
                 }
                 catch (Exception ex)
                 {
-                    ContextTransaction.Rollback();                  
+                    ContextTransaction.Rollback();
                     throw ex;
                     return Json("Please Try After Sometime", JsonRequestBehavior.AllowGet);
 

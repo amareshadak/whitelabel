@@ -182,24 +182,29 @@
                     </div><!--.panel-body-->
 
                     <div class="card-footer">
-                        <div class="col-lg-6">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group row">                                    
+                                    <div class="col-md-6 text-center">
+                                        @if (ViewBag.checkbank == "0")
+                                        {
+                                            <input type="submit" value="Send Requisition" class="btn btn-primary" />
+                                        }
+                                        else
+                                        {
+                                            <input type="submit" value="Update Requisition" class="btn btn-primary" />
+                                        }
+                                    </div>
+                                    <div class="col-md-6 text-center">
+                                        @Html.CheckBoxFor(model => model.checkboxBilldesk, new { htmlAttributes = new { @class = "checkbox-primary", id = "chkbildesk" } })
+                                        Agree to recharge your wallet<br />
+                                        <input type="submit" value="Recharge your wallet" class="btn btn-primary" />
+                                    </div>
+                                </div>
+                            </div>
 
                         </div>
-
-                        <div class="col-lg-6 text-right">
-                            @if (ViewBag.checkbank == "0")
-                            {
-                                <input type="submit" value="Create" class="btn btn-primary" />
-                            }
-                            else
-                            {
-                                <input type="submit" value="Update" class="btn btn-primary" />
-                            }
-
-                        </div>
-                        <div class="clearfix"></div>
                     </div>
-
                 </div><!--.panel-->
             </div><!--.col-md-12-->
         </div>

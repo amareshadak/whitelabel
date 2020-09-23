@@ -429,70 +429,105 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
             {
                 try
                 {
-                    
-                    //long userId = long.Parse(objval.FromUser);
-                    // var membertype = db.TBL_MASTER_MEMBER.Where(x => x.MEM_ID == userId).FirstOrDefault();
-                  
-                                         
+                    string COrelationID = Settings.GetUniqueKey(CurrentMerchant.MEM_ID.ToString());
                     var whiteleveluser = await db.TBL_MASTER_MEMBER.Where(x => x.MEM_ID == CurrentMerchant.MEM_ID).FirstOrDefaultAsync();
-                    var translist = await db.TBL_BALANCE_TRANSFER_LOGS.Where(x => x.SLN == objval.SLN).FirstOrDefaultAsync();
-                    if (translist != null)
+                    if (objval.checkboxBilldesk == true)
                     {
-                        var getsuperior = db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == translist.TO_MEMBER);
-                        translist.REQUEST_DATE = Convert.ToDateTime(objval.REQUEST_DATE);
-                        
-                        translist.REQUEST_TIME = System.DateTime.Now;
-                        translist.BANK_ACCOUNT = objval.BANK_ACCOUNT;
-                        translist.AMOUNT = objval.AMOUNT;
-                        translist.PAYMENT_METHOD = objval.PAYMENT_METHOD;
-                        translist.TRANSFER_METHOD = "Cash";
-                        translist.FromUser = "testval";
-                        translist.BANK_CHARGES = objval.BANK_CHARGES;
-                        translist.TRANSACTION_DETAILS = objval.TRANSACTION_DETAILS;
-                        translist.INSERTED_BY = CurrentMerchant.MEM_ID;
-                        translist.REF_NO = objval.RequisitionSendTO;
-                        db.Entry(translist).State = System.Data.Entity.EntityState.Modified;
-                        await db.SaveChangesAsync();
-                        EmailHelper objsms = new EmailHelper();
-                        string Regmsg = "Hi " + whiteleveluser.MEM_UNIQUE_ID + " \r\n. You have successfully updated requisition of amount:- "+ objval.AMOUNT+" to "+ getsuperior.MEM_UNIQUE_ID + ".\r\n Regards\r\n BOOM Travels";
-                        objsms.SendUserEmail(whiteleveluser.EMAIL_ID, "Your requisition update successfully.", Regmsg);
-                        //return RedirectToAction("Index");
+                        string TsnAMt = objval.AMOUNT.ToString();
+                        string UpdateAccount = AccountBalance(TsnAMt);
+                        string salt = System.Configuration.ConfigurationSettings.AppSettings["EaseBuzzSaltKey"];
+                            string Key = System.Configuration.ConfigurationSettings.AppSettings["EaseBuzzKey"];
+                            string env = System.Configuration.ConfigurationSettings.AppSettings["EaseBuzzEnviroment"];
+                            //string salt = "4NGY1NYJJP";
+                            // string Key = "W8A3NHRAWY";
+                            //string env = "test";
+                            var memberinfo = db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == CurrentMerchant.MEM_ID);
+                            string amount = "100";
+                            string firstname = memberinfo.MEMBER_NAME.Trim();
+                            string email = memberinfo.EMAIL_ID.Trim();
+                            string phone = memberinfo.MEMBER_MOBILE.Trim();
+                            string productinfo = "Easebuzz payment integration text";
+                            string surl = "http://b2b.boomtravels.com/Merchant/MerchantRequisition/EasepaySuccess";
+                            string furl = "http://b2b.boomtravels.com/Merchant/MerchantRequisition/EasepaySuccess";
+                            //string surl = "http://localhost:56049/Merchant/MerchantRequisition/EasepaySuccess";
+                            //string furl = "http://localhost:56049/Merchant/MerchantRequisition/EasepayFailure";
+                            string Txnid = COrelationID.Trim();
+                            string UDF1 = "";
+                            string UDF2 = "";
+                            string UDF3 = "";
+                            string UDF4 = "";
+                            string UDF5 = "";
+                            string Show_payment_mode = "";
+                            Easebuzz t = new Easebuzz(salt, Key, env);
+                            string strForm = t.initiatePaymentAPI(amount, firstname, email, phone, productinfo, surl, furl, Txnid, UDF1, UDF2, UDF3, UDF4, UDF5, Show_payment_mode);
+                            return Content(strForm, System.Net.Mime.MediaTypeNames.Text.Html);
+
+                       
                     }
                     else
                     {
-                        //long fromuser = long.Parse(objval.FromUser);
-                        long fromuser = 0;
-                        if (objval.RequisitionSendTO == "Distributor")
+                        //long userId = long.Parse(objval.FromUser);
+                        // var membertype = db.TBL_MASTER_MEMBER.Where(x => x.MEM_ID == userId).FirstOrDefault();
+
+                        var translist = await db.TBL_BALANCE_TRANSFER_LOGS.Where(x => x.SLN == objval.SLN).FirstOrDefaultAsync();
+                        if (translist != null)
                         {
-                            fromuser = long.Parse(whiteleveluser.INTRODUCER.ToString());
+                            var getsuperior = db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == translist.TO_MEMBER);
+                            translist.REQUEST_DATE = Convert.ToDateTime(objval.REQUEST_DATE);
+
+                            translist.REQUEST_TIME = System.DateTime.Now;
+                            translist.BANK_ACCOUNT = objval.BANK_ACCOUNT;
+                            translist.AMOUNT = objval.AMOUNT;
+                            translist.PAYMENT_METHOD = objval.PAYMENT_METHOD;
+                            translist.TRANSFER_METHOD = "Cash";
+                            translist.FromUser = "testval";
+                            translist.BANK_CHARGES = objval.BANK_CHARGES;
+                            translist.TRANSACTION_DETAILS = objval.TRANSACTION_DETAILS;
+                            translist.INSERTED_BY = CurrentMerchant.MEM_ID;
+                            translist.REF_NO = objval.RequisitionSendTO;
+                            db.Entry(translist).State = System.Data.Entity.EntityState.Modified;
+                            await db.SaveChangesAsync();
+                            //EmailHelper objsms = new EmailHelper();
+                            //string Regmsg = "Hi " + whiteleveluser.MEM_UNIQUE_ID + " \r\n. You have successfully updated requisition of amount:- " + objval.AMOUNT + " to " + getsuperior.MEM_UNIQUE_ID + ".\r\n Regards\r\n BOOM Travels";
+                            //objsms.SendUserEmail(whiteleveluser.EMAIL_ID, "Your requisition update successfully.", Regmsg);
+                            
                         }
                         else
                         {
-                            fromuser = long.Parse(whiteleveluser.UNDER_WHITE_LEVEL.ToString());
+                            //long fromuser = long.Parse(objval.FromUser);
+                            long fromuser = 0;
+                            if (objval.RequisitionSendTO == "Distributor")
+                            {
+                                fromuser = long.Parse(whiteleveluser.INTRODUCER.ToString());
+                            }
+                            else
+                            {
+                                fromuser = long.Parse(whiteleveluser.UNDER_WHITE_LEVEL.ToString());
+                            }
+                            var getsuperior = db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == fromuser);
+                            objval.TransactionID = fromuser + "" + CurrentMerchant.MEM_ID + DateTime.Now.ToString("yyyyMMdd") + "" + DateTime.Now.ToString("HHMMss");
+                            objval.TO_MEMBER = fromuser;
+                            objval.FROM_MEMBER = CurrentMerchant.MEM_ID;
+                            objval.REQUEST_DATE = Convert.ToDateTime(objval.REQUEST_DATE);
+
+                            objval.REQUEST_TIME = System.DateTime.Now;
+                            objval.BANK_ACCOUNT = objval.BANK_ACCOUNT;
+                            objval.STATUS = "Pending";
+                            objval.FromUser = "test";
+                            objval.TRANSFER_METHOD = "Cash";
+                            objval.BANK_CHARGES = objval.BANK_CHARGES;
+                            objval.INSERTED_BY = CurrentMerchant.MEM_ID;
+                            objval.REF_NO = objval.RequisitionSendTO;
+                            db.TBL_BALANCE_TRANSFER_LOGS.Add(objval);
+                            await db.SaveChangesAsync();
+                            //EmailHelper objsms = new EmailHelper();
+                            //string Regmsg = "Hi " + whiteleveluser.MEM_UNIQUE_ID + " \r\n. You have successfully send requisition of amount:- " + objval.AMOUNT + " to " + getsuperior.MEM_UNIQUE_ID + ".\r\n Regards\r\n BOOM Travels";
+                            //objsms.SendUserEmail(whiteleveluser.EMAIL_ID, "Your requisition send successfully.", Regmsg);
+                            
                         }
-                        var getsuperior = db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == fromuser);
-                        objval.TransactionID = fromuser + "" + CurrentMerchant.MEM_ID + DateTime.Now.ToString("yyyyMMdd") + "" + DateTime.Now.ToString("HHMMss");
-                        objval.TO_MEMBER = fromuser;
-                        objval.FROM_MEMBER = CurrentMerchant.MEM_ID;
-                        objval.REQUEST_DATE = Convert.ToDateTime(objval.REQUEST_DATE);
-                        
-                        objval.REQUEST_TIME = System.DateTime.Now;
-                        objval.BANK_ACCOUNT = objval.BANK_ACCOUNT;
-                        objval.STATUS = "Pending";
-                        objval.FromUser = "test";
-                        objval.TRANSFER_METHOD = "Cash";
-                        objval.BANK_CHARGES = objval.BANK_CHARGES;
-                        objval.INSERTED_BY = CurrentMerchant.MEM_ID;
-                        objval.REF_NO = objval.RequisitionSendTO;
-                        db.TBL_BALANCE_TRANSFER_LOGS.Add(objval);
-                        await db.SaveChangesAsync();
-                        EmailHelper objsms = new EmailHelper();
-                        string Regmsg = "Hi " + whiteleveluser.MEM_UNIQUE_ID + " \r\n. You have successfully send requisition of amount:- " + objval.AMOUNT + " to " + getsuperior.MEM_UNIQUE_ID + ".\r\n Regards\r\n BOOM Travels";
-                        objsms.SendUserEmail(whiteleveluser.EMAIL_ID, "Your requisition send successfully.", Regmsg);
-                        //return RedirectToAction("Index");
+                        ContextTransaction.Commit();
+                        return RedirectToAction("Index");
                     }
-                    ContextTransaction.Commit();
-                    return RedirectToAction("Index");
                 }
                 catch (Exception ex)
                 {
@@ -635,13 +670,13 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
             var db = new DBContext();
             try
             {
+                //var MerchantGetMember = db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == CurrentMerchant.MEM_ID);
+
                 string salt = System.Configuration.ConfigurationSettings.AppSettings["EaseBuzzSaltKey"];
                 string Key = System.Configuration.ConfigurationSettings.AppSettings["EaseBuzzKey"];
                 //string env = System.Configuration.ConfigurationSettings.AppSettings["EaseBuzzEnviroment"];
                 //string salt = "4NGY1NYJJP";
                 //string Key = "W8A3NHRAWY";
-                
-
                 string[] merc_hash_vars_seq;
                 string merc_hash_string = string.Empty;
                 string merc_hash = string.Empty;
@@ -672,16 +707,22 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                         //string Responseval = ViewBag.messagevalue;
                         ViewBag.TXnStatus = Request.Form["status"];
                         ViewBag.txnid = Request.Form["txnid"];
-                        ViewBag.txnAmt =Request.Form["amount"];                        
-                        //TBL_PAYMENT_GATEWAY_RESPONSE objres = new TBL_PAYMENT_GATEWAY_RESPONSE()
-                        //{
-                        //    MEM_ID=0,
-                        //    EASEBUZZ_RESPONSE= Responseval,
-                        //    EXECUTE_DATE =DateTime.Now,
-                        //    STATUS="SUCCESS"
-                        //};
-                        //db.TBL_PAYMENT_GATEWAY_RESPONSE.Add(objres);
-                        //db.SaveChanges();
+                        ViewBag.txnAmt =Request.Form["amount"];
+                        //return RedirectToAction("Index", "MerchantDashboard", new { area = "Merchant" });
+                        
+                        //TempData["EaseBuzzResponse"] = ViewBag.messagevalue;
+                        //TempData["TXnStatus"] = ViewBag.TXnStatus;
+                        //TempData["txnid"] = ViewBag.txnid;
+                        //TempData["txnAmt"] = ViewBag.txnAmt;
+                        //Session["MerchantUserId"] = MerchantGetMember.MEM_ID;
+
+                        //Session["MerchantUserName"] = MerchantGetMember.UName;
+                        //Session["MerchantCompanyName"] = MerchantGetMember.COMPANY;
+                        //Session["UserType"] = "Merchant";
+                        //Session["CreditLimitAmt"] = MerchantGetMember.CREDIT_LIMIT.ToString().Replace(".00", "").Trim();
+                        //Session["ReservedCreditLimitAmt"] = MerchantGetMember.RESERVED_CREDIT_LIMIT.ToString().ToString().Replace(".00", "").Trim();
+                        //string TsnAMt = Request.Form["amount"].ToString();
+                        //string UpdateAccount= AccountBalance(TsnAMt);
                     }
                     else
                     {
@@ -692,25 +733,132 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                         ViewBag.TXnStatus = Request.Form["status"];
                         ViewBag.txnid = Request.Form["txnid"];
                         ViewBag.txnAmt = Request.Form["amount"];
-                        //TBL_PAYMENT_GATEWAY_RESPONSE objres = new TBL_PAYMENT_GATEWAY_RESPONSE()
-                        //{
-                        //    MEM_ID = 0,
-                        //    EASEBUZZ_RESPONSE = Responseval,
-                        //    EXECUTE_DATE = DateTime.Now,
-                        //    STATUS = "FAILURE"
-                        //};
-                        //db.TBL_PAYMENT_GATEWAY_RESPONSE.Add(objres);
-                        //db.SaveChanges();
+                        //return RedirectToAction("Index", "MerchantDashboard", new { area = "Merchant" });
+                        
+                        //TempData["EaseBuzzResponse"] = ViewBag.messagevalue;
+                        //TempData["TXnStatus"] = ViewBag.TXnStatus;
+                        //TempData["txnid"] = ViewBag.txnid;
+                        //TempData["txnAmt"] = ViewBag.txnAmt;
+                        //Session["MerchantUserId"] = MerchantGetMember.MEM_ID;
+
+                        //Session["MerchantUserName"] = MerchantGetMember.UName;
+                        //Session["MerchantCompanyName"] = MerchantGetMember.COMPANY;
+                        //Session["UserType"] = "Merchant";
+                        //Session["CreditLimitAmt"] = MerchantGetMember.CREDIT_LIMIT.ToString().Replace(".00", "").Trim();
+                        //Session["ReservedCreditLimitAmt"] = MerchantGetMember.RESERVED_CREDIT_LIMIT.ToString().ToString().Replace(".00", "").Trim();
                     }
                     //Hash value did not matched
                 }
+                return View();
             }
             catch (Exception ex)
             {
                 Response.Write("<span style='color:red'>" + ex.Message + "</span>");
+                return RedirectToAction("Index", "MerchantDashboard", new { area = "Merchant" });
+            }            
+        }
+        public string AccountBalance(string Amount)
+        {
+            var db = new DBContext();
+            decimal Baln = 0;
+            decimal OpenningBal = 0;
+            decimal ColsingBal = 0;
+            decimal MainBaln = 0;
+            decimal AddmainBal = 0;
+            decimal TransactionAmt = 0;
+            decimal.TryParse(Amount,out TransactionAmt);
+            string COrelationID = Settings.GetUniqueKey(CurrentMerchant.MEM_ID.ToString());
+            using (System.Data.Entity.DbContextTransaction ContextTransaction = db.Database.BeginTransaction())
+            {
+                try
+                {
+                    var whiteleveluser = db.TBL_MASTER_MEMBER.Where(x => x.MEM_ID == CurrentMerchant.MEM_ID).FirstOrDefault();
+                    var accountdetails = db.TBL_ACCOUNTS.Where(X => X.MEM_ID == CurrentMerchant.MEM_ID).OrderByDescending(z => z.ACC_NO).FirstOrDefault();
+                    if (accountdetails != null)
+                    {
+                        Baln = TransactionAmt;
+                        OpenningBal = accountdetails.CLOSING;
+                        ColsingBal = OpenningBal + Baln;
+                        decimal.TryParse(whiteleveluser.BALANCE.ToString(), out MainBaln);
 
+                        AddmainBal = MainBaln + Baln;
+                        TBL_ACCOUNTS objmer = new TBL_ACCOUNTS()
+                        {
+                            API_ID = 0,
+                            MEM_ID = CurrentMerchant.MEM_ID,
+                            MEMBER_TYPE = "MERCHANT",
+                            //TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
+                            TRANSACTION_TYPE = "Merchant Wallet Recharge",
+                            TRANSACTION_DATE = DateTime.Now,
+                            TRANSACTION_TIME = DateTime.Now,
+                            DR_CR = "CR",
+                            //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
+                            AMOUNT = Baln,
+                            NARRATION = "Merchant Wallet Recharge",
+                            OPENING = OpenningBal,
+                            CLOSING = ColsingBal,
+                            REC_NO = 0,
+                            COMM_AMT = 0,
+                            TDS = 0,
+                            GST = 0,
+                            IPAddress = "",
+                            SERVICE_ID = 0,
+                            CORELATIONID = COrelationID
+                        };
+                        db.TBL_ACCOUNTS.Add(objmer);
+                        whiteleveluser.BALANCE = AddmainBal;
+                        db.Entry(whiteleveluser).State = System.Data.Entity.EntityState.Modified;
+                        db.SaveChanges();
+                        ContextTransaction.Commit();
+                        return "true";
+                    }
+                    else
+                    {
+                        Baln = TransactionAmt;
+                        OpenningBal = 0;
+                        ColsingBal = OpenningBal + Baln;
+                        decimal.TryParse(whiteleveluser.BALANCE.ToString(), out MainBaln);
+                        AddmainBal = MainBaln + Baln;
+                        TBL_ACCOUNTS objmer = new TBL_ACCOUNTS()
+                        {
+                            API_ID = 0,
+                            MEM_ID = CurrentMerchant.MEM_ID,
+                            MEMBER_TYPE = "MERCHANT",
+                            //TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
+                            TRANSACTION_TYPE = "Merchant Wallet Recharge",
+                            TRANSACTION_DATE = DateTime.Now,
+                            TRANSACTION_TIME = DateTime.Now,
+                            DR_CR = "CR",
+                            //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
+                            AMOUNT = Baln,
+                            NARRATION = "Merchant Wallet Recharge",
+                            OPENING = OpenningBal,
+                            CLOSING = ColsingBal,
+                            REC_NO = 0,
+                            COMM_AMT = 0,
+                            TDS = 0,
+                            GST = 0,
+                            IPAddress = "",
+                            SERVICE_ID = 0,
+                            CORELATIONID = COrelationID
+                        };
+                        db.TBL_ACCOUNTS.Add(objmer);
+                        whiteleveluser.BALANCE = AddmainBal;
+                        db.Entry(whiteleveluser).State = System.Data.Entity.EntityState.Modified;
+                        db.SaveChanges();
+                        ContextTransaction.Commit();
+                        return "true";
+                    }
+                }
+                catch (Exception ex )
+                {
+                    ContextTransaction.Rollback();
+                    throw;
+                    return "false";
+                }
             }
-            return View();
+                
+           
         }
         public ActionResult EasepayFailure()
         {

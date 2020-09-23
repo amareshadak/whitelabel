@@ -2326,6 +2326,7 @@
     <Content Include="Areas\Merchant\Views\MerchantRequisition\EasebuzzPaymentGateway.cshtml" />
     <Content Include="Areas\Merchant\Views\MerchantRequisition\EasepaySuccess.cshtml" />
     <Content Include="Areas\Merchant\Views\MerchantRequisition\EasepayFailure.cshtml" />
+    <Content Include="Areas\Admin\Views\MemberAPILabel\EditMerchant.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\dirPagination.js" />

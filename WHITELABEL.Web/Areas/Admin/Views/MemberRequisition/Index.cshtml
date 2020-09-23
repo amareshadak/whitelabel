@@ -164,10 +164,15 @@
         </div><!--.modal-dialog-->
     </div>
 
-
+<div class="preloader hidden" id="progressRequisition" style="display:none;">
+    <div id="loading"></div>
+</div>
     
     <script type="text/javascript">
         $(document).ready(function () {
+            $('#progressRequisition').removeClass("hidden");
+            $('#progressRequisition').hide();
+
             const currentYear = (new Date).getFullYear();
             const currentMonth = (new Date).getMonth();
             const currentDay = (new Date).getDate();

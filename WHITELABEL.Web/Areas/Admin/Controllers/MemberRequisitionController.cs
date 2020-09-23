@@ -617,7 +617,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                        AMOUNT = x.AMOUNT,
                                        BANK_ACCOUNT = x.BANK_ACCOUNT,
                                        TRANSACTION_DETAILS = x.TRANSACTION_DETAILS,
-                                       SLN = x.SLN
+                                       SLN = x.SLN,
+                                       REFERENCE_NO=x.REFERENCE_NO
                                    }).AsEnumerable().Select(z => new TBL_BALANCE_TRANSFER_LOGS
                                    {
                                        ToUser = z.Touser,
@@ -626,7 +627,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                        REQUEST_DATE = z.REQUEST_DATE,
                                        BANK_ACCOUNT = z.BANK_ACCOUNT,
                                        TRANSACTION_DETAILS = z.TRANSACTION_DETAILS,
-                                       SLN = z.SLN
+                                       SLN = z.SLN,
+                                       REFERENCE_NO=z.REFERENCE_NO
                                    }).FirstOrDefault();
 
                 return Json(new { Result = "true", data = listdetails });
@@ -804,9 +806,9 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                             db.TBL_ACCOUNTS.Add(MERCH_objACCOUNT);
                             await db.SaveChangesAsync();
                             ContextTransaction.Commit();
-                            EmailHelper emailhelper = new EmailHelper();
-                            string mailbody = "Hi " + Merchant_Info.UName + ",<p>Your requisition has been approve of amount " + Trans_Req_Amount + " by admin (" + Distributor_Info.MEM_UNIQUE_ID + ").</p>";
-                            emailhelper.SendUserEmail(Merchant_Info.EMAIL_ID, "Requisition Approve", mailbody);
+                            //EmailHelper emailhelper = new EmailHelper();
+                            //string mailbody = "Hi " + Merchant_Info.UName + ",<p>Your requisition has been approve of amount " + Trans_Req_Amount + " by admin (" + Distributor_Info.MEM_UNIQUE_ID + ").</p>";
+                            //emailhelper.SendUserEmail(Merchant_Info.EMAIL_ID, "Requisition Approve", mailbody);
                             return Json("Transaction Approve.", JsonRequestBehavior.AllowGet);
                         }
                         else
@@ -977,9 +979,9 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                     //db.TBL_MEMBER_CREDIT_ACCOUNT_LOGS.Add(MEM_CREDIT_ACNT_LOGS);
                                     await db.SaveChangesAsync();
                                     ContextTransaction.Commit();
-                                    EmailHelper emailhelper = new EmailHelper();
-                                    string mailbody = "Hi " + Merchant_Info.UName + ",<p>Your requisition has been approve of amount " + Trans_Req_Amount + " by admin (" + Distributor_Info.MEM_UNIQUE_ID + ").</p>";
-                                    emailhelper.SendUserEmail(Merchant_Info.EMAIL_ID, "Requisition Approve", mailbody);
+                                    //EmailHelper emailhelper = new EmailHelper();
+                                    //string mailbody = "Hi " + Merchant_Info.UName + ",<p>Your requisition has been approve of amount " + Trans_Req_Amount + " by admin (" + Distributor_Info.MEM_UNIQUE_ID + ").</p>";
+                                    //emailhelper.SendUserEmail(Merchant_Info.EMAIL_ID, "Requisition Approve", mailbody);
                                     return Json("Transaction Approve.", JsonRequestBehavior.AllowGet);
                                 }
                                 else
@@ -1148,9 +1150,9 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                 //db.TBL_MEMBER_CREDIT_ACCOUNT_LOGS.Add(MEM_CREDIT_ACNT_LOGS);
                                 await db.SaveChangesAsync();
                                 ContextTransaction.Commit();
-                                EmailHelper emailhelper = new EmailHelper();
-                                string mailbody = "Hi " + Merchant_Info.UName + ",<p>Your requisition has been approve of amount " + Trans_Req_Amount + " by admin (" + Distributor_Info.MEM_UNIQUE_ID + ").</p>";
-                                emailhelper.SendUserEmail(Merchant_Info.EMAIL_ID, "Requisition Approve", mailbody);
+                                //EmailHelper emailhelper = new EmailHelper();
+                                //string mailbody = "Hi " + Merchant_Info.UName + ",<p>Your requisition has been approve of amount " + Trans_Req_Amount + " by admin (" + Distributor_Info.MEM_UNIQUE_ID + ").</p>";
+                                //emailhelper.SendUserEmail(Merchant_Info.EMAIL_ID, "Requisition Approve", mailbody);
                                 return Json("Transaction Approve.", JsonRequestBehavior.AllowGet);
                             }
                             else
@@ -1350,9 +1352,9 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                     //db.TBL_MEMBER_CREDIT_ACCOUNT_LOGS.Add(MEM_CREDIT_ACNT_LOGS);
                                     await db.SaveChangesAsync();
                                     ContextTransaction.Commit();
-                                    EmailHelper emailhelper = new EmailHelper();
-                                    string mailbody = "Hi " + Merchant_Info.UName + ",<p>Your requisition has been approve of amount " + Trans_Req_Amount + " by admin (" + Distributor_Info.MEM_UNIQUE_ID + ").</p>";
-                                    emailhelper.SendUserEmail(Merchant_Info.EMAIL_ID, "Requisition Approve", mailbody);
+                                    //EmailHelper emailhelper = new EmailHelper();
+                                    //string mailbody = "Hi " + Merchant_Info.UName + ",<p>Your requisition has been approve of amount " + Trans_Req_Amount + " by admin (" + Distributor_Info.MEM_UNIQUE_ID + ").</p>";
+                                    //emailhelper.SendUserEmail(Merchant_Info.EMAIL_ID, "Requisition Approve", mailbody);
                                     return Json("Transaction Approve.", JsonRequestBehavior.AllowGet);
                                 }
                                 else
@@ -1522,9 +1524,9 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                 //db.TBL_MEMBER_CREDIT_ACCOUNT_LOGS.Add(MEM_CREDIT_ACNT_LOGS);
                                 await db.SaveChangesAsync();
                                 ContextTransaction.Commit();
-                                EmailHelper emailhelper = new EmailHelper();
-                                string mailbody = "Hi " + Merchant_Info.UName + ",<p>Your requisition has been approve of amount " + Trans_Req_Amount + " by admin (" + Distributor_Info.MEM_UNIQUE_ID + ").</p>";
-                                emailhelper.SendUserEmail(Merchant_Info.EMAIL_ID, "Requisition Approve", mailbody);
+                                //EmailHelper emailhelper = new EmailHelper();
+                                //string mailbody = "Hi " + Merchant_Info.UName + ",<p>Your requisition has been approve of amount " + Trans_Req_Amount + " by admin (" + Distributor_Info.MEM_UNIQUE_ID + ").</p>";
+                                //emailhelper.SendUserEmail(Merchant_Info.EMAIL_ID, "Requisition Approve", mailbody);
                                 return Json("Transaction Approve.", JsonRequestBehavior.AllowGet);
                             }
                             else
@@ -1686,9 +1688,9 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                 //db.TBL_MEMBER_CREDIT_ACCOUNT_LOGS.Add(MEM_CREDIT_ACNT_LOGS);
                                 await db.SaveChangesAsync();
                                 ContextTransaction.Commit();
-                                EmailHelper emailhelper = new EmailHelper();
-                                string mailbody = "Hi " + Merchant_Info.UName + ",<p>Your requisition has been approve of amount " + Trans_Req_Amount + " by admin (" + Distributor_Info.MEM_UNIQUE_ID + ").</p>";
-                                emailhelper.SendUserEmail(Merchant_Info.EMAIL_ID, "Requisition Approve", mailbody);
+                                //EmailHelper emailhelper = new EmailHelper();
+                                //string mailbody = "Hi " + Merchant_Info.UName + ",<p>Your requisition has been approve of amount " + Trans_Req_Amount + " by admin (" + Distributor_Info.MEM_UNIQUE_ID + ").</p>";
+                                //emailhelper.SendUserEmail(Merchant_Info.EMAIL_ID, "Requisition Approve", mailbody);
                                 return Json("Transaction Approve.", JsonRequestBehavior.AllowGet);
                             }
 

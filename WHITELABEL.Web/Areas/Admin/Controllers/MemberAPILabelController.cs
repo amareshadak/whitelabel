@@ -873,12 +873,12 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                     long DistId = 0;
                     //long.TryParse(DistributorId, out DistId);
                     //var MerchantList = db.TBL_MASTER_MEMBER.Where(x => x.INTRODUCER == DistId && x.UNDER_WHITE_LEVEL == MemberCurrentUser.MEM_ID && x.MEMBER_ROLE == 5).OrderByDescending(x => x.JOINING_DATE).ToList();
-                    var MerchantList = db.TBL_MASTER_MEMBER.Where(x =>x.ACTIVE_MEMBER==true && (x.UName.StartsWith(SearchVal) || x.MEMBER_MOBILE.StartsWith(SearchVal) || x.MEMBER_NAME.StartsWith(SearchVal) || x.COMPANY.StartsWith(SearchVal) || x.COMPANY_GST_NO.StartsWith(SearchVal) || x.ADDRESS.StartsWith(SearchVal) || x.CITY.StartsWith(SearchVal) || x.PIN.StartsWith(SearchVal) || x.EMAIL_ID.StartsWith(SearchVal) || x.AADHAAR_NO.StartsWith(SearchVal) || x.PAN_NO.StartsWith(SearchVal) || x.RAIL_ID.StartsWith(SearchVal) || x.FACEBOOK_ID.StartsWith(SearchVal) || x.WEBSITE_NAME.StartsWith(SearchVal) || x.MEM_UNIQUE_ID.StartsWith(SearchVal))).ToList().Select(c=>c.ACTIVE_MEMBER==true);
+                    var MerchantList = db.TBL_MASTER_MEMBER.Where(x => x.ACTIVE_MEMBER == true && x.MEMBER_ROLE==5 && (x.UName.StartsWith(SearchVal) || x.MEMBER_MOBILE.StartsWith(SearchVal) || x.MEMBER_NAME.StartsWith(SearchVal) || x.COMPANY.StartsWith(SearchVal) || x.COMPANY_GST_NO.StartsWith(SearchVal) || x.ADDRESS.StartsWith(SearchVal) || x.CITY.StartsWith(SearchVal) || x.PIN.StartsWith(SearchVal) || x.EMAIL_ID.StartsWith(SearchVal) || x.AADHAAR_NO.StartsWith(SearchVal) || x.PAN_NO.StartsWith(SearchVal) || x.RAIL_ID.StartsWith(SearchVal) || x.FACEBOOK_ID.StartsWith(SearchVal) || x.WEBSITE_NAME.StartsWith(SearchVal) || x.MEM_UNIQUE_ID.StartsWith(SearchVal))).ToList();
                     return PartialView("AllMerchantInformationGrid", MerchantList);
                 }
                 else
                 {
-                    var MerchantList = db.TBL_MASTER_MEMBER.Where(x => x.UNDER_WHITE_LEVEL == MemberCurrentUser.MEM_ID && x.MEMBER_ROLE == 5).OrderByDescending(x=>x.JOINING_DATE).ToList();
+                    var MerchantList = db.TBL_MASTER_MEMBER.Where(x => x.UNDER_WHITE_LEVEL == MemberCurrentUser.MEM_ID && x.MEMBER_ROLE == 5 && x.ACTIVE_MEMBER==true).OrderByDescending(x=>x.JOINING_DATE).ToList();
                     return PartialView("AllMerchantInformationGrid", MerchantList);
                 }
             }
@@ -997,5 +997,105 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
             
         }
 
+        public ActionResult EditMerchant(string memid = "")
+        {
+            var dbcontext = new DBContext();
+            var StateName = dbcontext.TBL_STATES.ToList();
+            ViewBag.StateNameList = new SelectList(StateName, "STATEID", "STATENAME");
+            if (Session["WhiteLevelUserId"] != null)
+            {
+                initpage();
+                var model = new TBL_MASTER_MEMBER();
+                var memberrole = dbcontext.TBL_MASTER_MEMBER_ROLE.Where(x => x.ROLE_NAME == "RETAILER").ToList();
+                ViewBag.RoleDetails = new SelectList(memberrole, "ROLE_ID", "ROLE_NAME");                
+                string decrptSlId = Decrypt.DecryptMe(memid);
+                //long Memid = long.Parse(decrptSlId);
+                long idval = long.Parse(decrptSlId);
+                model = dbcontext.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == idval);
+                var GSTValueID = dbcontext.TBL_TAX_MASTERS.Where(x => x.TAX_NAME == "GST").ToList();
+                ViewBag.GSTValue = new SelectList(GSTValueID, "SLN", "TAX_NAME");
+                var TDSValueID = dbcontext.TBL_TAX_MASTERS.Where(x => x.TAX_NAME == "TDS").ToList();
+                ViewBag.TDSValue = new SelectList(TDSValueID, "SLN", "TAX_NAME");
+                return View(model);
+                
+            }
+            else
+            {
+                Session["WhiteLevelUserId"] = null;
+                Session["WhiteLevelUserName"] = null;
+                Session["UserType"] = null;
+                Session.Remove("WhiteLevelUserId");
+                Session.Remove("WhiteLevelUserName");
+                Session.Remove("UserType");
+                return RedirectToAction("Index", "Login", new { area = "" });
+            }
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        //public async Task<JsonResult> POSTADDMerchantDetails(TBL_MASTER_MEMBER objsupermem, HttpPostedFileBase AadhaarFile, HttpPostedFileBase PanFile)
+        public async Task<JsonResult> UpdateMerchantInformation(TBL_MASTER_MEMBER objdetails)
+        {
+            var db = new DBContext();
+            var CheckUser = await db.TBL_MASTER_MEMBER.Where(x => x.MEM_ID == objdetails.MEM_ID).FirstOrDefaultAsync();
+            if (CheckUser != null)
+            {
+                CheckUser.STATE_ID = objdetails.STATE_ID;
+                CheckUser.FACEBOOK_ID = objdetails.FACEBOOK_ID;
+                CheckUser.WEBSITE_NAME = objdetails.WEBSITE_NAME;
+                CheckUser.NOTES = objdetails.NOTES;
+                CheckUser.UNDER_WHITE_LEVEL = MemberCurrentUser.MEM_ID;
+                CheckUser.INTRODUCER = CheckUser.INTRODUCER;
+                CheckUser.AADHAAR_NO = objdetails.AADHAAR_NO;
+                CheckUser.PAN_NO = objdetails.PAN_NO;
+                
+                //CheckUser.UNDER_WHITE_LEVEL = value.UNDER_WHITE_LEVEL;
+                CheckUser.MEMBER_MOBILE = objdetails.MEMBER_MOBILE;
+                CheckUser.MEMBER_NAME = objdetails.MEMBER_NAME;
+                CheckUser.COMPANY = objdetails.COMPANY;
+                //CheckUser.MEMBER_ROLE = value.MEMBER_ROLE;
+                //CheckUser.INTRODUCER = value.INTRODUCER;
+                CheckUser.ADDRESS = objdetails.ADDRESS;
+                CheckUser.CITY = objdetails.CITY;
+                CheckUser.PIN = objdetails.PIN;
+                if (CheckUser.GST_FLAG != null)
+                {
+                    CheckUser.GST_MODE = 1;
+                }
+                else
+                {
+                    CheckUser.GST_MODE = 0;
+                }
+                if (CheckUser.TDS_FLAG != null)
+                {
+                    CheckUser.TDS_MODE = 1;
+                }
+                else
+                {
+                    CheckUser.TDS_MODE = 0;
+                }
+                //CheckUser.EMAIL_ID = value.EMAIL_ID;
+                CheckUser.SECURITY_PIN_MD5 = objdetails.SECURITY_PIN_MD5;
+                CheckUser.BLOCKED_BALANCE = objdetails.BLOCKED_BALANCE;
+                CheckUser.DUE_CREDIT_BALANCE = 0;
+                CheckUser.CREDIT_BALANCE = 0;
+                CheckUser.IS_TRAN_START = true;
+                CheckUser.OPTIONAL_EMAIL_ID = objdetails.OPTIONAL_EMAIL_ID;
+                CheckUser.SEC_OPTIONAL_EMAIL_ID = objdetails.SEC_OPTIONAL_EMAIL_ID;
+                CheckUser.OPTIONAL_MOBILE_NO = objdetails.OPTIONAL_MOBILE_NO;
+                CheckUser.SEC_OPTIONAL_MOBILE_NO = objdetails.SEC_OPTIONAL_MOBILE_NO;
+                CheckUser.OLD_MEMBER_ID = objdetails.OLD_MEMBER_ID;
+                db.Entry(CheckUser).State = System.Data.Entity.EntityState.Modified;
+                await db.SaveChangesAsync();
+                EmailHelper objsms = new EmailHelper();
+                string Regmsg = "Hi " + CheckUser.MEM_UNIQUE_ID + " \r\n. Your profile information is updated successfully.\r\n Regards\r\n BOOM Travels";
+                objsms.SendUserEmail(objdetails.EMAIL_ID, "Your Profile is Updated.", Regmsg);
+                return Json("Profile update successfully ", JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json("Please try again later", JsonRequestBehavior.AllowGet);
+            }
+            
+        }
     }
 }

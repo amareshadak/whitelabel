@@ -77,7 +77,7 @@
         {
             MailMessage mailMessage = new MailMessage();
             mailMessage.From = new MailAddress("test@boomtravels.com");
-            mailMessage.To.Add("rahuls1017@gmail.com    ");
+            mailMessage.To.Add("rahuls1017@gmail.com");
             mailMessage.Body = "Test";
             mailMessage.Subject = "TEst VAl";
             return mailMessage;
