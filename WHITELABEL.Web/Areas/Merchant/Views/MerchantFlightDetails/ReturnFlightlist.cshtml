@@ -5,761 +5,788 @@
 }
 
 <style>
-    .fb {
-        font-weight: bold;
-        font-style: normal;
-    }
-
-    .brdrRd5 {
-        border-radius: 5px;
-    }
-
-    .fltHpySrt li {
-        width: 25%;
-        list-style: none;
-    }
-
-    .curPointFlt {
-        cursor: pointer;
-    }
-
-    .dF {
-        display: -webkit-flex;
-        display: -ms-flexbox;
-        display: -ms-flex;
-        display: flex;
-    }
-
-    .clr {
-        clear: both;
-    }
-
-    .fltHpyRsltCard {
-        box-shadow: 0 2px 4px 0 rgba(0,0,0,0.13);
-    }
-
-    .flexCol {
-        display: -webkit-flex;
-        display: -ms-flexbox;
-        display: -ms-flex;
-        display: flex;
-        -webkit-flex-direction: column;
-        -ms-flex-direction: column;
-        flex-direction: column;
-    }
-
-    .fl {
-        float: left;
-    }
-
-    .alignItemsCenter {
-        -webkit-align-items: center;
-        -ms-align-items: center;
-        align-items: center;
-    }
-
-    .flightImagesNew {
-        max-height: 30px;
-    }
-
-    .flightImagesNew {
-        max-width: 100%;
-        max-height: 30px;
-        padding-right: 10px;
-    }
-
-    .padT10 {
-        padding-top: 10px;
-    }
-
-    .alignItemsEnd {
-        -webkit-align-items: flex-end;
-        -ms-align-items: flex-end;
-        align-items: flex-end;
-    }
-
-    .fGS0 {
-        flex-grow: 0;
-        flex-shrink: 0;
-    }
-
-    .db {
-        display: block;
-    }
-
-    .textOverflow {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-
-    .ico12 {
-        font-size: 12px;
-    }
-
-    .ico11 {
-        font-size: 11px;
-    }
-
-    .nav-tabs {
-        border-bottom: 1px solid #8601af !important;
-    }
-
-
-    .quicks {
-        font-family: "QuickSand",Helvetica,Arial,sans-serif;
-    }
-
-    .padT5 {
-        padding-top: 5px;
-    }
-
-    .ico18 {
-        font-size: 18px;
-    }
-
-    .fGS0 {
-        flex-grow: 0;
-        flex-shrink: 0;
-    }
-
-    .ico15 {
-        font-size: 15px;
-    }
-
-    .justifyBetween {
-        -webkit-justify-content: space-between;
-        -ms-justify-content: space-between;
-        justify-content: space-between;
-    }
-
-    .alignItemsCenter {
-        -webkit-align-items: center;
-        -ms-align-items: center;
-        align-items: center;
-    }
-
-    .ico20 {
-        font-size: 20px;
-    }
-
-    .button.fltbook {
-        border-radius: 5px;
-        padding: 7px 0;
-        background-color: #f37638;
-        border: solid 1px #f37638;
-    }
-
-    .fr {
-        float: right;
-    }
-
-    .widthF105 {
-        width: 80px;
-    }
-
-    .padB20 {
-        padding-bottom: 20px;
-    }
-
-    .justifyEnd {
-        -webkit-justify-content: flex-end;
-        -ms-justify-content: flex-end;
-        justify-content: flex-end;
-    }
-
-    .marginT10 {
-        margin-top: 10px;
-    }
-
-    .ico12 {
-        font-size: 12px;
-    }
-
-    .ico11 {
-        font-size: 11px;
-    }
-
-    .padTB10 {
-        padding-top: 10px;
-        padding-bottom: 10px;
-    }
-
-    .alignItemsEnd {
-        -webkit-align-items: flex-end;
-        -ms-align-items: flex-end;
-        align-items: flex-end;
-    }
-
-    .justifyBetween {
-        -webkit-justify-content: space-between;
-        -ms-justify-content: space-between;
-        justify-content: space-between;
-    }
-
-    .width100 {
-        width: 100%;
-    }
-
-    .padL10 {
-        padding-left: 10px;
-    }
-
-    .dF {
-        display: -webkit-flex;
-        display: -ms-flexbox;
-        display: -ms-flex;
-        display: flex;
-    }
-
-    .ico11 {
-        font-size: 11px;
-    }
-
-    .db {
-        display: block;
-    }
-
-    .fl {
-        float: left;
-    }
-
-    .width29 {
-        width: 29%;
-    }
-
-    .padLR0 {
-        padding-left: 0;
-        padding-right: 0;
-    }
-
-    .padB5 {
-        padding-bottom: 5px;
-    }
-
-    .ico12 {
-        font-size: 12px;
-    }
-
-    .ico12 {
-        font-size: 12px;
-    }
-
-    .fb {
-        font-weight: bold;
-        font-style: normal;
-    }
-
-    .alignSelfCenter {
-        -webkit-align-self: center;
-        -ms-align-self: center;
-        align-self: center;
-    }
-
-    .padB5 {
-        padding-bottom: 5px;
-    }
-
-    .ico12 {
-        font-size: 12px;
-    }
-
-    .pad0 {
-        padding: 0 !important;
-    }
-
-    .col-md-5 {
-        width: 41.66666667%;
-    }
-
-    .prgrsDot.dotVH:before {
-        visibility: hidden;
-    }
-
-    .prgrsDot:after {
-        width: 100%;
-        height: 1px;
-        content: '';
-        position: absolute;
-        background-color: #e7e7e7;
-        top: 1px;
-        z-index: 0;
-    }
-
-    .width70 {
-        width: 70%;
-    }
-
-    .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12 {
-        float: left;
-    }
-
-    .padB5 {
-        padding-bottom: 5px;
-    }
-
-    .padLR0 {
-        padding-left: 0;
-        padding-right: 0;
-    }
-
-    .widMd30 {
-        width: 30%;
-    }
-
-    .flexCol {
-        display: -webkit-flex;
-        display: -ms-flexbox;
-        display: -ms-flex;
-        display: flex;
-        -webkit-flex-direction: column;
-        -ms-flex-direction: column;
-        flex-direction: column;
-    }
-
-    .stickyHpy {
-        position: sticky;
-        top: 63px;
-        z-index: 9;
-        background-color: #ccc;
-    }
-
-    .brdrRd10 {
-        border-radius: 10px;
-    }
-
-    .fltHpyRsltCard {
-        box-shadow: 0 2px 4px 0 rgba(0,0,0,0.13);
-    }
-
-    .marginT5 {
-        margin-top: 5px;
-    }
-
-    .pad10 {
-        padding: 10px;
-    }
-
-    .borderRight {
-        border-right: 1px solid #e6e6e6;
-    }
-
-    .width50 {
-        width: 50%;
-    }
-
-    .width30 {
-        width: 30%;
-    }
-
-    .fltHpySumryPrc {
-        border-left: 1px dashed #c2c2c2;
-    }
-
-    .padR15 {
-        padding-right: 15px;
-    }
-
-    .ico24 {
-        font-size: 24px;
-    }
-
-    .padTB15 {
-        padding-top: 15px;
-        padding-bottom: 15px;
-    }
-
-    .ico10 {
-        font-size: 10px;
-    }
-
-    .paleGreyBg3 {
-        background-color: #f3f6f8;
-    }
-
-    .fltHpyStp {
-        width: 100%;
-        border-radius: 2px;
-        color: #0a2549;
-    }
-
-    .padTB10 {
-        padding-top: 10px;
-        padding-bottom: 10px;
-    }
-
-    .ico11 {
-        font-size: 11px;
-    }
-
-    .padLR5 {
-        padding-left: 5px;
-        padding-right: 5px;
-    }
-
-    .padB5 {
-        padding-bottom: 5px;
-    }
-
-    .fl {
-        float: left;
-    }
-
-    .width100 {
-        width: 100%;
-    }
-
-    .padR10 {
-        padding-right: 10px;
-    }
-
-    .custRadWht [type="radio"]:checked + label, .custRadWht [type="radio"]:not(:checked) + label {
-        padding-left: 20px;
-    }
-
-    .custRad [type="radio"]:checked + label, .custRad [type="radio"]:not(:checked) + label {
-        position: relative;
-        padding-left: 25px;
-        cursor: pointer;
-    }
-
-    .lh1 {
-        line-height: 1;
-    }
-
-    .alignItemsCenter {
-        -webkit-align-items: center;
-        -ms-align-items: center;
-        align-items: center;
-    }
-
-    .dF {
-        display: -webkit-flex;
-        display: -ms-flexbox;
-        display: -ms-flex;
-        display: flex;
-    }
-    /*.custRadWht [type="radio"]:not(:checked) + label:before, .custRadWht [type="radio"]:checked + label:before {
-         border-color: white;
-         width: 16px;
-         height: 16px;
-     }
-    .custRad [type="radio"]:not(:checked) + label:before, .custRad [type="radio"]:checked + label:before {
-         content: '';
-         border: 2px solid #647a97;
-         position: absolute;
-         left: 0;
-         top: -2px;
-         width: 18px;
-         height: 18px;
-         border-radius: 100%;
-     }*/
-    *:before, *:after {
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        box-sizing: border-box;
-    }
-
-    .fb {
-        font-weight: bold;
-        font-style: normal;
-    }
-
-    .custRad [type="radio"]:not(:checked) + label:after, .custCheck:not(:checked) ~ .checkmark i {
-        opacity: 0;
-        -webkit-transform: scale(0);
-        transform: scale(0);
-        -webkit-transition: all .2s ease;
-    }
-
-    .custRadWht [type="radio"]:checked + label:after, .custRadWht [type="radio"]:not(:checked) + label:after {
-        background-color: #ffffff;
-        top: 2px;
-        left: 4px;
-        width: 8px;
-        height: 8px;
-    }
-
-    /*.custRad [type="radio"]:checked + label:after, .custRad [type="radio"]:not(:checked) + label:after {
-         content: '';
-         width: 10px;
-         height: 10px;
-         background-color: #2276e3;
-         position: absolute;
-         top: 2px;
-         left: 4px;
-         border-radius: 100%;
-         transition: all .2s ease;
-     }*/
-
-    .padT5 {
-        padding-top: 5px;
-    }
-
-    .width20 {
-        width: 20%;
-    }
-
-    .autoSuggestBox {
-        position: relative;
-    }
-
-    .padR20 {
-        padding-right: 20px;
-    }
-
-    .txtTransUpper {
-        text-transform: uppercase;
-    }
-
-    .ico12 {
-        font-size: 12px;
-    }
-
-    .op6 {
-        opacity: .6;
-    }
-
-    .padR20 {
-        padding-right: 20px;
-    }
-
-    .col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12 {
-        float: left;
-    }
-
-    .textOverflow {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-
-    .col-lg-1 {
-        width: 8.33333333%;
-    }
-
-    .marginB10 {
-        margin-bottom: 10px;
-    }
-
-    .col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 {
-        position: relative;
-        min-height: 1px;
-        padding-right: 5px;
-        padding-left: 5px;
-    }
-
-    .hpySrchDis, .hpySrchEnb {
-        text-align: center;
-        border-radius: 20px;
-        background-color: #4c93e4;
-        color: #2276e3;
-        font-weight: bold;
-        text-transform: uppercase;
-        height: 36px;
-        font-size: 18px;
-    }
-
-    .button {
-        cursor: pointer;
-        border-radius: 3px;
-        -webkit-border-radius: 3px;
-        -moz-border-radius: 3px;
-        text-align: center;
-        color: #fff;
-        border: 0;
-        font-size: 14px;
-        -webkit-appearance: none;
-    }
-
-    .paxMobile {
-        position: absolute;
-        background: #fff;
-        border: 1px solid #eaeaea;
-        width: auto;
-        border-radius: 3px;
-        -webkit-border-radius: 3px;
-        -moz-border-radius: 3px;
-        box-shadow: 0 3px 3px 0 #ccc;
-        z-index: 9;
-        left: 50%;
-        top: 95%;
-        margin-left: -175px;
-        width: 350px;
-    }
-
-        .paxMobile:before {
-            border-color: rgba(234,234,234,0);
-            border-bottom-color: #eaeaea;
-            border-width: 11px;
-            margin-left: -11px;
+       .fb {
+           font-weight: bold;
+           font-style: normal;
+       }
+
+       .brdrRd5 {
+           border-radius: 5px;
+       }
+
+       .fltHpySrt li {
+           width: 25%;
+           list-style: none;
+       }
+
+       .curPointFlt {
+           cursor: pointer;
+       }
+
+       .dF {
+           display: -webkit-flex;
+           display: -ms-flexbox;
+           display: -ms-flex;
+           display: flex;
+       }
+
+       .clr {
+           clear: both;
+       }
+
+       .fltHpyRsltCard {
+           box-shadow: 0 2px 4px 0 rgba(0,0,0,0.13);
+       }
+
+       .flexCol {
+           display: -webkit-flex;
+           display: -ms-flexbox;
+           display: -ms-flex;
+           display: flex;
+           -webkit-flex-direction: column;
+           -ms-flex-direction: column;
+           flex-direction: column;
+       }
+
+       .fl {
+           float: left;
+       }
+
+       .alignItemsCenter {
+           -webkit-align-items: center;
+           -ms-align-items: center;
+           align-items: center;
+       }
+
+       .flightImagesNew {
+           max-height: 30px;
+       }
+
+       .flightImagesNew {
+           max-width: 100%;
+           max-height: 30px;
+           padding-right: 10px;
+       }
+
+       .padT10 {
+           padding-top: 10px;
+       }
+
+       .alignItemsEnd {
+           -webkit-align-items: flex-end;
+           -ms-align-items: flex-end;
+           align-items: flex-end;
+       }
+
+       .fGS0 {
+           flex-grow: 0;
+           flex-shrink: 0;
+       }
+
+       .db {
+           display: block;
+       }
+
+       .textOverflow {
+           overflow: hidden;
+           text-overflow: ellipsis;
+           white-space: nowrap;
+       }
+
+       .ico12 {
+           font-size: 12px;
+       }
+
+       .ico11 {
+           font-size: 11px;
+       }
+
+       .nav-tabs {
+           border-bottom: 1px solid #8601af !important;
+       }
+
+
+       .quicks {
+           font-family: "QuickSand",Helvetica,Arial,sans-serif;
+       }
+
+       .padT5 {
+           padding-top: 5px;
+       }
+
+       .ico18 {
+           font-size: 18px;
+       }
+
+       .fGS0 {
+           flex-grow: 0;
+           flex-shrink: 0;
+       }
+
+       .ico15 {
+           font-size: 15px;
+       }
+
+       .justifyBetween {
+           -webkit-justify-content: space-between;
+           -ms-justify-content: space-between;
+           justify-content: space-between;
+       }
+
+       .alignItemsCenter {
+           -webkit-align-items: center;
+           -ms-align-items: center;
+           align-items: center;
+       }
+
+       .ico20 {
+           font-size: 20px;
+       }
+
+       .button.fltbook {
+           border-radius: 5px;
+           padding: 7px 0;
+           background-color: #f37638;
+           border: solid 1px #f37638;
+       }
+
+       .fr {
+           float: right;
+       }
+
+       .widthF105 {
+           width: 80px;
+       }
+
+       .padB20 {
+           padding-bottom: 20px;
+       }
+
+       .justifyEnd {
+           -webkit-justify-content: flex-end;
+           -ms-justify-content: flex-end;
+           justify-content: flex-end;
+       }
+
+       .marginT10 {
+           margin-top: 10px;
+       }
+
+       .ico12 {
+           font-size: 12px;
+       }
+
+       .ico11 {
+           font-size: 11px;
+       }
+
+       .padTB10 {
+           padding-top: 10px;
+           padding-bottom: 10px;
+       }
+
+       .alignItemsEnd {
+           -webkit-align-items: flex-end;
+           -ms-align-items: flex-end;
+           align-items: flex-end;
+       }
+
+       .justifyBetween {
+           -webkit-justify-content: space-between;
+           -ms-justify-content: space-between;
+           justify-content: space-between;
+       }
+
+       .width100 {
+           width: 100%;
+       }
+
+       .padL10 {
+           padding-left: 10px;
+       }
+
+       .dF {
+           display: -webkit-flex;
+           display: -ms-flexbox;
+           display: -ms-flex;
+           display: flex;
+       }
+
+       .ico11 {
+           font-size: 11px;
+       }
+
+       .db {
+           display: block;
+       }
+
+       .fl {
+           float: left;
+       }
+
+       .width29 {
+           width: 29%;
+       }
+
+       .padLR0 {
+           padding-left: 0;
+           padding-right: 0;
+       }
+
+       .padB5 {
+           padding-bottom: 5px;
+       }
+
+       .ico12 {
+           font-size: 12px;
+       }
+
+       .ico12 {
+           font-size: 12px;
+       }
+
+       .fb {
+           font-weight: bold;
+           font-style: normal;
+       }
+
+       .alignSelfCenter {
+           -webkit-align-self: center;
+           -ms-align-self: center;
+           align-self: center;
+       }
+
+       .padB5 {
+           padding-bottom: 5px;
+       }
+
+       .ico12 {
+           font-size: 12px;
+       }
+
+       .pad0 {
+           padding: 0 !important;
+       }
+
+       .col-md-5 {
+           width: 41.66666667%;
+       }
+
+       .prgrsDot.dotVH:before {
+           visibility: hidden;
+       }
+
+       .prgrsDot:after {
+           width: 100%;
+           height: 1px;
+           content: '';
+           position: absolute;
+           background-color: #e7e7e7;
+           top: 1px;
+           z-index: 0;
+       }
+
+       .width70 {
+           width: 70%;
+       }
+
+       .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12 {
+           float: left;
+       }
+
+       .padB5 {
+           padding-bottom: 5px;
+       }
+
+       .padLR0 {
+           padding-left: 0;
+           padding-right: 0;
+       }
+
+       .widMd30 {
+           width: 30%;
+       }
+
+       .flexCol {
+           display: -webkit-flex;
+           display: -ms-flexbox;
+           display: -ms-flex;
+           display: flex;
+           -webkit-flex-direction: column;
+           -ms-flex-direction: column;
+           flex-direction: column;
+       }
+
+       .stickyHpy {
+           position: sticky;
+           top: 63px;
+           z-index: 9;
+           background-color: #ccc;
+       }
+
+       .brdrRd10 {
+           border-radius: 10px;
+       }
+
+       .fltHpyRsltCard {
+           box-shadow: 0 2px 4px 0 rgba(0,0,0,0.13);
+       }
+
+       .marginT5 {
+           margin-top: 5px;
+       }
+
+       .pad10 {
+           padding: 10px;
+       }
+
+       .borderRight {
+           border-right: 1px solid #e6e6e6;
+       }
+
+       .width50 {
+           width: 50%;
+       }
+
+       .width30 {
+           width: 30%;
+       }
+
+       .fltHpySumryPrc {
+           border-left: 1px dashed #c2c2c2;
+       }
+
+       .padR15 {
+           padding-right: 15px;
+       }
+
+       .ico24 {
+           font-size: 24px;
+       }
+
+       .padTB15 {
+           padding-top: 15px;
+           padding-bottom: 15px;
+       }
+
+       .ico10 {
+           font-size: 10px;
+       }
+
+       .paleGreyBg3 {
+           background-color: #f3f6f8;
+       }
+
+       .fltHpyStp {
+           width: 100%;
+           border-radius: 2px;
+           color: #0a2549;
+       }
+
+       .padTB10 {
+           padding-top: 10px;
+           padding-bottom: 10px;
+       }
+
+       .ico11 {
+           font-size: 11px;
+       }
+
+       .padLR5 {
+           padding-left: 5px;
+           padding-right: 5px;
+       }
+
+       .padB5 {
+           padding-bottom: 5px;
+       }
+
+       .fl {
+           float: left;
+       }
+
+       .width100 {
+           width: 100%;
+       }
+
+       .padR10 {
+           padding-right: 10px;
+       }
+
+       .custRadWht [type="radio"]:checked + label, .custRadWht [type="radio"]:not(:checked) + label {
+           padding-left: 20px;
+       }
+
+       .custRad [type="radio"]:checked + label, .custRad [type="radio"]:not(:checked) + label {
+           position: relative;
+           padding-left: 25px;
+           cursor: pointer;
+       }
+
+       .lh1 {
+           line-height: 1;
+       }
+
+       .alignItemsCenter {
+           -webkit-align-items: center;
+           -ms-align-items: center;
+           align-items: center;
+       }
+
+       .dF {
+           display: -webkit-flex;
+           display: -ms-flexbox;
+           display: -ms-flex;
+           display: flex;
+       }
+       /*.custRadWht [type="radio"]:not(:checked) + label:before, .custRadWht [type="radio"]:checked + label:before {
+            border-color: white;
+            width: 16px;
+            height: 16px;
         }
-
-        .paxMobile:before {
-            bottom: 100%;
-            left: 50%;
-            border: solid transparent;
-            content: " ";
-            height: 0;
-            width: 0;
+       .custRad [type="radio"]:not(:checked) + label:before, .custRad [type="radio"]:checked + label:before {
+            content: '';
+            border: 2px solid #647a97;
             position: absolute;
-            pointer-events: none;
-        }
+            left: 0;
+            top: -2px;
+            width: 18px;
+            height: 18px;
+            border-radius: 100%;
+        }*/
+       *:before, *:after {
+           -webkit-box-sizing: border-box;
+           -moz-box-sizing: border-box;
+           box-sizing: border-box;
+       }
 
-    [class^="icon-"], [class*=" icon-"] {
-        font-family: 'go_font_v38' !important;
-        speak: none;
-        font-style: normal;
-        font-weight: normal;
-        font-variant: normal;
-        text-transform: none;
-        line-height: 1;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-    }
+       .fb {
+           font-weight: bold;
+           font-style: normal;
+       }
 
-    .roomRow {
-        padding: 15px 0;
-        float: left;
-        width: 100%;
-        border: none;
-    }
+       .custRad [type="radio"]:not(:checked) + label:after, .custCheck:not(:checked) ~ .checkmark i {
+           opacity: 0;
+           -webkit-transform: scale(0);
+           transform: scale(0);
+           -webkit-transition: all .2s ease;
+       }
 
-    .widgetUserBlock {
-        width: auto;
-    }
+       .custRadWht [type="radio"]:checked + label:after, .custRadWht [type="radio"]:not(:checked) + label:after {
+           background-color: #ffffff;
+           top: 2px;
+           left: 4px;
+           width: 8px;
+           height: 8px;
+       }
 
-    .ico36, .ico35, .ico34, .ico33, .ico32, .ico31, .ico30, .ico29, .ico28, .ico27, .ico26, .ico25, .ico24, .ico23, .ico22, .ico21, .ico20, .ico19, .ico18, .ico17, .ico15, .ico16, .ico14, .ico13, .ico12, .ico11, .ico10 {
-        line-height: 1;
-    }
+       /*.custRad [type="radio"]:checked + label:after, .custRad [type="radio"]:not(:checked) + label:after {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background-color: #2276e3;
+            position: absolute;
+            top: 2px;
+            left: 4px;
+            border-radius: 100%;
+            transition: all .2s ease;
+        }*/
 
-    .ico14 {
-        font-size: 14px;
-    }
+       .padT5 {
+           padding-top: 5px;
+       }
 
-    .font13Lt {
-        font-size: 13px;
-        color: #999;
-    }
+       .width20 {
+           width: 20%;
+       }
 
-    .padT3 {
-        padding-top: 3px;
-    }
+       .autoSuggestBox {
+           position: relative;
+       }
 
-    .number-spinner {
-        float: left;
-        width: 100%;
-    }
+       .padR20 {
+           padding-right: 20px;
+       }
 
-    .minSpin {
-        border-right-width: 0;
-    }
+       .txtTransUpper {
+           text-transform: uppercase;
+       }
 
-    .minSpin, .plusSpin, .numbSpin {
-        height: 25px;
-    }
+       .ico12 {
+           font-size: 12px;
+       }
 
-    .minSpin, .plusSpin {
-        background-color: #ffffff;
-        border: 1px solid #c2c2c2;
-        outline: none;
-        color: #4a4a4a;
-        padding: 0 10px;
-        font-size: 15px;
-        font-weight: bold;
-        cursor: pointer;
-        width: 30px;
-    }
+       .op6 {
+           opacity: .6;
+       }
 
-    .numbSpin {
-        border: 1px solid #c2c2c2;
-        border-left-width: 0;
-        border-right-width: 0;
-        outline: none;
-        font-size: 15px;
-        padding: 5px;
-        text-align: center;
-        width: 30px;
-    }
+       .padR20 {
+           padding-right: 20px;
+       }
 
-    .plusSpin {
-        border-left-width: 0;
-    }
+       .col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12 {
+           float: left;
+       }
 
-    .minSpin, .plusSpin {
-        background-color: #ffffff;
-        border: 1px solid #c2c2c2;
-        outline: none;
-        color: #4a4a4a;
-        padding: 0 10px;
-        font-size: 15px;
-        font-weight: bold;
-        cursor: pointer;
-        width: 30px;
-    }
+       .textOverflow {
+           overflow: hidden;
+           text-overflow: ellipsis;
+           white-space: nowrap;
+       }
 
-    .paxMobile:before {
-        bottom: 100%;
-        left: 50%;
-        border: solid transparent;
-        content: " ";
-        height: 0;
-        width: 0;
-        position: absolute;
-        pointer-events: none;
-    }
+       .col-lg-1 {
+           width: 8.33333333%;
+       }
 
-    ol, ul {
-        list-style: none;
-    }
+       .marginB10 {
+           margin-bottom: 10px;
+       }
 
-    .padB15 {
-        padding-bottom: 15px;
-    }
+       .col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 {
+           position: relative;
+           min-height: 1px;
+           padding-right: 5px;
+           padding-left: 5px;
+       }
 
-    .padLR15 {
-        padding-left: 15px;
-        padding-right: 15px;
-    }
+       .hpySrchDis, .hpySrchEnb {
+           text-align: center;
+           border-radius: 20px;
+           background-color: #4c93e4;
+           color: #2276e3;
+           font-weight: bold;
+           text-transform: uppercase;
+           height: 36px;
+           font-size: 18px;
+       }
 
-    .width70 {
-        width: 70%;
-    }
+       .button {
+           cursor: pointer;
+           border-radius: 3px;
+           -webkit-border-radius: 3px;
+           -moz-border-radius: 3px;
+           text-align: center;
+           color: #fff;
+           border: 0;
+           font-size: 14px;
+           -webkit-appearance: none;
+       }
 
-    select.form-control {
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        padding: 5px 25px 5px 5px;
-    }
+       .paxMobile {
+           position: absolute;
+           background: #fff;
+           border: 1px solid #eaeaea;
+           width: auto;
+           border-radius: 3px;
+           -webkit-border-radius: 3px;
+           -moz-border-radius: 3px;
+           box-shadow: 0 3px 3px 0 #ccc;
+           z-index: 9;
+           left: 50%;
+           top: 95%;
+           margin-left: -175px;
+           width: 350px;
+       }
 
-    .owl-carousel {
-        display: inherit;
-        position: relative;
-        width: 100%;
-        /*-ms-touch-action: pan-y;*/
-    }
+           .paxMobile:before {
+               border-color: rgba(234,234,234,0);
+               border-bottom-color: #eaeaea;
+               border-width: 11px;
+               margin-left: -11px;
+           }
 
-    /*
- *  STYLE 4
- */
+           .paxMobile:before {
+               bottom: 100%;
+               left: 50%;
+               border: solid transparent;
+               content: " ";
+               height: 0;
+               width: 0;
+               position: absolute;
+               pointer-events: none;
+           }
 
-    .style-4::-webkit-scrollbar-track {
-        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-        background-color: #F5F5F5;
-    }
+       [class^="icon-"], [class*=" icon-"] {
+           font-family: 'go_font_v38' !important;
+           speak: none;
+           font-style: normal;
+           font-weight: normal;
+           font-variant: normal;
+           text-transform: none;
+           line-height: 1;
+           -webkit-font-smoothing: antialiased;
+           -moz-osx-font-smoothing: grayscale;
+       }
 
-    .style-4::-webkit-scrollbar {
-        width: 5px;
-        background-color: #F5F5F5;
-    }
+       .roomRow {
+           padding: 15px 0;
+           float: left;
+           width: 100%;
+           border: none;
+       }
 
-    .style-4::-webkit-scrollbar-thumb {
-        background-color: #000000;
-        border: 2px solid #555555;
-    }
+       .widgetUserBlock {
+           width: auto;
+       }
 
+       .ico36, .ico35, .ico34, .ico33, .ico32, .ico31, .ico30, .ico29, .ico28, .ico27, .ico26, .ico25, .ico24, .ico23, .ico22, .ico21, .ico20, .ico19, .ico18, .ico17, .ico15, .ico16, .ico14, .ico13, .ico12, .ico11, .ico10 {
+           line-height: 1;
+       }
+
+       .ico14 {
+           font-size: 14px;
+       }
+
+       .font13Lt {
+           font-size: 13px;
+           color: #999;
+       }
+
+       .padT3 {
+           padding-top: 3px;
+       }
+
+       .number-spinner {
+           float: left;
+           width: 100%;
+       }
+
+       .minSpin {
+           border-right-width: 0;
+       }
+
+       .minSpin, .plusSpin, .numbSpin {
+           height: 25px;
+       }
+
+       .minSpin, .plusSpin {
+           background-color: #ffffff;
+           border: 1px solid #c2c2c2;
+           outline: none;
+           color: #4a4a4a;
+           padding: 0 10px;
+           font-size: 15px;
+           font-weight: bold;
+           cursor: pointer;
+           width: 30px;
+       }
+
+       .numbSpin {
+           border: 1px solid #c2c2c2;
+           border-left-width: 0;
+           border-right-width: 0;
+           outline: none;
+           font-size: 15px;
+           padding: 5px;
+           text-align: center;
+           width: 30px;
+       }
+
+       .plusSpin {
+           border-left-width: 0;
+       }
+
+       .minSpin, .plusSpin {
+           background-color: #ffffff;
+           border: 1px solid #c2c2c2;
+           outline: none;
+           color: #4a4a4a;
+           padding: 0 10px;
+           font-size: 15px;
+           font-weight: bold;
+           cursor: pointer;
+           width: 30px;
+       }
+
+       .paxMobile:before {
+           bottom: 100%;
+           left: 50%;
+           border: solid transparent;
+           content: " ";
+           height: 0;
+           width: 0;
+           position: absolute;
+           pointer-events: none;
+       }
+
+       ol, ul {
+           list-style: none;
+       }
+
+       .padB15 {
+           padding-bottom: 15px;
+       }
+
+       .padLR15 {
+           padding-left: 15px;
+           padding-right: 15px;
+       }
+
+       .width70 {
+           width: 70%;
+       }
+
+       select.form-control {
+           -webkit-appearance: none;
+           -moz-appearance: none;
+           padding: 5px 25px 5px 5px;
+       }
+
+       .owl-carousel {
+           display: inherit;
+           position: relative;
+           width: 100%;
+           /*-ms-touch-action: pan-y;*/
+       }
+
+       /*
+    *  STYLE 4
+    */
+
+       .style-4::-webkit-scrollbar-track {
+           -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+           background-color: #F5F5F5;
+       }
+
+       .style-4::-webkit-scrollbar {
+           width: 5px;
+           background-color: #F5F5F5;
+       }
+
+       .style-4::-webkit-scrollbar-thumb {
+           background-color: #000000;
+           border: 2px solid #555555;
+       }
 </style>
 
+<style>
+    .cata-sub-nav {
+        background: #eee;
+        padding: 2px 0px 3px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -ms-overflow-style: -ms-autohiding-scrollbar;
+        -webkit-overflow-scrolling: touch;
+        white-space: nowrap;
+        height: 33px;
+    }
+
+        .cata-sub-nav::-webkit-scrollbar {
+            display: none;
+        }
+
+        .cata-sub-nav ul {
+            margin: 0;
+            display: flex;
+            -webkit-padding-start: 0px;
+        }
+
+        .cata-sub-nav li {
+            display: inline-table;
+            margin: 0 10px;
+            font-size: 16px;
+        }
+</style>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.css" rel="stylesheet" type="text/css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
 <script src="//momentjs.com/downloads/moment.min.js"></script>
@@ -772,7 +799,8 @@
 <script src="~/Areas/Merchant/MerchantHelperJS/FlightBooking/FlightServices.js"></script>
 <script src="~/Areas/Merchant/MerchantHelperJS/FlightBooking/RoundTripSearchController.js"></script>
 <script src="~/Areas/Merchant/MerchantHelperJS/FlightBooking/FlightSearchWidgetController.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"
+        crossorigin="anonymous"></script>
 
 
 
@@ -930,11 +958,11 @@
                         </div>
                     </div>
 
-                    <div class="card" style="width:100%;" ng-controller="RoundTripSearchController" ng-init="LoadFlightSearch('@ViewBag.Tripmode','@ViewBag.FromCityCode','@ViewBag.TOAirportCode','@ViewBag.FromDate','@ViewBag.ToDate','@ViewBag.TravelType','@ViewBag.Adult','@ViewBag.Child','@ViewBag.Infant')" id="AirportAutocompleteController">
+                    <div class="card mt-2" style="width:100%;" ng-controller="RoundTripSearchController" ng-init="LoadFlightSearch('@ViewBag.Tripmode','@ViewBag.FromCityCode','@ViewBag.TOAirportCode','@ViewBag.FromDate','@ViewBag.ToDate','@ViewBag.TravelType','@ViewBag.Adult','@ViewBag.Child','@ViewBag.Infant')" id="AirportAutocompleteController">
                         <div class="card-body">
-                            <div class="row" >
+                            <div class="row">
                                 <!--.col-->
-                                <div class="row col-md-12" style="padding-bottom:40px;display:none">
+                                <div class="row col-md-12">
                                     <div class="accordion" id="accordionRightIcon" style="width:100%">
                                         <div class="card">
                                             <div class="card-header header-elements-inline">
@@ -942,8 +970,8 @@
                                             </div>
                                             <div class="collapse show" id="accordion-item-icons-1" data-parent="#accordionRightIcon">
                                                 <div class="card-body">
-                                                    <div class="row m-0 p-0">
-                                                        <div class="col-md-3 p-0">
+                                                    <div class="row p-0 m-0">
+                                                        <div class="col-4">
                                                             <div class="form-group">
                                                                 <label>Departure Price range:</label>
                                                                 <div class="clearfix"></div>
@@ -952,20 +980,8 @@
                                                                 <div class="clearfix"></div>
                                                                 <slider floor="{{min}}" ceiling="{{max}}" ng-model-low="lower_price_bound" ng-model-high="upper_price_bound"></slider>
                                                             </div>
-                                                            <div class="form-group">
-                                                                <label>Return Price range:</label>
-                                                                <div class="clearfix"></div>
-                                                                <span class="badge badge-dark pull-left" ng-cloak>{{Return_lower_price_bound}}</span>
-                                                                <span class="badge badge-dark pull-right" ng-cloak>{{Return_upper_price_bound}}</span>
-                                                                <div class="clearfix"></div>
-                                                                <slider floor="{{Return_min}}" ceiling="{{Return_max}}" ng-model-low="Return_lower_price_bound" ng-model-high="Return_upper_price_bound"></slider>
-                                                            </div>
                                                         </div>
-
-
-
-
-                                                        <div class="col-md-4 p-2">
+                                                        <div class="col-5">
                                                             <div class="control-group">
                                                                 <div class="controls">
                                                                     <label>Depart on</label>
@@ -977,38 +993,9 @@
                                                                         <button type="button" class="btn mb-1 btn-sm btn-{{filterData.timeSlots.Night ? 'primary':'default'}}" ng-model="filterData.timeSlots.Night" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">8pm - 12am</button>
                                                                     </div>
                                                                 </div>
-                                                                <div class="controls">
-                                                                    <label>Depart on</label>
-                                                                    <div>
-                                                                        <button type="button" class="btn mb-1 btn-sm btn-{{filterData.timeSlots.EarlyMorning ? 'primary':'default'}}" ng-model="filterData.timeSlots.EarlyMorning" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">12am - 8am</button>
-                                                                        <button type="button" class="btn mb-1 btn-sm btn-{{filterData.timeSlots.Morning ? 'primary':'default'}}" ng-model="filterData.timeSlots.Morning" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">8am - 12pm</button>
-                                                                        <button type="button" class="btn mb-1 btn-sm btn-{{filterData.timeSlots.MidDay ? 'primary':'default'}}" ng-model="filterData.timeSlots.MidDay" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">12pm - 4pm</button>
-                                                                        <button type="button" class="btn mb-1 btn-sm btn-{{filterData.timeSlots.Evening ? 'primary':'default'}}" ng-model="filterData.timeSlots.Evening" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">4pm - 8pm</button>
-                                                                        <button type="button" class="btn mb-1 btn-sm btn-{{filterData.timeSlots.Night ? 'primary':'default'}}" ng-model="filterData.timeSlots.Night" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">8pm - 12am</button>
-                                                                    </div>
-                                                                </div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-4 p-2">
-                                                            <div class="control-group">
-                                                                <div class="controls">
-                                                                    <label>
-                                                                        Return on
-                                                                        @*{{filterRetrunData.timeSlots}}*@
-                                                                    </label>
-                                                                    <div>
-                                                                        <button type="button" class="btn mb-1 btn-{{filterRetrunData.timeSlots.EarlyMorning ? 'primary':'default'}}" ng-model="filterRetrunData.timeSlots.EarlyMorning" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">12am - 8am</button>
-                                                                        <button type="button" class="btn mb-1 btn-{{filterRetrunData.timeSlots.Morning ? 'primary':'default'}}" ng-model="filterRetrunData.timeSlots.Morning" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">8am - 12pm</button>
-                                                                        <button type="button" class="btn mb-1 btn-{{filterRetrunData.timeSlots.MidDay ? 'primary':'default'}}" ng-model="filterRetrunData.timeSlots.MidDay" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">12pm - 4pm</button>
-                                                                        <button type="button" class="btn mb-1 btn-{{filterRetrunData.timeSlots.Evening ? 'primary':'default'}}" ng-model="filterRetrunData.timeSlots.Evening" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">4pm - 8pm</button>
-                                                                        <button type="button" class="btn mb-1 btn-{{filterRetrunData.timeSlots.Night ? 'primary':'default'}}" ng-model="filterRetrunData.timeSlots.Night" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">8pm - 12am</button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                        </div>
-
-                                                        <div class="col-md-4 p-2">
+                                                        <div class="col-3">
                                                             Stops
                                                             <div class="clearfix"></div>
                                                             <div class="btn-group btn-group-xs" data-toggle="buttons">
@@ -1018,29 +1005,124 @@
                                                                 <label class="btn btn-{{filterData.stops=='0' ? 'primary':'success'}}" ng-model="filterData.stops" uib-btn-radio="0" uncheckable ng-value="0">show Direct Flight</label>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-4 p-2 row">
-                                                            Preferred Airlines:
 
-                                                            @*<button class="btn btn-xs btn-default pull-right" style="padding:5px;font-size:x-small;font-weight:bold" ng-click="filterData.airlines = [];resetFilterAirlinesList()">Reset</button>*@
-                                                            @*<div class="clearfix"></div>
-            <br />
-            <div class="checkboxer" ng-repeat="item in airlinesList">
-                <input type="checkbox" ng-model="item.selected">
-                <label for="check6"> {{item.name}} <img ng-hide="item.code == ''" ng-src="~/Content/static-airlines-master/logos/{{item.code}}.png" class="flightImagesNew" alt="flights"></label>
-            </div>*@
-                                                            @*<div id="news-slider2" class="owl-carousel" ng-repeat="item in airlinesList">
-                <div class="post-slide2">
-                    <div class="post-img">
-                        <input type="checkbox" ng-model="item.selected" value="" id="check6">
-                        <label for="check6"><img ng-hide="item.code == ''" ng-src="~/Content/static-airlines-master/logos/{{item.code}}.png" class="flightImagesNew" alt="flights"><br />{{item.name}}</label>
-                    </div>
-                </div>
-            </div>*@
-                                                            <!--.checkbox-->
+                                                        <div class="col-4">
+                                                            <div class="form-group">
+                                                                <label>Return Price range:</label>
+                                                                <div class="clearfix"></div>
+                                                                <span class="badge badge-dark pull-left" ng-cloak>{{Return_lower_price_bound}}</span>
+                                                                <span class="badge badge-dark pull-right" ng-cloak>{{Return_upper_price_bound}}</span>
+                                                                <div class="clearfix"></div>
+                                                                <slider floor="{{Return_min}}" ceiling="{{Return_max}}" ng-model-low="Return_lower_price_bound" ng-model-high="Return_upper_price_bound"></slider>
+                                                            </div>
                                                         </div>
-                                                       
+                                                        <div class="col-5">
+                                                            <div class="control-group">
+                                                                <div class="controls">
+                                                                    <label>Return on</label>
+                                                                    <div>
+                                                                        <button type="button" class="btn mb-1 btn-sm btn-{{filterRetrunData.timeSlots.EarlyMorning ? 'primary':'default'}}" ng-model="filterRetrunData.timeSlots.EarlyMorning" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">12am - 8am</button>
+                                                                        <button type="button" class="btn mb-1 btn-sm btn-{{filterRetrunData.timeSlots.Morning ? 'primary':'default'}}" ng-model="filterRetrunData.timeSlots.Morning" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">8am - 12pm</button>
+                                                                        <button type="button" class="btn mb-1 btn-sm btn-{{filterRetrunData.timeSlots.MidDay ? 'primary':'default'}}" ng-model="filterRetrunData.timeSlots.MidDay" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">12pm - 4pm</button>
+                                                                        <button type="button" class="btn mb-1 btn-sm btn-{{filterRetrunData.timeSlots.Evening ? 'primary':'default'}}" ng-model="filterRetrunData.timeSlots.Evening" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">4pm - 8pm</button>
+                                                                        <button type="button" class="btn mb-1 btn-sm btn-{{filterRetrunData.timeSlots.Night ? 'primary':'default'}}" ng-model="filterRetrunData.timeSlots.Night" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">8pm - 12am</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-3">
+                                                            Stops
+                                                            <div class="clearfix"></div>
+                                                            <div class="btn-group btn-group-xs" data-toggle="buttons">
+                                                                <label class="btn btn-{{filterRetrunData.stops=='1' ? 'primary':'success'}}" ng-model="filterRetrunData.stops" uib-btn-radio="1" uncheckable ng-value="1">1</label>&nbsp;
+                                                                <label class="btn btn-{{filterRetrunData.stops=='2' ? 'primary':'success'}}" ng-model="filterRetrunData.stops" uib-btn-radio="2" uncheckable ng-value="2">2</label>&nbsp;
+                                                                <label class="btn btn-{{filterRetrunData.stops=='3' ? 'primary':'success'}}" ng-model="filterRetrunData.stops" uib-btn-radio="3" uib-uncheckable="uncheckable" ng-value="3">3</label>&nbsp;
+                                                                <label class="btn btn-{{filterRetrunData.stops=='0' ? 'primary':'success'}}" ng-model="filterRetrunData.stops" uib-btn-radio="0" uncheckable ng-value="0">show Direct Flight</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-2 mt-2" ng-show="selectedDeptFlight.length > 0 && selectedReturnFlight.length > 0"><label class="label label-default pull-right mt-2"> Out Bound Airlines</label></div>
+                                                        <div class="col-10 mt-2" ng-show="selectedDeptFlight.length > 0 && selectedReturnFlight.length > 0">
+                                                            <div class="row">
+                                                                <div class="col-1 p-0 m-0">
+                                                                    <button type="button" data-scroll-btn="scrollOutBoundAirlines" class="btn btn-block btn-light btn-prev-scroll" style="border-radius: unset" disabled>
+                                                                        <span><i class="fa fa-angle-double-left"></i></span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="col-10 p-0 m-0">
+                                                                    <div class="cata-sub-nav"
+                                                                         id="scrollOutBoundAirlines"
+                                                                         onscroll="myFunction(this)"
+                                                                         data-scroll-container="scrollOutBoundAirlines">
+                                                                        <ul>
+                                                                            <li class="nav-item"
+                                                                                style="border-right: 1px solid gray;width:160px"
+                                                                                ng-repeat="item in outBoundAirlinesList">
+                                                                                <div class="row p-0">
+                                                                                    <div class="col-2 p-0">
+                                                                                        <input class="mt-2 pull-right" id="rbOutBoundAirlines{{$index}}"
+                                                                                               type="checkbox" ng-model="item.selected">
+                                                                                    </div>
+                                                                                    <div class="col-4 p-0">
+                                                                                        <img ng-hide="item.code == ''" ng-src="~/Content/static-airlines-master/logos/{{item.code}}.png" class="flightImagesNew  pull-right" alt="flights" />
+                                                                                    </div>
+                                                                                    <div class="col p-0">
+                                                                                        <label for="rbOutBoundAirlines{{$index}}" class="pull-left mt-1">{{item.name}}</label>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-1 p-0 m-0">
+                                                                    <button type="button" data-scroll-btn="scrollOutBoundAirlines" class="btn btn-block btn-light btn-next-scroll" style="border-radius: unset">
+                                                                        <span><i class="fa fa-angle-double-right"></i></span>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="clearfix"></div>
+                                                        <div class="col-2 mt-2" ng-show="selectedDeptFlight.length > 0 && selectedReturnFlight.length > 0"><label class="label label-default pull-right mt-2"> In Bound Airlines</label></div>
+                                                        <div class="col-10 mt-2" ng-show="selectedDeptFlight.length > 0 && selectedReturnFlight.length > 0">
+                                                            <div class="row">
+                                                                <div class="col-1 p-0 m-0">
+                                                                    <button type="button" data-scroll-btn="scrollInBoundAirlines" class="btn btn-block btn-light btn-prev-scroll" style="border-radius: unset" disabled>
+                                                                        <span><i class="fa fa-angle-double-left"></i></span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="col-10 p-0 m-0">
+                                                                    <div class="cata-sub-nav"
+                                                                         id="scrollInBoundAirlines"
+                                                                         onscroll="myFunction(this)"
+                                                                         data-scroll-container="scrollInBoundAirlines">
+                                                                        <ul>
+                                                                            <li class="nav-item"
+                                                                                style="border-right: 1px solid gray;width:160px"
+                                                                                ng-repeat="item in inBoundAirlinesList">
+                                                                                <div class="row p-0">
+                                                                                    <div class="col-2 p-0">
+                                                                                        <input class="mt-2 pull-right" id="rbInBoundAirlines{{$index}}"
+                                                                                               type="checkbox" ng-model="item.selected">
+                                                                                    </div>
+                                                                                    <div class="col-4 p-0">
+                                                                                        <img ng-hide="item.code == ''" ng-src="~/Content/static-airlines-master/logos/{{item.code}}.png" class="flightImagesNew  pull-right" alt="flights" />
+                                                                                    </div>
+                                                                                    <div class="col p-0">
+                                                                                        <label for="rbInBoundAirlines{{$index}}" class="pull-left mt-1">{{item.name}}</label>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-1 p-0 m-0">
+                                                                    <button type="button" data-scroll-btn="scrollInBoundAirlines" class="btn btn-block btn-light btn-next-scroll" style="border-radius: unset">
+                                                                        <span><i class="fa fa-angle-double-right"></i></span>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                 </div>
                                             </div>
                                         </div>
                                     </div>
@@ -1159,7 +1241,7 @@
                                         </div>
                                         <div data-cy="flightItem_CCUDEL20200710ESG:SG3281SG903:0">
                                             <div class="row mb-2" style="box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0.2), 0 0px 5px 2px rgba(0, 0, 0, 0.19)"
-                                                 ng-repeat="flight in deptureFlight | filter : filterDeptFlightData1"
+                                                 ng-repeat="flight in deptureFlight | filter : filterDeptFlightData"
                                                  ng-show="selectedDeptFlight.length > 0 && selectedReturnFlight.length > 0"
                                                  ng-cloak>
 
@@ -1337,7 +1419,7 @@
                                                                     <td>{{getDeptureFlightTotalBasefare(flight[0].SrNo)}}/-</td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td>Other Amoutn (<span>{{AdultCount}} {{AdultCount > 1 ? 'Adults' : 'Adult'}}</span> <span ng-show="ChildCount > 0">, {{ChildCount}} {{ChildCount > 1 ? 'Childs' : 'Child'}}</span><span ng-show="InfantCount > 0">, {{InfantCount}} {{InfantCount > 1 ? 'Infants' : 'Infant'}}</span>)</td>
+                                                                    <td>Other Amount (<span>{{AdultCount}} {{AdultCount > 1 ? 'Adults' : 'Adult'}}</span> <span ng-show="ChildCount > 0">, {{ChildCount}} {{ChildCount > 1 ? 'Childs' : 'Child'}}</span><span ng-show="InfantCount > 0">, {{InfantCount}} {{InfantCount > 1 ? 'Infants' : 'Infant'}}</span>)</td>
                                                                     <td>{{getDeptureOtherFare(flight[0].SrNo)}}/-</td>
                                                                 </tr>
                                                                 <tr>
@@ -1383,9 +1465,9 @@
                                                 <li id="PRICE" class="curPointFlt"><span class="dF alignItemsCenter justifyCenter"><span class="fb ico11  hpyBlueLt ">PRICE</span><i class="ico13 icon-arrow2-up hpyBlueLt "></i></span></li>
                                             </ul>
                                         </div>
-                                        <div data-cy="flightItem_CCUDEL20200710ESG:SG3281SG903:0" >
+                                        <div data-cy="flightItem_CCUDEL20200710ESG:SG3281SG903:0">
                                             <div class="row mb-2" style="box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0.2), 0 0px 5px 2px rgba(0, 0, 0, 0.19)"
-                                                 ng-repeat="flight in returnFlight"
+                                                 ng-repeat="flight in returnFlight | filter : filterReturnFlightData"
                                                  ng-show="selectedDeptFlight.length > 0 && selectedReturnFlight.length > 0"
                                                  ng-cloak>
 
@@ -1598,7 +1680,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <!--.col-->
                             </div>
                         </div>
@@ -1626,3 +1708,58 @@
         </div>
     </div>
 </div>
+
+
+<script>
+    function myFunction($this) {
+        $val = $($this).scrollLeft();
+        let selectorValue = $($this).attr("data-scroll-container");
+        if (
+            $($this).scrollLeft() + $($this).innerWidth() >=
+            $($this)[0].scrollWidth
+        ) {
+            $("[data-scroll-btn='" + selectorValue + "'].btn-next-scroll").attr(
+                "disabled",
+                true
+            );
+            // $(".btn-next-scroll").hide();
+        } else {
+            $("[data-scroll-btn='" + selectorValue + "'].btn-next-scroll").attr(
+                "disabled",
+                false
+            );
+        }
+
+        if ($val == 0) {
+            $("[data-scroll-btn='" + selectorValue + "'].btn-prev-scroll").attr(
+                "disabled",
+                true
+            );
+        } else {
+            $("[data-scroll-btn='" + selectorValue + "'].btn-prev-scroll").attr(
+                "disabled",
+                false
+            );
+        }
+    }
+
+    (function ($) {
+        console.log("init-scroll: " + $(".btn-next-scroll").scrollLeft());
+
+        $(document).on("click", ".btn-next-scroll", function () {
+            let selectorValue = $(this).attr("data-scroll-btn");
+            $("[data-scroll-container='" + selectorValue + "']").animate(
+                { scrollLeft: "+=460" },
+                500
+            );
+        });
+
+        $(document).on("click", ".btn-prev-scroll", function () {
+            let selectorValue = $(this).attr("data-scroll-btn");
+            $("[data-scroll-container='" + selectorValue + "']").animate(
+                { scrollLeft: "-=460" },
+                500
+            );
+        });
+    })(jQuery);
+</script>

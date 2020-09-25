@@ -1,6 +1,6 @@
 ﻿app.controller('RoundTripSearchController', ['FlightServices', '$scope', '$http', '$window', '$filter', function (FlightServices, $scope, $http, $window, $filter) {
 
-    $scope.additionalAddedAmount = parseFloat(document.getElementById('AIRADDITIONALAMOUNT').value);
+    $scope.additionalAddedAmount =  parseFloat(document.getElementById('AIRADDITIONALAMOUNT').value);
 
     $scope.getFloatNumber = function (n) {
         if (n) {
@@ -47,14 +47,30 @@
         airlines: []
     };
 
-    $scope.airlinesList = [];
+    $scope.outBoundAirlinesList = [];
+    $scope.inBoundAirlinesList = [];
 
     $scope.selectDeptTrackNo = '';
     $scope.selectReturnTrackNo = '';
 
 
 
+    $scope.$watch('outBoundAirlinesList|filter:{selected:true}', function (nv) {
+        $scope.filterData.airlines = nv.map(function (item) {
+            return item.code;
+        });
+    }, true);
+
+
+    $scope.$watch('inBoundAirlinesList|filter:{selected:true}', function (nv) {
+        $scope.filterRetrunData.airlines = nv.map(function (item) {
+            return item.code;
+        });
+    }, true);
+
+
     $scope.filterDeptFlightData = function (item) {
+
         let returnValue = false;
 
         let amount = Math.round(item[0].TotalAmount);
@@ -107,9 +123,9 @@
             returnValue = item[0].FareType == ($scope.filterData.refundable == 'true' ? 'R' : 'N');
         }
 
-        //if ($scope.filterData.airlines.length > 0 && returnValue) {
-        //    returnValue = $scope.filterData.airlines.includes(item[0].AirlineCode);
-        //}
+        if ($scope.filterData.airlines.length > 0 && returnValue) {
+            returnValue = $scope.filterData.airlines.includes(item[0].AirlineCode);
+        }
 
 
 
@@ -163,17 +179,17 @@
             returnValue = check;
         }
 
-        if ($scope.filterData.stops != null && returnValue) {
-            returnValue = item[0].Stops == $scope.filterData.stops;
+        if ($scope.filterRetrunData.stops != null && returnValue) {
+            returnValue = item[0].Stops == $scope.filterRetrunData.stops;
         }
 
         if ($scope.filterData.refundable != null && returnValue) {
             returnValue = item[0].FareType == ($scope.filterData.refundable == 'true' ? 'R' : 'N');
         }
 
-        //if ($scope.filterData.airlines.length > 0 && returnValue) {
-        //    returnValue = $scope.filterData.airlines.includes(item[0].AirlineCode);
-        //}
+        if ($scope.filterRetrunData.airlines.length > 0 && returnValue) {
+            returnValue = $scope.filterRetrunData.airlines.includes(item[0].AirlineCode);
+        }
 
 
 
@@ -250,7 +266,6 @@
             const data = response.data;
             const FlightResponse = JSON.parse(data);
 
-            debugger;
             //=========================== Store All Flight Information =============================//
             $scope.deptureFlightDetails = FlightResponse.GetFlightAvailibilityResponse.FlightDetails;
             $scope.deptureFareDetails = FlightResponse.GetFlightAvailibilityResponse.FareDetails;
@@ -258,7 +273,7 @@
             $scope.deptureAirportList = FlightResponse.GetFlightAvailibilityResponse.AirportList;
 
 
-            $scope.airlinesList = $scope.deptureAirlineList.map(item => {
+            $scope.outBoundAirlinesList = $scope.deptureAirlineList.map(item => {
                 const container = {};
                 container.name = item.AirlineName;
                 container.code = item.AirlineCode;
@@ -335,6 +350,7 @@
 
 
             const maxPeak = $scope.deptureFareDetails.reduce((p, c) => Math.round(p.TotalAmount) > Math.round(c.TotalAmount) ? p : c);
+            console.log($scope.deptureFareDetails)
             const minPeak = $scope.deptureFareDetails.reduce((p, c) => Math.round(p.TotalAmount) < Math.round(c.TotalAmount) ? p : c);
 
             $scope.minAmount = Math.round(minPeak.TotalAmount) + $scope.additionalAddedAmount;
@@ -345,6 +361,8 @@
 
             $scope.min = $scope.minAmount;
             $scope.max = $scope.maxAmount;
+
+            
 
         });
     }
@@ -507,7 +525,7 @@
 
     // #endregion
 
-    // #region Load detpture flight 
+    // #region Load return flight 
     $scope.loadReturnFlightSearch = function (Tripmode, FromCityCode, TOAirportCode, FromDate, ToDate, TravelType, Adult, Child, Infant) {
 
 
@@ -539,7 +557,7 @@
             $scope.returnAirportList = FlightResponse.GetFlightAvailibilityResponse.AirportList;
 
 
-            $scope.airlinesList = $scope.returnAirlineList.map(item => {
+            $scope.inBoundAirlinesList = $scope.returnAirlineList.map(item => {
                 const container = {};
                 container.name = item.AirlineName;
                 container.code = item.AirlineCode;
@@ -613,16 +631,21 @@
                 return 0;
             });
 
+
+       
+
             $scope.selectedReturnFlight = $scope.returnFlight[0];
 
             const ReturnmaxPeak = $scope.returnFareDetails.reduce((p, c) => Math.round(p.TotalAmount) > Math.round(c.TotalAmount) ? p : c);
             const ReturnminPeak = $scope.returnFareDetails.reduce((p, c) => Math.round(p.TotalAmount) < Math.round(c.TotalAmount) ? p : c);
 
-            $scope.ReturnminAmount = Math.round(ReturnminPeak.TotalAmount);
-            $scope.ReturnmaxAmount = Math.round(ReturnmaxPeak.TotalAmount);
+
+            $scope.ReturnminAmount = Math.round(ReturnminPeak.TotalAmount) + $scope.additionalAddedAmount;
+            $scope.ReturnmaxAmount = Math.round(ReturnmaxPeak.TotalAmount) + $scope.additionalAddedAmount;
 
             $scope.Return_lower_price_bound = $scope.ReturnminAmount;
             $scope.Return_upper_price_bound = $scope.ReturnmaxAmount;
+
             $scope.Return_min = $scope.ReturnminAmount;
             $scope.Return_max = $scope.ReturnmaxAmount;
         });
@@ -786,84 +809,6 @@
 
     // #endregion
 
-
-
-
-
-
-
-
-
-    $scope.$watch('airlinesList|filter:{selected:true}', function (nv) {
-        $scope.filterData.airlines = nv.map(function (item) {
-            return item.code;
-        });
-    }, true);
-
-
-
-
-
-
-
-    $scope.loadDeptFareDetails = function (srNo, adult, child, infant) {
-        let adlt = adult;
-        let data = $scope.DeptFlightFareDetails.filter(x => x.SrNo == srNo);
-        let adultval = (adult = 0 ? 0 : adult);
-        let childval = (child = 0 ? 0 : child);
-        let infantval = (infant = 0 ? 0 : infant);
-        let FlightBaseFare = (parseFloat(data[0].AdultBaseFare)) + (parseFloat(data[0].ChildBaseFare)) + (parseFloat(data[0].InfantBaseFare));
-        $scope.FlightDeptTotalBasefare = FlightBaseFare;
-        let FlightTaxFare = (parseFloat(data[0].AdultTax)) + (parseFloat(data[0].ChildTax)) + (parseFloat(data[0].InfantTax));
-        $scope.FlightDeptTotalTaxfare = FlightTaxFare;
-        let FlightCuteFare = (parseFloat(data[0].AdultCuteFee)) + (parseFloat(data[0].ChildCuteFee)) + (parseFloat(data[0].InfantCuteFee));
-        $scope.FlightDeptTotalCutefare = FlightCuteFare;
-        $scope.FlightDeptTotalFare = parseFloat(FlightBaseFare) + parseFloat(FlightTaxFare) + parseFloat(FlightCuteFare);
-        let baggageval = data[0].Baggage;
-        $scope.BaggageDeptAllowance = baggageval;
-    }
-
-    $scope.loadRetrnFareDetails = function (srNo, adult, child, infant) {
-        let adlt = adult;
-        let data = $scope.ReturnFlightFareDetails.filter(x => x.SrNo == srNo);
-        let adultval = (adult = 0 ? 0 : adult);
-        let childval = (child = 0 ? 0 : child);
-        let infantval = (infant = 0 ? 0 : infant);
-        let FlightBaseFare = (parseFloat(data[0].AdultBaseFare)) + (parseFloat(data[0].ChildBaseFare)) + (parseFloat(data[0].InfantBaseFare));
-        $scope.FlightReturnTotalBasefare = FlightBaseFare;
-
-        let FlightTaxFare = (parseFloat(data[0].AdultTax)) + (parseFloat(data[0].ChildTax)) + (parseFloat(data[0].InfantTax));
-        $scope.FlightReturnTotalTaxfare = FlightTaxFare;
-
-        let FlightCuteFare = (parseFloat(data[0].AdultCuteFee)) + (parseFloat(data[0].ChildCuteFee)) + (parseFloat(data[0].InfantCuteFee));
-        $scope.FlightReturnTotalCutefare = FlightCuteFare;
-
-        $scope.FlightReturnTotalFare = parseFloat(FlightBaseFare) + parseFloat(FlightTaxFare) + parseFloat(FlightCuteFare);
-        let baggageval = data[0].Baggage;
-        $scope.BaggageReturnAllowance = baggageval;
-    }
-
-    $scope.get_FlightDetails = function (Adult, Children, Infant, TrackNo, TripMode) {
-        var Tracevalue = JSON.parse(window.localStorage.getItem("SearchTraceDetails"));
-        var timevalue = new Date(Tracevalue.Time);
-        var TraceId = Tracevalue.Token;
-        const currDate = new Date();
-        const oldDate = timevalue;
-
-        var list = (currDate - oldDate) / 60000;
-        if (list <= 15) {
-            //window.location.href = '/Merchant/MerchantFlightBooking/FlightBooking?BookingValue=' + item + '&token=' + TraceId + '&Passenger=' + Passenger + '&TripMode=' + TripMode + '&IsLCC=' + IsLCC;;
-            window.location.href = '/Merchant/MerchantFlightDetails/FlightBookingDetails?TrackNo=' + TrackNo + '&PsgnAdult=' + Adult + '&PsgnChildren=' + Children + '&PsgnInfant=' + Infant + '&TripMode=' + TripMode;
-        }
-        else {
-            bootbox.alert({
-                message: "Session is expired.Please search again",
-                backdrop: true
-            });
-        }
-    };
-
-  
 
 
     //================= Common =====================//
