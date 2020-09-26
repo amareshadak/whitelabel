@@ -973,7 +973,7 @@
                                                     <div class="row p-0 m-0">
                                                         <div class="col-4">
                                                             <div class="form-group">
-                                                                <label>Departure Price range:</label>
+                                                                <label>Onward Price range:</label>
                                                                 <div class="clearfix"></div>
                                                                 <span class="badge badge-dark pull-left" ng-cloak>{{lower_price_bound}}</span>
                                                                 <span class="badge badge-dark pull-right" ng-cloak>{{upper_price_bound}}</span>
@@ -984,7 +984,7 @@
                                                         <div class="col-5">
                                                             <div class="control-group">
                                                                 <div class="controls">
-                                                                    <label>Depart on</label>
+                                                                    <label>Onward on</label>
                                                                     <div>
                                                                         <button type="button" class="btn mb-1 btn-sm btn-{{filterData.timeSlots.EarlyMorning ? 'primary':'default'}}" ng-model="filterData.timeSlots.EarlyMorning" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">12am - 8am</button>
                                                                         <button type="button" class="btn mb-1 btn-sm btn-{{filterData.timeSlots.Morning ? 'primary':'default'}}" ng-model="filterData.timeSlots.Morning" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">8am - 12pm</button>
@@ -996,7 +996,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="col-3">
-                                                            Stops
+                                                            Onward Stops
                                                             <div class="clearfix"></div>
                                                             <div class="btn-group btn-group-xs" data-toggle="buttons">
                                                                 <label class="btn btn-{{filterData.stops=='1' ? 'primary':'success'}}" ng-model="filterData.stops" uib-btn-radio="1" uncheckable ng-value="1">1</label>&nbsp;
@@ -1031,7 +1031,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="col-3">
-                                                            Stops
+                                                            Return Stops
                                                             <div class="clearfix"></div>
                                                             <div class="btn-group btn-group-xs" data-toggle="buttons">
                                                                 <label class="btn btn-{{filterRetrunData.stops=='1' ? 'primary':'success'}}" ng-model="filterRetrunData.stops" uib-btn-radio="1" uncheckable ng-value="1">1</label>&nbsp;
@@ -1054,10 +1054,10 @@
                                                                          onscroll="myFunction(this)"
                                                                          data-scroll-container="scrollOutBoundAirlines">
                                                                         <ul>
-                                                                            <li class="nav-item"
+                                                                            <li class="nav-item" ng-cloak
                                                                                 style="border-right: 1px solid gray;width:160px"
-                                                                                ng-repeat="item in outBoundAirlinesList">
-                                                                                <div class="row p-0">
+                                                                                ng-repeat="item in outBoundAirlinesList" ng-class="{'bg-light' : item.selected}">
+                                                                                <div class="row p-0" for="rbOutBoundAirlines{{$index}}">
                                                                                     <div class="col-2 p-0">
                                                                                         <input class="mt-2 pull-right" id="rbOutBoundAirlines{{$index}}"
                                                                                                type="checkbox" ng-model="item.selected">
