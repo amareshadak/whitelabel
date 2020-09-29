@@ -568,7 +568,7 @@
     </style>
 
 
-<script src="//momentjs.com/downloads/moment.min.js"></script>
+<script src="https://momentjs.com/downloads/moment.min.js"></script>
 <script src="~/HelperJS/AngularjsLinks/bootstrap.bundle.min.js"></script>
 <script src="~/HelperJS/AngularjsLinks/perfect-scrollbar.min.js"></script>
 <script src="~/HelperJS/AngularjsLinks/script.min.js"></script>
@@ -579,7 +579,7 @@
 <script src="~/Areas/Merchant/MerchantHelperJS/FlightBooking/FlightServices.js"></script>
 <script src="~/Areas/Merchant/MerchantHelperJS/FlightBooking/RoundTripDetailsController.js"></script>
 
-<div ng-app="AirportAutocompleteoduleApp" class="display-animation" ng-controller="RoundTripDetailsController" ng-init="loadFlightDetails('@ViewBag.TrackNo','@ViewBag.TripMode');populatePesengerList('@ViewBag.AdultCount','@ViewBag.ChildCount','@ViewBag.InfantCount');" id="FlightBookingControllerId">
+<div ng-app="AirportAutocompleteoduleApp" class="display-animation" ng-controller="RoundTripDetailsController" ng-init="loadFlightDetails('@ViewBag.TrackNo','@ViewBag.TripMode');populatePesengerList('@ViewBag.AdultCount','@ViewBag.ChildCount','@ViewBag.InfantCount');" id="FlightBookingControllerId" ng-cloak>
     <div class="content" style="margin-top:20px;">
         <div class="display-animation">
             <div class="full-content margin-bottom-40 bg-white" id="Bill_page">
@@ -716,16 +716,17 @@
                         </div>
 
 
-
-                        <div class="card" style="margin-top:20px;">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="fl width100 padLR15 padTB10 borderBtm">
-                                        <div class="fl">
-                                            <span class="fl padLR10 padT5 ico18 quicks fb">Traveller Details</span>
+                        @*<form id="travellerForm" name="travellerForm" method="POST">*@
+                        <form id="travellerForm" name="travellerForm" class="needs-validation mt-2" novalidate>
+                            <div class="card" style="margin-top:20px;">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="fl width100 padLR15 padTB10 borderBtm">
+                                            <div class="fl">
+                                                <span class="fl padLR10 padT5 ico18 quicks fb">Traveller Details</span>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <form id="travellerForm" name="travellerForm" method="POST">
+
                                         <div class="fl width100 padLR20 mobpadLR5 bkTraveller padT10">
                                             <div class="fl width100" style="display:none">
                                                 <div style="width: 210px; margin: 0px auto;">
@@ -737,80 +738,236 @@
                                             </div>
 
                                             <div class="alert_msg info_msg fl"><b class="status_info fl">Note: </b><span class="status_cont">Please make sure you enter the Name as per your govt. photo id.</span></div>
-
-                                            <div class="fl width100 padLR10 greyBg borderBtm marginB5" ng-repeat="psssenger in passengers">
-                                                <div class="fl width100 padTB10 curPoint">
-                                                    <span class="fl padR5">
-                                                        <i class="fl icon-user3 ico24"></i>
-                                                        <i class="fl fltCirc bordBlac icon-tick-mark ico8 pad1 marginLN5"></i>
-                                                    </span>
-                                                    <span class="fl padLR20 ico14 padT5">{{psssenger.label}}</span>
+                                            <div class="form-row" ng-repeat="psssenger in passengers" style="width:100%;">
+                                                <div class="col-md-12 col-sm-12 col-xs-12 p-1">
+                                                    <b>{{psssenger.label}}</b>
                                                 </div>
-                                                <div class="padL30 fl width100" style="margin-bottom:5px">
-                                                    <div class="row">
-                                                        <div class="col-md-2 col-sm-2 col-xs-12">
-                                                            <select ng-model="psssenger.Title" data-traveller="0" data-index="1" data-field="title" data-fieldname="Title" data-name="Adult" name="Adultchoose1" id="Adulttitle1" class="form-control inputMedium">
-                                                                <option value="">Title</option>
-                                                                <option ng-show="psssenger.PassengerType == 'A'" value="Mr">Mr</option>
-                                                                <option value="Ms">Ms</option>
-                                                                <option ng-show="psssenger.PassengerType == 'A'" value="Mrs">Mrs</option>
-                                                                <option value="Mrs">Mstr</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="col-md-5 col-sm-5 col-xs-12">
-                                                            <input ng-model="psssenger.FirstName" type="text" class="form-control inputMedium padLR5 placeholder" placeholder="First Name/Given Name" value="">
-                                                        </div>
-                                                        <div class="col-md-5 col-sm-5 col-xs-12">
-                                                            <input ng-model="psssenger.LastName" type="text" class="form-control inputMedium padLR5 placeholder" placeholder="Last Name">
-                                                        </div>
-
-
+                                                <div class="col-md-2 col-sm-2 col-xs-12 p-1 ">
+                                                    @*<label for="passengerTitle{{$index}}">Title <span class="text-danger">*</span></label>*@
+                                                    <select ng-model="psssenger.Title" name="passengerTitle{{$index}}" id="passengerTitle{{$index}}" class="form-control inputMedium" required>
+                                                        <option value="">Title</option>
+                                                        <option ng-show="psssenger.PassengerType == 'A'" value="Mr">Mr</option>
+                                                        <option value="Ms">Ms</option>
+                                                        <option ng-show="psssenger.PassengerType == 'A'" value="Mrs">Mrs</option>
+                                                        <option value="Mrs">Mstr</option>
+                                                    </select>
+                                                    <div class="invalid-feedback">
+                                                        Please provide title.
                                                     </div>
-                                                    <div class="row" style="margin-top:20px">
-                                                        <div class="col-md-2 col-sm-2 col-xs-12"></div>
-                                                        <div class="col-md-5 col-sm-5 col-xs-12">
-                                                            <input ng-model="psssenger.DateOfBirth" type="text" class="form-control inputMedium padLR5 placeholder DateofBirthVal" placeholder="dd/MM/yyyy">
-                                                        </div>
-                                                        <div class="col-md-5 col-sm-5 col-xs-12">
-                                                            @*<input ng-model="psssenger.PassportNo" type="text" class="form-control inputMedium padLR5 placeholder" placeholder="Passport Number">*@
-                                                        </div>
+                                                </div>
+
+                                                <div class="col-md-5 col-sm-5 col-xs-12 p-1">
+                                                    @*<label for="passengerFirstName{{$index}}">First Name <span class="text-danger">*</span></label>*@
+                                                    <input ng-model="psssenger.FirstName" type="text" id="passengerFirstName{{$index}}"
+                                                           name="passengerFirstName{{$index}}" class="form-control inputMedium" placeholder="First Name" required>
+                                                    <div class="invalid-feedback">
+                                                        Please enter first name.
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-5 col-sm-5 col-xs-12 p-1">
+                                                    @*<label for="passengerLastName{{$index}}">Last Name <span class="text-danger">*</span></label>*@
+                                                    <input ng-model="psssenger.LastName" type="text" id="passengerLastName{{$index}}"
+                                                           name="passengerLastName{{$index}}" class="form-control inputMedium" placeholder="Last Name" required>
+                                                    <div class="invalid-feedback">
+                                                        Please enter last name.
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-3 col-sm-3 col-xs-12 p-1" ng-show="flightDetails[0].IsDOBMandatory == 'YES'">
+                                                    @*<label for="passengerDateOfBirth{{$index}}">Date of birth <span class="text-danger">*</span></label>*@
+                                                    <input ng-model="psssenger.DateOfBirth" type="text" id="passengerDateOfBirth{{$index}}"
+                                                           name="passengerDateOfBirth{{$index}}" class="form-control inputMedium DateofBirthVal" placeholder="dd/MM/yyyy"
+                                                           ng-required="flightDetails[0].IsDOBMandatory == 'YES'">
+                                                    <div class="invalid-feedback">
+                                                        Please enter first name.
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-3 col-sm-3 col-xs-12 p-1" ng-show="flightDetails[0].IsPassportNoMandatory == 'YES'">
+                                                    @*<label for="passengerPassportNo{{$index}}">Passport No <span class="bg-danger">*</span></label>*@
+                                                    <input ng-model="psssenger.PassportNo" type="text" id="passengerPassportNo{{$index}}"
+                                                           name="passengerPassportNo{{$index}}" class="form-control inputMedium" placeholder="Passport number"
+                                                           ng-required="flightDetails[0].IsPassportNoMandatory == 'YES'">
+                                                    <div class="invalid-feedback">
+                                                        Please enter passport number.
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-3 col-sm-3 col-xs-12 p-1" ng-show="flightDetails[0].IsPassportExpDateMandatory == 'YES'">
+                                                    @*<label for="passengerpassportexpdate{{$index}}">Passport Expiry Date <span class="text-danger">*</span></label>*@
+                                                    <input ng-model="psssenger.passportexpdate" type="text" id="passengerpassportexpdate{{$index}}"
+                                                           name="passengerpassportexpdate{{$index}}" class="form-control inputMedium DateofBirthVal" placeholder="Passport expiry date (dd/MM/yyyy)"
+                                                           ng-required="flightDetails[0].IsPassportExpDateMandatory == 'YES'">
+                                                    <div class="invalid-feedback">
+                                                        Please select date.
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-3 col-sm-3 col-xs-12 p-1" ng-show="flightDetails[0].passportissuingcountry == 'YES'">
+                                                    @*<label for="passengerpassportissuingcountry{{$index}}">Passport issuing country code <span class="text-danger">*</span></label>*@
+                                                    <input ng-model="psssenger.passportissuingcountry" type="text" id="passengerpassportissuingcountry{{$index}}"
+                                                           name="passengerpassportissuingcountry{{$index}}" class="form-control inputMedium" placeholder="Passport issuing country code (IND)"
+                                                           ng-required="flightDetails[0].passportissuingcountry == 'YES'">
+                                                    <div class="invalid-feedback">
+                                                        Please select country.
                                                     </div>
                                                 </div>
                                             </div>
 
-                                            <div class="fl width100 padLR10 greyBg borderBtm marginB5">
-                                                <hr />
-                                                <div class="padL30 fl width100" style="margin-bottom:5px">
-                                                    <div class="row">
-                                                        <div class="col-md-6 col-sm-6 col-xs-12">
-                                                            <input type="email" ng-model="emailAddress" class="form-control inputMedium" placeholder="Enter Email Id.">
-                                                        </div>
-                                                        <div class="col-md-3 col-sm-3 col-xs-12">
-                                                            <input type="text" ng-model="mobileNumber" class="form-control inputMedium" maxlength="10" placeholder="Mobile No.">
-                                                        </div>
-                                                        <div class="col-md-3 col-sm-3 col-xs-12">
-                                                            <input type="text" ng-model="altMobileNo" class="form-control inputMedium" maxlength="10" placeholder="Alternative Mobile No.">
-                                                        </div>
+                                            <div class="col-12 p-1 m-1" style="border-top: 1px solid #dbc9bb;width: 99%"></div>
+                                            <div class="form-row">
+                                                <div class="col-md-4 col-sm-4 col-xs-12 p-1">
+                                                    <input type="text" ng-model="GSTNo"
+                                                           name="inputgstno" id="inputgstno"
+                                                           ng-required="flightDetails[0].IsGSTMandatory == 'YES'"
+                                                           class="form-control inputMedium" placeholder="GST No">
+                                                    <div class="invalid-feedback">
+                                                        Please enter GST number.
                                                     </div>
-
+                                                </div>
+                                                <div class="col-md-4 col-sm-4 col-xs-12 p-1">
+                                                    <input type="email" ng-model="GSTEmailID"
+                                                           name="inputgstemail" id="inputgstemail"
+                                                           ng-required="GSTNo"
+                                                           class="form-control inputMedium" placeholder="GST Email">
+                                                    <div class="invalid-feedback">
+                                                        Please enter GST email id.
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 col-sm-4 col-xs-12 p-1">
+                                                    <input type="text" ng-model="GSTMobileNo" maxlength="10"
+                                                           name="inputgstmobileno" id="inputgstmobileno"
+                                                           ng-required="GSTNo"
+                                                           pattern="(.){10,10}"
+                                                           class="form-control inputMedium" placeholder="GST mobile number (xxxxxxxxxx)">
+                                                    <div class="invalid-feedback">
+                                                        Please enter GST mobile number.
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 col-sm-6 col-xs-12 p-1">
+                                                    <input type="text" ng-model="GSTCompanyName"
+                                                           name="inputgstcompany" id="inputgstcompany"
+                                                           ng-required="GSTNo"
+                                                           class="form-control inputMedium" placeholder="GST company name">
+                                                    <div class="invalid-feedback">
+                                                        Please enter GST company name.
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 col-sm-6 col-xs-12 p-1">
+                                                    <input type="text" ng-model="GSTAddress"
+                                                           name="inputgstaddress" id="inputgstaddress"
+                                                           ng-required="GSTNo"
+                                                           class="form-control inputMedium" placeholder="GST address">
+                                                    <div class="invalid-feedback">
+                                                        Please enter GST address.
+                                                    </div>
                                                 </div>
                                             </div>
+                                            <div class="col-12 p-1 m-1" style="border-top: 1px solid #dbc9bb;width: 99%"></div>
+
+
+                                            <div class="form-row">
+                                                <div class="col-md-4 col-sm-6 col-xs-12 p-1">
+                                                    <input type="email" ng-model="emailAddress"
+                                                           class="form-control inputMedium" placeholder="Enter Email Id." required>
+                                                    <div class="invalid-feedback">
+                                                        Please enter email address.
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 col-sm-3 col-xs-12 p-1">
+                                                    <input type="text" ng-model="mobileNumber" class="form-control inputMedium"
+                                                           pattern="(.){10,10}"
+                                                           maxlength="10" placeholder="Mobile No." required>
+                                                    <div class="invalid-feedback">
+                                                        Please enter mobile number.
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 col-sm-3 col-xs-12 p-1">
+                                                    <input type="text" ng-model="altMobileNo" class="form-control inputMedium"
+                                                           pattern="(.){10,10}"
+                                                           maxlength="10" placeholder="Alternative Mobile No.">
+                                                    <div class="invalid-feedback">
+                                                        Please enter alternative mobile number.
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+
+
+                                            @*<div class="fl width100 padLR10 greyBg borderBtm marginB5" ng-repeat="psssenger in passengers">
+                                <div class="fl width100 padTB10 curPoint">
+                                    <span class="fl padR5">
+                                        <i class="fl icon-user3 ico24"></i>
+                                        <i class="fl fltCirc bordBlac icon-tick-mark ico8 pad1 marginLN5"></i>
+                                    </span>
+                                    <span class="fl padLR20 ico14 padT5">{{psssenger.label}}</span>
+                                </div>
+                                <div class="padL30 fl width100" style="margin-bottom:5px">
+                                    <div class="row">
+                                        <div class="col-md-2 col-sm-2 col-xs-12">
+                                            <select ng-model="psssenger.Title" data-traveller="0" data-index="1" data-field="title" data-fieldname="Title" data-name="Adult" name="Adultchoose1" id="Adulttitle1" class="form-control inputMedium">
+                                                <option value="">Title</option>
+                                                <option ng-show="psssenger.PassengerType == 'A'" value="Mr">Mr</option>
+                                                <option value="Ms">Ms</option>
+                                                <option ng-show="psssenger.PassengerType == 'A'" value="Mrs">Mrs</option>
+                                                <option value="Mrs">Mstr</option>
+                                            </select>
                                         </div>
-                                    </form>
+                                        <div class="col-md-5 col-sm-5 col-xs-12">
+                                            <input ng-model="psssenger.FirstName" type="text" class="form-control inputMedium padLR5 placeholder" placeholder="First Name/Given Name" value="">
+                                        </div>
+                                        <div class="col-md-5 col-sm-5 col-xs-12">
+                                            <input ng-model="psssenger.LastName" type="text" class="form-control inputMedium padLR5 placeholder" placeholder="Last Name">
+                                        </div>
+
+
+                                    </div>
+                                    <div class="row" style="margin-top:20px">
+                                        <div class="col-md-2 col-sm-2 col-xs-12"></div>
+                                        <div class="col-md-5 col-sm-5 col-xs-12">
+                                            <input ng-model="psssenger.DateOfBirth" type="text" class="form-control inputMedium padLR5 placeholder DateofBirthVal" placeholder="dd/MM/yyyy">
+                                        </div>
+                                        <div class="col-md-5 col-sm-5 col-xs-12">
+
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="card" style="margin-top:20px;margin-bottom:50px">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="borderAll whiteBg posRel crdShdw brRadius5 fl width100 marginT10">
-                                        <div class="fl width100 padLR15 padTB10 borderBtm">
-                                            <div class="fl">
-                                                <span class="fl padLR10 padT5 ico18 quicks fb">Additional Services (Bages & Meals)</span>
-                                            </div>
+                            <div class="fl width100 padLR10 greyBg borderBtm marginB5">
+                                <hr />
+                                <div class="padL30 fl width100" style="margin-bottom:5px">
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                            <input type="email" ng-model="emailAddress" class="form-control inputMedium" placeholder="Enter Email Id.">
                                         </div>
-                                        <form id="travellerForm" name="travellerForm" method="POST">
+                                        <div class="col-md-3 col-sm-3 col-xs-12">
+                                            <input type="text" ng-model="mobileNumber" class="form-control inputMedium" maxlength="10" placeholder="Mobile No.">
+                                        </div>
+                                        <div class="col-md-3 col-sm-3 col-xs-12">
+                                            <input type="text" ng-model="altMobileNo" class="form-control inputMedium" maxlength="10" placeholder="Alternative Mobile No.">
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>*@
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card" style="margin-top:20px;margin-bottom:50px">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="borderAll whiteBg posRel crdShdw brRadius5 fl width100 marginT10">
+                                            <div class="fl width100 padLR15 padTB10 borderBtm">
+                                                <div class="fl">
+                                                    <span class="fl padLR10 padT5 ico18 quicks fb">Additional Services (Bages & Meals)</span>
+                                                </div>
+                                            </div>
+
 
                                             <div class="fl width100 padLR20 mobpadLR5 bkTraveller padT10">
                                                 <div class="row" @*ng-hide="isAddtionalServives"*@>
@@ -928,24 +1085,24 @@
                                                 </div>
                                             </div>
                                             <div class="fl width100 borderTop padLR15 padTB10">
-
                                                 <div class="row">
                                                     <div class="col-md-7 col-sm-7 col-xs-12">
                                                         <div class="alert_msg info_msg fl"><b class="status_info fl">Note: </b><span class="status_cont">Please check all the above information carefully before procced.</span></div>
                                                     </div>
                                                     <div class="col-md-2 col-sm-2 col-xs-12">
-                                                        <button ng-click="holdingFlightRequest()" ng-show="flightDetails[0].HoldAllowed == 'Y'" class="button orange btn-block"><div>Hold Ticket</div></button>
+                                                        <button ng-click="holdingFlightRequest(travellerForm.$invalid)"  type="submit" ng-show="flightDetails[0].HoldAllowed == 'Y'" class="button orange btn-block"><div>Hold Ticket</div></button>
                                                     </div>
                                                     <div class="col-md-3 col-sm-3 col-xs-12">
-                                                        <button ng-click="bookFlightRequest()" class="button orange btn-block">Issue Ticket</button>
+                                                        <button ng-click="bookFlightRequest(travellerForm.$invalid)" type="submit" class="button orange btn-block">Issue Ticket</button>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </form>
+                                            @*</form>*@
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </form>
                     </div>
 
                     <div class="col-md-3">
@@ -973,8 +1130,8 @@
                                                 <td class="text-right">{{totalTaxAndCharges}}/-</td>
                                             </tr>
                                             <tr>
-                                                <td>Additional Charges</td>
-                                                <td class="text-right">{{additionalAddedAmount}}/-</td>
+                                                <td>Additional Charges x 2</td>
+                                                <td class="text-right">{{(additionalAddedAmount == 0 ? 0 : (additionalAddedAmount * 2))}}/-</td>
                                             </tr>
                                             <tr>
                                                 <td>Processing Charges</td>
@@ -1034,6 +1191,26 @@
         </div>
     </div>
 </div>
+<script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function () {
+        'use strict';
+        window.addEventListener('load', function () {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+</script>
 
 <script>
     $(document).ready(function () {

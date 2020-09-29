@@ -1,0 +1,103 @@
+﻿
+@{
+    ViewBag.Title = "EasepaySuccess";
+    //Layout = "~/Areas/Merchant/Views/Shared/_RetailerLayout.cshtml";
+    Layout = null;
+}
+@*<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>*@
+<script src="http://static.jsbin.com/js/render/edit.js?4.1.8"></script>
+@*<script>jsbinShowEdit && jsbinShowEdit({"static":"http://static.jsbin.com","root":"http://jsbin.com"});</script>*@
+<div style="width:100%">
+    <div style="text-align:center;width:100%">
+        <table>
+            <tr>
+                <td>Recharge Status</td>
+                <td>@ViewBag.messagevalue</td>
+            </tr>
+            <tr>
+                <td>Transaction Id</td>
+                <td>@ViewBag.txnid</td>
+            </tr>
+            <tr>
+                <td>Transaction Amount</td>
+                <td>@ViewBag.txnAmt</td>
+            </tr>
+            <tr>
+                <td>Transaction Ref No</td>
+                <td>@ViewBag.easepayid</td>
+            </tr>
+            <tr>
+                <td colspan="1"><a href="@Url.Action("Index","MerchantDashboard", new {area="Merchant" })" class="btn btn-primary">Back to dashboard</a></td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<script>
+(function (global) {
+
+	if(typeof (global) === "undefined")
+	{
+		throw new Error("window is undefined");
+	}
+
+    var _hash = "!";
+    var noBackPlease = function () {
+        global.location.href += "#";
+
+		// making sure we have the fruit available for juice....
+		// 50 milliseconds for just once do not cost much (^__^)
+        global.setTimeout(function () {
+            global.location.href += "!";
+        }, 50);
+    };
+
+	// Earlier we had setInerval here....
+    global.onhashchange = function () {
+        if (global.location.hash !== _hash) {
+            global.location.hash = _hash;
+        }
+    };
+
+    global.onload = function () {
+
+		noBackPlease();
+
+		// disables backspace on page except on input fields and textarea..
+		document.body.onkeydown = function (e) {
+            var elm = e.target.nodeName.toLowerCase();
+            if (e.which === 8 && (elm !== 'input' && elm  !== 'textarea')) {
+                e.preventDefault();
+            }
+            // stopping event bubbling up the DOM tree..
+            e.stopPropagation();
+        };
+
+    };
+
+})(window);
+</script>
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-1656750-34', 'auto');
+ga('require', 'linkid', 'linkid.js');
+ga('require', 'displayfeatures');
+ga('send', 'pageview');
+
+</script>
+@*<h4></h4><br />
+    <h4>@ViewBag.TXnStatus</h4><br />
+    <h4>@ViewBag.txnid</h4><br />
+    <h4>@ViewBag.txnAmt</h4><br />   *@
+@*<h4>@ViewBag.iewBegCheckError</h4><br />
+<h4> MEM Id:-  @ViewBag.MEMID</h4>
+<h4>@ViewBag.AountVAl</h4>*@
+
+

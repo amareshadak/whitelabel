@@ -4,7 +4,7 @@
     $scope.childsCount = 0;
     $scope.infantsCount = 0;
     $scope.tripType = '1';
-    $scope.getAirport = function (val) {
+    $scope.getAirport = function (val) {        
         return $http.get('/Merchant/MerchantFlightBooking/GetAllAirports', {
             params: {
                 req: val,

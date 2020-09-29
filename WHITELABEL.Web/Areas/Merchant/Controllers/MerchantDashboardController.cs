@@ -98,6 +98,14 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
             if (Session["MerchantUserId"] != null)
             {
                 initpage();
+                if (Session["PaymentGatewayAmount"] != null)
+                {
+                    string Amount = Session["PaymentGatewayAmount"].ToString();
+                    string UpdateAccount = AccountBalance(Amount);
+                }
+                else {
+                    Session["PaymentGatewayAmount"] = null;
+                }
 
                 //if ((TempData["EaseBuzzResponse"]) != null)
                 //{
@@ -277,6 +285,110 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
             {
                 return Json("please try again later", JsonRequestBehavior.AllowGet);
                 throw ex;
+            }
+        }
+
+
+        public string AccountBalance(string Amount)
+        {
+            var db = new DBContext();
+            decimal Baln = 0;
+            decimal OpenningBal = 0;
+            decimal ColsingBal = 0;
+            decimal MainBaln = 0;
+            decimal AddmainBal = 0;
+            decimal TransactionAmt = 0;
+            decimal.TryParse(Amount, out TransactionAmt);
+            long MEM_IDVAue = 0;            
+
+            string COrelationID = Settings.GetUniqueKey(CurrentMerchant.MEM_ID.ToString());
+            using (System.Data.Entity.DbContextTransaction ContextTransaction = db.Database.BeginTransaction())
+            {
+                try
+                {
+                    var whiteleveluser = db.TBL_MASTER_MEMBER.Where(x => x.MEM_ID == CurrentMerchant.MEM_ID).FirstOrDefault();
+                    var accountdetails = db.TBL_ACCOUNTS.Where(X => X.MEM_ID == CurrentMerchant.MEM_ID).OrderByDescending(z => z.ACC_NO).FirstOrDefault();
+                    if (accountdetails != null)
+                    {
+                        Baln = TransactionAmt;
+                        OpenningBal = accountdetails.CLOSING;
+                        ColsingBal = OpenningBal + Baln;
+                        decimal.TryParse(whiteleveluser.BALANCE.ToString(), out MainBaln);
+                        AddmainBal = MainBaln + Baln;
+                        TBL_ACCOUNTS objmer = new TBL_ACCOUNTS()
+                        {
+                            API_ID = 0,
+                            MEM_ID = CurrentMerchant.MEM_ID,
+                            MEMBER_TYPE = "MERCHANT",
+                            //TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
+                            TRANSACTION_TYPE = "Merchant Wallet Recharge",
+                            TRANSACTION_DATE = DateTime.Now,
+                            TRANSACTION_TIME = DateTime.Now,
+                            DR_CR = "CR",
+                            //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
+                            AMOUNT = Baln,
+                            NARRATION = "Merchant Wallet Recharge",
+                            OPENING = OpenningBal,
+                            CLOSING = ColsingBal,
+                            REC_NO = 0,
+                            COMM_AMT = 0,
+                            TDS = 0,
+                            GST = 0,
+                            IPAddress = "",
+                            SERVICE_ID = 0,
+                            CORELATIONID = COrelationID
+                        };
+                        db.TBL_ACCOUNTS.Add(objmer);
+                        whiteleveluser.BALANCE = AddmainBal;
+                        db.Entry(whiteleveluser).State = System.Data.Entity.EntityState.Modified;
+                        db.SaveChanges();
+                        ContextTransaction.Commit();
+                        return "true";
+                    }
+                    else
+                    {
+                        Baln = TransactionAmt;
+                        OpenningBal = 0;
+                        ColsingBal = OpenningBal + Baln;
+                        decimal.TryParse(whiteleveluser.BALANCE.ToString(), out MainBaln);
+                        AddmainBal = MainBaln + Baln;
+                        TBL_ACCOUNTS objmer = new TBL_ACCOUNTS()
+                        {
+                            API_ID = 0,
+                            MEM_ID = CurrentMerchant.MEM_ID,
+                            MEMBER_TYPE = "MERCHANT",
+                            //TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
+                            TRANSACTION_TYPE = "Merchant Wallet Recharge",
+                            TRANSACTION_DATE = DateTime.Now,
+                            TRANSACTION_TIME = DateTime.Now,
+                            DR_CR = "CR",
+                            //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
+                            AMOUNT = Baln,
+                            NARRATION = "Merchant Wallet Recharge",
+                            OPENING = OpenningBal,
+                            CLOSING = ColsingBal,
+                            REC_NO = 0,
+                            COMM_AMT = 0,
+                            TDS = 0,
+                            GST = 0,
+                            IPAddress = "",
+                            SERVICE_ID = 0,
+                            CORELATIONID = COrelationID
+                        };
+                        db.TBL_ACCOUNTS.Add(objmer);
+                        whiteleveluser.BALANCE = AddmainBal;
+                        db.Entry(whiteleveluser).State = System.Data.Entity.EntityState.Modified;
+                        db.SaveChanges();
+                        ContextTransaction.Commit();
+                        return "true";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ContextTransaction.Rollback();
+                    throw;
+                    return "false";
+                }
             }
         }
     }

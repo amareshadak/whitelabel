@@ -327,6 +327,7 @@
     <Compile Include="Areas\Merchant\Controllers\MerchantOutletController.cs" />
     <Compile Include="Areas\Merchant\Controllers\MerchantOutletRegistrationController.cs" />
     <Compile Include="Areas\Merchant\Controllers\MerchantPasswordChangeController.cs" />
+    <Compile Include="Areas\Merchant\Controllers\MerchantPaymentgatewayController.cs" />
     <Compile Include="Areas\Merchant\Controllers\MerchantProfileUpdateController.cs" />
     <Compile Include="Areas\Merchant\Controllers\MerchantRailApplicationController.cs" />
     <Compile Include="Areas\Merchant\Controllers\MerchantRailUtilityApplicationController.cs" />
@@ -2327,6 +2328,7 @@
     <Content Include="Areas\Merchant\Views\MerchantRequisition\EasepaySuccess.cshtml" />
     <Content Include="Areas\Merchant\Views\MerchantRequisition\EasepayFailure.cshtml" />
     <Content Include="Areas\Admin\Views\MemberAPILabel\EditMerchant.cshtml" />
+    <Content Include="Areas\Merchant\Views\MerchantPaymentgateway\EasepaySuccess.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\dirPagination.js" />

@@ -481,11 +481,12 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
             {
                 var db = new DBContext();
                 //var airportlist = db.TBL_AIRPORT_DETAILS.Where(x => x.CITYNAME.Contains(pretext)).ToList();
-                var airportlist = db.TBL_AIRPORT_DETAILS.Where(x=> x.CITYCODE.ToLower().Contains(req.ToLower()) || x.CITYNAME.ToLower().Contains(req.ToLower())).Select(z => new
+                var airportlist = db.TBL_AIRPORT_DETAILS.Where(x=> x.CITYCODE.ToLower().StartsWith(req.ToLower()) || x.CITYNAME.ToLower().StartsWith(req.ToLower())).Select(z => new
                 {
                     ID = z.ID,
                     CITYCODE = z.CITYCODE,
-                    CITYNAME = z.CITYNAME + " " + z.CITYCODE,
+                    //CITYNAME = z.CITYNAME + " " + z.CITYCODE,
+                    CITYNAME = z.CITYNAME + " " + z.CITYCODE +" ("+(z.AIRPORT_TYPE== "domestic"?"INDIA": "International")+")",
                     COUNTRYCODE = z.COUNTRYCODE,
                     AIRPORT_TYPE = z.AIRPORT_TYPE,
                     ISACTIVE = z.ISACTIVE

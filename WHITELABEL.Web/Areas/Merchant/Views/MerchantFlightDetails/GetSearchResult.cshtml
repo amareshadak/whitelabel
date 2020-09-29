@@ -937,7 +937,7 @@
                                                                    name="amountRb{{$parent.$index}}"
                                                                    id="amountRb{{$index}}{{$parent.$index}}"
                                                                    value="option1"
-                                                                   ng-click="setDeptureSameFareFlight(fare.TrackNo,fare.FlightNo,$parent.$index)"
+                                                                   ng-click="setSameFareFlight(fare.TrackNo,fare.FlightNo,$parent.$index)"
                                                                    ng-checked="{{flight[0] == fare}}" />
                                                             <label class="form-check-label"
                                                                    for="amountRb{{$index}}{{$parent.$index}}">
@@ -948,7 +948,7 @@
                                                     <div class="col-4 p-1 text-center">
                                                         <span style="font-size: larger; font-weight: bold;text-decoration:{{ displayNetAmount ? 'line-through ' : 'node' }}" class="ml-4">र {{getFloatNumber(flight[0].TotalAmount) + additionalAddedAmount}}</span>
                                                         <br />
-                                                        <span ng-show="displayNetAmount" style=" font-size: larger; font-weight: bold;" class="ml-4">र {{getNetFare(flight[0].SrNo) + additionalAddedAmount}}</span>
+                                                        <span ng-show="displayNetAmount" style="font-size: larger; font-weight: bold;" class="ml-4">र {{getNetFare(flight[0].SrNo)}}</span>
 
                                                         <input type="button" data-cy="bookBtn" value="BOOK" class="button fr fltbook fb widthF105 fb quicks"
                                                                ng-click="getFlightDetails(AdultCount,ChildCount,InfantCount,flight[0].TrackNo,TripMode)" />

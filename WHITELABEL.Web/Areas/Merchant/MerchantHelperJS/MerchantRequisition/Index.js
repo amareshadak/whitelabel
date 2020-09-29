@@ -54,7 +54,7 @@ function DisplayButton() {
 
     var DistributorchkYes = document.getElementById("checkRequisitionTypeDist");
     var WhitelabelchkYes = document.getElementById("checkRequisitionTypeAdmin");
-
+    var Paymentgatewaycheckdiv = document.getElementById("RechargewithPaymentGatewway");
     var MemberType = "";
     if (document.getElementById("checkRequisitionTypeDist").checked) {
         MemberType = "Distributor";
@@ -67,12 +67,20 @@ function DisplayButton() {
     if (DistributorchkYes.checked) {
         $('#div_DIstributor').show();
         $('#div_WhiteLabel').hide();
+        $('#Paymentgateway').hide();
+        $('#checkbyRequisition').show();
         GetBankListAccordnigtoSelect(MemberType);
     }
     else if (WhitelabelchkYes.checked) {
         $('#div_DIstributor').hide();
         $('#div_WhiteLabel').show();
+        $('#Paymentgateway').hide();
+        $('#checkbyRequisition').show();
         GetBankListAccordnigtoSelect(MemberType);
+    }
+    else if (Paymentgatewaycheckdiv.checked) {
+        $('#checkbyRequisition').hide();
+        $('#Paymentgateway').show();
     }
     else {
 
@@ -80,6 +88,44 @@ function DisplayButton() {
 
 }
 
+function PAymentGatewaydiv() {
+    debugger;
+    var DistributorchkYes = document.getElementById("checkRequisitionTypeDist");
+    var WhitelabelchkYes = document.getElementById("checkRequisitionTypeAdmin");
+    var Paymentgatewaycheckdiv = document.getElementById("RechargewithPaymentGatewway");
+    var MemberType = "";
+    if (document.getElementById("checkRequisitionTypeDist").checked) {
+        MemberType = "Distributor";
+
+    }
+    if (document.getElementById("checkRequisitionTypeAdmin").checked) {
+        MemberType = "Admin";
+        //GetBankListAccordnigtoSelect(MemberType);
+    }
+    if (Paymentgatewaycheckdiv.checked) {
+        $('#checkbyRequisition').hide();
+        $('#Paymentgateway').show();
+    }
+    else if (DistributorchkYes.checked) {
+        $('#div_DIstributor').show();
+        $('#div_WhiteLabel').hide();
+        $('#Paymentgateway').hide();
+        $('#checkbyRequisition').show();
+        GetBankListAccordnigtoSelect(MemberType);
+    }
+    else if (WhitelabelchkYes.checked) {
+        $('#div_DIstributor').hide();
+        $('#div_WhiteLabel').show();
+        $('#Paymentgateway').hide();
+        $('#checkbyRequisition').show();
+        GetBankListAccordnigtoSelect(MemberType);
+    }
+
+    else {
+        $('#Paymentgateway').hide();
+        $('#checkbyRequisition').show();
+    }
+}
 
 
 function GetBankListAccordnigtoSelect(GetIntroducer) {

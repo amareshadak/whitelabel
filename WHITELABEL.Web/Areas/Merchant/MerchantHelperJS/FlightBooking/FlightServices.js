@@ -61,6 +61,16 @@
             method: "POST",
             data: data,
             url: "/Merchant/MerchantFlightDetails/FlightBookingRequest"
+            
+        });
+        return request;
+    }
+    this.getFlightReturnBookeServices = function (data) {
+        var request = $http({
+            method: "POST",
+            data: data,
+            
+            url: "/Merchant/MerchantFlightDetails/FlightReturnBookingRequest"
         });
         return request;
     }

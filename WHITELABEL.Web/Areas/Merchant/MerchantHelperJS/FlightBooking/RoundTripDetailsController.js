@@ -114,6 +114,7 @@
     $scope.TotalAmount = 0;
     $scope.totalAmount = 0;
 
+
     $scope.setTotalFare = function () {
         if ($scope.deptureFareDetails && $scope.returnFareDetails) {
             $scope.totalBaseFare =
@@ -126,28 +127,78 @@
 
 
             $scope.totalTaxAndCharges =
-                parseFloat($scope.deptureFareDetails.AdultTax)
-                + parseFloat($scope.deptureFareDetails.ChildTax)
-                + parseFloat($scope.deptureFareDetails.InfantTax)
+                parseFloat($scope.deptureFareDetails.AdultTax) +
+                parseFloat($scope.deptureFareDetails.ChildTax) +
+                parseFloat($scope.deptureFareDetails.InfantTax) +
+                parseFloat($scope.deptureFareDetails.AdultFuelCharges) +
+                parseFloat($scope.deptureFareDetails.ChildFuelCharges) +
+                parseFloat($scope.deptureFareDetails.InfantFuelCharges) +
+                parseFloat($scope.deptureFareDetails.AdultPassengerServiceFee) +
+                parseFloat($scope.deptureFareDetails.ChildPassengerServiceFee) +
+                parseFloat($scope.deptureFareDetails.InfantPassengerServiceFee) +
+                parseFloat($scope.deptureFareDetails.AdultTransactionFee) +
+                parseFloat($scope.deptureFareDetails.ChildTransactionFee) +
+                parseFloat($scope.deptureFareDetails.InfantTransactionFee) +
+                parseFloat($scope.deptureFareDetails.AdultServiceCharges) +
+                parseFloat($scope.deptureFareDetails.ChildServiceCharges) +
+                parseFloat($scope.deptureFareDetails.InfantServiceCharges) +
+                parseFloat($scope.deptureFareDetails.AdultAirportTax) +
+                parseFloat($scope.deptureFareDetails.ChildAirportTax) +
+                parseFloat($scope.deptureFareDetails.InfantAirportTax) +
+                parseFloat($scope.deptureFareDetails.AdultAirportDevelopmentFee) +
+                parseFloat($scope.deptureFareDetails.AdultCuteFee) +
+                parseFloat($scope.deptureFareDetails.AdultConvenienceFee) +
+                parseFloat($scope.deptureFareDetails.AdultSkyCafeMeals) +
+                parseFloat($scope.deptureFareDetails.ChildAirportDevelopmentFee) +
+                parseFloat($scope.deptureFareDetails.ChildCuteFee) +
+                parseFloat($scope.deptureFareDetails.ChildConvenienceFee) +
+                parseFloat($scope.deptureFareDetails.ChildSkyCafeMeals) +
+                parseFloat($scope.deptureFareDetails.InfantAirportDevelopmentFee) +
+                parseFloat($scope.deptureFareDetails.InfantCuteFee) +
+                parseFloat($scope.deptureFareDetails.InfantConvenienceFee) +
+                parseFloat($scope.deptureFareDetails.InfantSkyCafeMeals) +
+                parseFloat($scope.returnFareDetails.AdultTax) +
+                parseFloat($scope.returnFareDetails.ChildTax) +
+                parseFloat($scope.returnFareDetails.InfantTax) +
+                parseFloat($scope.returnFareDetails.AdultFuelCharges) +
+                parseFloat($scope.returnFareDetails.ChildFuelCharges) +
+                parseFloat($scope.returnFareDetails.InfantFuelCharges) +
+                parseFloat($scope.returnFareDetails.AdultPassengerServiceFee) +
+                parseFloat($scope.returnFareDetails.ChildPassengerServiceFee) +
+                parseFloat($scope.returnFareDetails.InfantPassengerServiceFee) +
+                parseFloat($scope.returnFareDetails.AdultTransactionFee) +
+                parseFloat($scope.returnFareDetails.ChildTransactionFee) +
+                parseFloat($scope.returnFareDetails.InfantTransactionFee) +
+                parseFloat($scope.returnFareDetails.AdultServiceCharges) +
+                parseFloat($scope.returnFareDetails.ChildServiceCharges) +
+                parseFloat($scope.returnFareDetails.InfantServiceCharges) +
+                parseFloat($scope.returnFareDetails.AdultAirportTax) +
+                parseFloat($scope.returnFareDetails.ChildAirportTax) +
+                parseFloat($scope.returnFareDetails.InfantAirportTax) +
+                parseFloat($scope.returnFareDetails.AdultAirportDevelopmentFee) +
+                parseFloat($scope.returnFareDetails.AdultCuteFee) +
+                parseFloat($scope.returnFareDetails.AdultConvenienceFee) +
+                parseFloat($scope.returnFareDetails.AdultSkyCafeMeals) +
+                parseFloat($scope.returnFareDetails.ChildAirportDevelopmentFee) +
+                parseFloat($scope.returnFareDetails.ChildCuteFee) +
+                parseFloat($scope.returnFareDetails.ChildConvenienceFee) +
+                parseFloat($scope.returnFareDetails.ChildSkyCafeMeals) +
+                parseFloat($scope.returnFareDetails.InfantAirportDevelopmentFee) +
+                parseFloat($scope.returnFareDetails.InfantCuteFee) +
+                parseFloat($scope.returnFareDetails.InfantConvenienceFee) +
+                parseFloat($scope.returnFareDetails.InfantSkyCafeMeals);
 
-                + parseFloat($scope.returnFareDetails.AdultTax)
-                + parseFloat($scope.returnFareDetails.ChildTax)
-                + parseFloat($scope.returnFareDetails.InfantTax)
 
-                + parseFloat($scope.deptureFareDetails.AdultCuteFee)
-                + parseFloat($scope.deptureFareDetails.ChildCuteFee)
-                + parseFloat($scope.deptureFareDetails.InfantCuteFee)
 
-                + parseFloat($scope.returnFareDetails.AdultCuteFee)
-                + parseFloat($scope.returnFareDetails.ChildCuteFee)
-                + parseFloat($scope.returnFareDetails.InfantCuteFee);
 
-            $scope.totalAmount = $scope.totalBaseFare + $scope.totalTaxAndCharges + $scope.additionalAddedAmount;
+            $scope.totalAmount = $scope.totalBaseFare + $scope.totalTaxAndCharges;
         }
     }
-    
+
+
 
     $scope.loadFlightDetails = function (trackNo, tripMode) {
+        //debugger;
         const track = trackNo.split(',');
         const outBound = track[0];
         const inBound = track[1];
@@ -159,7 +210,7 @@
         const data = { outBoundTrackNo: outBound, inBoundTrackNo: inBound, TripMode: tripMode };
         const service = FlightServices.getRoundTripFlightVerificationDetails(data);
         service.then(function (response) {
-
+            //debugger;
             const data = response.data;
             const outBoundFlight = JSON.parse(data.outBoundData).VerifyFlightDetailResponse.FlightDetails;
             const inBoundFlight = JSON.parse(data.inBoundData).VerifyFlightDetailResponse.FlightDetails;
@@ -171,17 +222,17 @@
             $scope.deptureFlight = outBoundFlight;// flightDetails.filter(x => x.SrNo.charAt(x.SrNo.length - 1) === 'O');
             $scope.returnFlight = inBoundFlight;// flightDetails.filter(x => x.SrNo.charAt(x.SrNo.length - 1) === 'R');
 
-            // debugger;
+             debugger;
 
             const fareDetails = JSON.parse(data.outBoundData).VerifyFlightDetailResponse.FareDetails;
             $scope.deptureFareDetails = JSON.parse(data.outBoundData).VerifyFlightDetailResponse.FareDetails[0];
             $scope.returnFareDetails = JSON.parse(data.inBoundData).VerifyFlightDetailResponse.FareDetails[0];
             $scope.setTotalFare();
-
+            //debugger;
             $scope.TotalAmount = parseFloat($scope.deptureFareDetails.TotalAmount) + parseFloat($scope.returnFareDetails.TotalAmount);
-            // $scope.flightDetails = flightDetails;
-            // $scope.fareDetails = fareDetails;
-            $scope.detailsLoadingError = verifyFlightDetailResponse.Error;
+            //// $scope.flightDetails = flightDetails;
+            //// $scope.fareDetails = fareDetails;
+            //$scope.detailsLoadingError = verifyFlightDetailResponse.Error;
             $scope.trackNumber = $scope.deptureFlight[0].TrackNo + ',' + $scope.returnFlight[0].TrackNo;
 
 
@@ -197,7 +248,7 @@
     $scope.outBoundSegment = [];
     $scope.inBoundSegment = [];
 
-    $scope.loadSegment = function () {
+    $scope.loadSegment = function () {        
         let SegmentSeqNo = 1;
         angular.forEach($scope.returnFlight, function (value, key) {
             let data = {
@@ -324,20 +375,52 @@
         return hours + " hr " + minutes + " m";
     }
 
-    $scope.bookFlightRequest = function () {
+    $scope.bookFlightRequest = function (isFormInvalid) {
+        debugger;
+        if (isFormInvalid) {
+            return false;
+        }
+        let OutSegmentValue = $scope.inBoundSegment;
+        let inSegmentValue = $scope.outBoundSegment;
+        let DeptFareVal = $scope.deptureFareDetails;
+        let DeptDeatil = $scope.deptureFlight;
+        let outBoundObj = angular.copy($scope.bookingRequestObj);
+        outBoundObj.RequestXml.BookTicketRequest.TrackNo = DeptDeatil[0].TrackNo;
+        outBoundObj.RequestXml.BookTicketRequest.MobileNo = $scope.mobileNumber;
+        outBoundObj.RequestXml.BookTicketRequest.AltMobileNo = $scope.altMobileNo;
+        outBoundObj.RequestXml.BookTicketRequest.Email = $scope.emailAddress;
+        outBoundObj.RequestXml.BookTicketRequest.Email = $scope.emailAddress;
+        outBoundObj.RequestXml.BookTicketRequest.Passengers.Passenger = $scope.passengers;
+        outBoundObj.RequestXml.BookTicketRequest.Segments.Segment = OutSegmentValue;
+        outBoundObj.RequestXml.BookTicketRequest.AdditionalServices.AdditionalService = $scope.additionaServices.filter(function (x) { return x.IsSelected; });
+        outBoundObj.RequestXml.BookTicketRequest.TotalAmount = DeptFareVal.TotalAmount;
+        const DeptTotalFareAmt=DeptFareVal.TotalAmount;
+        let InboundFareDetails = $scope.returnFareDetails;
+        let InboundFlightDeatil = $scope.returnFlight;
+        let InBoundObj = angular.copy($scope.bookingRequestObj);
+        InBoundObj.RequestXml.BookTicketRequest.TrackNo = InboundFlightDeatil[0].TrackNo;
+        InBoundObj.RequestXml.BookTicketRequest.MobileNo = $scope.mobileNumber;
+        InBoundObj.RequestXml.BookTicketRequest.AltMobileNo = $scope.altMobileNo;
+        InBoundObj.RequestXml.BookTicketRequest.Email = $scope.emailAddress;
+        InBoundObj.RequestXml.BookTicketRequest.Email = $scope.emailAddress;
+        InBoundObj.RequestXml.BookTicketRequest.Passengers.Passenger = $scope.passengers;
+        InBoundObj.RequestXml.BookTicketRequest.Segments.Segment = inSegmentValue;
+        InBoundObj.RequestXml.BookTicketRequest.AdditionalServices.AdditionalService = $scope.additionaServices.filter(function (x) { return x.IsSelected; });
+        InBoundObj.RequestXml.BookTicketRequest.TotalAmount = InboundFareDetails.TotalAmount;
+        const ReturnTotalFareAmt=InboundFareDetails.TotalAmount;
 
-        $scope.bookingRequestObj.RequestXml.BookTicketRequest.TrackNo = $scope.trackNumber;
-        $scope.bookingRequestObj.RequestXml.BookTicketRequest.MobileNo = $scope.mobileNumber;
-        $scope.bookingRequestObj.RequestXml.BookTicketRequest.AltMobileNo = $scope.altMobileNo;
-        $scope.bookingRequestObj.RequestXml.BookTicketRequest.Email = $scope.emailAddress;
-        $scope.bookingRequestObj.RequestXml.BookTicketRequest.Passengers.Passenger = $scope.passengers;
-        $scope.bookingRequestObj.RequestXml.BookTicketRequest.Segments.Segment = $scope.segments;
-        $scope.bookingRequestObj.RequestXml.BookTicketRequest.AdditionalServices.AdditionalService = $scope.additionaServices.filter(function (x) { return x.IsSelected; });
-        $scope.bookingRequestObj.RequestXml.BookTicketRequest.TotalAmount = $scope.TotalAmount;
+        //$scope.bookingRequestObj.RequestXml.BookTicketRequest.TrackNo = $scope.trackNumber;
+        //$scope.bookingRequestObj.RequestXml.BookTicketRequest.MobileNo = $scope.mobileNumber;
+        //$scope.bookingRequestObj.RequestXml.BookTicketRequest.AltMobileNo = $scope.altMobileNo;
+        //$scope.bookingRequestObj.RequestXml.BookTicketRequest.Email = $scope.emailAddress;
+        //$scope.bookingRequestObj.RequestXml.BookTicketRequest.Passengers.Passenger = $scope.passengers;
+        //$scope.bookingRequestObj.RequestXml.BookTicketRequest.Segments.Segment = $scope.segments;
+        //$scope.bookingRequestObj.RequestXml.BookTicketRequest.AdditionalServices.AdditionalService = $scope.additionaServices.filter(function (x) { return x.IsSelected; });
+        //$scope.bookingRequestObj.RequestXml.BookTicketRequest.TotalAmount = $scope.TotalAmount;
 
 
-        const req = { req: JSON.stringify($scope.bookingRequestObj), userMarkup: $scope.userMarkup, FlightAmt: $scope.TotalAmount, TripMode: 'R', deptSegment: JSON.stringify($scope.deptureFlight), returnSegment: JSON.stringify($scope.returnFlight) };
-        const service = FlightServices.getFlightBookeServices(req);
+        const req = { Deptreq: JSON.stringify(outBoundObj), Retntreq: JSON.stringify(InBoundObj), userMarkup: $scope.userMarkup, FlightAmt: DeptTotalFareAmt, ReturnFlightAmt: ReturnTotalFareAmt, TripMode: 'R', deptSegment: JSON.stringify($scope.deptureFlight), returnSegment: JSON.stringify($scope.returnFlight) };
+        const service = FlightServices.getFlightReturnBookeServices(req);
 
         service.then(function (response) {
             try {
@@ -380,7 +463,11 @@
     };
 
 
-    $scope.holdingFlightRequest = function () {
+    $scope.holdingFlightRequest = function (isFormInvalid) {
+
+        if (isFormInvalid) {
+            return false;
+        }
 
         $scope.bookingRequestObj.RequestXml.BookTicketRequest.TrackNo = $scope.trackNumber;
         $scope.bookingRequestObj.RequestXml.BookTicketRequest.MobileNo = $scope.mobileNumber;
@@ -449,7 +536,7 @@
 
     $scope.totalAmountCalculation = function (amount) {
         if (amount) {
-            return parseFloat(amount) + $scope.additionalAddedAmount + parseFloat($scope.userMarkup);
+            return parseFloat(amount) + ($scope.additionalAddedAmount == 0 ? 0 : ($scope.additionalAddedAmount * 2)) + parseFloat($scope.userMarkup);
         }
         return 0;
     }

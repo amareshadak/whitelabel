@@ -9,6 +9,7 @@
 <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
 <script src="~/Areas/Merchant/MerchantHelperJS/FlightBooking/app.js"></script>
 <script src="~/Areas/Merchant/MerchantHelperJS/FlightBooking/AirportAutocomplete.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <div class="content" style="margin-top:20px;">
     <div class="display-animation" ng-app="AirportAutocompleteoduleApp" ng-controller="AirportAutocompleteController" id="AirportAutocompleteController">
         <div class="full-content margin-bottom-40 bg-white" id="Bill_page">
@@ -35,26 +36,36 @@
                                     <div class="col-4 ">
                                         <div class="form-group">
                                             <label>From</label>
-                                            <div angucomplete-alt id="txtAutocomplete" placeholder="Type airport name" pause="100"
+                                            <input type="text" ng-model="fromAirportDetails" placeholder="From" uib-typeahead="items as items.CITYNAME for items in getAirport($viewValue)" typeahead-loading="fromLoadingAirport" typeahead-no-results="fromNoResults" class="form-control">
+                                            <i ng-show="fromLoadingAirport" class="glyphicon glyphicon-refresh"></i>
+                                            <div ng-show="fromNoResults" class="text-danger">
+                                                <i class="glyphicon glyphicon-remove"></i> No Results Found
+                                            </div>
+                                            @*<div angucomplete-alt id="txtAutocomplete" placeholder="Type airport name" pause="100"
                                                  selected-object="SelectedAirport" local-data="Airports" search-fields="CITYNAME" ng-model="Airport.AirportsName"
-                                                 title-field="CITYNAME" minlength="3" input-class="form-control" match-class="highlight">
+                                                 title-field="CITYNAME" minlength="1" input-class="form-control" match-class="highlight">
                                             </div>
                                             <input type="hidden" id="AirportCode" ng-model="SelectedAirport.CITYCODE" />
                                             <div ng-hide="SelectedAirport" ng-cloak>
                                                 {{SelectedAirport.CITYCODE}}
-                                            </div>
+                                            </div>*@
                                         </div>
                                     </div>
                                     <div class="col-4">
                                         <div class="form-group">
                                             <label>To</label>
-                                            <div angucomplete-alt id="txtTOAutocomplete" placeholder="Type airport name" pause="100"
+                                            <input type="text" ng-model="toAirportDetails" placeholder="Destination" uib-typeahead="items as items.CITYNAME for items in getAirport($viewValue)" typeahead-loading="toLoadingAirport" typeahead-no-results="toNoResults" class="form-control">
+                                            <i ng-show="toLoadingAirport" class="glyphicon glyphicon-refresh"></i>
+                                            <div ng-show="toNoResults" class="text-danger">
+                                                <i class="glyphicon glyphicon-remove"></i> No Results Found
+                                            </div>
+                                            @*<div angucomplete-alt id="txtTOAutocomplete" placeholder="Type airport name" pause="100"
                                                  selected-object="ToAirportName" local-data="Airports" search-fields="CITYNAME" ng-model="Airport.ToAirportsName"
                                                  title-field="CITYNAME" minlength="3" input-class="form-control" match-class="highlight">
                                             </div>
                                             <div ng-hide="ToAirportName" ng-cloak>
                                                 {{ToAirportName.CITYCODE}}
-                                            </div>
+                                            </div>*@
                                         </div>
                                     </div>
                                 </div>
@@ -135,11 +146,17 @@
                                 </div>
                                 <div class="row justify-content-md-center">
                                     <div class="col-8 text-center">
+                                        <button type="submit" class="btn btn-danger btn-lg" ng-disabled="!fromAirportDetails
+                                                        || !toAirportDetails
+                                                        || (Airport.Tripmode == '2' && !ToDate)
+                                                        || !FromDate">
+                                            Search Flight
+                                        </button>
                                         @*<button type="submit" class="btn btn-danger btn-lg">Search Flight</button>*@
-                                        <button type="submit" class="btn btn-danger btn-lg"  ng-disabled="!SelectedAirport.CITYCODE
+                                        @*<button type="submit" class="btn btn-danger btn-lg"  ng-disabled="!SelectedAirport.CITYCODE
                                                         || !ToAirportName.CITYCODE
                                                         || (Airport.Tripmode == '2' && !ToDate)
-                                                        || !FromDate">Search Flight</button>
+                                                        || !FromDate">Search Flight</button>*@
                                     </div>
                                 </div>
                             </div>

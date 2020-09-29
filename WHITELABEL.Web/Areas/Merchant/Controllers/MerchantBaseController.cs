@@ -13,6 +13,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
     public class MerchantBaseController : Controller
     {
         public string getSession = null;
+        //public string getSession;
         public TBL_MASTER_MEMBER CurrentMerchant
         {
             get
@@ -23,6 +24,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                 }
                 var UserId = (long)Session["MerchantUserId"];
                 Session["MerchantId"] = UserId;
+                //getSession = null;
                 getSession = UserId.ToString();
 
                 var db = new DBContext();

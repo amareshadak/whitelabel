@@ -89,42 +89,57 @@ app.controller('AirportAutocompleteController', function ($scope, $http, $window
         };
     $scope.formdisplay = true;
     $scope.airlineList = new Array();
-    //event fires when click on textbox  From AirportName
-    $scope.SelectedAirport = function (selected) {        
-        if (selected) {
-            $scope.SelectedAirport = selected.originalObject;            
-            //alert($scope.SelectedAirport);
-        }
-    }
-    // To airport Name
-    $scope.ToAirportName = function (selected) {
-        if (selected) {            
-            $scope.ToAirportName = selected.originalObject;
-            //alert($scope.ToAirportName);
-        }
-    }
-    //Gets data from the Database
-    $http({
-        method: 'GET',
-        url: '/MerchantFlightDetails/GetAllAirportName'
-    }).then(function (data) {
-        $scope.Airports = data.data;
-    }, function () {
-        // alert('Error');
-    })
+
+    $scope.tripType = '1';
+    $scope.getAirport = function (val) {
+        return $http.get('/Merchant/MerchantFlightBooking/GetAllAirports', {
+            params: {
+                req: val,
+            }
+        }).then(function (response) {
+            return response.data;
+        });
+    };
+
+    ////event fires when click on textbox  From AirportName
+    //$scope.SelectedAirport = function (selected) {        
+    //    if (selected) {            
+    //        $scope.SelectedAirport = selected.originalObject;            
+    //        //alert($scope.SelectedAirport);
+    //    }
+    //}
+    //// To airport Name
+    //$scope.ToAirportName = function (selected) {
+    //    if (selected) {            
+    //        $scope.ToAirportName = selected.originalObject;
+    //        //alert($scope.ToAirportName);
+    //    }
+    //}
+    ////Gets data from the Database
+    //$http({
+    //    method: 'GET',
+    //    url: '/MerchantFlightDetails/GetAllAirportName'
+    //}).then(function (data) {
+    //    $scope.Airports = data.data;
+    //}, function () {
+    //    // alert('Error');
+    //})
     //Airport.TravellType
     $scope.Airport = { Tripmode : 1 };
-    $scope.SerachFlights = function () {
-        debugger;
+    $scope.SerachFlights = function () {        
         var Tripmode = $scope.Airport.Tripmode;
         if (Tripmode != '3') {
             var date_to = "";
             $scope.formdisplay = true;
             var From_DAte = $scope.FromDate;
-            var FromAirportsName = $scope.SelectedAirport.CITYNAME;
-            var FromCityCode = $scope.SelectedAirport.CITYCODE;
-            var TOAirportName = $scope.ToAirportName.CITYNAME;
-            var TOAirportCode = $scope.ToAirportName.CITYCODE;
+            //var FromAirportsName = $scope.SelectedAirport.CITYNAME;
+            //var FromCityCode = $scope.SelectedAirport.CITYCODE;
+            //var TOAirportName = $scope.ToAirportName.CITYNAME;
+            //var TOAirportCode = $scope.ToAirportName.CITYCODE;
+            var FromAirportsName = $scope.fromAirportDetails.CITYNAME;
+            var FromCityCode = $scope.fromAirportDetails.CITYCODE;
+            var TOAirportName = $scope.toAirportDetails.CITYNAME;
+            var TOAirportCode = $scope.toAirportDetails.CITYCODE;
 
             var FromDate = $scope.FromDate;
             if (Tripmode == 1) {
@@ -242,6 +257,19 @@ app.controller('AirportAutocompleteController', function ($scope, $http, $window
         
         
     };
+
+    //// search function to match full text
+    //$scope.localSearch = function (str, Airports) {
+    //    debugger;
+    //    var matches = [];
+    //    Airports.forEach(function (item) {
+    //        var CITYNAME = item.CITYNAME;
+    //        if ((item.CITYNAME.toLowerCase().indexOf(str.toString().toLowerCase()) >= 0)) {
+    //            matches.push(item);
+    //        }
+    //    });
+    //    return matches;
+    //};
 
     $scope.LoadFlightSearch = function (Tripmode, FromCityCode, TOAirportCode, FromDate, ToDate, TravelType, Adult, Child, Infant) {
         debugger;

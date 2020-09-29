@@ -12,25 +12,23 @@
         public long SLN { get; set; }
         public long TO_MEMBER { get; set; }
         public long FROM_MEMBER { get; set; }
-        
+
         [Required]
-        ////[Display(Name = "REQUEST DATE")]
-        //[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        //[DataType(DataType.Date)]
-        ////[Range(typeof(DateTime), "1/1/1966", "1/1/2020")]
+        //[Display(Name = "REQUEST DATE")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [DataType(DataType.Date)]        
         public DateTime REQUEST_DATE { get; set; }
         public DateTime REQUEST_TIME { get; set; }
         [Required]
         [Display(Name = "Amount")]
-        [Range(typeof(Decimal), "0", "9999999999", ErrorMessage = "{0} must be a decimal/number between {1} and {2}.")]
-        //[RegularExpression(@"^\d*(\.\d{1,4})?$", ErrorMessage = "Enter Valid Amount")]           
+        [Range(typeof(Decimal), "0", "9999999999", ErrorMessage = "{0} must be a decimal/number between {1} and {2}.")]                  
         public decimal AMOUNT { get; set; }
-        
+
         [Display(Name = "Bank Account")]
         [Required]
         public string BANK_ACCOUNT { get; set; }
         [Required]
-        [Display(Name = "Payment Method")]        
+        [Display(Name = "Payment Method")]
         public string PAYMENT_METHOD { get; set; }
         public string TRANSACTION_DETAILS { get; set; }
         public string STATUS { get; set; }
@@ -48,9 +46,9 @@
         public string REMARKS { get; set; }
         public string TransactionID { get; set; }
         [Range(typeof(Decimal), "0", "99999", ErrorMessage = "{0} must be a decimal/number between {1} and {2}.")]
-        public decimal BANK_CHARGES { get; set; }
+        public decimal? BANK_CHARGES { get; set; }
         [Required]
-        [Display(Name = "Reference")]       
+        [Display(Name = "Reference")]
         public string REFERENCE_NO { get; set; }  
         public long INSERTED_BY { get; set; }
         public string PAYMENT_TXN_DETAILS { get; set; }
@@ -82,5 +80,7 @@
         public string CompanyName { get; set; }
         [NotMapped]
         public bool checkboxBilldesk { get; set; }
+        [NotMapped]
+        public string rechargeWalletAmount { get; set; }
     }
 }

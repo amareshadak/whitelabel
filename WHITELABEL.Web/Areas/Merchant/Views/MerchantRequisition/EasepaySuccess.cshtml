@@ -1,13 +1,16 @@
 ﻿
 @{
     ViewBag.Title = "EasepaySuccess";
-    Layout = "~/Areas/Merchant/Views/Shared/_RetailerLayout.cshtml";
+    //Layout = "~/Areas/Merchant/Views/Shared/_RetailerLayout.cshtml";
+    Layout = null;
 }
 
 <h4>@ViewBag.messagevalue</h4><br />
 <h4>@ViewBag.TXnStatus</h4><br />
 <h4>@ViewBag.txnid</h4><br />
 <h4>@ViewBag.txnAmt</h4><br />
-
+<h4>@ViewBag.iewBegCheckError</h4><br />
+<h4> MEM Id:-  @ViewBag.MEMID</h4>
+<h4>@ViewBag.AountVAl</h4>
 
 <a href="@Url.Action("Index","MerchantDashboard", new {area="Merchant" })" class="btn btn-primary" >Back to dashboard</a>

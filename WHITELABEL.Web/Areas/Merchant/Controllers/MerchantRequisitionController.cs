@@ -540,6 +540,59 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
         }
 
         [HttpPost]
+        public async Task<ActionResult> PaymentgatewayRechargewallet(TBL_BALANCE_TRANSFER_LOGS objval)
+        {
+            initpage();
+            if (Session["MerchantUserId"] != null)
+            {
+                var db = new DBContext();
+                string COrelationID = Settings.GetUniqueKey(CurrentMerchant.MEM_ID.ToString());
+                string amount = objval.AMOUNT.ToString();
+                //string UpdateAccount = AccountBalance(amount);
+                string salt = System.Configuration.ConfigurationSettings.AppSettings["EaseBuzzSaltKey"];
+                string Key = System.Configuration.ConfigurationSettings.AppSettings["EaseBuzzKey"];
+                string env = System.Configuration.ConfigurationSettings.AppSettings["EaseBuzzEnviroment"];
+                //string salt = "4NGY1NYJJP";
+                // string Key = "W8A3NHRAWY";
+                //string env = "test";
+                var memberinfo = db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == CurrentMerchant.MEM_ID);
+                //Session["MerchantUserId"] = memberinfo.MEM_ID;
+                //Session["MerchantPassword"] = memberinfo.SECURITY_PIN_MD5;
+                string firstname = memberinfo.MEMBER_NAME.Trim();
+                string email = memberinfo.EMAIL_ID.Trim();
+                string phone = memberinfo.MEMBER_MOBILE.Trim();
+                string productinfo = "Easebuzz payment integration text";
+                //string surl = "http://b2b.boomtravels.com/Merchant/MerchantRequisition/EasepaySuccess";
+                //string furl = "http://b2b.boomtravels.com/Merchant/MerchantRequisition/EasepaySuccess";
+                string surl = "http://localhost:56049/Merchant/MerchantPaymentgateway/EasepaySuccess";
+                string furl = "http://localhost:56049/Merchant/MerchantPaymentgateway/EasepaySuccess";
+                string Txnid = COrelationID.Trim();
+                string UDF1 = memberinfo.MEM_ID.ToString();
+                string UDF2 = memberinfo.User_pwd.ToString();
+                string UDF3 = "";
+                string UDF4 = "";
+                string UDF5 = "";
+                string Show_payment_mode = "";
+                Easebuzz t = new Easebuzz(salt, Key, env);
+                string strForm = t.initiatePaymentAPI(amount, firstname, email, phone, productinfo, surl, furl, Txnid, UDF1, UDF2, UDF3, UDF4, UDF5, Show_payment_mode);
+                return Content(strForm, System.Net.Mime.MediaTypeNames.Text.Html);
+            }
+            else
+            {
+                Session["MerchantUserId"] = null;
+                Session["MerchantUserName"] = null;
+                Session["UserType"] = null;
+                Session.Remove("MerchantUserId");
+                Session.Remove("MerchantUserName");
+                Session.Remove("UserType");
+                return RedirectToAction("Index", "Login", new { area = "" });
+            }
+
+
+            
+        }
+
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<JsonResult> CheckReferenceNo(string referenceno)
         {
@@ -701,15 +754,24 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                     order_id = Request.Form["txnid"];
                     //Response.Write("value matched");
                     if (Request.Form["status"] == "success")
-                    {
+                    {   
                         //Response.Write(Request.Form);
                         ViewBag.messagevalue = Request.Form;
                         //string Responseval = ViewBag.messagevalue;
                         ViewBag.TXnStatus = Request.Form["status"];
                         ViewBag.txnid = Request.Form["txnid"];
                         ViewBag.txnAmt =Request.Form["amount"];
+                        decimal TranAmount = Convert.ToDecimal(Request.Form["amount"]);
+                        string ValueCheck = Request.Form["amount"].ToString();
+                        ViewBag.iewBegCheckError = ValueCheck;
+                        ViewBag.MEMID = Session["MerchantUserId"];
+                        //initpage();
+                        Session["PaymentGatewayAmount"] = ValueCheck;
+                        string MEMID = Session["MerchantUserId"].ToString();
+                        string MEM_Pass = Session["MerchantPassword"].ToString();
+                        ViewBag.AountVAl = Session["PaymentGatewayAmount"];
                         //return RedirectToAction("Index", "MerchantDashboard", new { area = "Merchant" });
-                        
+
                         //TempData["EaseBuzzResponse"] = ViewBag.messagevalue;
                         //TempData["TXnStatus"] = ViewBag.TXnStatus;
                         //TempData["txnid"] = ViewBag.txnid;
@@ -721,8 +783,9 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                         //Session["UserType"] = "Merchant";
                         //Session["CreditLimitAmt"] = MerchantGetMember.CREDIT_LIMIT.ToString().Replace(".00", "").Trim();
                         //Session["ReservedCreditLimitAmt"] = MerchantGetMember.RESERVED_CREDIT_LIMIT.ToString().ToString().Replace(".00", "").Trim();
-                        //string TsnAMt = Request.Form["amount"].ToString();
-                        //string UpdateAccount= AccountBalance(TsnAMt);
+                        //decimal TranAmount = Convert.ToDecimal(Request.Form["amount"]);
+
+                        //string UpdateAccount = AccountBalance(ValueCheck);
                     }
                     else
                     {
@@ -732,15 +795,9 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                         //string Responseval = ViewBag.messagevalue;
                         ViewBag.TXnStatus = Request.Form["status"];
                         ViewBag.txnid = Request.Form["txnid"];
-                        ViewBag.txnAmt = Request.Form["amount"];
-                        //return RedirectToAction("Index", "MerchantDashboard", new { area = "Merchant" });
+                        ViewBag.txnAmt = Request.Form["amount"];                        
                         
-                        //TempData["EaseBuzzResponse"] = ViewBag.messagevalue;
-                        //TempData["TXnStatus"] = ViewBag.TXnStatus;
-                        //TempData["txnid"] = ViewBag.txnid;
-                        //TempData["txnAmt"] = ViewBag.txnAmt;
-                        //Session["MerchantUserId"] = MerchantGetMember.MEM_ID;
-
+                        
                         //Session["MerchantUserName"] = MerchantGetMember.UName;
                         //Session["MerchantCompanyName"] = MerchantGetMember.COMPANY;
                         //Session["UserType"] = "Merchant";
@@ -767,7 +824,10 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
             decimal AddmainBal = 0;
             decimal TransactionAmt = 0;
             decimal.TryParse(Amount,out TransactionAmt);
-            string COrelationID = Settings.GetUniqueKey(CurrentMerchant.MEM_ID.ToString());
+            long MEM_IDVAue = 0;
+            long.TryParse(Session["MerchantUserId"].ToString(),out MEM_IDVAue);
+
+            string COrelationID = Settings.GetUniqueKey(MEM_IDVAue.ToString());
             using (System.Data.Entity.DbContextTransaction ContextTransaction = db.Database.BeginTransaction())
             {
                 try
@@ -780,7 +840,6 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                         OpenningBal = accountdetails.CLOSING;
                         ColsingBal = OpenningBal + Baln;
                         decimal.TryParse(whiteleveluser.BALANCE.ToString(), out MainBaln);
-
                         AddmainBal = MainBaln + Baln;
                         TBL_ACCOUNTS objmer = new TBL_ACCOUNTS()
                         {
@@ -857,8 +916,6 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                     return "false";
                 }
             }
-                
-           
         }
         public ActionResult EasepayFailure()
         {
