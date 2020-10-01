@@ -136,12 +136,12 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 Session.Clear();
                 Session.Remove("WhiteLevelUserId");
                 Session.Remove("WhiteLevelUserName");
-                return RedirectToAction("Index", "login", new { area = "" });
+                return RedirectToAction("AdminLogin", "login", new { area = "" });
             }
             else
             {
                 //return RedirectToAction("Index", "AdminLogin", new { area = "Admin" });
-                return RedirectToAction("Index", "login", new { area = "" });
+                return RedirectToAction("AdminLogin", "login", new { area = "" });
             }
         }
         [AllowAnonymous]

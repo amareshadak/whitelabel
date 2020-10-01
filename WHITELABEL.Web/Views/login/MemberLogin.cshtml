@@ -1,0 +1,710 @@
+﻿@model WHITELABEL.Web.Models.LoginViewModel
+@{
+    ViewBag.Title = "Member Login";
+     Layout = "~/Views/Shared/_newlayout.cshtml";
+}
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+@*<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>*@ 
+   <!--Header start-->
+<header id="header_wrapper">
+    <div class="header_top">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-sm-6">
+                    <p><i class="fa fa-phone"></i> For Support? Call Us: <span><a href="tel:011-41827860">011-41827860</a></span></p>
+                    <p></p>
+                </div>
+                <div class="col-md-6 col-sm-6">
+                    <div class="top_menu">
+                        <ul>
+                            <li><a href="mailto:agentscare@boomtravels.com" target="_blank">agentscare@boomtravels.com</a></li>
+                            <li class="travelite_login_alert"><a href="#">Login</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- popup form Start -->
+    <div class="full_width login_wrapper">
+        <div class="row">
+            <div class="container">
+                <div class="col-lg-5 col-md-5 col-sm-5 col-lg-offset-6 col-md-offset-6 col-sm-offset-6">
+                    <!-- login form start -->
+                    <div class="popup_alert_main travelite_login_form">
+                        <div class="login_heading"> login <span class="close_btn"><i class="fa fa-times"></i></span> </div>
+                        <div class="popup_inner">
+                            <form  action="~/Login/MemberLogin@(ViewBag.ReturnURL==null?"":"?ReturnURL="+ViewBag.ReturnURL)" method="post">
+                                @*@using (Ajax.BeginForm("PostAgentLogin", "Login", new AjaxOptions { OnSuccess = "OnSuccessMemberLogin", OnFailure = "OnFailureMemberLogin", LoadingElementId = "progressMemberLogin" }, new { @id = "AgentLogin" }))
+                                {*@
+                                    @Html.TextBoxFor(m => m.Email, new { @placeholder = "Enter Username", @type = "text", id = "txtloginUsername",@class= "input_login" })
+                                    <span for="psw" style="color:red;"><b>@Html.ValidationMessageFor(model => model.Email)</b></span>
+                                    @Html.PasswordFor(m => m.Password, new { @placeholder = "Enter Password", @type = "password", id = "txtloginPassword", @class = "input_login" })
+                                    <span for="psw" style="color:red;"><b>@Html.ValidationMessageFor(model => model.Password)</b></span>
+                                    @*<input type="email" name="emaillogin" placeholder="Email Id" class="input_login">*@
+                                    @*<input type="password" name="passlogin" placeholder="Password" class="input_login">*@
+                                    @*<input type="checkbox" id="login_check" name="checkbox" class="checkbox_login">
+                                    <label for="login_check" class="remember_me">Remember me</label>*@
+                                    <a href="#" class="forgot_link">Forget password?</a>
+                                    
+                                    <div style="text-align:center; top: 20px; font-size:12px; color:#FF0000;" id="informationMessage">@ViewBag.Message</div>
+                                    <div class="have_an_acnt"></div>
+                                <div class="have_an_acnt">
+                                    <p>Dont have an account? <a href="@Url.Action("MerchantSignUp","Login")">Sign up</a></p>
+                                </div>
+                                @*<div class="or_line"> <span>(OR)</span> </div>*@
+                                <div class="social_links_login">
+                                    <input type="submit" value="Login" id="btnLogin" class="btn btn-danger btn-lg btn-block" />
+                                    @*<ul>                                        
+                                        <li class="facebook_login"><a href="#"><i class="fa fa-facebook"></i>Login with facebook</a></li>
+                                        <li class="gplus_login"><a href="#"><i class="fa fa-google-plus"></i>Login with Google+</a></li>
+                                    </ul>*@
+                                </div>
+                                @*}*@
+
+                            </form>
+                            
+                        </div>
+                    </div>
+                    <!-- login form  End -->
+                    <!-- signup form start -->
+                    <div class="popup_alert_main travelite_signup_form">
+                        <div class="login_heading"> signup <span class="close_btn"><i class="fa fa-times"></i></span> </div>
+                        <div class="popup_inner">
+                            <form class="signup_form">
+                                <input type="text" name="emaillogin" placeholder="First Name" class="input_login">
+                                <input type="text" name="emaillogin" placeholder="Last Name" class="input_login">
+                                <input type="email" name="emaillogin" placeholder="Email Id" class="input_login">
+                                <input type="password" name="passlogin" placeholder="Password" class="input_login">
+                                <input type="password" name="conf passlogin" placeholder="Confirm Password" class="input_login">
+                                <input type="checkbox" id="signup_check" name="checkbox" class="checkbox_login">
+                                <label for="signup_check" class="remember_me">I agree the Terms of Service, Privacy Policy, Guest Refund Policy, and Host Guarantee Terms.</label>
+                                <input type="submit" value="SIGN UP" class="sub_signup">
+                            </form>
+                            <div class="or_line"> <span>(OR)</span> </div>
+                            <div class="social_links_login">
+                                <ul>
+                                    <li class="facebook_login"><a href="#"><i class="fa fa-facebook"></i>Login with facebook</a></li>
+                                    <li class="gplus_login"><a href="#"><i class="fa fa-google-plus"></i>Login with Google+</a></li>
+                                </ul>
+                            </div>
+                            <div class="already_member"> already member? <a href="#">login here</a></div>
+                        </div>
+                    </div>
+                    <!-- signup form  End -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- popup form  End -->
+    <div class="header_bottom">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-2 col-sm-2">
+                    <div class="travel_logo">
+                        <a href="@Url.Action("Index", "Home")"><img src="~/Assets/logo.png" alt="logo" /></a>
+                    </div>
+                </div>
+                <div class="col-md-10 col-sm-10">
+                    <a href="javascript:;" class="menu-toggle"></a>
+                    <div class="main_menu">
+                        <ul>
+                            <li class="active">
+                                <a href="@Url.Action("Index", "Home")">home</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("CommingSoon", "Home")">tours</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("CommingSoon", "Home")">hotels</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("CommingSoon", "Home")">flights</a>
+                            </li>
+                            <li><a href="@Url.Action("CommingSoon", "Home")">cars</a></li>
+                            <li><a href="@Url.Action("CommingSoon", "Home")">special offers</a></li>
+                            <li><a href="@Url.Action("CommingSoon", "Home")">contact</a></li>
+                            <li><a href="@Url.Action("CommingSoon", "Home")">others</a></li>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<!--Header end-->
+<!--content body start-->
+<div id="content_wrapper">
+    <div class="clearfix"></div>
+    <div class="slider_tab_main">
+        <!-- Home first slider start -->
+        <div class="full_width home_slider">
+            <div class="example">
+                <div class="content" style="width:100%; float:left;">
+                    <div id="rev_slider_116_1_wrapper" class="rev_slider_wrapper fullwidthbanner-container" data-alias="layer-animations" style="margin:0px auto;background-color:transparent;padding:0px;margin-top:0px;margin-bottom:0px;">
+                        <!-- START REVOLUTION SLIDER 5.0.7 auto mode -->
+                        <div id="rev_slider_116_1" class="rev_slider fullwidthabanner" style="display:none;" data-version="5.0.7">
+                            <ul style="width:100% !important;" class="home_3_slide">
+                                <!-- SLIDE  -->
+                                <li data-index="rs-391" data-transition="parallaxhorizontal" data-slotamount="default" data-easein="default" data-easeout="default" data-masterspeed="default" data-rotate="0" data-saveperformance="off" data-title="Smooth Mask" data-description="">
+                                    <!-- MAIN IMAGE --><img src="~/Assets/images/Home/Home5/CityScape.jpg" alt="slide2" data-bgposition="center center" data-bgfit="cover" data-bgrepeat="no-repeat" class="rev-slidebg" data-no-retina>
+                                    <!-- LAYERS -->
+                                    <div class="slider_heading_wrap">
+                                        <!-- LAYER NR. 1 -->
+                                        <div class="tp-caption NotGeneric-Title   tp-resizeme" id="slide-391-layer-1" data-x="center" data-hoffset="" data-y="center" data-voffset="-120" data-width="['auto','auto','auto','auto']" data-height="['auto','auto','auto','auto']" data-transform_idle="o:1;" data-transform_in="y:top;s:2000;e:Power4.easeInOut;" data-transform_out="s:1000;e:Power2.easeInOut;s:1000;e:Power2.easeInOut;" data-start="1000" data-splitin="none" data-splitout="none" data-responsive_offset="on">
+                                            <div style="line-height:60px;"> <img src="~/Assets/logo.png" alt="slider logo"> </div>
+                                        </div>
+                                        <!-- LAYER NR. End -->
+                                        <!-- LAYER NR. 2 -->
+                                        <div class="tp-caption NotGeneric-Title   tp-resizeme" id="slide-391-layer-2" data-x="100" data-hoffset="" data-y="center" data-voffset="-160" data-width="['auto','auto','auto','auto']" data-height="['auto','auto','auto','auto']" data-transform_idle="o:1;" data-transform_in="z:0;rX:0;rY:0;rZ:0;sX:0.9;sY:0.9;skX:0;skY:0;opacity:0;s:1000;e:Power2.easeOut;" data-transform_out="s:1000;e:Power3.easeInOut;s:1000;e:Power3.easeInOut;" data-start="3000" data-splitin="none" data-splitout="none" data-responsive_offset="on">
+                                            <div style="line-height:60px;"> <img src="~/Assets/images/Home/Home5/Cloud-big.png" alt="cloud"> </div>
+                                        </div>
+                                        <!-- LAYER NR. End -->
+                                        <!-- LAYER NR. 3-->
+                                        <div class="tp-caption NotGeneric-Title   tp-resizeme" id="slide-391-layer-3" data-x="1070" data-hoffset="" data-y="center" data-voffset="-100" data-width="['auto','auto','auto','auto']" data-height="['auto','auto','auto','auto']" data-transform_idle="o:1;" data-transform_in="z:0;rX:0;rY:0;rZ:0;sX:0.9;sY:0.9;skX:0;skY:0;opacity:0;s:1000;e:Power2.easeOut;" data-transform_out="s:1000;e:Power3.easeInOut;s:1000;e:Power3.easeInOut;" data-start="4000" data-splitin="none" data-splitout="none" data-responsive_offset="on">
+                                            <div style="line-height:60px;"> <img src="~/Assets/images/Home/Home5/Cloud-big.png" alt="Cloud"> </div>
+                                        </div>
+                                        <!-- LAYER NR. End -->
+                                        <!-- LAYER NR. 4-->
+                                        <div class="tp-caption NotGeneric-Title   tp-resizeme" id="slide-391-layer-4" data-x="970" data-hoffset="" data-y="center" data-voffset="-70" data-width="['auto','auto','auto','auto']" data-height="['auto','auto','auto','auto']" data-transform_idle="o:1;" data-transform_in="z:0;rX:0;rY:0;rZ:0;sX:0.9;sY:0.9;skX:0;skY:0;opacity:0;s:1000;e:Power2.easeOut;" data-transform_out="s:1000;e:Power3.easeInOut;s:1000;e:Power3.easeInOut;" data-start="5000" data-splitin="none" data-splitout="none" data-responsive_offset="on">
+                                            <div style="line-height:60px;"> <img src="~/Assets/images/Home/Home5/Cloud-small.png" alt="small cloud"> </div>
+                                        </div>
+                                        <!-- LAYER NR. End -->
+                                    </div>
+                                    <!-- LAYER end -->
+                                </li>
+                                <!--slide-->
+                                <li data-index="rs-392" data-transition="parallaxhorizontal" data-slotamount="default" data-easein="default" data-easeout="default" data-masterspeed="default" data-rotate="0" data-saveperformance="off" data-title="Smooth Mask" data-description="">
+                                    <!-- MAIN IMAGE --><img src="~/Assets/images/Home/Home5/CityScape.jpg" alt="slide2" data-bgposition="center center" data-bgfit="cover" data-bgrepeat="no-repeat" class="rev-slidebg" data-no-retina>
+                                    <!-- LAYERS -->
+                                    <div class="slider_heading_wrap">
+                                        <!-- LAYER NR. 1 -->
+                                        <div class="tp-caption NotGeneric-Title   tp-resizeme" id="slide-392-layer-1" data-x="center" data-hoffset="" data-y="center" data-voffset="-120" data-width="['auto','auto','auto','auto']" data-height="['auto','auto','auto','auto']" data-transform_idle="o:1;" data-transform_in="y:top;s:2000;e:Power4.easeInOut;" data-transform_out="s:1000;e:Power2.easeInOut;s:1000;e:Power2.easeInOut;" data-start="1000" data-splitin="none" data-splitout="none" data-responsive_offset="on">
+                                            <div style="line-height:60px;"> <img src="~/Assets/logo.png" alt="slider logo"> </div>
+                                        </div>
+                                        <!-- LAYER NR. End -->
+                                        <!-- LAYER NR. 2 -->
+                                        <div class="tp-caption NotGeneric-Title   tp-resizeme" id="slide-392-layer-2" data-x="100" data-hoffset="" data-y="center" data-voffset="-160" data-width="['auto','auto','auto','auto']" data-height="['auto','auto','auto','auto']" data-transform_idle="o:1;" data-transform_in="z:0;rX:0;rY:0;rZ:0;sX:0.9;sY:0.9;skX:0;skY:0;opacity:0;s:1000;e:Power2.easeOut;" data-transform_out="s:1000;e:Power3.easeInOut;s:1000;e:Power3.easeInOut;" data-start="3000" data-splitin="none" data-splitout="none" data-responsive_offset="on">
+                                            <div style="line-height:60px;"> <img src="~/Assets/images/Home/Home5/Cloud-big.png" alt="cloud"> </div>
+                                        </div>
+                                        <!-- LAYER NR. End -->
+                                        <!-- LAYER NR. 3-->
+                                        <div class="tp-caption NotGeneric-Title   tp-resizeme" id="slide-392-layer-3" data-x="1070" data-hoffset="" data-y="center" data-voffset="-100" data-width="['auto','auto','auto','auto']" data-height="['auto','auto','auto','auto']" data-transform_idle="o:1;" data-transform_in="z:0;rX:0;rY:0;rZ:0;sX:0.9;sY:0.9;skX:0;skY:0;opacity:0;s:1000;e:Power2.easeOut;" data-transform_out="s:1000;e:Power3.easeInOut;s:1000;e:Power3.easeInOut;" data-start="4000" data-splitin="none" data-splitout="none" data-responsive_offset="on">
+                                            <div style="line-height:60px;"> <img src="~/Assets/images/Home/Home5/Cloud-big.png" alt="Cloud"> </div>
+                                        </div>
+                                        <!-- LAYER NR. End -->
+                                        <!-- LAYER NR. 4-->
+                                        <div class="tp-caption NotGeneric-Title   tp-resizeme" id="slide-392-layer-4" data-x="970" data-hoffset="" data-y="center" data-voffset="-70" data-width="['auto','auto','auto','auto']" data-height="['auto','auto','auto','auto']" data-transform_idle="o:1;" data-transform_in="z:0;rX:0;rY:0;rZ:0;sX:0.9;sY:0.9;skX:0;skY:0;opacity:0;s:1000;e:Power2.easeOut;" data-transform_out="s:1000;e:Power3.easeInOut;s:1000;e:Power3.easeInOut;" data-start="5000" data-splitin="none" data-splitout="none" data-responsive_offset="on">
+                                            <div style="line-height:60px;"> <img src="~/Assets/images/Home/Home5/Cloud-small.png" alt="small cloud"> </div>
+                                        </div>
+                                        <!-- LAYER NR. End -->
+                                    </div>
+                                    <!-- LAYER end -->
+                                </li>
+                                <!-- SLIDE  -->
+                                <li data-index="rs-393" data-transition="parallaxhorizontal" data-slotamount="default" data-easein="default" data-easeout="default" data-masterspeed="default" data-rotate="0" data-saveperformance="off" data-title="Smooth Mask" data-description="">
+                                    <!-- MAIN IMAGE --><img src="~/Assets/images/Home/Home5/CityScape.jpg" alt="slide2" data-bgposition="center center" data-bgfit="cover" data-bgrepeat="no-repeat" class="rev-slidebg" data-no-retina>
+                                    <!-- LAYERS -->
+                                    <div class="slider_heading_wrap">
+                                        <!-- LAYER NR. 1 -->
+                                        <div class="tp-caption NotGeneric-Title   tp-resizeme" id="slide-393-layer-1" data-x="center" data-hoffset="" data-y="center" data-voffset="-120" data-width="['auto','auto','auto','auto']" data-height="['auto','auto','auto','auto']" data-transform_idle="o:1;" data-transform_in="y:top;s:2000;e:Power4.easeInOut;" data-transform_out="s:1000;e:Power2.easeInOut;s:1000;e:Power2.easeInOut;" data-start="1000" data-splitin="none" data-splitout="none" data-responsive_offset="on">
+                                            <div style="line-height:60px;"> <img src="~/Assets/logo.png" alt="slider logo"> </div>
+                                        </div>
+                                        <!-- LAYER NR. End -->
+                                        <!-- LAYER NR. 2 -->
+                                        <div class="tp-caption NotGeneric-Title   tp-resizeme" id="slide-393-layer-2" data-x="100" data-hoffset="" data-y="center" data-voffset="-160" data-width="['auto','auto','auto','auto']" data-height="['auto','auto','auto','auto']" data-transform_idle="o:1;" data-transform_in="z:0;rX:0;rY:0;rZ:0;sX:0.9;sY:0.9;skX:0;skY:0;opacity:0;s:1000;e:Power2.easeOut;" data-transform_out="s:1000;e:Power3.easeInOut;s:1000;e:Power3.easeInOut;" data-start="3000" data-splitin="none" data-splitout="none" data-responsive_offset="on">
+                                            <div style="line-height:60px;"> <img src="~/Assets/images/Home/Home5/Cloud-big.png" alt="cloud"> </div>
+                                        </div>
+                                        <!-- LAYER NR. End -->
+                                        <!-- LAYER NR. 3-->
+                                        <div class="tp-caption NotGeneric-Title   tp-resizeme" id="slide-393-layer-3" data-x="1070" data-hoffset="" data-y="center" data-voffset="-100" data-width="['auto','auto','auto','auto']" data-height="['auto','auto','auto','auto']" data-transform_idle="o:1;" data-transform_in="z:0;rX:0;rY:0;rZ:0;sX:0.9;sY:0.9;skX:0;skY:0;opacity:0;s:1000;e:Power2.easeOut;" data-transform_out="s:1000;e:Power3.easeInOut;s:1000;e:Power3.easeInOut;" data-start="4000" data-splitin="none" data-splitout="none" data-responsive_offset="on">
+                                            <div style="line-height:60px;"> <img src="~/Assets/images/Home/Home5/Cloud-big.png" alt="Cloud"> </div>
+                                        </div>
+                                        <!-- LAYER NR. End -->
+                                        <!-- LAYER NR. 4-->
+                                        <div class="tp-caption NotGeneric-Title   tp-resizeme" id="slide-393-layer-4" data-x="970" data-hoffset="" data-y="center" data-voffset="-70" data-width="['auto','auto','auto','auto']" data-height="['auto','auto','auto','auto']" data-transform_idle="o:1;" data-transform_in="z:0;rX:0;rY:0;rZ:0;sX:0.9;sY:0.9;skX:0;skY:0;opacity:0;s:1000;e:Power2.easeOut;" data-transform_out="s:1000;e:Power3.easeInOut;s:1000;e:Power3.easeInOut;" data-start="5000" data-splitin="none" data-splitout="none" data-responsive_offset="on">
+                                            <div style="line-height:60px;"> <img src="~/Assets/images/Home/Home5/Cloud-small.png" alt="small cloud"> </div>
+                                        </div>
+                                        <!-- LAYER NR. End -->
+                                    </div>
+                                    <!-- LAYER end -->
+                                </li>
+                                <!-- SLIDE  -->
+                                <li data-index="rs-394" data-transition="parallaxhorizontal" data-slotamount="default" data-easein="default" data-easeout="default" data-masterspeed="default" data-rotate="0" data-saveperformance="off" data-title="Smooth Mask" data-description="">
+                                    <!-- MAIN IMAGE --><img src="~/Assets/images/Home/Home5/CityScape.jpg" alt="slide2" data-bgposition="center center" data-bgfit="cover" data-bgrepeat="no-repeat" class="rev-slidebg" data-no-retina>
+                                    <!-- LAYERS -->
+                                    <div class="slider_heading_wrap">
+                                        <!-- LAYER NR. 1 -->
+                                        <div class="tp-caption NotGeneric-Title   tp-resizeme" id="slide-394-layer-1" data-x="center" data-hoffset="" data-y="center" data-voffset="-120" data-width="['auto','auto','auto','auto']" data-height="['auto','auto','auto','auto']" data-transform_idle="o:1;" data-transform_in="y:top;s:2000;e:Power4.easeInOut;" data-transform_out="s:1000;e:Power2.easeInOut;s:1000;e:Power2.easeInOut;" data-start="1000" data-splitin="none" data-splitout="none" data-responsive_offset="on">
+                                            <div style="line-height:60px;"> <img src="~/Assets/logo.png" alt="slider logo"> </div>
+                                        </div>
+                                        <!-- LAYER NR. End -->
+                                        <!-- LAYER NR. 2 -->
+                                        <div class="tp-caption NotGeneric-Title   tp-resizeme" id="slide-394-layer-2" data-x="100" data-hoffset="" data-y="center" data-voffset="-160" data-width="['auto','auto','auto','auto']" data-height="['auto','auto','auto','auto']" data-transform_idle="o:1;" data-transform_in="z:0;rX:0;rY:0;rZ:0;sX:0.9;sY:0.9;skX:0;skY:0;opacity:0;s:1000;e:Power2.easeOut;" data-transform_out="s:1000;e:Power3.easeInOut;s:1000;e:Power3.easeInOut;" data-start="3000" data-splitin="none" data-splitout="none" data-responsive_offset="on">
+                                            <div style="line-height:60px;"> <img src="~/Assets/images/Home/Home5/Cloud-big.png" alt="cloud"> </div>
+                                        </div>
+                                        <!-- LAYER NR. End -->
+                                        <!-- LAYER NR. 3-->
+                                        <div class="tp-caption NotGeneric-Title   tp-resizeme" id="slide-394-layer-3" data-x="1070" data-hoffset="" data-y="center" data-voffset="-100" data-width="['auto','auto','auto','auto']" data-height="['auto','auto','auto','auto']" data-transform_idle="o:1;" data-transform_in="z:0;rX:0;rY:0;rZ:0;sX:0.9;sY:0.9;skX:0;skY:0;opacity:0;s:1000;e:Power2.easeOut;" data-transform_out="s:1000;e:Power3.easeInOut;s:1000;e:Power3.easeInOut;" data-start="4000" data-splitin="none" data-splitout="none" data-responsive_offset="on">
+                                            <div style="line-height:60px;"> <img src="~/Assets/images/Home/Home5/Cloud-big.png" alt="Cloud"> </div>
+                                        </div>
+                                        <!-- LAYER NR. End -->
+                                        <!-- LAYER NR. 4-->
+                                        <div class="tp-caption NotGeneric-Title   tp-resizeme" id="slide-394-layer-4" data-x="970" data-hoffset="" data-y="center" data-voffset="-70" data-width="['auto','auto','auto','auto']" data-height="['auto','auto','auto','auto']" data-transform_idle="o:1;" data-transform_in="z:0;rX:0;rY:0;rZ:0;sX:0.9;sY:0.9;skX:0;skY:0;opacity:0;s:1000;e:Power2.easeOut;" data-transform_out="s:1000;e:Power3.easeInOut;s:1000;e:Power3.easeInOut;" data-start="5000" data-splitin="none" data-splitout="none" data-responsive_offset="on">
+                                            <div style="line-height:60px;"> <img src="~/Assets/images/Home/Home5/Cloud-small.png" alt="small cloud"> </div>
+                                        </div>
+                                        <!-- LAYER NR. End -->
+                                    </div>
+                                    <!-- LAYER end -->
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- END REVOLUTION SLIDER -->
+                </div>
+            </div>
+            <!-- section end -->
+        </div>
+        <!-- slider tab section End -->
+    </div>
+    <!-- slider main wrapper end -->
+    <!-- What we do section start -->
+    <div class="full_width travelite_world_section">
+        <div class="container">
+            <div class="row">
+
+                <div class="heading_team">
+                    <h3>What We Do</h3>
+                    <p>Our latest Services will keep everyone updated</p>
+                </div>
+
+                <div class="full_width rectangle_wrapper">
+                    <!-- first ractangle start -->
+                    <div class="col_25 ractangle_box_cover">
+                        <div class="circle_icon">
+                            <i class="fa fa-soundcloud big_circle"></i>
+                        </div>
+                        <div class="full_width ractangle_inner">
+                            <img src="~/Assets/images/Home/BoatHouse.jpg" alt="house">
+                            <div class="inner_ovelay">
+                                <h4>AEPS</h4>
+                                <p>Aadhaar Enabled Payment System</p>
+                            </div>
+                        </div>
+                        <div class="circle_icon">
+                            <i class="fa fa-arrow-right small_circle"></i>
+                        </div>
+                    </div>
+                    <!-- first ractangle End -->
+                    <!-- second ractangle start -->
+                    <div class="col_25 ractangle_box_cover">
+                        <div class="circle_icon">
+                            <i class="fa fa-home big_circle"></i>
+                        </div>
+                        <div class="full_width ractangle_inner">
+                            <img src="~/Assets/images/Home/BoatHouse.jpg" alt="house">
+                            <div class="inner_ovelay">
+                                <h4>BBPS</h4>
+                                <p>Bharat Bill Payment System</p>
+                            </div>
+                        </div>
+                        <div class="circle_icon">
+                            <a href="#" class="fa fa-arrow-right small_circle"></a>
+                        </div>
+                    </div>
+                    <!-- second ractangle End -->
+                    <!-- thired ractangle start -->
+                    <div class="col_25 ractangle_box_cover">
+                        <div class="circle_icon">
+                            <i class="fa fa-paw big_circle"></i>
+                        </div>
+                        <div class="full_width ractangle_inner">
+                            <img src="~/Assets/images/Home/BoatHouse.jpg" alt="house">
+                            <div class="inner_ovelay">
+                                <h4>DMT </h4>
+                                <p>Domestic Money Transfer</p>
+                            </div>
+                        </div>
+                        <div class="circle_icon">
+                            <a href="#" class="fa fa-arrow-right small_circle"></a>
+                        </div>
+                    </div>
+                    <!-- thired ractangle End -->
+                    <!-- fourth ractangle start -->
+                    <div class="col_25 ractangle_box_cover">
+                        <div class="circle_icon">
+                            <i class="fa fa-birthday-cake big_circle"></i>
+                        </div>
+                        <div class="full_width ractangle_inner">
+                            <img src="~/Assets/images/Home/BoatHouse.jpg" alt="house">
+                            <div class="inner_ovelay">
+                                <h4>RECHARGES </h4>
+                                <p>Online Multi Recharge</p>
+                            </div>
+                        </div>
+                        <div class="circle_icon">
+                            <a href="#" class="fa fa-arrow-right small_circle"></a>
+                        </div>
+                    </div>
+                    <!-- fourth ractangle End -->
+                    <!-- fourth ractangle start -->
+                    <div class="col_25 ractangle_box_cover">
+                        <div class="circle_icon">
+                            <i class="fa fa-pied-piper-alt big_circle"></i>
+                        </div>
+                        <div class="full_width ractangle_inner">
+                            <img src="~/Assets/images/Home/BoatHouse.jpg" alt="house">
+                            <div class="inner_ovelay">
+                                <h4>TOUR & TRAVELS </h4>
+                                <p>Many tours available</p>
+                            </div>
+                        </div>
+                        <div class="circle_icon">
+                            <a href="#" class="fa fa-arrow-right small_circle"></a>
+                        </div>
+                    </div>
+                    <!-- fourth ractangle End -->
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- What we do section end -->
+<!-- feature section start -->
+<div class="full_width travelite_feature_section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-6">
+                <div class="feature_box first_box">
+                    <h3 class="travelite_heading_feature">features</h3>
+                    <p>We have done some great idea. </p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 feature_box_wrapper">
+                <div class="feature_box ">
+                    <div class="feature_box_content">
+                        <i class="fa fa-usd"></i>
+                        <h4 class="feature_title">price guarantee</h4>
+                    </div>
+                    <div class="feature_overlay">
+                        <h4>price guarantee</h4>
+                        <p>There are many variations of passages of Lorem Ipsum available, but the joy have suffered alteration </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 feature_box_wrapper">
+                <div class="feature_box ">
+                    <div class="feature_box_content">
+                        <i class="fa fa-lock"></i>
+                        <h4 class="feature_title">trust & safety</h4>
+                    </div>
+                    <div class="feature_overlay">
+                        <h4>trust & safety</h4>
+                        <p>There are many variations of passages of Lorem Ipsum available, but the joy have suffered alteration </p>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 feature_box_wrapper">
+                <div class="feature_box ">
+                    <div class="feature_box_content">
+                        <i class="fa fa-thumbs-up"></i>
+                        <h4 class="feature_title">good guidance</h4>
+                    </div>
+                    <div class="feature_overlay">
+                        <h4>good guidance</h4>
+                        <p>There are many variations of passages of Lorem Ipsum available, but the joy have suffered alteration </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- feature section end -->
+<!-- icon_circle_secion -->
+<!-- count-down section start -->
+<div class="full_width counter_section">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div class="timer" id="counter1" data-to="1580" data-delay="100" data-speed="3000">1580</div>
+                <div class="chart" data-animated="bounceIn" data-delay="100">
+                    <div class="percentage-light" data-percent="80">
+                        <i class="fa fa-globe"></i>
+                    </div>
+                    <div class="counter_title">Happy Clients</div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div class="timer" id="counter2" data-to="1240" data-delay="100" data-speed="3000">1240</div>
+                <div class="chart" data-animated="bounceIn" data-delay="100">
+                    <div class="percentage_blue" data-percent="90">
+                        <i class="fa fa-plane"></i>
+                    </div>
+                    <div class="counter_title">airlines to travel</div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div class="timer" id="counter3" data-to="3850" data-delay="100" data-speed="3000">3850</div>
+                <div class="chart" data-animated="bounceIn" data-delay="100">
+                    <div class="percentage_red" data-percent="85">
+                        <i class="fa fa-car"></i>
+                    </div>
+                    <div class="counter_title">Distributors</div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div class="timer" id="counter4" data-to="3850" data-delay="100" data-speed="3000">3850</div>
+                <div class="chart" data-animated="bounceIn" data-delay="100">
+                    <div class="percentage_skyblue" data-percent="70">
+                        <i class="fa fa-building-o"></i>
+                    </div>
+                    <div class="counter_title">Vendors</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- count-down section End -->
+<!-- icon_circle_secion -->
+<!-- our feature section start -->
+<div class="full_width our_feature_section">
+    <div class="container">
+        <div class="row row_top">
+            <div class="heading_team">
+                <h3>Why Choose Boom Travels</h3>
+
+            </div>
+            <div class="why_choose_travelite">
+                <div class="col-md-3 col-sm-6">
+                    <div class="best_feature_wrapper">
+                        <div class="best_feature_icon"><i class="fa fa-car"></i><span class="icon_overlay"></span></div>
+                        <h3>Trusted and professional Boom Travels advisors for you</h3>
+                        <p>Create stunning pages with our powerful admin panel. Functionality and usability combine. Travellers Deals</p>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6">
+                    <div class="best_feature_wrapper">
+                        <div class="best_feature_icon"><i class="fa fa-users"></i><span class="icon_overlay"></span></div>
+                        <h3>Offers for Group Booking</h3>
+                        <p>Create stunning pages with our powerful admin panel. Functionality and usability combine. Travellers Deals</p>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6">
+                    <div class="best_feature_wrapper">
+                        <div class="best_feature_icon"><i class="fa fa-headphones"></i><span class="icon_overlay"></span></div>
+                        <h3>24/7 Customer Service</h3>
+                        <p>Create stunning pages with our powerful admin panel. Functionality and usability combine. Travellers Deals</p>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6">
+                    <div class="best_feature_wrapper">
+                        <div class="best_feature_icon"><i class="fa fa-life-ring"></i><span class="icon_overlay"></span></div>
+                        <h3>Promise & Experience to give you a better results</h3>
+                        <p>Create stunning pages with our powerful admin panel. Functionality and usability combine. Travellers Deals</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- our feature section start -->
+<!-- customer says section start -->
+<div class="full_width customer_says_section">
+    <div class="container">
+        <div class="row row_top">
+            <div class="heading_team">
+                <h3>customer says </h3>
+                <p>Create stunning pages with our powerful admin panel. Functionality and usability combine. Travelllers Deals and Offers on Hotels, Vacation Packages, Flights, Cruises and Car Rentals</p>
+            </div>
+            <div class="col-lg-8 col-lg-offset-2">
+                <div class="slick_crousel">
+                    <div class="slick_items">
+                        <img src="~/Assets/images/Home/Home4/crousel_thumb3.jpg" alt="crousel">
+                        <div class="content_bg">
+                            <h4>Sanhita Chaterjee</h4>
+                            <p>Howrah</p>
+                        </div>
+                    </div>
+                    <div class="slick_items">
+                        <img src="~/Assets/images/Home/Home4/crousel_thumb1.jpg" alt="crousel">
+                        <div class="content_bg">
+                            <h4>Supriya Basak</h4>
+                            <p>Burdwan</p>
+                        </div>
+                    </div>
+                    <div class="slick_items">
+                        <img src="~/Assets/images/Home/Home4/crousel_thumb2.jpg" alt="crousel">
+                        <div class="content_bg">
+                            <h4>Apurba Chaterjee</h4>
+                            <p>Uttarpara</p>
+                        </div>
+                    </div>
+                    <div class="slick_items">
+                        <img src="~/Assets/images/Home/Home4/crousel_thumb1.jpg" alt="crousel">
+                        <div class="content_bg">
+                            <h4>Subrata Sil</h4>
+                            <p>Kolkata</p>
+                        </div>
+                    </div>
+                    <div class="slick_items">
+                        <img src="~/Assets/images/Home/Home4/crousel_thumb2.jpg" alt="crousel">
+                        <div class="content_bg">
+                            <h4>Debashis Paul</h4>
+                            <p>Hooghly</p>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="slick_contents">
+                    <p class="cls content_1">
+                        Booking a hotel when you travel does not have to be a costly experience when you book with
+                        Travellers. Have your travel budget last longer and check out these great deals
+                    </p>
+                    <p class="cls content_2">
+                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
+                        been the industry's standard dummy text ever since the 1500s, when an unknown printer
+                    </p>
+                    <p class="cls content_3">
+                        Booking a hotel when you travel does not have to be a costly experience when you book with
+                        Travellers. Have your travel budget last longer and check out these great deals
+                    </p>
+                    <p class="cls content_4">
+                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
+                        been the industry's standard dummy text ever since the 1500s, when an unknown printer
+                    </p>
+                    <p class="cls content_5">
+                        Booking a hotel when you travel does not have to be a costly experience when you book with
+                        Travellers. Have your travel budget last longer and check out these great deals
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- customer says  section end -->
+
+<div class="travel_page_loader hidden" id="progressMemberLogin">
+    <div id="loading"></div>
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        window.setTimeout(function () {
+            $("#informationMessage").fadeOut('slow');
+        }, 2000);
+        $('#progressMemberLogin').removeClass("hidden");
+        $('#progressMemberLogin').hide();
+        //bootbox.alert({
+        //    message: "test",
+        //    size: 'small'
+        //})
+    })
+    function OnSuccessMemberLogin(response) {
+        debugger;
+        const message = response;
+        const message_result = response.Result;
+        const messageRole = response.msgRole;
+        if (messageRole == "0")
+        {
+            bootbox.alert({
+                message: message_result,
+                size: 'large',
+                backdrop: true,
+                callback: function () {
+                    console.log(message);
+                    var url = "/Login/DomainError";
+                    window.location.href = url;
+                }
+            })
+        }
+        else if (messageRole == "1") {
+            var url = "/Admin/WhiteLevelAdmin/Index";
+            window.location.href = url;
+            //bootbox.alert({
+            //    message: message_result,
+            //    size: 'large',
+            //    backdrop: true,
+            //    callback: function () {
+            //        console.log(message);
+            //        var url = "/Admin/WhiteLevelAdmin/Index";
+            //        window.location.href = url;
+            //    }
+            //})
+        }
+        else if (messageRole == "4") {
+            var url = "/Distributor/DistributorDashboard/Index";
+            window.location.href = url;
+            //bootbox.alert({
+            //    message: message_result,
+            //    size: 'large',
+            //    backdrop: true,
+            //    callback: function () {
+            //        console.log(message);
+            //        var url = "/Distributor/DistributorDashboard/Index";
+            //        window.location.href = url;
+            //    }
+            //})
+        }
+        else if (messageRole == "5") {
+            var url = "/Merchant/MerchantDashboard/Index";
+                    window.location.href = url;
+            //bootbox.alert({
+            //    message: message_result,
+            //    size: 'large',
+            //    backdrop: true,
+            //    callback: function () {
+            //        console.log(message);
+            //        var url = "/Merchant/MerchantDashboard/Index";
+            //        window.location.href = url;
+            //    }
+            //})
+        }
+        else if (messageRole == "x") {
+            $("#txtloginUsername").val('');
+            $("#txtloginPassword").val('');
+
+            bootbox.alert({
+                message: message_result,
+                size: 'large',
+                backdrop: true
+            })
+            $("#Index").trigger("reset");
+        }
+        else {
+            $("#txtloginUsername").val('');
+            $("#txtloginPassword").val('');
+            bootbox.alert({
+                message: message_result,
+                className: "bootboxclass",
+                size: 'large',
+                backdrop: true
+            })
+            $("#Index").trigger("reset");
+        }
+
+        //callGeocodeMobile();
+        //alert(message);
+    }
+    function OnFailureMemberLogin(response) {
+        alert("Error occured.");
+    }
+</script>

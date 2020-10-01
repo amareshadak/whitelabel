@@ -98,6 +98,10 @@ namespace WHITELABEL.Web.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
+        }       
+        public ActionResult CommingSoon()
+        {
+            return View();
         }
     }
 }

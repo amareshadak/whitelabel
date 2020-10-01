@@ -7,7 +7,7 @@ namespace WHITELABEL.Web.Models
     {
         //[Required]
         //[EmailAddress(ErrorMessage = "Please enter a valid email address")]
-        [Required(ErrorMessage = "TravelIQ ID is required")]
+        [Required(ErrorMessage = "Boom Travels User ID is required")]
         public string Email { get; set; }
 
         [Required]
