@@ -1074,6 +1074,10 @@
     <Content Include="Content\fonts\slick.svg" />
     <Content Include="Content\Gridmvc.css" />
     <Content Include="Content\MvcGrid\mvc-grid.css" />
+    <Content Include="Content\PriceDatepickerTemplate\datepicker.html" />
+    <Content Include="Content\PriceDatepickerTemplate\day.html" />
+    <Content Include="Content\PriceDatepickerTemplate\month.html" />
+    <Content Include="Content\PriceDatepickerTemplate\year.html" />
     <Content Include="Content\slick-theme.css" />
     <Content Include="Content\slick.css" />
     <Content Include="Content\static-airlines-master\.idea\vcs.xml" />

@@ -4248,6 +4248,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
             }
         }
         #endregion
+
         #region Return Return from
         public string ReturnReturnwayBooking(string req, string Retntreq, string userMarkup, string FlightAmt, string ReturnFlightAmt, string TripMode, string deptSegment = "", string returnSegment = "")
         {
@@ -4788,6 +4789,28 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                     return "Try again later";
                     throw;
                 }
+            }
+        }
+        #endregion
+
+        #region Flight Price Calender
+        public ActionResult GetFlightPriceCalender(string DepartureDate, string ArrivalDate, int TripType, string FromSourceCode, string ToDestinationCode)
+        {
+            try
+            {
+                dynamic fareCalender = MultiLinkAirAPI.FareCalender(
+                    DepartureDate,
+                    ArrivalDate,
+                    TripType,
+                    FromSourceCode,
+                    ToDestinationCode);
+
+                var data = JsonConvert.SerializeObject(fareCalender);
+                return Json(data, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
         #endregion

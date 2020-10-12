@@ -14,6 +14,8 @@
         });
     };
 
+    $scope.newDt = new Date();
+
     $scope.dynamicPopover = {
         content: '',
         templateUrl: 'myPopoverTemplate.html',
@@ -36,6 +38,29 @@
     $scope.openEndDatePicker = function () {
         $scope.endDatePopup.opened = true;
     };
+
+
+    $scope.$watch('startDatePopup.opened', function (oldValue, newValue) {
+        if ($scope.startDatePopup.opened) {
+            $timeout(function () {
+                changeMonth();
+            }, 1000);
+        }
+    });
+
+
+    $scope.$watch('endDatePopup.opened', function (oldValue, newValue) {
+        if ($scope.endDatePopup.opened) {
+            $timeout(function () {
+                changeMonth();
+            }, 1000);
+        }
+    });
+
+   
+
+   
+
     $scope.passengerCount = 1;
     $scope.updatePassenger = function (adultsCount, childsCount, infantsCount) {
         $scope.adultsCount = adultsCount;

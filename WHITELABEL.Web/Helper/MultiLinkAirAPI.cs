@@ -132,6 +132,41 @@ namespace WHITELABEL.Web.Helper
                 return res;
             }
         }
+        #region Flight Price Calender
+        public static dynamic FareCalender(string DepartureDate, string ArrivalDate, int TripType, string FromSourceCode, string ToDestinationCode)
+        {
+            string url = root + "API/FareCalender";
+            dynamic RequestXml_Val = new JObject();
+            dynamic RequestXmlObj = new JObject();
+            dynamic Authenticate_Val = new JObject();
+            Authenticate_Val.InterfaceCode = InterfaceCode;
+            Authenticate_Val.InterfaceAuthKey = token;
+            Authenticate_Val.AgentCode = AgentCode;
+            Authenticate_Val.Password = AgentPass;
+            RequestXml_Val.Authenticate = new JObject(Authenticate_Val);
+            dynamic FlightPriceDetailRequest_Val = new JObject();
+
+            FlightPriceDetailRequest_Val.DepartureDate = DepartureDate;
+            FlightPriceDetailRequest_Val.ArrivalDate = ArrivalDate;
+            FlightPriceDetailRequest_Val.TripType = TripType;
+            FlightPriceDetailRequest_Val.FromSourceCode = FromSourceCode;
+            FlightPriceDetailRequest_Val.ToDestinationCode = ToDestinationCode;
+
+            RequestXml_Val.GetFareCalendarRequest = new JObject(FlightPriceDetailRequest_Val);
+            RequestXmlObj.RequestXml = new JObject(RequestXml_Val);
+            string SearchparamValue = JsonConvert.SerializeObject(RequestXmlObj);
+            var res = GetResponse(SearchparamValue, url);
+            if (res != null)
+            {
+                return res;
+            }
+            else
+            {
+                return res;
+            }
+        }
+        #endregion
+
         public static dynamic GetAdditionalFlightDetails(string req)
         {
             string url = $"{root}API/AdditionalServices";
