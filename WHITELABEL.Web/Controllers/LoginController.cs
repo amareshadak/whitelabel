@@ -122,7 +122,6 @@ namespace WHITELABEL.Web.Controllers
             //{
             using (var db = new DBContext())
             {
-
                 string DomaineName = Request.Url.Host;
                 var logochecking = (from x in db.TBL_MASTER_MEMBER
                                     join y in db.TBL_WHITE_LEVEL_HOSTING_DETAILS
