@@ -816,7 +816,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
 
                                 #region Email Code done by Sayan at 11-10-2020
                                 string name = Merchant_Info.MEMBER_NAME;
-                                string mailbody = "Hi " + Merchant_Info.UName + "(" + Merchant_Info.MEMBER_NAME + ")" + ",<p>Your requisition has been approved of amount " + Trans_Req_Amount + " by distributor (" + Distributor_Info.MEM_UNIQUE_ID + ").</p>"+ "<br /> Regards, <br/>< br />BOOM Travels"; ;
+                                string mailbody = "Hi " + Merchant_Info.UName + "(" + Merchant_Info.MEMBER_NAME + ")" + ",<p>Your requisition has been approved of amount " + Trans_Req_Amount + " by distributor (" + Distributor_Info.MEM_UNIQUE_ID + ").</p>"+ "<br /> Regards, <br/><br/>BOOM Travels"; ;
                                 EmailHelper emailhelper = new EmailHelper();
                                 string msgbody = emailhelper.GetEmailTemplate(name, mailbody, "UserEmailTemplate.html");
                                 emailhelper.SendUserEmail(Merchant_Info.EMAIL_ID.Trim(), "Great! Requisition Approved!", msgbody);
@@ -997,7 +997,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
 
                                         #region Email Code done by Sayan at 11-10-2020
                                         string name = Merchant_Info.MEMBER_NAME;
-                                        string mailbody = "Hi " + Merchant_Info.UName + "(" + Merchant_Info.MEMBER_NAME + ")" + ",<p>Your requisition has been approved of amount " + Trans_Req_Amount + " by distributor (" + Distributor_Info.MEM_UNIQUE_ID + ").</p>"+ "<br /> Regards, <br/>< br />BOOM Travels";
+                                        string mailbody = "Hi " + Merchant_Info.UName + "(" + Merchant_Info.MEMBER_NAME + ")" + ",<p>Your requisition has been approved of amount " + Trans_Req_Amount + " by distributor (" + Distributor_Info.MEM_UNIQUE_ID + ").</p>"+ "<br /> Regards, <br/><br/>BOOM Travels";
                                         EmailHelper emailhelper = new EmailHelper();
                                         string msgbody = emailhelper.GetEmailTemplate(name, mailbody, "UserEmailTemplate.html");
                                         emailhelper.SendUserEmail(Merchant_Info.EMAIL_ID.Trim(), "Great! Requisition Approved!", msgbody);
@@ -1176,7 +1176,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
 
                                     #region Email Code done by Sayan at 11-10-2020
                                     string name = Merchant_Info.MEMBER_NAME;
-                                    string mailbody = "Hi " + Merchant_Info.UName + "(" + Merchant_Info.MEMBER_NAME + ")" + ",<p>Your requisition has been approved of amount " + Trans_Req_Amount + " by distributor (" + Distributor_Info.MEM_UNIQUE_ID + ").</p>"+"<br /> Regards, <br/>< br />BOOM Travels";
+                                    string mailbody = "Hi " + Merchant_Info.UName + "(" + Merchant_Info.MEMBER_NAME + ")" + ",<p>Your requisition has been approved of amount " + Trans_Req_Amount + " by distributor (" + Distributor_Info.MEM_UNIQUE_ID + ").</p>"+"<br /> Regards, <br/><br/>BOOM Travels";
                                     EmailHelper emailhelper = new EmailHelper();
                                     string msgbody = emailhelper.GetEmailTemplate(name, mailbody, "UserEmailTemplate.html");
                                     emailhelper.SendUserEmail(Merchant_Info.EMAIL_ID.Trim(), "Great! Requisition Approved!", msgbody);
@@ -1386,7 +1386,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
 
                                         #region Email Code done by Sayan at 11-10-2020
                                         string name = Merchant_Info.MEMBER_NAME;
-                                        string mailbody = "Hi " + Merchant_Info.UName + "(" + Merchant_Info.MEMBER_NAME + ")" + ",<p>Your requisition has been approved of amount " + Trans_Req_Amount + " by distributor (" + Distributor_Info.MEM_UNIQUE_ID + ").</p>"+ ".<br /> Regards, <br/>< br />BOOM Travels";
+                                        string mailbody = "Hi " + Merchant_Info.UName + "(" + Merchant_Info.MEMBER_NAME + ")" + ",<p>Your requisition has been approved of amount " + Trans_Req_Amount + " by distributor (" + Distributor_Info.MEM_UNIQUE_ID + ").</p>"+ ".<br /> Regards, <br/><br/>BOOM Travels";
                                         EmailHelper emailhelper = new EmailHelper();
                                         string msgbody = emailhelper.GetEmailTemplate(name, mailbody, "UserEmailTemplate.html");
                                         emailhelper.SendUserEmail(Merchant_Info.EMAIL_ID.Trim(), "Great! Requisition Approved!", msgbody);
@@ -1569,7 +1569,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
 
                                     #region Email Code done by Sayan at 11-10-2020
                                     string name = Merchant_Info.MEMBER_NAME;
-                                    string mailbody = "Hi " + Merchant_Info.UName + "(" + Merchant_Info.MEMBER_NAME + ")" + ",<p>Your requisition has been approved of amount " + Trans_Req_Amount + " by distributor (" + Distributor_Info.MEM_UNIQUE_ID + ").</p>"+ ".<br /> Regards, <br/>< br />BOOM Travels";
+                                    string mailbody = "Hi " + Merchant_Info.UName + "(" + Merchant_Info.MEMBER_NAME + ")" + ",<p>Your requisition has been approved of amount " + Trans_Req_Amount + " by distributor (" + Distributor_Info.MEM_UNIQUE_ID + ").</p>"+ ".<br /> Regards, <br/><br/>BOOM Travels";
                                     EmailHelper emailhelper = new EmailHelper();
                                     string msgbody = emailhelper.GetEmailTemplate(name, mailbody, "UserEmailTemplate.html");
                                     emailhelper.SendUserEmail(Merchant_Info.EMAIL_ID.Trim(), "Great! Requisition Approved!", msgbody);
@@ -1746,7 +1746,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
 
                                     #region Email Code done by Sayan at 11-10-2020
                                     string name = Merchant_Info.MEMBER_NAME;
-                                    string mailbody = "Hi " + Merchant_Info.UName + "(" + Merchant_Info.MEMBER_NAME + ")" + ",<p>Your requisition has been approved of amount " + Trans_Req_Amount + " by distributor (" + Distributor_Info.MEM_UNIQUE_ID + ").</p>"+ ".<br /> Regards, <br/>< br />BOOM Travels";
+                                    string mailbody = "Hi " + Merchant_Info.UName + "(" + Merchant_Info.MEMBER_NAME + ")" + ",<p>Your requisition has been approved of amount " + Trans_Req_Amount + " by distributor (" + Distributor_Info.MEM_UNIQUE_ID + ").</p>"+ ".<br /> Regards, <br/><br/>BOOM Travels";
                                     EmailHelper emailhelper = new EmailHelper();
                                     string msgbody = emailhelper.GetEmailTemplate(name, mailbody, "UserEmailTemplate.html");
                                     emailhelper.SendUserEmail(Merchant_Info.EMAIL_ID.Trim(), "Great! Requisition Approved!", msgbody);
@@ -2044,7 +2044,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
 
                     #region Email Code done by Sayan at 11-10-2020
                     string name = memberlist.MEMBER_NAME;
-                    string mailbody = "Hi " + memberlist.UName + "(" + memberlist.MEMBER_NAME + ")" + ",<p>Your requisition has been declined of amount:- "+transinfo.AMOUNT+"</p>"+".<br /> Regards, <br/>< br />BOOM Travels";
+                    string mailbody = "Hi " + memberlist.UName + "(" + memberlist.MEMBER_NAME + ")" + ",<p>Your requisition has been declined of amount:- "+transinfo.AMOUNT+"</p>"+".<br /> Regards, <br/><br/>BOOM Travels";
                     EmailHelper emailhelper = new EmailHelper();
                     string msgbody = emailhelper.GetEmailTemplate(name, mailbody, "UserEmailTemplate.html");
                     emailhelper.SendUserEmail(memberlist.EMAIL_ID.Trim(), "Oops! Requisition Declined", msgbody);

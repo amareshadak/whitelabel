@@ -365,6 +365,18 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                             CORELATIONID = ""
                         };
                         db.TBL_ACCOUNTS.Add(MemberObj);
+                        TBL_FLIGHT_MARKUP objflight = new TBL_FLIGHT_MARKUP()
+                        {
+                            MEM_ID = long.Parse(value.MEM_ID.ToString()),
+                            ASSIGN_BY = 0,
+                            INTERNATIONAL_MARKUP = 0,
+                            DOMESTIC_MARKUP = 0,
+                            ASSIGN_DATE = DateTime.Now,
+                            STATUS = 0,
+                            ASSIGN_TYPE = "MARK UP ASSIGN"
+                        };
+                        db.TBL_FLIGHT_MARKUP.Add(objflight);
+                        
                         await db.SaveChangesAsync();                        
                         ViewBag.savemsg = "Data Saved Successfully";
 

@@ -154,3 +154,59 @@ function FetchPaymentGatewayTnx(Sln_Val) {
         }
     });
 }
+function FetchFlightMarkupTagging(Sln_Val) {
+    $.ajax({
+
+        url: "/MemberFlightMarkupSetting/FetchFlightMarkUpByMember?area=Admin",
+        data: {
+
+            SlnValue: Sln_Val
+        },
+        cache: false,
+        type: "POST",
+        dataType: "json",
+        beforeSend: function () {
+        },
+        success: function (data) {
+            const Res_Data = data.Result;
+            const Res_Status = data.Status;
+            if (Res_Status == "0") {
+                const txtMEMBER_UNIQUE_ID = Res_Data.MEMBER_UNIQUE_ID;
+                const MEMBER_NAME = Res_Data.MEMBER_NAME;
+                const INTERNATIONAL_MARKUP = Res_Data.INTERNATIONAL_MARKUP;
+                const DOMESTIC_MARKUP = Res_Data.DOMESTIC_MARKUP;
+                const ASSIGN_DATE = Res_Data.ASSIGN_DATE;
+                const SLn = Res_Data.SLN;
+                const MEMID = Res_Data.MEM_ID;
+                const MyDate_String_Value = ASSIGN_DATE;
+                const value_Date = new Date
+                            (
+                                 parseInt(MyDate_String_Value.replace(/(^.*\()|([+-].*$)/g, ''))
+                            );
+                var dateTxn = value_Date.getMonth() +
+                                         1 +
+                                       "/" +
+                           value_Date.getDate() +
+                                       "/" +
+                       value_Date.getFullYear();
+                $('#txtMEMBER_UNIQUE_ID').val(txtMEMBER_UNIQUE_ID);
+                $('#txtMEMBER_NAME').val(MEMBER_NAME);
+                $('#txtInternationalMarkup').val(INTERNATIONAL_MARKUP);
+                $('#txtDOMESTIC_MARKUP').val(DOMESTIC_MARKUP);
+                //$('#txtRES_DATE').val(dateTxn);
+                $('#hdn_MemberId').val(SLn);
+                $('#hdn_MEM_ID').val(MEMID);
+            }
+            else {
+                bootbox.alert({
+                    size: "small",
+                    message: Res_Data,
+                    backdrop: true
+                });
+            }
+        },
+        error: function (xhr, status, error) {
+            console.log(status);
+        }
+    });
+}

@@ -9,7 +9,7 @@ app.controller('AirportAutocompleteController', function ($scope, $http, $window
     $scope.selectedAirlines = new Array();
     $scope.airlines = new Array();
 
-    
+    $scope.newDt = new Date();
     $scope.startDatePopup = {
         opened: false
     };

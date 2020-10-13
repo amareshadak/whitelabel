@@ -1,0 +1,42 @@
+﻿@using NonFactors.Mvc.Grid;
+@using WHITELABEL.Web.Helper;
+@model IEnumerable<WHITELABEL.Data.Models.TBL_FLIGHT_MARKUP>
+
+@{
+    ViewBag.Title = "IndexGrid";
+    Layout = null;
+}
+@(Html
+                                    .Grid(Model)
+                                    .Build(columns =>
+                                    {
+                                        columns.Add(model => model.Serial_No).Titled("Sln").Filterable(true).Sortable(true);
+                                        columns.Add(model => model.MEMBER_UNIQUE_ID).Titled("Mem ID").Filterable(true).Sortable(true);
+                                        columns.Add(model => model.MEMBER_NAME).Titled("Member Name").Filterable(true).Sortable(true);
+                                        columns.Add(model => model.MEMBER_EMAIL).Titled("Email").Filterable(true).Sortable(true);
+                                        columns.Add(model => model.MEMBER_COMPANY).Titled("Company").Filterable(true).Sortable(true);
+                                        columns.Add(model => model.MEMBER_MOBILE).Titled("Mobile").Filterable(true).Sortable(true);
+                                        columns.Add(model => model.MEMBER_ADDRESS).Titled("Address").Filterable(true).Sortable(true);
+                                        columns.Add(model => model.INTERNATIONAL_MARKUP).Titled("Internation MarkUp").Filterable(true).Sortable(true);
+                                        columns.Add(model => model.DOMESTIC_MARKUP).Titled("Domestic MarkUp").Filterable(true).Sortable(true);
+                                        columns.Add(model => model.SLN).Titled("Process TXN").Encoded(false).Filterable(false).Sortable(false)
+                     .RenderedAs(model => "<a class='btn btn-primary btn-xs' style='color:white;' data-toggle='modal' data-target='.FlightMarkupTagg' id='ProcessFlightMarkupTagging' data-id='" + model.SLN + "' onclick='FetchFlightMarkupTagging(" + model.SLN + ");'>Tag MarkUp</a>");
+                                    })
+                                    .Css("css-classes")
+                                    .AppendCss("table table-striped")
+                                    .Empty("No data found")
+                                    .Id("my-ajax-grid")
+                                    .Pageable(pager =>
+                                    {
+                                        pager.PagesToDisplay = 5;
+                                        pager.RowsPerPage = 5;
+                                    })
+                                    .Filterable()
+                                    .Sortable()
+)
+
+<style>
+    .RowColorchange {
+        background-color: sandybrown;
+    }
+</style>

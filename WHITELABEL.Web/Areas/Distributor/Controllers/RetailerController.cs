@@ -390,13 +390,24 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                             CORELATIONID = ""
                         };
                         db.TBL_ACCOUNTS.Add(MemberObj);
+                        TBL_FLIGHT_MARKUP objflight = new TBL_FLIGHT_MARKUP()
+                        {
+                            MEM_ID = long.Parse(value.MEM_ID.ToString()),
+                            ASSIGN_BY = 0,
+                            INTERNATIONAL_MARKUP = 0,
+                            DOMESTIC_MARKUP = 0,
+                            ASSIGN_DATE = DateTime.Now,
+                            STATUS = 0,
+                            ASSIGN_TYPE = "MARK UP ASSIGN"
+                        };
+                        db.TBL_FLIGHT_MARKUP.Add(objflight);
                         await db.SaveChangesAsync();
                         ViewBag.savemsg = "Data Saved Successfully";
                         Session["msg"] = "Data Saved Successfully";
 
                         #region Email Code done by Sayan at 10-10-2020
                         string name = value.MEMBER_NAME;
-                        string Regmsg = "Hi " + value.MEM_UNIQUE_ID + "(" + value.MEMBER_NAME + ")" + "\r\n Welcome to BOOM Travels.\r\n.Your User Name:- " + UniqId + ".\n\r Your Password:- " + value.User_pwd + ".\r\nRegards\r\nBoom Travels";
+                        string Regmsg = "Hi " + value.MEM_UNIQUE_ID + "(" + value.MEMBER_NAME + ")" + " Welcome to BOOM Travels. Your User Name:- " + UniqId + " Your Password:- " + value.User_pwd + "<br /><br/> Regards, <br/><br/>BOOM Travels";
                         EmailHelper emailhelper = new EmailHelper();
                         string msgbody = emailhelper.GetEmailTemplate(name, Regmsg, "UserEmailTemplate.html");
                         emailhelper.SendUserEmail(value.EMAIL_ID.Trim(), "Welcome to BOOM Travels", msgbody);
@@ -663,16 +674,26 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
             initpage();
             try
             {
-                EmailHelper emailhelper = new EmailHelper();
+                //EmailHelper emailhelper = new EmailHelper();
                 var db = new DBContext();
                 long memId = long.Parse(id);
                 var meminfo = await db.TBL_MASTER_MEMBER.Where(x => x.MEM_ID == memId).FirstOrDefaultAsync();
                 if (meminfo != null)
                 {
                     //string decriptpass = Decrypt.DecryptMe(meminfo.User_pwd);
+                    //string password = meminfo.User_pwd;
+                    //string mailbody = "Hi " + meminfo.UName + ",<p>Your WHITE LABEL LOGIN USER ID:- " + meminfo.EMAIL_ID + " and  PASSWORD IS:- " + password + "</p>";
+                    //emailhelper.SendUserEmail(meminfo.EMAIL_ID, "White Label Password", mailbody);
+
+                    #region Email Code done by sayan at 13-10-2020
+                    string name = meminfo.MEMBER_NAME;
                     string password = meminfo.User_pwd;
-                    string mailbody = "Hi " + meminfo.UName + ",<p>Your WHITE LABEL LOGIN USER ID:- " + meminfo.EMAIL_ID + " and  PASSWORD IS:- " + password + "</p>";
-                    emailhelper.SendUserEmail(meminfo.EMAIL_ID, "White Label Password", mailbody);
+                    string Regmsg = "Hi " + meminfo.UName + "(" + meminfo.MEMBER_NAME + ")" + " Your Distributer has been sent your login credentials. Your Login USER ID:- " + meminfo.EMAIL_ID + " and  PASSWORD is:- " + password + ".<br /><br/> Regards, <br/><br/>Boom Travels.";
+                    EmailHelper emailhelper = new EmailHelper();
+                    string usermsgbody = emailhelper.GetEmailTemplate(name, Regmsg, "UserEmailTemplate.html");
+                    emailhelper.SendUserEmail(meminfo.EMAIL_ID.Trim(), "You Have Received Your Boom Travels User Id & Password!", usermsgbody);
+                    #endregion
+
                 }
                 return Json(new { Result = "true" });
             }

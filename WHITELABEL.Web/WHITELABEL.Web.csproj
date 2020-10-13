@@ -249,6 +249,7 @@
     <Compile Include="Areas\Admin\Controllers\MemberCreditManagmentController.cs" />
     <Compile Include="Areas\Admin\Controllers\MemberDebitCreditRequestController.cs" />
     <Compile Include="Areas\Admin\Controllers\MemberDMRTransactionListController.cs" />
+    <Compile Include="Areas\Admin\Controllers\MemberFlightMarkupSettingController.cs" />
     <Compile Include="Areas\Admin\Controllers\MemberGSTCalculationController.cs" />
     <Compile Include="Areas\Admin\Controllers\MemberHostingController.cs" />
     <Compile Include="Areas\Admin\Controllers\MemberIssueDebitCreditNoteController.cs" />
@@ -1705,6 +1706,7 @@
     <Content Include="EmailTemplate\img\t7_ico_instagram.jpg" />
     <Content Include="EmailTemplate\img\t7_ico_linkedin.jpg" />
     <Content Include="EmailTemplate\img\t7_ico_twitter.jpg" />
+    <Content Include="EmailTemplate\img\Travel.jpeg" />
     <Content Include="EmailTemplate\UserEmailTemplate.html" />
     <Content Include="favicon.ico" />
     <Content Include="flight_p3.html" />
@@ -2849,6 +2851,8 @@
     <Content Include="Assets\js\plugin\slick\fonts\slickd41d.eot" />
     <Content Include="Areas\Admin\Views\MemberRequisitionReport\PaymentGatewayWalletRechargeReport.cshtml" />
     <Content Include="Areas\Admin\Views\MemberRequisitionReport\PaymentGatewayWalletRechargeReportIndexGrid.cshtml" />
+    <Content Include="Areas\Admin\Views\MemberFlightMarkupSetting\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\MemberFlightMarkupSetting\IndexGrid.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\dirPagination.js" />

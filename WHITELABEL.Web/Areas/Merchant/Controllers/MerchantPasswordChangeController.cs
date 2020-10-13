@@ -150,7 +150,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
 
                             #region Email Code done by Sayan at 11-10-2020
                             string name = changepass.MEMBER_NAME;
-                            string Regmsg = "Hi " + changepass.MEM_UNIQUE_ID + "(" + changepass.MEMBER_NAME + ")" + " \r\n. You have successfully changed your password. Your New Password is "+ value.User_pwd + ".<br /> Regards, <br/>< br />BOOM Travels";
+                            string Regmsg = "Hi " + changepass.MEM_UNIQUE_ID + "(" + changepass.MEMBER_NAME + ")" + " \r\n. You have successfully changed your password. Your New Password is "+ value.User_pwd + ".<br /> Regards, <br/><br/>BOOM Travels";
                             EmailHelper emailhelper = new EmailHelper();
                             string msgbody = emailhelper.GetEmailTemplate(name, Regmsg, "UserEmailTemplate.html");
                             emailhelper.SendUserEmail(changepass.EMAIL_ID.Trim(), "Your password has been updated successfully!", msgbody);
@@ -247,7 +247,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
 
                             #region Email Code done by Sayan at 11-10-2020
                             string name = changepass.MEMBER_NAME;
-                            string Regmsg = "Hi " + changepass.MEM_UNIQUE_ID + "(" + changepass.MEMBER_NAME + ")" + " \r\n. You have successfully changed your password. Your New Password is " + value.User_pwd + ".<br /> Regards, <br/>< br />BOOM Travels";
+                            string Regmsg = "Hi " + changepass.MEM_UNIQUE_ID + "(" + changepass.MEMBER_NAME + ")." + " You have successfully changed your password. Your New Password is " + value.User_pwd + ".<br /> Regards, <br/><br/>BOOM Travels";
                             EmailHelper emailhelper = new EmailHelper();
                             string msgbody = emailhelper.GetEmailTemplate(name, Regmsg, "UserEmailTemplate.html");
                             emailhelper.SendUserEmail(changepass.EMAIL_ID.Trim(), "Your password has been updated successfully!", msgbody);

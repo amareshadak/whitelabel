@@ -79,6 +79,7 @@
         public DbSet<TBL_FLIGHT_BOOKING_DETAILS> TBL_FLIGHT_BOOKING_DETAILS { get; set; }
         public DbSet<TBL_FLIGHT_BOOKING_PASSENGER_LIST> TBL_FLIGHT_BOOKING_PASSENGER_LIST { get; set; }
         public DbSet<TBL_PAYMENT_GATEWAY_RESPONSE> TBL_PAYMENT_GATEWAY_RESPONSE { get; set; }
+        public DbSet<TBL_FLIGHT_MARKUP> TBL_FLIGHT_MARKUP { get; set; }
     }
     
 }

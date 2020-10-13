@@ -490,7 +490,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
 
                             #region Email Code done by Sayan at 11-10-2020
                             string name = whiteleveluser.MEMBER_NAME;
-                            string Regmsg = "Hi " + whiteleveluser.MEM_UNIQUE_ID + "(" + whiteleveluser.MEMBER_NAME + ")" + " \r\n. You have successfully updated requisition of amount:- " + objval.AMOUNT + " to " + getsuperior.MEM_UNIQUE_ID + ".<br /> Regards, <br/>< br />BOOM Travels";
+                            string Regmsg = "Hi " + whiteleveluser.MEM_UNIQUE_ID + "(" + whiteleveluser.MEMBER_NAME + ")." + " You have successfully updated requisition of amount:- " + objval.AMOUNT + " to " + getsuperior.MEM_UNIQUE_ID + ".<br /> Regards, <br/><br/>BOOM Travels";
                             EmailHelper emailhelper = new EmailHelper();
                             string msgbody = emailhelper.GetEmailTemplate(name, Regmsg, "UserEmailTemplate.html");
                             emailhelper.SendUserEmail(whiteleveluser.EMAIL_ID.Trim(), "Your requisition has been updated successfully!", msgbody);
@@ -532,7 +532,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
 
                             #region Email Code done by Sayan at 11-10-2020
                             string name = whiteleveluser.MEMBER_NAME;
-                            string Regmsg = "Hi " + whiteleveluser.MEM_UNIQUE_ID + "(" + whiteleveluser.MEMBER_NAME + ")" + " \r\n. You have successfully updated requisition of amount:- " + objval.AMOUNT + " to " + getsuperior.MEM_UNIQUE_ID + ".<br /> Regards, <br/>< br />BOOM Travels";
+                            string Regmsg = "Hi " + whiteleveluser.MEM_UNIQUE_ID + "(" + whiteleveluser.MEMBER_NAME + ")." + " You have successfully updated requisition of amount:- " + objval.AMOUNT + " to " + getsuperior.MEM_UNIQUE_ID + ".<br /> Regards, <br/><br/>BOOM Travels";
                             EmailHelper emailhelper = new EmailHelper();
                             string msgbody = emailhelper.GetEmailTemplate(name, Regmsg, "UserEmailTemplate.html");
                             emailhelper.SendUserEmail(whiteleveluser.EMAIL_ID.Trim(), "Your requisition has been updated successfully!", msgbody);
