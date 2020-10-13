@@ -4248,6 +4248,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
             }
         }
         #endregion
+
         #region Return Return from
         public string ReturnReturnwayBooking(string req, string Retntreq, string userMarkup, string FlightAmt, string ReturnFlightAmt, string TripMode, string deptSegment = "", string returnSegment = "")
         {
