@@ -8,7 +8,7 @@
 }
 @Scripts.Render("~/bundles/MemberRequisition")
 @*@using (Html.BeginForm("Index", "MemberDebitCreditRequest", FormMethod.Post, new { area = "Admin" }))*@
-@using (Ajax.BeginForm("Index", "MemberDebitCreditRequest", new AjaxOptions { OnSuccess = "OnSuccessSettlementAmtAdminDistributor", OnFailure = "OnFailureSettlementAmtAdminDistributor", LoadingElementId = "progressSettlementAmtAdminDistributor" }, new { area = "Admin", @id = "SettlementOFDistributorAmt" }))
+@using (Ajax.BeginForm("Index", "MemberDebitCreditRequest", new AjaxOptions { Confirm = "Do you want to Debit/Credit Amount.", OnSuccess = "OnSuccessSettlementAmtAdminDistributor", OnFailure = "OnFailureSettlementAmtAdminDistributor", LoadingElementId = "progressSettlementAmtAdminDistributor" }, new { area = "Admin", @id = "SettlementOFDistributorAmt" }))
 {
     <div class="form-horizontal padding-top-20">
         @Html.AntiForgeryToken()

@@ -148,9 +148,15 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                             db.TBL_PASSWORD_RESET.Add(PasswordResetObj);
                             db.SaveChanges();
                             ContextTransaction.Commit();
-                            EmailHelper objsms = new EmailHelper();
-                            string Regmsg = "Hi " + changepass.MEM_UNIQUE_ID + " \r\n. Your have successfully changed your password.\r\n Regards\r\n BOOM Travels";
-                            objsms.SendUserEmail(changepass.EMAIL_ID, "Password change successfully", Regmsg);
+
+                            #region Email Code done by sayan at 10-10-2020
+                            string name = changepass.MEMBER_NAME;
+                            string Regmsg = "Hi " + changepass.MEM_UNIQUE_ID + "(" + changepass.MEMBER_NAME + ")" + " \r\n. You have successfully changed your password. Your New Password is " + value.User_pwd + ".<br /> Regards, <br/>< br />BOOM Travels";
+                            EmailHelper emailhelper = new EmailHelper();
+                            string usermsgbody = emailhelper.GetEmailTemplate(name, Regmsg, "UserEmailTemplate.html");
+                            emailhelper.SendUserEmail(changepass.EMAIL_ID, "Password Changed Successfully!", usermsgbody);
+                            #endregion
+
                             FormsAuthentication.SignOut();
                             FormsAuthentication.SignOut();
                             Session["WhiteLevelUserId"] = null;

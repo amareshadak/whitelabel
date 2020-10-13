@@ -197,6 +197,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
         {
             initpage();////
             var db = new DBContext();
+            //EmailClassHelper objemail = new EmailClassHelper();
             using (System.Data.Entity.DbContextTransaction ContextTransaction = db.Database.BeginTransaction())
             {
                 try
@@ -240,15 +241,18 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
 
                         }
                         value.BALANCE = 0;
+                        decimal AmountVal = 0;
                         if (value.BLOCKED_BALANCE == null)
                         {
                             value.BLOCKED_BALANCE = 0;
                             value.BALANCE = 0;
+                            AmountVal = 0;
                         }
                         else
                         {
                             value.BLOCKED_BALANCE = value.BLOCKED_BALANCE;
                             value.BALANCE = value.BLOCKED_BALANCE;
+                            AmountVal = (decimal)value.BLOCKED_BALANCE;
                         }
                         string GetUniqueNo = String.Format("{0:d5}", (DateTime.Now.Ticks / 10) % 10000);
                         string UniqId = "BMT" + GetUniqueNo;
@@ -338,10 +342,41 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                             db.TBL_WHITELABLE_SERVICE.Add(objser);
                             await db.SaveChangesAsync();
                         }
+                        TBL_ACCOUNTS MemberObj = new TBL_ACCOUNTS()
+                        {
+                            API_ID = 0,
+                            MEM_ID = long.Parse(value.MEM_ID.ToString()),
+                            MEMBER_TYPE = "DISTRIBUTOR",
+                            TRANSACTION_TYPE = "ADD DISTRIBUTOR",
+                            TRANSACTION_DATE = DateTime.Now,
+                            TRANSACTION_TIME = DateTime.Now,
+                            DR_CR = "CR",
+                            //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
+                            AMOUNT = AmountVal,
+                            NARRATION = "Add Distributor",
+                            OPENING = 0,
+                            CLOSING = AmountVal,
+                            REC_NO = 0,
+                            COMM_AMT = 0,
+                            TDS = 0,
+                            GST = 0,
+                            IPAddress = "",
+                            SERVICE_ID = 0,
+                            CORELATIONID = ""
+                        };
+                        db.TBL_ACCOUNTS.Add(MemberObj);
+                        await db.SaveChangesAsync();                        
                         ViewBag.savemsg = "Data Saved Successfully";
-                        EmailHelper objsms = new EmailHelper();
-                        string Regmsg ="Hi "+value.MEM_UNIQUE_ID+ "\r\n Welcome to BOOM Travels.\r\n.Your User Name:- "+ UniqId + ".\n\r Your Password:- "+value.User_pwd+ ".\r\nRegards\r\nBoom Travels";
-                        objsms.SendUserEmail(value.EMAIL_ID, "Welome BOOM Travels", Regmsg);
+
+                        #region Email Code done by sayan at 10-10-2020
+
+                        string name = value.MEMBER_NAME;
+                        string sub = "Welcome to Boom Travels.";
+                        string usermsgdesc = "Dear <b>" + value.MEMBER_NAME + "</b> You have successfully joined in Boom Travels.<br /><p>Your User Id:- " + value.EMAIL_ID + " <br/>Password:- " + value.User_pwd + " </p> "+"<br /> Regards, <br/>< br />BOOM Travels";
+                        EmailHelper emailhelper = new EmailHelper();
+                        string usermsgbody = emailhelper.GetEmailTemplate(name, usermsgdesc, "UserEmailTemplate.html");
+                        emailhelper.SendUserEmail(value.EMAIL_ID, sub, usermsgbody);
+                        #endregion
                         Session["msg"] = "Data Saved Successfully";
                         //ContextTransaction.Commit();
                     }
@@ -400,9 +435,9 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                         CheckUser.CITY = value.CITY;
                         CheckUser.PIN = value.PIN;
                         //CheckUser.EMAIL_ID = value.EMAIL_ID;
-                        CheckUser.SECURITY_PIN_MD5 = value.SECURITY_PIN_MD5;
-                        CheckUser.BLOCKED_BALANCE = value.BLOCKED_BALANCE;
-                        CheckUser.BALANCE = value.BLOCKED_BALANCE;
+                        CheckUser.SECURITY_PIN_MD5 = value.SECURITY_PIN_MD5;                      
+                        //CheckUser.BLOCKED_BALANCE = value.BLOCKED_BALANCE;
+                        //CheckUser.BALANCE = value.BLOCKED_BALANCE;
                         CheckUser.DUE_CREDIT_BALANCE = 0;
                         CheckUser.CREDIT_BALANCE = 0;
                         if (CheckUser.GST_FLAG != null)
@@ -429,11 +464,51 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                         CheckUser.OLD_MEMBER_ID = value.OLD_MEMBER_ID;
                         db.Entry(CheckUser).State = System.Data.Entity.EntityState.Modified;
                         await db.SaveChangesAsync();
+                        //var BalanceUpdate = await db.TBL_ACCOUNTS.Where(z => z.MEM_ID == value.MEM_ID).OrderByDescending(z => z.ACC_NO).FirstOrDefaultAsync();
+                        //if (BalanceUpdate != null)
+                        //{
+                        //    decimal closing = 0;
+                        //    decimal AddBalance = 0;
+                        //    decimal.TryParse(BalanceUpdate.CLOSING.ToString(), out closing);
+                        //    decimal Updated_Balance = (decimal)value.BLOCKED_BALANCE;
+                        //    AddBalance = closing + Updated_Balance;
+                        //    TBL_ACCOUNTS DIST_objACCOUNT = new TBL_ACCOUNTS()
+                        //    {
+                        //        API_ID = 0,
+                        //        MEM_ID = long.Parse(value.MEM_ID.ToString()),
+                        //        MEMBER_TYPE = "DISTRIBUTOR",
+                        //        TRANSACTION_TYPE = "ADD DISTRIBUTOR",
+                        //        TRANSACTION_DATE = DateTime.Now,
+                        //        TRANSACTION_TIME = DateTime.Now,
+                        //        DR_CR = "CR",
+                        //        //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
+                        //        AMOUNT = Updated_Balance,
+                        //        NARRATION = "Add Distributor",
+                        //        OPENING = closing,
+                        //        CLOSING = AddBalance,
+                        //        REC_NO = 0,
+                        //        COMM_AMT = 0,
+                        //        TDS = 0,
+                        //        GST = 0,
+                        //        IPAddress = "",
+                        //        SERVICE_ID = 0,
+                        //        CORELATIONID = ""
+                        //    };
+                        //    db.TBL_ACCOUNTS.Add(DIST_objACCOUNT);
+
+                        //}
                         ViewBag.savemsg = "Data Updated Successfully";
                         Session["msg"] = "Data Updated Successfully";
-                        EmailHelper objsms = new EmailHelper();
-                        string Regmsg = "Hi "+ CheckUser.MEM_UNIQUE_ID + " \r\n. Your profile information is updated successfully.\r\n Regards\r\n BOOM Travels";
-                        objsms.SendUserEmail(value.EMAIL_ID, "Your Profile is Updated.", Regmsg);
+
+                        //#region Email Code done by sayan at 10-10-2020
+                        //string msgdesc = "Dear <b>"+CheckUser.MEM_UNIQUE_ID + "("+CheckUser.MEMBER_NAME+")</b>, Your Profile is updated.";
+                        //string usersub = "Your profile is updated";                        
+                        //EmailHelper emailhelper = new EmailHelper();
+                        //string msgbody = emailhelper.GetEmailTemplate(CheckUser.MEMBER_NAME, msgdesc, "UserEmailTemplate.html");                        
+                        //emailhelper.SendUserEmail(CheckUser.EMAIL_ID.Trim(), usersub, msgbody);
+                        //#endregion
+                        //string Regmsg = "Hi "+ CheckUser.MEM_UNIQUE_ID + " \r\n. Your profile information is updated successfully.\r\n Regards\r\n BOOM Travels";
+                        //objsms.SendUserEmail(value.EMAIL_ID, "Your Profile is Updated.", Regmsg);
                     }
                     //throw new Exception();
                     ContextTransaction.Commit();
@@ -559,15 +634,17 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 try
                 {
                     long memid = long.Parse(id);
-
+                    string MsgBody = string.Empty;
                     bool memberstatus = false;
                     if (statusval == "True")
                     {
                         memberstatus = false;
+                        MsgBody = "Your Boom Travels profile is deactivated";
                     }
                     else
                     {
                         memberstatus = true;
+                        MsgBody = "Your Boom Travels profile is activated";
                     }
                     var memberlist = await db.TBL_MASTER_MEMBER.Where(x => x.MEM_ID == memid).FirstOrDefaultAsync();
                     if (statusval == "True")
@@ -584,6 +661,15 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                     db.Entry(memberlist).State = System.Data.Entity.EntityState.Modified;
                     await db.SaveChangesAsync();
                     ContextTransaction.Commit();
+                    //#region Email Code done by sayan at 10-10-2020
+                    //string name = memberlist.MEMBER_NAME;
+                    //string sub = MsgBody;
+                    //string usermsgdesc = "Dear <b>" + memberlist.MEMBER_NAME + "</b> " + MsgBody + " by Admin. For any query please contact your Admin.";
+                    //EmailHelper emailhelper = new EmailHelper();
+                    //string usermsgbody = emailhelper.GetEmailTemplate(name, usermsgdesc, "UserEmailTemplate.html");
+                    //emailhelper.SendUserEmail(memberlist.EMAIL_ID.Trim(), sub, usermsgbody);
+                    //#endregion
+
                     return Json(new { Result = "true" });
                 }
                 catch (Exception ex)
@@ -1086,9 +1172,15 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 CheckUser.OLD_MEMBER_ID = objdetails.OLD_MEMBER_ID;
                 db.Entry(CheckUser).State = System.Data.Entity.EntityState.Modified;
                 await db.SaveChangesAsync();
-                EmailHelper objsms = new EmailHelper();
-                string Regmsg = "Hi " + CheckUser.MEM_UNIQUE_ID + " \r\n. Your profile information is updated successfully.\r\n Regards\r\n BOOM Travels";
-                objsms.SendUserEmail(objdetails.EMAIL_ID, "Your Profile is Updated.", Regmsg);
+
+                //#region Email Code done by sayan at 10-10-2020
+                //string name = CheckUser.MEMBER_NAME;
+                //string regmsg = "Hi " + CheckUser.MEM_UNIQUE_ID + "("+ CheckUser.MEMBER_NAME +")" + " \r\n. Your profile information is updated successfully.\r\n Regards\r\n BOOM Travels";
+                //EmailHelper emailhelper = new EmailHelper();
+                //string usermsgbody = emailhelper.GetEmailTemplate(name, regmsg, "UserEmailTemplate.html");
+                //emailhelper.SendUserEmail(objdetails.EMAIL_ID.Trim(), "Your Profile is Updated.", usermsgbody);
+                //#endregion
+
                 return Json("Profile update successfully ", JsonRequestBehavior.AllowGet);
             }
             else

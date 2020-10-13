@@ -1,5 +1,5 @@
 ﻿app.controller('RoundTripSearchController', ['FlightServices', '$scope', '$http', '$window', '$filter', function (FlightServices, $scope, $http, $window, $filter) {
-
+    $scope.displayNetAmount = false;
     $scope.additionalAddedAmount =  parseFloat(document.getElementById('AIRADDITIONALAMOUNT').value);
 
     $scope.getFloatNumber = function (n) {
@@ -523,6 +523,22 @@
         return 0;
     };
 
+    $scope.getDeptureNetFare = function (SrNo) {
+        if (SrNo) {
+            let fare = $scope.deptureFareDetails.filter(function (item) {
+                return item.SrNo == SrNo;
+            });
+            if (fare) {
+                return parseFloat(fare[0].NetAmount);
+
+            }
+            else {
+                return 0;
+            }
+        }
+        return 0;
+    }
+
     // #endregion
 
     // #region Load return flight 
@@ -807,6 +823,22 @@
         return 0;
     };
 
+    $scope.getReturnNetFare = function (SrNo) {
+        if (SrNo) {
+            let fare = $scope.returnFareDetails.filter(function (item) {
+                return item.SrNo == SrNo;
+            });
+            if (fare) {
+                return parseFloat(fare[0].NetAmount);
+
+            }
+            else {
+                return 0;
+            }
+        }
+        return 0;
+    }
+
     // #endregion
 
 
@@ -934,5 +966,6 @@
     $scope.roundtripgetFlightDetails = function (Adult, Children, Infant, TrackNo, TripMode) {
         window.location.href = '/Merchant/MerchantFlightDetails/FlightBookingDetails?TrackNo=' + TrackNo + '&PsgnAdult=' + Adult + '&PsgnChildren=' + Children + '&PsgnInfant=' + Infant + '&TripMode=' + TripMode;
     };
+
 
 }]);

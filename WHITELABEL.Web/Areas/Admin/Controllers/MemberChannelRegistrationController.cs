@@ -184,15 +184,18 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                     string GetUniqueNo = String.Format("{0:d5}", (DateTime.Now.Ticks / 10) % 10000);
                     string UniqId = "BMT" + GetUniqueNo;
                     objsupermem.BALANCE = 0;
+                    decimal AmountVal = 0;
                     if (objsupermem.BLOCKED_BALANCE == null)
                     {
                         objsupermem.BLOCKED_BALANCE = 0;
                         objsupermem.BALANCE = 0;
+                        AmountVal = 0;
                     }
                     else
                     {
                         objsupermem.BLOCKED_BALANCE = objsupermem.BLOCKED_BALANCE;
                         objsupermem.BALANCE = objsupermem.BLOCKED_BALANCE;
+                        AmountVal = (decimal)objsupermem.BLOCKED_BALANCE;
                     }
                     objsupermem.EMAIL_ID = objsupermem.EMAIL_ID.ToLower();
                     objsupermem.UNDER_WHITE_LEVEL = MemberCurrentUser.MEM_ID;
@@ -260,6 +263,30 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                         db.TBL_WHITELABLE_SERVICE.Add(objser);
                         await db.SaveChangesAsync();
                     }
+                    TBL_ACCOUNTS MemberObj = new TBL_ACCOUNTS()
+                    {
+                        API_ID = 0,
+                        MEM_ID = long.Parse(objsupermem.MEM_ID.ToString()),
+                        MEMBER_TYPE = "SUPER",
+                        TRANSACTION_TYPE = "ADD SUPER",
+                        TRANSACTION_DATE = DateTime.Now,
+                        TRANSACTION_TIME = DateTime.Now,
+                        DR_CR = "CR",
+                        //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
+                        AMOUNT = AmountVal,
+                        NARRATION = "Add Super",
+                        OPENING = 0,
+                        CLOSING = AmountVal,
+                        REC_NO = 0,
+                        COMM_AMT = 0,
+                        TDS = 0,
+                        GST = 0,
+                        IPAddress = "",
+                        SERVICE_ID = 0,
+                        CORELATIONID = ""
+                    };
+                    db.TBL_ACCOUNTS.Add(MemberObj);
+                    await db.SaveChangesAsync();
                     //ViewBag.savemsg = "Data Saved Successfully";
                     //Session["msg"] = "Data Saved Successfully";
                     //ContextTransaction.Commit();
@@ -359,15 +386,18 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                     //string GetUniqueNo = String.Format("{0:d5}", (DateTime.Now.Ticks / 10) % 10000);                    
                     //string UniqId = "BMT" + GetUniqueNo;
                     objsupermem.BALANCE = 0;
+                    decimal AmountVal = 0;
                     if (objsupermem.BLOCKED_BALANCE == null)
                     {
                         objsupermem.BLOCKED_BALANCE = 0;
                         objsupermem.BALANCE = 0;
+                        AmountVal = 0;
                     }
                     else
                     {
                         objsupermem.BLOCKED_BALANCE = objsupermem.BLOCKED_BALANCE;
                         objsupermem.BALANCE = objsupermem.BLOCKED_BALANCE;
+                        AmountVal = (decimal)objsupermem.BLOCKED_BALANCE;
                     }
                     string GetUniqueNo = String.Format("{0:d5}", (DateTime.Now.Ticks / 10) % 10000);
                     string UniqId = "BMT" + GetUniqueNo;
@@ -455,14 +485,44 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                         db.TBL_WHITELABLE_SERVICE.Add(objser);
                         await db.SaveChangesAsync();
                     }
+                    TBL_ACCOUNTS MemberObj = new TBL_ACCOUNTS()
+                    {
+                        API_ID = 0,
+                        MEM_ID = long.Parse(objsupermem.MEM_ID.ToString()),
+                        MEMBER_TYPE = "DISTRIBUTOR",
+                        TRANSACTION_TYPE = "ADD DISTRIBUTOR",
+                        TRANSACTION_DATE = DateTime.Now,
+                        TRANSACTION_TIME = DateTime.Now,
+                        DR_CR = "CR",
+                        //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
+                        AMOUNT = AmountVal,
+                        NARRATION = "Add Distributor",
+                        OPENING = 0,
+                        CLOSING = AmountVal,
+                        REC_NO = 0,
+                        COMM_AMT = 0,
+                        TDS = 0,
+                        GST = 0,
+                        IPAddress = "",
+                        SERVICE_ID = 0,
+                        CORELATIONID = ""
+                    };
+                    db.TBL_ACCOUNTS.Add(MemberObj);
+                    await db.SaveChangesAsync();
                     //ViewBag.savemsg = "Data Saved Successfully";
                     //Session["msg"] = "Data Saved Successfully";
                     //ContextTransaction.Commit();
                     //throw new Exception();
                     ContextTransaction.Commit();
-                    EmailHelper objsms = new EmailHelper();
-                    string Regmsg = "Hi " + objsupermem.MEM_UNIQUE_ID + "\r\n Welcome to BOOM Travels.\r\n.Your User Name:- " + UniqId + ".\n\r Your Password:- " + objsupermem.User_pwd + ".\r\nRegards\r\nBoom Travels";
-                    objsms.SendUserEmail(objsupermem.EMAIL_ID, "Welome BOOM Travels", Regmsg);
+
+                    #region Email Code done by sayan at 10-10-2020
+                    string name = objsupermem.MEMBER_NAME;
+                    string Regmsg = "Hi " + objsupermem.MEM_UNIQUE_ID + "(" + objsupermem.MEMBER_NAME + ")" + "\r\n Welcome to BOOM Travels.\r\n.Your User Name:- " + UniqId + ".\n\r Your Password:- " + objsupermem.User_pwd + ".\r\nRegards\r\nBoom Travels";
+                    EmailHelper emailhelper = new EmailHelper();
+                    string msgbody = emailhelper.GetEmailTemplate(name, Regmsg, "UserEmailTemplate.html");
+                    emailhelper.SendUserEmail(objsupermem.EMAIL_ID.Trim(), "Welome to BOOM Travels", msgbody);
+                    #endregion
+
                     return Json("Distributor Added Successfully", JsonRequestBehavior.AllowGet);
                 }
                 catch (Exception ex)
@@ -569,15 +629,18 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                     //string GetUniqueNo = String.Format("{0:d5}", (DateTime.Now.Ticks / 10) % 10000);
                     //string UniqId = "BMT" + GetUniqueNo;
                     objsupermem.BALANCE = 0;
+                    decimal AmountVal = 0;
                     if (objsupermem.BLOCKED_BALANCE == null)
                     {
                         objsupermem.BLOCKED_BALANCE = 0;
                         objsupermem.BALANCE = 0;
+                        AmountVal = 0;
                     }
                     else
                     {
                         objsupermem.BLOCKED_BALANCE = objsupermem.BLOCKED_BALANCE;
                         objsupermem.BALANCE = objsupermem.BLOCKED_BALANCE;
+                        AmountVal = (decimal)objsupermem.BLOCKED_BALANCE;
                     }
                     string GetUniqueNo = String.Format("{0:d5}", (DateTime.Now.Ticks / 10) % 10000);
                     string UniqId = "BMT" + GetUniqueNo;
@@ -666,14 +729,44 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                         db.TBL_WHITELABLE_SERVICE.Add(objser);
                         await db.SaveChangesAsync();
                     }
+                    TBL_ACCOUNTS MemberObj = new TBL_ACCOUNTS()
+                    {
+                        API_ID = 0,
+                        MEM_ID = long.Parse(objsupermem.MEM_ID.ToString()),
+                        MEMBER_TYPE = "MERCHANT",
+                        TRANSACTION_TYPE = "ADD MERCHANT",
+                        TRANSACTION_DATE = DateTime.Now,
+                        TRANSACTION_TIME = DateTime.Now,
+                        DR_CR = "CR",
+                        //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
+                        AMOUNT = AmountVal,
+                        NARRATION = "Add Merchant",
+                        OPENING = 0,
+                        CLOSING = AmountVal,
+                        REC_NO = 0,
+                        COMM_AMT = 0,
+                        TDS = 0,
+                        GST = 0,
+                        IPAddress = "",
+                        SERVICE_ID = 0,
+                        CORELATIONID = ""
+                    };
+                    db.TBL_ACCOUNTS.Add(MemberObj);
+                    await db.SaveChangesAsync();
                     //ViewBag.savemsg = "Data Saved Successfully";
                     //Session["msg"] = "Data Saved Successfully";
                     //ContextTransaction.Commit();
                     //throw new Exception();
                     ContextTransaction.Commit();
-                    EmailHelper objsms = new EmailHelper();
-                    string Regmsg = "Hi " + objsupermem.MEM_UNIQUE_ID + "\r\n Welcome to BOOM Travels.\r\n.Your User Name:- " + UniqId + ".\n\r Your Password:- " + objsupermem.User_pwd + ".\r\nRegards\r\nBoom Travels";
-                    objsms.SendUserEmail(objsupermem.EMAIL_ID, "Welome BOOM Travels", Regmsg);
+
+                    #region Email Code done by Sayan at 10-10-2020
+                    string name = objsupermem.MEMBER_NAME;
+                    string Regmsg = "Hi " + objsupermem.MEM_UNIQUE_ID + "(" + objsupermem.MEMBER_NAME + ")" + "\r\n Welcome to BOOM Travels.\r\n.Your User Name:- " + UniqId + ".\n\r Your Password:- " + objsupermem.User_pwd + ".<br /> Regards, <br/>< br />BOOM Travels";
+                    EmailHelper emailhelper = new EmailHelper();
+                    string msgbody = emailhelper.GetEmailTemplate(name, Regmsg, "UserEmailTemplate.html");
+                    emailhelper.SendUserEmail(objsupermem.EMAIL_ID.Trim(), "Welcome to BOOM Travels", msgbody);
+                    #endregion
+
                     return Json("Merchant Added Successfully", JsonRequestBehavior.AllowGet);
                 }
                 catch (Exception ex)

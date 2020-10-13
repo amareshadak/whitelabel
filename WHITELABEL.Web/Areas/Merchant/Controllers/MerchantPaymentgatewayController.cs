@@ -53,6 +53,13 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
             try
             {
                 //var MerchantGetMember = db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == CurrentMerchant.MEM_ID);
+                decimal AmountVal = 0;
+                string ResponseOut = "";
+                long MEMBER_ID = 0;
+                string txnid = "";
+                string Easypayid = "";
+                string error_Message = "";
+                string TXNStatus = "";
 
                 string salt = System.Configuration.ConfigurationSettings.AppSettings["EaseBuzzSaltKey"];
                 string Key = System.Configuration.ConfigurationSettings.AppSettings["EaseBuzzKey"];
@@ -94,16 +101,37 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                         ViewBag.easepayid = Request.Form["easepayid"];
                         string MEM_ID = Request.Form["udf1"];
                         string MEM_Password = Request.Form["udf2"];
-                        ViewBag.iewBegCheckError = ValueCheck;  
+                         Easypayid= Request.Form["easepayid"];
+                        ViewBag.EasypayId = Easypayid;
+                        txnid = Request.Form["txnid"];
+                        string payment_source = Request.Form["payment_source"];
+                        ViewBag.payment_source = payment_source;
+                        error_Message = Request.Form["error_Message"];
+                        ViewBag.error_Message = error_Message;
+                         ResponseOut = Convert.ToString(Request.Form);
+                        ViewBag.iewBegCheckError = ValueCheck;
+                        TXNStatus = Request.Form["status"];
+                        decimal.TryParse(ValueCheck, out AmountVal);
+                        long.TryParse(MEM_ID, out MEMBER_ID);
+                        var GEtMemberinfpo = db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == MEMBER_ID);
+                        TBL_PAYMENT_GATEWAY_RESPONSE objres = new TBL_PAYMENT_GATEWAY_RESPONSE()
+                        {
+                            MEM_ID = MEMBER_ID,
+                            RES_MSG = ResponseOut,
+                            RES_DATE = DateTime.Now,
+                            RES_STATUS = TXNStatus,
+                            PAY_REF_NO = Easypayid,
+                            CORELATION_ID = txnid,
+                            EMAIL_ID = GEtMemberinfpo.EMAIL_ID,
+                            MOBILE_No = GEtMemberinfpo.MEMBER_MOBILE,
+                            TRANSACTION_AMOUNT = AmountVal,
+                            RES_CODE = error_Message,
+                            TRANSACTION_DETAILS = "Online Process"
+                        };
+                        db.TBL_PAYMENT_GATEWAY_RESPONSE.Add(objres);
+                        db.SaveChanges();
                         string MSgAmt = AccountBalance(ValueCheck, MEM_ID);
-                        //Session["MerchantUserName"] = MerchantGetMember.UName;
-                        //Session["MerchantCompanyName"] = MerchantGetMember.COMPANY;
-                        //Session["UserType"] = "Merchant";
-                        //Session["CreditLimitAmt"] = MerchantGetMember.CREDIT_LIMIT.ToString().Replace(".00", "").Trim();
-                        //Session["ReservedCreditLimitAmt"] = MerchantGetMember.RESERVED_CREDIT_LIMIT.ToString().ToString().Replace(".00", "").Trim();
-                        //decimal TranAmount = Convert.ToDecimal(Request.Form["amount"]);
-
-                        //string UpdateAccount = AccountBalance(ValueCheck);
+                       
                     }
                     else
                     {
@@ -120,14 +148,36 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                         decimal TranAmount = Convert.ToDecimal(Request.Form["amount"]);
                         string ValueCheck = Request.Form["amount"].ToString();
                         ViewBag.iewBegCheckError = ValueCheck;
+                         Easypayid = Request.Form["easepayid"];
+                        ViewBag.EasypayId = Easypayid;
+                         txnid = Request.Form["txnid"];
+                         string payment_source = Request.Form["payment_source"];
+                        ViewBag.payment_source = payment_source;
+                         error_Message = Request.Form["error_Message"];
+                        ViewBag.error_Message = error_Message;
+                        string Outpot = Convert.ToString(Request.Form);
+                        long.TryParse(MEM_ID, out MEMBER_ID);
+                        long.TryParse(MEM_ID, out MEMBER_ID);
+                        var GEtMemberinfpo = db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == MEMBER_ID);
+                        TBL_PAYMENT_GATEWAY_RESPONSE objres = new TBL_PAYMENT_GATEWAY_RESPONSE()
+                        {
+                            MEM_ID = MEMBER_ID,
+                            RES_MSG = ResponseOut,
+                            RES_DATE = DateTime.Now,
+                            RES_STATUS = TXNStatus,
+                            PAY_REF_NO = Easypayid,
+                            CORELATION_ID = txnid,
+                            EMAIL_ID = GEtMemberinfpo.EMAIL_ID,
+                            MOBILE_No = GEtMemberinfpo.MEMBER_MOBILE,
+                            TRANSACTION_AMOUNT = AmountVal,
+                            RES_CODE = error_Message,
+                            TRANSACTION_DETAILS = "Online Process"
+                        };
+                        db.TBL_PAYMENT_GATEWAY_RESPONSE.Add(objres);
+                        db.SaveChanges();
+                        //string MSgAmt = AccountBalance(ValueCheck, MEM_ID);
 
-                        string MSgAmt = AccountBalance(ValueCheck, MEM_ID);
 
-                        //Session["MerchantUserName"] = MerchantGetMember.UName;
-                        //Session["MerchantCompanyName"] = MerchantGetMember.COMPANY;
-                        //Session["UserType"] = "Merchant";
-                        //Session["CreditLimitAmt"] = MerchantGetMember.CREDIT_LIMIT.ToString().Replace(".00", "").Trim();
-                        //Session["ReservedCreditLimitAmt"] = MerchantGetMember.RESERVED_CREDIT_LIMIT.ToString().ToString().Replace(".00", "").Trim();
                     }
                     //Hash value did not matched
                 }
@@ -195,6 +245,12 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                         db.Entry(whiteleveluser).State = System.Data.Entity.EntityState.Modified;
                         db.SaveChanges();
                         ContextTransaction.Commit();
+                        string name = whiteleveluser.MEMBER_NAME;
+                        string sub = "Easypay payment is successfull";
+                        string usermsgdesc = "Dear <b>" + whiteleveluser.MEMBER_NAME + "</b>, You have successfully recharge your wallet of amount " + Baln.ToString() + "  Rs. by Easypay Payment gateway.";
+                        EmailHelper emailhelper = new EmailHelper();
+                        string usermsgbody = emailhelper.GetEmailTemplate(name, usermsgdesc, "UserEmailTemplate.html");
+                        emailhelper.SendUserEmail(whiteleveluser.EMAIL_ID, sub, usermsgbody);
                         return "true";
                     }
                     else
@@ -232,6 +288,12 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                         db.Entry(whiteleveluser).State = System.Data.Entity.EntityState.Modified;
                         db.SaveChanges();
                         ContextTransaction.Commit();
+                        string name = whiteleveluser.MEMBER_NAME;
+                        string sub = "Easypay payment is successfull";
+                        string usermsgdesc = "Dear <b>" + whiteleveluser.MEMBER_NAME + "</b>, You have successfully recharge your wallet of amount " + Baln.ToString() + "  Rs. by Easypay Payment gateway.";
+                        EmailHelper emailhelper = new EmailHelper();
+                        string usermsgbody = emailhelper.GetEmailTemplate(name, usermsgdesc, "UserEmailTemplate.html");
+                        emailhelper.SendUserEmail(whiteleveluser.EMAIL_ID, sub, usermsgbody);
                         return "true";
                     }
                 }

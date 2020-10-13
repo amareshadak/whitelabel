@@ -8,6 +8,24 @@ app.controller('AirportAutocompleteController', function ($scope, $http, $window
     $scope.selectedAirlines = new Array();
     $scope.airlines = new Array();
 
+    
+    $scope.startDatePopup = {
+        opened: false
+    };
+
+    $scope.openStartDatePicker = function () {
+        $scope.startDatePopup.opened = true;
+    };
+
+    $scope.endDatePopup = {
+        opened: false
+    };
+
+    $scope.openEndDatePicker = function () {
+        $scope.endDatePopup.opened = true;
+    };
+
+
     $scope.AddMulticitySearchInfo = new Array();
 
     $scope.addNewRow = function () {     
@@ -126,12 +144,15 @@ app.controller('AirportAutocompleteController', function ($scope, $http, $window
     //})
     //Airport.TravellType
     $scope.Airport = { Tripmode : 1 };
-    $scope.SerachFlights = function () {        
+    $scope.SerachFlights = function () {
+        debugger;
         var Tripmode = $scope.Airport.Tripmode;
         if (Tripmode != '3') {
             var date_to = "";
             $scope.formdisplay = true;
+            
             var From_DAte = $scope.FromDate;
+            //var From_DAte = DeptDate;
             //var FromAirportsName = $scope.SelectedAirport.CITYNAME;
             //var FromCityCode = $scope.SelectedAirport.CITYCODE;
             //var TOAirportName = $scope.ToAirportName.CITYNAME;
@@ -141,12 +162,16 @@ app.controller('AirportAutocompleteController', function ($scope, $http, $window
             var TOAirportName = $scope.toAirportDetails.CITYNAME;
             var TOAirportCode = $scope.toAirportDetails.CITYCODE;
 
-            var FromDate = $scope.FromDate;
+            //var FromDate = $scope.FromDate;
+            const DeptDate = moment($scope.FromDate).format('YYYY-MM-DD');
+            var FromDate = DeptDate;
             if (Tripmode == 1) {
                 date_to = 0;
             }
             else if (Tripmode == 2) {
-                date_to = $scope.ToDate;
+                const RetDate = moment($scope.ToDate).format('YYYY-MM-DD');
+                //date_to = $scope.ToDate;
+                date_to = RetDate;
             }
             var ToDate = date_to;
             var TravelType = $scope.TravellType;

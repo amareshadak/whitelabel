@@ -151,9 +151,18 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                             db.TBL_PASSWORD_RESET.Add(PasswordResetObj);
                             db.SaveChanges();
                             ContextTransaction.Commit();
-                            EmailHelper objsms = new EmailHelper();
-                            string Regmsg = "Hi " + changepass.MEM_UNIQUE_ID + " \r\n. Your have successfully changed your password.\r\n Regards\r\n BOOM Travels";
-                            objsms.SendUserEmail(changepass.EMAIL_ID, "Password change successfully", Regmsg);
+
+                            #region Email Code done by Sayan at 11-10-2020
+                            string name = changepass.MEMBER_NAME;
+                            string Regmsg = "Hi " + changepass.MEM_UNIQUE_ID + "(" + changepass.MEMBER_NAME + ")" + " \r\n. You have successfully changed your password. Your New Password is " + value.User_pwd + ".<br /> Regards, <br/>< br />BOOM Travels";
+                            EmailHelper emailhelper = new EmailHelper();
+                            string msgbody = emailhelper.GetEmailTemplate(name, Regmsg, "UserEmailTemplate.html");
+                            emailhelper.SendUserEmail(changepass.EMAIL_ID.Trim(), "Your password has been changed successfully!", msgbody);
+                            #endregion
+
+                            //EmailHelper objsms = new EmailHelper();
+                            //string Regmsg = "Hi " + changepass.MEM_UNIQUE_ID + " \r\n. Your have successfully changed your password.\r\n Regards\r\n BOOM Travels";
+                            //objsms.SendUserEmail(changepass.EMAIL_ID, "Password change successfully", Regmsg);
                             FormsAuthentication.SignOut();
                             Session["DistributorUserId"] = null;
                             Session["DistributorUserName"] = null;

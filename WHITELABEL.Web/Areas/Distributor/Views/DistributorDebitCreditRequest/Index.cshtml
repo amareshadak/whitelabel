@@ -8,7 +8,7 @@
 }
 @Scripts.Render("~/bundles/DistributorRequisition")
 @*@using (Html.BeginForm("Index", "DistributorDebitCreditRequest", FormMethod.Post, new { area = "Distributor" }))*@
-@using (Ajax.BeginForm("Index", "DistributorDebitCreditRequest", new AjaxOptions {  OnSuccess = "OnSuccessSettlementAmtDistributor", OnFailure = "OnFailureSettlementAmtDistributor", LoadingElementId = "progressSettlementAmtDistributor" }, new { area = "Distributor", @id = "SettlementOFMERCHANTAmt" }))
+@using (Ajax.BeginForm("Index", "DistributorDebitCreditRequest", new AjaxOptions { Confirm = "Do you want to Debit/Credit Amount.", OnSuccess = "OnSuccessSettlementAmtDistributor", OnFailure = "OnFailureSettlementAmtDistributor", LoadingElementId = "progressSettlementAmtDistributor" }, new { area = "Distributor", @id = "SettlementOFMERCHANTAmt" }))
 {
     <div class="form-horizontal padding-top-20">
         @Html.AntiForgeryToken()

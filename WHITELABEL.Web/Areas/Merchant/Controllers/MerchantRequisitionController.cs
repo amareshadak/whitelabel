@@ -487,10 +487,19 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                             translist.REF_NO = objval.RequisitionSendTO;
                             db.Entry(translist).State = System.Data.Entity.EntityState.Modified;
                             await db.SaveChangesAsync();
+
+                            #region Email Code done by Sayan at 11-10-2020
+                            string name = whiteleveluser.MEMBER_NAME;
+                            string Regmsg = "Hi " + whiteleveluser.MEM_UNIQUE_ID + "(" + whiteleveluser.MEMBER_NAME + ")" + " \r\n. You have successfully updated requisition of amount:- " + objval.AMOUNT + " to " + getsuperior.MEM_UNIQUE_ID + ".<br /> Regards, <br/>< br />BOOM Travels";
+                            EmailHelper emailhelper = new EmailHelper();
+                            string msgbody = emailhelper.GetEmailTemplate(name, Regmsg, "UserEmailTemplate.html");
+                            emailhelper.SendUserEmail(whiteleveluser.EMAIL_ID.Trim(), "Your requisition has been updated successfully!", msgbody);
+                            #endregion
+
                             //EmailHelper objsms = new EmailHelper();
                             //string Regmsg = "Hi " + whiteleveluser.MEM_UNIQUE_ID + " \r\n. You have successfully updated requisition of amount:- " + objval.AMOUNT + " to " + getsuperior.MEM_UNIQUE_ID + ".\r\n Regards\r\n BOOM Travels";
                             //objsms.SendUserEmail(whiteleveluser.EMAIL_ID, "Your requisition update successfully.", Regmsg);
-                            
+
                         }
                         else
                         {
@@ -520,10 +529,19 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                             objval.REF_NO = objval.RequisitionSendTO;
                             db.TBL_BALANCE_TRANSFER_LOGS.Add(objval);
                             await db.SaveChangesAsync();
+
+                            #region Email Code done by Sayan at 11-10-2020
+                            string name = whiteleveluser.MEMBER_NAME;
+                            string Regmsg = "Hi " + whiteleveluser.MEM_UNIQUE_ID + "(" + whiteleveluser.MEMBER_NAME + ")" + " \r\n. You have successfully updated requisition of amount:- " + objval.AMOUNT + " to " + getsuperior.MEM_UNIQUE_ID + ".<br /> Regards, <br/>< br />BOOM Travels";
+                            EmailHelper emailhelper = new EmailHelper();
+                            string msgbody = emailhelper.GetEmailTemplate(name, Regmsg, "UserEmailTemplate.html");
+                            emailhelper.SendUserEmail(whiteleveluser.EMAIL_ID.Trim(), "Your requisition has been updated successfully!", msgbody);
+                            #endregion
+
                             //EmailHelper objsms = new EmailHelper();
                             //string Regmsg = "Hi " + whiteleveluser.MEM_UNIQUE_ID + " \r\n. You have successfully send requisition of amount:- " + objval.AMOUNT + " to " + getsuperior.MEM_UNIQUE_ID + ".\r\n Regards\r\n BOOM Travels";
                             //objsms.SendUserEmail(whiteleveluser.EMAIL_ID, "Your requisition send successfully.", Regmsg);
-                            
+
                         }
                         ContextTransaction.Commit();
                         return RedirectToAction("Index");

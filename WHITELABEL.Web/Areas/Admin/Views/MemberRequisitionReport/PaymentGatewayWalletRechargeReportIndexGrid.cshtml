@@ -1,0 +1,42 @@
+﻿@using NonFactors.Mvc.Grid;
+@using WHITELABEL.Web.Helper;
+@model IEnumerable<WHITELABEL.Data.Models.TBL_PAYMENT_GATEWAY_RESPONSE>
+@{
+    ViewBag.Title = "IndexGrid";
+    Layout = null;
+    //Layout = "~/Areas/Merchant/Views/Shared/_MerchantLayout.cshtml";
+}
+
+@(Html
+                            .Grid(Model)
+                            .Build(columns =>
+                            {
+                                columns.Add(model => model.Serial_No).Titled("Id");
+                                columns.Add(model => model.Member_Name).Titled("Member Name");
+                                columns.Add(model => model.Member_Company_Name).Titled("Company Name");
+                                columns.Add(model => model.EMAIL_ID).Titled("Email");
+                                columns.Add(model => model.MOBILE_No).Titled("Mobile");
+                                //columns.Add(model => model.ToUser).Titled("To User");
+                                columns.Add(model => model.PAY_REF_NO).Titled("Transaction Id");
+                                columns.Add(model => model.TRANSACTION_AMOUNT).Titled("Account");
+                                columns.Add(model => model.RES_DATE).Titled("Recharge Date").MultiFilterable(true);
+                                columns.Add(model => model.RES_STATUS).Titled("Status");
+                                columns.Add(model => model.CORELATION_ID).Titled("Co-Relation Id");
+                                //columns.Add(model => model.RES_CODE).Titled("Co-Relation Id");
+                                //columns.Add(model => (model.RES_CODE == "0300" ? "<a class='btn btn-primary btn-xs' style='color:red;'>process Transaction</a>" : "<a class='btn btn-primary btn-xs' style='color:white;' data-toggle='modal' data-target='.printRechargeTransd' id='ProcessRechargePaymentgatewayWallet' data-id='" + model.SLN + "' onclick='FetchPaymentGatewayTnx(" + model.SLN + ");'>process Transaction</a>")).Titled("Process TXN");
+                                columns.Add(model => model.SLN).Titled("Process TXN").Encoded(false).Filterable(false).Sortable(false)
+                     .RenderedAs(model => model.RES_CODE == "0300" ? "<a class='' style='color:red;'>Online Processed</a>" : "<a class='btn btn-primary btn-xs' style='color:white;' data-toggle='modal' data-target='.printRechargeTransd' id='ProcessRechargePaymentgatewayWallet' data-id='" + model.SLN + "' onclick='FetchPaymentGatewayTnx(" + model.SLN + ");'>process Transaction</a>");
+
+                            })
+                            .Empty("No data found")
+                            .Id("my-ajax-grid")
+                            .MultiFilterable()
+                            //.Pageable(pager =>
+                            //{
+                            //    pager.PagesToDisplay = 10;
+                            //    pager.RowsPerPage = 10;
+                            //})
+                            .Filterable()
+                            .Sortable()
+)
+

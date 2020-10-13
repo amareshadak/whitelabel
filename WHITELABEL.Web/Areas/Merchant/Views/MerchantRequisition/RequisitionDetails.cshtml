@@ -55,7 +55,7 @@
             @Html.AntiForgeryToken()
             @Html.HiddenFor(model => model.SLN)
             @Html.HiddenFor(model => model.FROM_MEMBER)
-
+@Html.HiddenFor(model=>model.RequisitionSendTO ,new {id="hdnRequisitionSendto" })
             @Html.HiddenFor(model => model.FromUser)
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             <div class="row">
@@ -415,6 +415,8 @@
 
 <script>
     $(document).ready(function () {
+	            const reqType = "Distributor";
+            $('#hdnRequisitionSendto').val(reqType);
         $('#Paymentgateway').hide();
         $('#checkbyRequisition').show();
         //$('#div_DIstributor').show();

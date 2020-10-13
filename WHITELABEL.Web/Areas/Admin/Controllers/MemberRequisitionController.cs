@@ -7,11 +7,13 @@ using System.Data.Entity;
 using System.Data.Entity.Core;
 using System.IO;
 using System.Linq;
+using System.Security;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using WHITELABEL.Data;
 using WHITELABEL.Data.Models;
+using WHITELABEL.Web.Areas.Merchant.Models;
 using WHITELABEL.Web.Controllers;
 using WHITELABEL.Web.Helper;
 using WHITELABEL.Web.Models;
@@ -487,9 +489,14 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                             translist.INSERTED_BY = MemberCurrentUser.MEM_ID;
                             db.Entry(translist).State = System.Data.Entity.EntityState.Modified;
                             await db.SaveChangesAsync();
-                            EmailHelper objsms = new EmailHelper();
-                            string Regmsg = "Hi " + checkAvailableMember.MEM_UNIQUE_ID + " \r\n. Your admin (" + AdminInfo.MEM_UNIQUE_ID + ") have successfully updated requisition of amount:- " + objval.AMOUNT + ".\r\n Regards\r\n BOOM Travels";
-                            objsms.SendUserEmail(checkAvailableMember.EMAIL_ID, "Your requisition update successfully.", Regmsg);
+
+                            #region Email Code done by Sayan at 10-10-2020
+                            string name = checkAvailableMember.MEMBER_NAME;
+                            string Regmsg = "Hi " + checkAvailableMember.MEM_UNIQUE_ID + "(" + checkAvailableMember.MEMBER_NAME + ")" + " \r\n. Your admin (" + AdminInfo.MEM_UNIQUE_ID + ") have successfully updated requisition of amount:- " + objval.AMOUNT + ".<br /> Regards, <br/>< br />BOOM Travels";
+                            EmailHelper emailhelper = new EmailHelper();
+                            string msgbody = emailhelper.GetEmailTemplate(name, Regmsg, "UserEmailTemplate.html");
+                            emailhelper.SendUserEmail(checkAvailableMember.EMAIL_ID.Trim(), "Your requisition has been updated successfully!", msgbody);
+                            #endregion
                             //return RedirectToAction("Index");
                         }
                         else
@@ -510,9 +517,14 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                 checkrefNo.INSERTED_BY = MemberCurrentUser.MEM_ID;
                                 db.Entry(checkrefNo).State = System.Data.Entity.EntityState.Modified;
                                 await db.SaveChangesAsync();
-                                EmailHelper objsms = new EmailHelper();
-                                string Regmsg = "Hi " + checkAvailableMember.MEM_UNIQUE_ID + " \r\n. Your admin (" + AdminInfo.MEM_UNIQUE_ID + ") have successfully updated requisition of amount:- " + objval.AMOUNT + ".\r\n Regards\r\n BOOM Travels";
-                                objsms.SendUserEmail(checkAvailableMember.EMAIL_ID, "Your requisition update successfully.", Regmsg);
+
+                                #region Email Code done by Sayan at 10-10-2020
+                                string name = checkAvailableMember.MEMBER_NAME;
+                                string Regmsg = "Hi " + checkAvailableMember.MEM_UNIQUE_ID + "(" + checkAvailableMember.MEMBER_NAME + ")" + " \r\n. Your admin (" + AdminInfo.MEM_UNIQUE_ID + ") have successfully updated requisition of amount:- " + objval.AMOUNT + ".<br /> Regards, <br/>< br />BOOM Travels";
+                                EmailHelper emailhelper = new EmailHelper();
+                                string msgbody = emailhelper.GetEmailTemplate(name, Regmsg, "UserEmailTemplate.html");
+                                emailhelper.SendUserEmail(checkAvailableMember.EMAIL_ID.Trim(), "Your requisition has been updated successfully!", msgbody);
+                                #endregion
                             }
                             else
                             {
@@ -529,9 +541,14 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                 objval.INSERTED_BY = MemberCurrentUser.MEM_ID;
                                 db.TBL_BALANCE_TRANSFER_LOGS.Add(objval);
                                 await db.SaveChangesAsync();
-                                EmailHelper objsms = new EmailHelper();
-                                string Regmsg = "Hi " + checkAvailableMember.MEM_UNIQUE_ID + " \r\n. Your admin (" + AdminInfo.MEM_UNIQUE_ID + ") have successfully added requisition of amount:- " + objval.AMOUNT + ".\r\n Regards\r\n BOOM Travels";
-                                objsms.SendUserEmail(checkAvailableMember.EMAIL_ID, "Your requisition added successfully.", Regmsg);
+
+                                #region Email Code done by Sayan at 10-10-2020
+                                string name = checkAvailableMember.MEMBER_NAME;
+                                string Regmsg = "Hi " + checkAvailableMember.MEM_UNIQUE_ID + "(" + checkAvailableMember.MEMBER_NAME + ")" + " \r\n. Your admin (" + AdminInfo.MEM_UNIQUE_ID + ") have successfully updated requisition of amount:- " + objval.AMOUNT + ".<br /> Regards, <br/>< br />BOOM Travels";
+                                EmailHelper emailhelper = new EmailHelper();
+                                string msgbody = emailhelper.GetEmailTemplate(name, Regmsg, "UserEmailTemplate.html");
+                                emailhelper.SendUserEmail(checkAvailableMember.EMAIL_ID.Trim(), "Your requisition has been updated successfully!", msgbody);
+                                #endregion
                             }
 
                             Logger.Info("");
@@ -678,170 +695,353 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                     decimal MER_PER_CR_LIT_AMT = 0;
                     string MemberType = string.Empty;
 
-                    var transinfo = await db.TBL_BALANCE_TRANSFER_LOGS.Where(x => x.SLN == sln).FirstOrDefaultAsync();
-                    decimal.TryParse(transinfo.AMOUNT.ToString(), out Trans_Req_Amount);
-
-                    #region For check Merchant Credit Balance
-                    //var DIST_ACCOUNT = await db.TBL_ACCOUNTS.Where(x => x.MEM_ID == transinfo.TO_MEMBER).OrderByDescending(z => z.TRANSACTION_TIME).FirstOrDefaultAsync();
-                    var DIST_ACCOUNT = await db.TBL_ACCOUNTS.Where(x => x.MEM_ID == transinfo.TO_MEMBER).OrderByDescending(z => z.ACC_NO).FirstOrDefaultAsync();
-                    if (DIST_ACCOUNT != null)
+                    var transinfo = await db.TBL_BALANCE_TRANSFER_LOGS.Where(x => x.SLN == sln).FirstOrDefaultAsync();                    
+                    if (transinfo.STATUS == "Pending")
                     {
-                        decimal.TryParse(DIST_ACCOUNT.CLOSING.ToString(), out DIST_CLOSING_AMT);
-                    }
-                    else
-                    {
-                        DIST_CLOSING_AMT = 0;
-                    }
-
-                    //var MER_ACCOUNT = await db.TBL_ACCOUNTS.Where(x => x.MEM_ID == transinfo.FROM_MEMBER).OrderByDescending(z => z.TRANSACTION_TIME).FirstOrDefaultAsync();
-                    var MER_ACCOUNT = await db.TBL_ACCOUNTS.Where(x => x.MEM_ID == transinfo.FROM_MEMBER).OrderByDescending(z => z.ACC_NO).FirstOrDefaultAsync();
-                    if (MER_ACCOUNT != null)
-                    {
-                        decimal.TryParse(MER_ACCOUNT.CLOSING.ToString(), out MER_CLOSING_AMT);
-                    }
-                    else
-                    {
-                        MER_CLOSING_AMT = 0;
-                    }
-
-                    var Distributor_Info = await db.TBL_MASTER_MEMBER.FirstOrDefaultAsync(x => x.MEM_ID == transinfo.TO_MEMBER);
-                    decimal.TryParse(Distributor_Info.BALANCE.ToString(), out Dist_MainBal);
-                    var Merchant_Info = await db.TBL_MASTER_MEMBER.FirstOrDefaultAsync(x => x.MEM_ID == transinfo.FROM_MEMBER);
-                    if (Merchant_Info.MEMBER_ROLE == 4)
-                    {
-                        MemberType = "DISTRIBUTOR";
-                    }
-                    else
-                    {
-                        MemberType = "RETAILER";
-                    }
-                    decimal.TryParse(Merchant_Info.BALANCE.ToString(), out MER_MainBal);
-                    decimal.TryParse(Merchant_Info.CREDIT_LIMIT.ToString(), out MER_CR_LMT_AMT);
-                    decimal.TryParse(Merchant_Info.RESERVED_CREDIT_LIMIT.ToString(), out MER_PER_CR_LIT_AMT);
-                    if (Merchant_Info.CREDIT_LIMIT <= 0)
-                    {
-
-                        if (Dist_MainBal >= Trans_Req_Amount)
+                        decimal.TryParse(transinfo.AMOUNT.ToString(), out Trans_Req_Amount);
+                        #region For check Merchant Credit Balance
+                        //var DIST_ACCOUNT = await db.TBL_ACCOUNTS.Where(x => x.MEM_ID == transinfo.TO_MEMBER).OrderByDescending(z => z.TRANSACTION_TIME).FirstOrDefaultAsync();
+                        var DIST_ACCOUNT = await db.TBL_ACCOUNTS.Where(x => x.MEM_ID == transinfo.TO_MEMBER).OrderByDescending(z => z.ACC_NO).FirstOrDefaultAsync();
+                        if (DIST_ACCOUNT != null)
                         {
-                            transinfo.STATUS = "Approve";
-                            transinfo.APPROVAL_DATE = DateTime.Now;
-                            transinfo.APPROVAL_TIME = DateTime.Now;
-                            transinfo.FromUser = "test";
-                            transinfo.REMARKS = SettlementTYPE;
-                            transinfo.APPROVED_BY = "ADMIN TRAVELIQ";
-                            transinfo.PAYMENT_TXN_DETAILS = PaymentTrnId;
-                            db.Entry(transinfo).State = System.Data.Entity.EntityState.Modified;
-                            //await db.SaveChangesAsync();
-
-                            //Distributor Main Balanve Update and insert innfor in Account table
-                            //Dist_Sub_MainAmount = Dist_MainBal - Trans_Req_Amount;
-                            //Distributor_Info.BALANCE = Dist_Sub_MainAmount;
-                            //db.Entry(Distributor_Info).State = System.Data.Entity.EntityState.Modified;
-                            //if (DIST_CLOSING_AMT > 0)
-                            //{
-                            //    DIST_ADJ_CLOSING_AMT = DIST_CLOSING_AMT - Trans_Req_Amount;
-                            //}
-                            //else
-                            //{
-                            //    DIST_ADJ_CLOSING_AMT = 0;
-                            //}
-                            //TBL_ACCOUNTS DIST_objACCOUNT = new TBL_ACCOUNTS()
-                            //{
-                            //    API_ID = 0,
-                            //    MEM_ID = transinfo.FROM_MEMBER,
-                            //    MEMBER_TYPE = "DISTRIBUTOR",
-                            //    TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
-                            //    TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                            //    TRANSACTION_TIME = DateTime.Now,
-                            //    DR_CR = "DR",
-                            //    //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
-                            //    AMOUNT = Trans_Req_Amount,
-                            //    NARRATION = transinfo.TRANSACTION_DETAILS,
-                            //    OPENING = DIST_CLOSING_AMT,
-                            //    CLOSING = DIST_ADJ_CLOSING_AMT,
-                            //    REC_NO = 0,
-                            //    COMM_AMT = 0,
-                            //    TDS = 0,
-                            //    GST = 0,
-                            //    IPAddress = "",
-                            //    SERVICE_ID = 0,
-                            //    CORELATIONID = COrelationID
-                            //};
-                            //db.TBL_ACCOUNTS.Add(DIST_objACCOUNT);
-                            //END Distributor Main Balanve Update and insert innfor in Account table
-                            Mer_Add_MainBalance = MER_MainBal + Trans_Req_Amount;
-                            Merchant_Info.BALANCE = Mer_Add_MainBalance;
-                            db.Entry(Merchant_Info).State = System.Data.Entity.EntityState.Modified;
-                            if (MER_CLOSING_AMT > 0)
-                            {
-                                MER_ADJ_CLOSING_AMT = MER_CLOSING_AMT + Trans_Req_Amount;
-                            }
-                            else
-                            {
-                                MER_ADJ_CLOSING_AMT = Trans_Req_Amount;
-                            }
-                            TBL_ACCOUNTS MERCH_objACCOUNT = new TBL_ACCOUNTS()
-                            {
-                                API_ID = 0,
-                                MEM_ID = transinfo.FROM_MEMBER,
-                                MEMBER_TYPE = MemberType,
-                                //TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
-                                TRANSACTION_TYPE ="DEPOSIT",
-                                TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                                TRANSACTION_TIME = DateTime.Now,
-                                DR_CR = "CR",
-                                //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
-                                AMOUNT = Trans_Req_Amount,
-                                NARRATION = transinfo.TRANSACTION_DETAILS,
-                                OPENING = MER_CLOSING_AMT,
-                                CLOSING = MER_ADJ_CLOSING_AMT,
-                                REC_NO = 0,
-                                COMM_AMT = 0,
-                                TDS = 0,
-                                GST = 0,
-                                IPAddress = "",
-                                SERVICE_ID = 0,
-                                CORELATIONID = COrelationID
-                            };
-                            db.TBL_ACCOUNTS.Add(MERCH_objACCOUNT);
-                            await db.SaveChangesAsync();
-                            ContextTransaction.Commit();
-                            //EmailHelper emailhelper = new EmailHelper();
-                            //string mailbody = "Hi " + Merchant_Info.UName + ",<p>Your requisition has been approve of amount " + Trans_Req_Amount + " by admin (" + Distributor_Info.MEM_UNIQUE_ID + ").</p>";
-                            //emailhelper.SendUserEmail(Merchant_Info.EMAIL_ID, "Requisition Approve", mailbody);
-                            return Json("Transaction Approve.", JsonRequestBehavior.AllowGet);
+                            decimal.TryParse(DIST_ACCOUNT.CLOSING.ToString(), out DIST_CLOSING_AMT);
                         }
                         else
                         {
-                            string msg = Distributor_Info.UName + " (Distributor) don't have sufficient balance to approve this transaction.";
-                            return Json(msg, JsonRequestBehavior.AllowGet);
+                            DIST_CLOSING_AMT = 0;
                         }
-                    }
-                    else
-                    {
-                        if (SettlementTYPE == "Full")
+
+                        //var MER_ACCOUNT = await db.TBL_ACCOUNTS.Where(x => x.MEM_ID == transinfo.FROM_MEMBER).OrderByDescending(z => z.TRANSACTION_TIME).FirstOrDefaultAsync();
+                        var MER_ACCOUNT = await db.TBL_ACCOUNTS.Where(x => x.MEM_ID == transinfo.FROM_MEMBER).OrderByDescending(z => z.ACC_NO).FirstOrDefaultAsync();
+                        if (MER_ACCOUNT != null)
                         {
-                            CREDITED_REQ_AMT = Trans_Req_Amount - MER_CR_LMT_AMT;
-                            if (CREDITED_REQ_AMT > 0)
+                            decimal.TryParse(MER_ACCOUNT.CLOSING.ToString(), out MER_CLOSING_AMT);
+                        }
+                        else
+                        {
+                            MER_CLOSING_AMT = 0;
+                        }
+
+                        var Distributor_Info = await db.TBL_MASTER_MEMBER.FirstOrDefaultAsync(x => x.MEM_ID == transinfo.TO_MEMBER);
+                        decimal.TryParse(Distributor_Info.BALANCE.ToString(), out Dist_MainBal);
+                        var Merchant_Info = await db.TBL_MASTER_MEMBER.FirstOrDefaultAsync(x => x.MEM_ID == transinfo.FROM_MEMBER);
+                        if (Merchant_Info.MEMBER_ROLE == 4)
+                        {
+                            MemberType = "DISTRIBUTOR";
+                        }
+                        else
+                        {
+                            MemberType = "RETAILER";
+                        }
+                        decimal.TryParse(Merchant_Info.BALANCE.ToString(), out MER_MainBal);
+                        decimal.TryParse(Merchant_Info.CREDIT_LIMIT.ToString(), out MER_CR_LMT_AMT);
+                        decimal.TryParse(Merchant_Info.RESERVED_CREDIT_LIMIT.ToString(), out MER_PER_CR_LIT_AMT);
+                        if (Merchant_Info.CREDIT_LIMIT <= 0)
+                        {
+
+                            if (Dist_MainBal >= Trans_Req_Amount)
                             {
-                                if (Dist_MainBal >= CREDITED_REQ_AMT)
+                                transinfo.STATUS = "Approve";
+                                transinfo.APPROVAL_DATE = DateTime.Now;
+                                transinfo.APPROVAL_TIME = DateTime.Now;
+                                transinfo.FromUser = "test";
+                                transinfo.REMARKS = SettlementTYPE;
+                                transinfo.APPROVED_BY = "ADMIN";
+                                transinfo.PAYMENT_TXN_DETAILS = PaymentTrnId;
+                                db.Entry(transinfo).State = System.Data.Entity.EntityState.Modified;
+                                //await db.SaveChangesAsync();
+
+                                //Distributor Main Balanve Update and insert innfor in Account table
+                                //Dist_Sub_MainAmount = Dist_MainBal - Trans_Req_Amount;
+                                //Distributor_Info.BALANCE = Dist_Sub_MainAmount;
+                                //db.Entry(Distributor_Info).State = System.Data.Entity.EntityState.Modified;
+                                //if (DIST_CLOSING_AMT > 0)
+                                //{
+                                //    DIST_ADJ_CLOSING_AMT = DIST_CLOSING_AMT - Trans_Req_Amount;
+                                //}
+                                //else
+                                //{
+                                //    DIST_ADJ_CLOSING_AMT = 0;
+                                //}
+                                //TBL_ACCOUNTS DIST_objACCOUNT = new TBL_ACCOUNTS()
+                                //{
+                                //    API_ID = 0,
+                                //    MEM_ID = transinfo.FROM_MEMBER,
+                                //    MEMBER_TYPE = "DISTRIBUTOR",
+                                //    TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
+                                //    TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
+                                //    TRANSACTION_TIME = DateTime.Now,
+                                //    DR_CR = "DR",
+                                //    //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
+                                //    AMOUNT = Trans_Req_Amount,
+                                //    NARRATION = transinfo.TRANSACTION_DETAILS,
+                                //    OPENING = DIST_CLOSING_AMT,
+                                //    CLOSING = DIST_ADJ_CLOSING_AMT,
+                                //    REC_NO = 0,
+                                //    COMM_AMT = 0,
+                                //    TDS = 0,
+                                //    GST = 0,
+                                //    IPAddress = "",
+                                //    SERVICE_ID = 0,
+                                //    CORELATIONID = COrelationID
+                                //};
+                                //db.TBL_ACCOUNTS.Add(DIST_objACCOUNT);
+                                //END Distributor Main Balanve Update and insert innfor in Account table
+                                Mer_Add_MainBalance = MER_MainBal + Trans_Req_Amount;
+                                Merchant_Info.BALANCE = Mer_Add_MainBalance;
+                                db.Entry(Merchant_Info).State = System.Data.Entity.EntityState.Modified;
+                                if (MER_CLOSING_AMT > 0)
+                                {
+                                    MER_ADJ_CLOSING_AMT = MER_CLOSING_AMT + Trans_Req_Amount;
+                                }
+                                else
+                                {
+                                    MER_ADJ_CLOSING_AMT = Trans_Req_Amount;
+                                }
+                                TBL_ACCOUNTS MERCH_objACCOUNT = new TBL_ACCOUNTS()
+                                {
+                                    API_ID = 0,
+                                    MEM_ID = transinfo.FROM_MEMBER,
+                                    MEMBER_TYPE = MemberType,
+                                    //TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
+                                    TRANSACTION_TYPE = "DEPOSIT",
+                                    TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
+                                    TRANSACTION_TIME = DateTime.Now,
+                                    DR_CR = "CR",
+                                    //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
+                                    AMOUNT = Trans_Req_Amount,
+                                    NARRATION = transinfo.TRANSACTION_DETAILS,
+                                    OPENING = MER_CLOSING_AMT,
+                                    CLOSING = MER_ADJ_CLOSING_AMT,
+                                    REC_NO = 0,
+                                    COMM_AMT = 0,
+                                    TDS = 0,
+                                    GST = 0,
+                                    IPAddress = "",
+                                    SERVICE_ID = 0,
+                                    CORELATIONID = COrelationID
+                                };
+                                db.TBL_ACCOUNTS.Add(MERCH_objACCOUNT);
+                                await db.SaveChangesAsync();
+                                ContextTransaction.Commit();
+
+                                #region Email Code done by Sayan at 10-10-2020
+                                string name = Merchant_Info.MEMBER_NAME;
+                                string mailbody = "Hi " + Merchant_Info.UName+ "(" + Merchant_Info.MEMBER_NAME + ")"  + ",<p>Your requisition has been approved of amount " + Trans_Req_Amount + " by admin (" + Distributor_Info.MEM_UNIQUE_ID + ").</p>";
+                                EmailHelper emailhelper = new EmailHelper();
+                                string msgbody = emailhelper.GetEmailTemplate(name, mailbody, "UserEmailTemplate.html");
+                                emailhelper.SendUserEmail(Merchant_Info.EMAIL_ID, "Great! Your Requisition Approved", msgbody);
+                                #endregion
+
+                                return Json("Transaction Approve.", JsonRequestBehavior.AllowGet);
+                            }
+                            else
+                            {
+                                string msg = Distributor_Info.UName + " (Distributor) don't have sufficient balance to approve this transaction.";
+                                return Json(msg, JsonRequestBehavior.AllowGet);
+                            }
+                        }
+                        else
+                        {
+                            if (SettlementTYPE == "Full")
+                            {
+                                CREDITED_REQ_AMT = Trans_Req_Amount - MER_CR_LMT_AMT;
+                                if (CREDITED_REQ_AMT > 0)
+                                {
+                                    if (Dist_MainBal >= CREDITED_REQ_AMT)
+                                    {
+                                        transinfo.STATUS = "Approve";
+                                        transinfo.APPROVAL_DATE = DateTime.Now;
+                                        transinfo.APPROVAL_TIME = DateTime.Now;
+                                        transinfo.REMARKS = SettlementTYPE;
+                                        transinfo.FromUser = "test";
+                                        transinfo.APPROVED_BY = "ADMIN";
+                                        transinfo.PAYMENT_TXN_DETAILS = PaymentTrnId;
+                                        db.Entry(transinfo).State = System.Data.Entity.EntityState.Modified;
+
+                                        ////Distributor Main Balanve Update and insert innfor in Account table
+                                        //Dist_Sub_MainAmount = Dist_MainBal - CREDITED_REQ_AMT;
+                                        //Distributor_Info.BALANCE = Dist_Sub_MainAmount;
+                                        //db.Entry(Distributor_Info).State = System.Data.Entity.EntityState.Modified;
+                                        //if (DIST_CLOSING_AMT > 0)
+                                        //{
+                                        //    DIST_ADJ_CLOSING_AMT = DIST_CLOSING_AMT - CREDITED_REQ_AMT;
+                                        //}
+                                        //else
+                                        //{
+                                        //    DIST_ADJ_CLOSING_AMT = 0;
+                                        //}
+                                        //TBL_ACCOUNTS DIST_objACCOUNT = new TBL_ACCOUNTS()
+                                        //{
+                                        //    API_ID = 0,
+                                        //    MEM_ID = transinfo.FROM_MEMBER,
+                                        //    MEMBER_TYPE = "DISTRIBUTOR",
+                                        //    TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
+                                        //    TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
+                                        //    TRANSACTION_TIME = DateTime.Now,
+                                        //    DR_CR = "DR",
+                                        //    //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
+                                        //    AMOUNT = CREDITED_REQ_AMT,
+                                        //    NARRATION = transinfo.TRANSACTION_DETAILS,
+                                        //    OPENING = DIST_CLOSING_AMT,
+                                        //    CLOSING = DIST_ADJ_CLOSING_AMT,
+                                        //    REC_NO = 0,
+                                        //    COMM_AMT = 0,
+                                        //    TDS = 0,
+                                        //    GST = 0,
+                                        //    IPAddress = "",
+                                        //    SERVICE_ID = 0,
+                                        //    CORELATIONID = COrelationID
+                                        //};
+                                        //db.TBL_ACCOUNTS.Add(DIST_objACCOUNT);
+                                        ////END Distributor Main Balanve Update and insert innfor in Account table
+                                        Mer_Add_MainBalance = MER_MainBal + Trans_Req_Amount - CREDITED_REQ_AMT;
+                                        Merchant_Info.BALANCE = Mer_Add_MainBalance;
+                                        Merchant_Info.CREDIT_LIMIT = 0;
+                                        //Merchant_Info.RESERVED_CREDIT_LIMIT = 0;
+                                        db.Entry(Merchant_Info).State = System.Data.Entity.EntityState.Modified;
+                                        if (MER_CLOSING_AMT > 0)
+                                        {
+                                            MER_ADJ_CLOSING_AMT = MER_CLOSING_AMT + Trans_Req_Amount;
+                                        }
+                                        else
+                                        {
+                                            MER_ADJ_CLOSING_AMT = Trans_Req_Amount;
+                                        }
+                                        TBL_ACCOUNTS MERCH_CreeditobjACCOUNT = new TBL_ACCOUNTS()
+                                        {
+                                            API_ID = 0,
+                                            MEM_ID = transinfo.FROM_MEMBER,
+                                            MEMBER_TYPE = MemberType,
+                                            //TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
+                                            TRANSACTION_TYPE = "DEPOSIT",
+                                            TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
+                                            TRANSACTION_TIME = DateTime.Now,
+                                            DR_CR = "CR",
+                                            //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
+                                            AMOUNT = Trans_Req_Amount,
+                                            NARRATION = transinfo.TRANSACTION_DETAILS,
+                                            OPENING = MER_CLOSING_AMT,
+                                            CLOSING = MER_ADJ_CLOSING_AMT,
+                                            REC_NO = 0,
+                                            COMM_AMT = 0,
+                                            TDS = 0,
+                                            GST = 0,
+                                            IPAddress = "",
+                                            SERVICE_ID = 0,
+                                            CORELATIONID = COrelationID
+                                        };
+                                        db.TBL_ACCOUNTS.Add(MERCH_CreeditobjACCOUNT);
+
+                                        decimal MERCH_Deduct_CR_AMT = 0;
+
+                                        //MERCH_Deduct_CR_AMT = MER_ADJ_CLOSING_AMT - CREDITED_REQ_AMT;
+                                        MERCH_Deduct_CR_AMT = MER_ADJ_CLOSING_AMT - MER_CR_LMT_AMT;
+
+                                        TBL_ACCOUNTS MERCH_objDECUR_AMT = new TBL_ACCOUNTS()
+                                        {
+                                            API_ID = 0,
+                                            MEM_ID = transinfo.FROM_MEMBER,
+                                            MEMBER_TYPE = MemberType,
+                                            //TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
+                                            TRANSACTION_TYPE = "CREDIT SETTLEMENT",
+                                            TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
+                                            TRANSACTION_TIME = DateTime.Now,
+                                            DR_CR = "DR",
+                                            //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
+                                            AMOUNT = MER_CR_LMT_AMT,
+                                            NARRATION = transinfo.TRANSACTION_DETAILS,
+                                            OPENING = MER_ADJ_CLOSING_AMT,
+                                            CLOSING = MERCH_Deduct_CR_AMT,
+                                            REC_NO = 0,
+                                            COMM_AMT = 0,
+                                            TDS = 0,
+                                            GST = 0,
+                                            IPAddress = "",
+                                            SERVICE_ID = 0,
+                                            CORELATIONID = COrelationID
+                                        };
+                                        db.TBL_ACCOUNTS.Add(MERCH_objDECUR_AMT);
+
+
+                                        TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION OBJMERCHANTCREDIT_VAL = new TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION()
+                                        {
+                                            TO_MEM_ID = transinfo.TO_MEMBER,
+                                            FROM_MEM_ID = transinfo.FROM_MEMBER,
+                                            CREDIT_DATE = DateTime.Now,
+                                            CREDIT_AMOUNT = MER_CR_LMT_AMT,
+                                            CREDIT_NOTE_DESCRIPTION = "CREDIT LIMIT AMOUNT LOGS",
+                                            CREDIT_STATUS = true,
+                                            GST_VAL = 0,
+                                            GST_AMOUNT = 0,
+                                            TDS_AMOUNT = 0,
+                                            TDS_VAL = 0,
+                                            CREDIT_OPENING = 0,
+                                            CREDITCLOSING = 0,
+                                            CREDIT_TRN_TYPE = "DR",
+                                            CORELATIONID = COrelationID
+                                        };
+                                        db.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION.Add(OBJMERCHANTCREDIT_VAL);
+
+                                        //TBL_MEMBER_CREDIT_ACCOUNT_LOGS MEM_CREDIT_ACNT_LOGS = new TBL_MEMBER_CREDIT_ACCOUNT_LOGS()
+                                        //{
+                                        //    MEM_ID = MemberCurrentUser.MEM_ID,
+                                        //    CREDIT_ID = MemberCurrentUser.MEM_ID,
+                                        //    CORELATIONID = COrelationID,
+                                        //    CREDIT_TRAN_TYPE = "DR",
+                                        //    USED_CREDIT_AMOUNT = CREDITED_REQ_AMT,
+                                        //    CREDIT_OPENING_BALANCE = 0,
+                                        //    CREDIT_CLOSING_BALANCE = 0,
+                                        //    CREDIT_USED_DATE = DateTime.Now,
+                                        //    IPADDRESS = "",
+                                        //    WLP_ID = (long)Merchant_Info.UNDER_WHITE_LEVEL,
+                                        //    DIST_ID = (long)Merchant_Info.INTRODUCER,
+                                        //    SUPER_ID = 0,
+                                        //    MER_ID = MemberCurrentUser.MEM_ID,
+                                        //    NARRATION = "CREDIT LIMIT AMOUNT LOGS"
+                                        //};
+                                        //db.TBL_MEMBER_CREDIT_ACCOUNT_LOGS.Add(MEM_CREDIT_ACNT_LOGS);
+                                        await db.SaveChangesAsync();
+                                        ContextTransaction.Commit();
+
+                                        #region Email Code done by Sayan at 10-10-2020
+                                        string name = Merchant_Info.MEMBER_NAME;
+                                        string mailbody = "Hi " + Merchant_Info.UName + "(" + Merchant_Info.MEMBER_NAME + ")" + ",<p>Your requisition has been approved of amount " + Trans_Req_Amount + " by admin (" + Distributor_Info.MEM_UNIQUE_ID + ").</p>";
+                                        EmailHelper emailhelper = new EmailHelper();
+                                        string msgbody = emailhelper.GetEmailTemplate(name, mailbody, "UserEmailTemplate.html");
+                                        emailhelper.SendUserEmail(Merchant_Info.EMAIL_ID, "Great! Your Requisition Approved", msgbody);
+                                        #endregion
+
+                                        return Json("Transaction Approve.", JsonRequestBehavior.AllowGet);
+                                    }
+                                    else
+                                    {
+                                        string msg = "Credit Requested Amount is Insufficiant After Calculation Merchant Full Settlement Amount of Rs." + MER_CR_LMT_AMT;
+                                        return Json(msg, JsonRequestBehavior.AllowGet);
+                                        //CREDITED_REQ_AMT IS INSUFFICIANT AFTER CALULATION MERCHANT FULL SETTLEMENT AMOUNT OF RS. MER_CR_LMT_AMT
+                                    }
+                                }
+                                else if (CREDITED_REQ_AMT == 0)
                                 {
                                     transinfo.STATUS = "Approve";
                                     transinfo.APPROVAL_DATE = DateTime.Now;
                                     transinfo.APPROVAL_TIME = DateTime.Now;
-                                    transinfo.REMARKS = SettlementTYPE;
                                     transinfo.FromUser = "test";
-                                    transinfo.APPROVED_BY = "ADMIN TRAVELIQ";
+                                    transinfo.REMARKS = SettlementTYPE;
+                                    transinfo.APPROVED_BY = "ADMIN";
                                     transinfo.PAYMENT_TXN_DETAILS = PaymentTrnId;
                                     db.Entry(transinfo).State = System.Data.Entity.EntityState.Modified;
 
+
                                     ////Distributor Main Balanve Update and insert innfor in Account table
                                     //Dist_Sub_MainAmount = Dist_MainBal - CREDITED_REQ_AMT;
+                                    ////Dist_Sub_MainAmount =0;
                                     //Distributor_Info.BALANCE = Dist_Sub_MainAmount;
                                     //db.Entry(Distributor_Info).State = System.Data.Entity.EntityState.Modified;
                                     //if (DIST_CLOSING_AMT > 0)
                                     //{
                                     //    DIST_ADJ_CLOSING_AMT = DIST_CLOSING_AMT - CREDITED_REQ_AMT;
+                                    //    //DIST_ADJ_CLOSING_AMT =0;
                                     //}
                                     //else
                                     //{
@@ -871,10 +1071,11 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                     //};
                                     //db.TBL_ACCOUNTS.Add(DIST_objACCOUNT);
                                     ////END Distributor Main Balanve Update and insert innfor in Account table
-                                    Mer_Add_MainBalance = MER_MainBal + Trans_Req_Amount - CREDITED_REQ_AMT;
-                                    Merchant_Info.BALANCE = Mer_Add_MainBalance;
+                                    //Mer_Add_MainBalance = MER_MainBal + Trans_Req_Amount - CREDITED_REQ_AMT;
+                                    Mer_Add_MainBalance = MER_MainBal + Trans_Req_Amount - Trans_Req_Amount;
                                     Merchant_Info.CREDIT_LIMIT = 0;
                                     //Merchant_Info.RESERVED_CREDIT_LIMIT = 0;
+                                    Merchant_Info.BALANCE = Mer_Add_MainBalance;
                                     db.Entry(Merchant_Info).State = System.Data.Entity.EntityState.Modified;
                                     if (MER_CLOSING_AMT > 0)
                                     {
@@ -912,8 +1113,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                     decimal MERCH_Deduct_CR_AMT = 0;
 
                                     //MERCH_Deduct_CR_AMT = MER_ADJ_CLOSING_AMT - CREDITED_REQ_AMT;
-                                    MERCH_Deduct_CR_AMT = MER_ADJ_CLOSING_AMT - MER_CR_LMT_AMT;
-                                    
+                                    MERCH_Deduct_CR_AMT = MER_ADJ_CLOSING_AMT - Trans_Req_Amount;
+
                                     TBL_ACCOUNTS MERCH_objDECUR_AMT = new TBL_ACCOUNTS()
                                     {
                                         API_ID = 0,
@@ -925,7 +1126,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                         TRANSACTION_TIME = DateTime.Now,
                                         DR_CR = "DR",
                                         //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
-                                        AMOUNT = MER_CR_LMT_AMT,
+                                        AMOUNT = Trans_Req_Amount,
                                         NARRATION = transinfo.TRANSACTION_DETAILS,
                                         OPENING = MER_ADJ_CLOSING_AMT,
                                         CLOSING = MERCH_Deduct_CR_AMT,
@@ -945,7 +1146,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                         TO_MEM_ID = transinfo.TO_MEMBER,
                                         FROM_MEM_ID = transinfo.FROM_MEMBER,
                                         CREDIT_DATE = DateTime.Now,
-                                        CREDIT_AMOUNT = MER_CR_LMT_AMT,
+                                        CREDIT_AMOUNT = Trans_Req_Amount,
                                         CREDIT_NOTE_DESCRIPTION = "CREDIT LIMIT AMOUNT LOGS",
                                         CREDIT_STATUS = true,
                                         GST_VAL = 0,
@@ -979,241 +1180,254 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                     //db.TBL_MEMBER_CREDIT_ACCOUNT_LOGS.Add(MEM_CREDIT_ACNT_LOGS);
                                     await db.SaveChangesAsync();
                                     ContextTransaction.Commit();
-                                    //EmailHelper emailhelper = new EmailHelper();
-                                    //string mailbody = "Hi " + Merchant_Info.UName + ",<p>Your requisition has been approve of amount " + Trans_Req_Amount + " by admin (" + Distributor_Info.MEM_UNIQUE_ID + ").</p>";
-                                    //emailhelper.SendUserEmail(Merchant_Info.EMAIL_ID, "Requisition Approve", mailbody);
+
+                                    #region Email Code done by Sayan at 10-10-2020
+                                    string name = Merchant_Info.MEMBER_NAME;
+                                    string mailbody = "Hi " + Merchant_Info.UName + "(" + Merchant_Info.MEMBER_NAME + ")" + ",<p>Your requisition has been approved of amount " + Trans_Req_Amount + " by admin (" + Distributor_Info.MEM_UNIQUE_ID + ").</p>";
+                                    EmailHelper emailhelper = new EmailHelper();
+                                    string msgbody = emailhelper.GetEmailTemplate(name, mailbody, "UserEmailTemplate.html");
+                                    emailhelper.SendUserEmail(Merchant_Info.EMAIL_ID, "Great! Your Requisition Approved", msgbody);
+                                    #endregion
+
                                     return Json("Transaction Approve.", JsonRequestBehavior.AllowGet);
                                 }
                                 else
                                 {
-                                    string msg = "Credit Requested Amount is Insufficiant After Calculation Merchant Full Settlement Amount of Rs." + MER_CR_LMT_AMT;
+                                    string msg = "This payment requisition can't be update in full settlement mode. Requisition amount is less than the credit limit amount";
                                     return Json(msg, JsonRequestBehavior.AllowGet);
-                                    //CREDITED_REQ_AMT IS INSUFFICIANT AFTER CALULATION MERCHANT FULL SETTLEMENT AMOUNT OF RS. MER_CR_LMT_AMT
+                                    //THIS PAYMENT REQUISITION CAN'T BE UPDATE IN FULL SETTLEMENT MODE. REQUISITION AMOUNT IS LESS THAN THE CREDIT LIMIT AMOUNT
                                 }
-                            }
-                            else if (CREDITED_REQ_AMT == 0)
-                            {
-                                transinfo.STATUS = "Approve";
-                                transinfo.APPROVAL_DATE = DateTime.Now;
-                                transinfo.APPROVAL_TIME = DateTime.Now;
-                                transinfo.FromUser = "test";
-                                transinfo.REMARKS = SettlementTYPE;
-                                transinfo.APPROVED_BY = "ADMIN TRAVELIQ";
-                                transinfo.PAYMENT_TXN_DETAILS = PaymentTrnId;
-                                db.Entry(transinfo).State = System.Data.Entity.EntityState.Modified;
-
-
-                                ////Distributor Main Balanve Update and insert innfor in Account table
-                                //Dist_Sub_MainAmount = Dist_MainBal - CREDITED_REQ_AMT;
-                                ////Dist_Sub_MainAmount =0;
-                                //Distributor_Info.BALANCE = Dist_Sub_MainAmount;
-                                //db.Entry(Distributor_Info).State = System.Data.Entity.EntityState.Modified;
-                                //if (DIST_CLOSING_AMT > 0)
-                                //{
-                                //    DIST_ADJ_CLOSING_AMT = DIST_CLOSING_AMT - CREDITED_REQ_AMT;
-                                //    //DIST_ADJ_CLOSING_AMT =0;
-                                //}
-                                //else
-                                //{
-                                //    DIST_ADJ_CLOSING_AMT = 0;
-                                //}
-                                //TBL_ACCOUNTS DIST_objACCOUNT = new TBL_ACCOUNTS()
-                                //{
-                                //    API_ID = 0,
-                                //    MEM_ID = transinfo.FROM_MEMBER,
-                                //    MEMBER_TYPE = "DISTRIBUTOR",
-                                //    TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
-                                //    TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                                //    TRANSACTION_TIME = DateTime.Now,
-                                //    DR_CR = "DR",
-                                //    //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
-                                //    AMOUNT = CREDITED_REQ_AMT,
-                                //    NARRATION = transinfo.TRANSACTION_DETAILS,
-                                //    OPENING = DIST_CLOSING_AMT,
-                                //    CLOSING = DIST_ADJ_CLOSING_AMT,
-                                //    REC_NO = 0,
-                                //    COMM_AMT = 0,
-                                //    TDS = 0,
-                                //    GST = 0,
-                                //    IPAddress = "",
-                                //    SERVICE_ID = 0,
-                                //    CORELATIONID = COrelationID
-                                //};
-                                //db.TBL_ACCOUNTS.Add(DIST_objACCOUNT);
-                                ////END Distributor Main Balanve Update and insert innfor in Account table
-                                //Mer_Add_MainBalance = MER_MainBal + Trans_Req_Amount - CREDITED_REQ_AMT;
-                                Mer_Add_MainBalance = MER_MainBal + Trans_Req_Amount - Trans_Req_Amount;
-                                Merchant_Info.CREDIT_LIMIT = 0;
-                                //Merchant_Info.RESERVED_CREDIT_LIMIT = 0;
-                                Merchant_Info.BALANCE = Mer_Add_MainBalance;
-                                db.Entry(Merchant_Info).State = System.Data.Entity.EntityState.Modified;
-                                if (MER_CLOSING_AMT > 0)
-                                {
-                                    MER_ADJ_CLOSING_AMT = MER_CLOSING_AMT + Trans_Req_Amount;
-                                }
-                                else
-                                {
-                                    MER_ADJ_CLOSING_AMT = Trans_Req_Amount;
-                                }
-                                TBL_ACCOUNTS MERCH_CreeditobjACCOUNT = new TBL_ACCOUNTS()
-                                {
-                                    API_ID = 0,
-                                    MEM_ID = transinfo.FROM_MEMBER,
-                                    MEMBER_TYPE = MemberType,
-                                    //TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
-                                    TRANSACTION_TYPE = "DEPOSIT",
-                                    TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                                    TRANSACTION_TIME = DateTime.Now,
-                                    DR_CR = "CR",
-                                    //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
-                                    AMOUNT = Trans_Req_Amount,
-                                    NARRATION = transinfo.TRANSACTION_DETAILS,
-                                    OPENING = MER_CLOSING_AMT,
-                                    CLOSING = MER_ADJ_CLOSING_AMT,
-                                    REC_NO = 0,
-                                    COMM_AMT = 0,
-                                    TDS = 0,
-                                    GST = 0,
-                                    IPAddress = "",
-                                    SERVICE_ID = 0,
-                                    CORELATIONID = COrelationID
-                                };
-                                db.TBL_ACCOUNTS.Add(MERCH_CreeditobjACCOUNT);
-
-                                decimal MERCH_Deduct_CR_AMT = 0;
-
-                                //MERCH_Deduct_CR_AMT = MER_ADJ_CLOSING_AMT - CREDITED_REQ_AMT;
-                                MERCH_Deduct_CR_AMT = MER_ADJ_CLOSING_AMT - Trans_Req_Amount;
-                                
-                                TBL_ACCOUNTS MERCH_objDECUR_AMT = new TBL_ACCOUNTS()
-                                {
-                                    API_ID = 0,
-                                    MEM_ID = transinfo.FROM_MEMBER,
-                                    MEMBER_TYPE = MemberType,
-                                    //TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
-                                    TRANSACTION_TYPE = "CREDIT SETTLEMENT",
-                                    TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                                    TRANSACTION_TIME = DateTime.Now,
-                                    DR_CR = "DR",
-                                    //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
-                                    AMOUNT = Trans_Req_Amount,
-                                    NARRATION = transinfo.TRANSACTION_DETAILS,
-                                    OPENING = MER_ADJ_CLOSING_AMT,
-                                    CLOSING = MERCH_Deduct_CR_AMT,
-                                    REC_NO = 0,
-                                    COMM_AMT = 0,
-                                    TDS = 0,
-                                    GST = 0,
-                                    IPAddress = "",
-                                    SERVICE_ID = 0,
-                                    CORELATIONID = COrelationID
-                                };
-                                db.TBL_ACCOUNTS.Add(MERCH_objDECUR_AMT);
-
-
-                                TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION OBJMERCHANTCREDIT_VAL = new TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION()
-                                {
-                                    TO_MEM_ID = transinfo.TO_MEMBER,
-                                    FROM_MEM_ID = transinfo.FROM_MEMBER,
-                                    CREDIT_DATE = DateTime.Now,
-                                    CREDIT_AMOUNT = Trans_Req_Amount,
-                                    CREDIT_NOTE_DESCRIPTION = "CREDIT LIMIT AMOUNT LOGS",
-                                    CREDIT_STATUS = true,
-                                    GST_VAL = 0,
-                                    GST_AMOUNT = 0,
-                                    TDS_AMOUNT = 0,
-                                    TDS_VAL = 0,
-                                    CREDIT_OPENING = 0,
-                                    CREDITCLOSING = 0,
-                                    CREDIT_TRN_TYPE = "DR",
-                                    CORELATIONID = COrelationID
-                                };
-                                db.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION.Add(OBJMERCHANTCREDIT_VAL);
-
-                                //TBL_MEMBER_CREDIT_ACCOUNT_LOGS MEM_CREDIT_ACNT_LOGS = new TBL_MEMBER_CREDIT_ACCOUNT_LOGS()
-                                //{
-                                //    MEM_ID = MemberCurrentUser.MEM_ID,
-                                //    CREDIT_ID = MemberCurrentUser.MEM_ID,
-                                //    CORELATIONID = COrelationID,
-                                //    CREDIT_TRAN_TYPE = "DR",
-                                //    USED_CREDIT_AMOUNT = CREDITED_REQ_AMT,
-                                //    CREDIT_OPENING_BALANCE = 0,
-                                //    CREDIT_CLOSING_BALANCE = 0,
-                                //    CREDIT_USED_DATE = DateTime.Now,
-                                //    IPADDRESS = "",
-                                //    WLP_ID = (long)Merchant_Info.UNDER_WHITE_LEVEL,
-                                //    DIST_ID = (long)Merchant_Info.INTRODUCER,
-                                //    SUPER_ID = 0,
-                                //    MER_ID = MemberCurrentUser.MEM_ID,
-                                //    NARRATION = "CREDIT LIMIT AMOUNT LOGS"
-                                //};
-                                //db.TBL_MEMBER_CREDIT_ACCOUNT_LOGS.Add(MEM_CREDIT_ACNT_LOGS);
-                                await db.SaveChangesAsync();
-                                ContextTransaction.Commit();
-                                //EmailHelper emailhelper = new EmailHelper();
-                                //string mailbody = "Hi " + Merchant_Info.UName + ",<p>Your requisition has been approve of amount " + Trans_Req_Amount + " by admin (" + Distributor_Info.MEM_UNIQUE_ID + ").</p>";
-                                //emailhelper.SendUserEmail(Merchant_Info.EMAIL_ID, "Requisition Approve", mailbody);
-                                return Json("Transaction Approve.", JsonRequestBehavior.AllowGet);
                             }
                             else
                             {
-                                string msg = "This payment requisition can't be update in full settlement mode. Requisition amount is less than the credit limit amount";
-                                return Json(msg, JsonRequestBehavior.AllowGet);
-                                //THIS PAYMENT REQUISITION CAN'T BE UPDATE IN FULL SETTLEMENT MODE. REQUISITION AMOUNT IS LESS THAN THE CREDIT LIMIT AMOUNT
-                            }
-                        }
-                        else
-                        {
-                            decimal CHECK_DIST_VAL = 0.00M;
-                            decimal MER_DEBIT_BAL = 0.00M;
-                            decimal CREDIT_WALLET_SETTLEMENT_VAL = 0.00M;
-                            if (MER_CR_LMT_AMT >= MER_PER_CR_LIT_AMT)
-                            {
-                                if (Trans_Req_Amount > (MER_CR_LMT_AMT - MER_PER_CR_LIT_AMT))
+                                decimal CHECK_DIST_VAL = 0.00M;
+                                decimal MER_DEBIT_BAL = 0.00M;
+                                decimal CREDIT_WALLET_SETTLEMENT_VAL = 0.00M;
+                                if (MER_CR_LMT_AMT >= MER_PER_CR_LIT_AMT)
                                 {
-                                    MER_DEBIT_BAL = MER_CR_LMT_AMT - MER_PER_CR_LIT_AMT;
+                                    if (Trans_Req_Amount > (MER_CR_LMT_AMT - MER_PER_CR_LIT_AMT))
+                                    {
+                                        MER_DEBIT_BAL = MER_CR_LMT_AMT - MER_PER_CR_LIT_AMT;
+                                    }
+                                    else
+                                    {
+                                        MER_DEBIT_BAL = Trans_Req_Amount;
+                                    }
+                                    CHECK_DIST_VAL = Trans_Req_Amount - (MER_CR_LMT_AMT - MER_PER_CR_LIT_AMT);
                                 }
                                 else
                                 {
-                                    MER_DEBIT_BAL = Trans_Req_Amount;
-                                }
-                                CHECK_DIST_VAL = Trans_Req_Amount - (MER_CR_LMT_AMT - MER_PER_CR_LIT_AMT);
-                            }
-                            else
-                            {
-                                if (Trans_Req_Amount > MER_CR_LMT_AMT)
+                                    if (Trans_Req_Amount > MER_CR_LMT_AMT)
 
-                                {
-                                    MER_DEBIT_BAL = MER_CR_LMT_AMT;
-                                }
-                                else
+                                    {
+                                        MER_DEBIT_BAL = MER_CR_LMT_AMT;
+                                    }
+                                    else
 
-                                {
-                                    MER_DEBIT_BAL = Trans_Req_Amount;
+                                    {
+                                        MER_DEBIT_BAL = Trans_Req_Amount;
+                                    }
+                                    CHECK_DIST_VAL = Trans_Req_Amount - MER_CR_LMT_AMT;
+                                    CREDIT_WALLET_SETTLEMENT_VAL = MER_DEBIT_BAL;
                                 }
-                                CHECK_DIST_VAL = Trans_Req_Amount - MER_CR_LMT_AMT;
-                                CREDIT_WALLET_SETTLEMENT_VAL = MER_DEBIT_BAL;
-                            }
-                            if (CHECK_DIST_VAL > 0)
-                            {
-                                if (Dist_MainBal > CHECK_DIST_VAL)
+                                if (CHECK_DIST_VAL > 0)
+                                {
+                                    if (Dist_MainBal > CHECK_DIST_VAL)
+                                    {
+                                        transinfo.STATUS = "Approve";
+                                        transinfo.APPROVAL_DATE = DateTime.Now;
+                                        transinfo.APPROVAL_TIME = DateTime.Now;
+                                        transinfo.FromUser = "test";
+                                        transinfo.REMARKS = SettlementTYPE;
+                                        transinfo.APPROVED_BY = "ADMIN";
+                                        transinfo.PAYMENT_TXN_DETAILS = PaymentTrnId;
+                                        db.Entry(transinfo).State = System.Data.Entity.EntityState.Modified;
+
+                                        ////Distributor Main Balanve Update and insert innfor in Account table
+                                        //Dist_Sub_MainAmount = Dist_MainBal - CHECK_DIST_VAL;
+                                        //Distributor_Info.BALANCE = Dist_Sub_MainAmount;
+                                        //db.Entry(Distributor_Info).State = System.Data.Entity.EntityState.Modified;
+                                        //if (DIST_CLOSING_AMT > 0)
+                                        //{
+                                        //    DIST_ADJ_CLOSING_AMT = DIST_CLOSING_AMT - CHECK_DIST_VAL;
+                                        //}
+                                        //else
+                                        //{
+                                        //    DIST_ADJ_CLOSING_AMT = 0;
+                                        //}
+                                        //TBL_ACCOUNTS DIST_objACCOUNT = new TBL_ACCOUNTS()
+                                        //{
+                                        //    API_ID = 0,
+                                        //    MEM_ID = transinfo.FROM_MEMBER,
+                                        //    MEMBER_TYPE = "DISTRIBUTOR",
+                                        //    TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
+                                        //    TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
+                                        //    TRANSACTION_TIME = DateTime.Now,
+                                        //    DR_CR = "DR",
+                                        //    //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
+                                        //    AMOUNT = CHECK_DIST_VAL,
+                                        //    NARRATION = transinfo.TRANSACTION_DETAILS,
+                                        //    OPENING = DIST_CLOSING_AMT,
+                                        //    CLOSING = DIST_ADJ_CLOSING_AMT,
+                                        //    REC_NO = 0,
+                                        //    COMM_AMT = 0,
+                                        //    TDS = 0,
+                                        //    GST = 0,
+                                        //    IPAddress = "",
+                                        //    SERVICE_ID = 0,
+                                        //    CORELATIONID = COrelationID
+                                        //};
+                                        //db.TBL_ACCOUNTS.Add(DIST_objACCOUNT);
+                                        ////END Distributor Main Balanve Update and insert innfor in Account table
+                                        Mer_Add_MainBalance = MER_MainBal + Trans_Req_Amount - MER_DEBIT_BAL;
+                                        //Merchant_Info.CREDIT_LIMIT = MER_DEBIT_BAL;
+                                        decimal SUBCRLIMIAMT = 0;
+                                        SUBCRLIMIAMT = MER_CR_LMT_AMT - MER_DEBIT_BAL;
+                                        Merchant_Info.CREDIT_LIMIT = SUBCRLIMIAMT;
+                                        Merchant_Info.BALANCE = Mer_Add_MainBalance;
+                                        db.Entry(Merchant_Info).State = System.Data.Entity.EntityState.Modified;
+                                        if (MER_CLOSING_AMT > 0)
+                                        {
+                                            MER_ADJ_CLOSING_AMT = MER_CLOSING_AMT + Trans_Req_Amount;
+                                        }
+                                        else
+                                        {
+                                            MER_ADJ_CLOSING_AMT = Trans_Req_Amount;
+                                        }
+                                        TBL_ACCOUNTS MERCH_CreeditobjACCOUNT = new TBL_ACCOUNTS()
+                                        {
+                                            API_ID = 0,
+                                            MEM_ID = transinfo.FROM_MEMBER,
+                                            MEMBER_TYPE = MemberType,
+                                            //TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
+                                            TRANSACTION_TYPE = "DEPOSIT",
+                                            TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
+                                            TRANSACTION_TIME = DateTime.Now,
+                                            DR_CR = "CR",
+                                            //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
+                                            AMOUNT = Trans_Req_Amount,
+                                            NARRATION = transinfo.TRANSACTION_DETAILS,
+                                            OPENING = MER_CLOSING_AMT,
+                                            CLOSING = MER_ADJ_CLOSING_AMT,
+                                            REC_NO = 0,
+                                            COMM_AMT = 0,
+                                            TDS = 0,
+                                            GST = 0,
+                                            IPAddress = "",
+                                            SERVICE_ID = 0,
+                                            CORELATIONID = COrelationID
+                                        };
+                                        db.TBL_ACCOUNTS.Add(MERCH_CreeditobjACCOUNT);
+
+                                        decimal MERCH_Deduct_CR_AMT = 0;
+
+                                        MERCH_Deduct_CR_AMT = MER_ADJ_CLOSING_AMT - MER_DEBIT_BAL;
+                                        TBL_ACCOUNTS MERCH_objDECUR_AMT = new TBL_ACCOUNTS()
+                                        {
+                                            API_ID = 0,
+                                            MEM_ID = transinfo.FROM_MEMBER,
+                                            MEMBER_TYPE = MemberType,
+                                            //TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
+                                            TRANSACTION_TYPE = "CREDIT SETTLEMENT",
+                                            TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
+                                            TRANSACTION_TIME = DateTime.Now,
+                                            DR_CR = "DR",
+                                            //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
+                                            AMOUNT = MER_DEBIT_BAL,
+                                            NARRATION = transinfo.TRANSACTION_DETAILS,
+                                            OPENING = MER_ADJ_CLOSING_AMT,
+                                            CLOSING = MERCH_Deduct_CR_AMT,
+                                            REC_NO = 0,
+                                            COMM_AMT = 0,
+                                            TDS = 0,
+                                            GST = 0,
+                                            IPAddress = "",
+                                            SERVICE_ID = 0,
+                                            CORELATIONID = COrelationID
+                                        };
+                                        db.TBL_ACCOUNTS.Add(MERCH_objDECUR_AMT);
+
+
+                                        TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION OBJMERCHANTCREDIT_VAL = new TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION()
+                                        {
+                                            TO_MEM_ID = transinfo.TO_MEMBER,
+                                            FROM_MEM_ID = transinfo.FROM_MEMBER,
+                                            CREDIT_DATE = DateTime.Now,
+                                            CREDIT_AMOUNT = MER_DEBIT_BAL,
+                                            CREDIT_NOTE_DESCRIPTION = "CREDIT LIMIT AMOUNT LOGS",
+                                            CREDIT_STATUS = true,
+                                            GST_VAL = 0,
+                                            GST_AMOUNT = 0,
+                                            TDS_AMOUNT = 0,
+                                            TDS_VAL = 0,
+                                            CREDIT_OPENING = MER_CR_LMT_AMT,
+                                            CREDITCLOSING = SUBCRLIMIAMT,
+                                            CREDIT_TRN_TYPE = "DR",
+                                            CORELATIONID = COrelationID
+                                        };
+                                        db.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION.Add(OBJMERCHANTCREDIT_VAL);
+
+
+                                        //TBL_MEMBER_CREDIT_ACCOUNT_LOGS MEM_CREDIT_ACNT_LOGS = new TBL_MEMBER_CREDIT_ACCOUNT_LOGS()
+                                        //{
+                                        //    MEM_ID = MemberCurrentUser.MEM_ID,
+                                        //    CREDIT_ID = MemberCurrentUser.MEM_ID,
+                                        //    CORELATIONID = COrelationID,
+                                        //    CREDIT_TRAN_TYPE = "DR",
+                                        //    USED_CREDIT_AMOUNT = MER_DEBIT_BAL,
+                                        //    CREDIT_OPENING_BALANCE = MER_CR_LMT_AMT,
+                                        //    CREDIT_CLOSING_BALANCE = SUBCRLIMIAMT,
+                                        //    CREDIT_USED_DATE = DateTime.Now,
+                                        //    IPADDRESS = "",
+                                        //    WLP_ID = (long)Merchant_Info.UNDER_WHITE_LEVEL,
+                                        //    DIST_ID = (long)Merchant_Info.INTRODUCER,
+                                        //    SUPER_ID = 0,
+                                        //    MER_ID = MemberCurrentUser.MEM_ID,
+                                        //    NARRATION = "CREDIT LIMIT AMOUNT LOGS"
+                                        //};
+                                        //db.TBL_MEMBER_CREDIT_ACCOUNT_LOGS.Add(MEM_CREDIT_ACNT_LOGS);
+                                        await db.SaveChangesAsync();
+                                        ContextTransaction.Commit();
+
+                                        #region Email Code done by Sayan at 10-10-2020
+                                        string name = Merchant_Info.MEMBER_NAME;
+                                        string mailbody = "Hi " + Merchant_Info.UName + "(" + Merchant_Info.MEMBER_NAME + ")" + ",<p>Your requisition has been approved of amount " + Trans_Req_Amount + " by admin (" + Distributor_Info.MEM_UNIQUE_ID + ").</p>";
+                                        EmailHelper emailhelper = new EmailHelper();
+                                        string msgbody = emailhelper.GetEmailTemplate(name, mailbody, "UserEmailTemplate.html");
+                                        emailhelper.SendUserEmail(Merchant_Info.EMAIL_ID, "Great! Your Requisition Approved", msgbody);
+                                        #endregion
+
+                                        return Json("Transaction Approve.", JsonRequestBehavior.AllowGet);
+                                    }
+                                    else
+                                    {
+                                        //CHECK_DIST_VAL IS INSUFFICIANT AFTER CALULATION MERCHANT PERTIAL SETTLEMENT AMOUNT OF RS. MER_CR_LMT_AMT
+                                        string msg = "Rs. " + MER_DEBIT_BAL + " Credit Requested Amount is Insufficiant After Calculation Merchant Full Settlement Amount of Rs." + MER_CR_LMT_AMT;
+                                        return Json(msg, JsonRequestBehavior.AllowGet);
+                                    }
+                                }
+                                else if (CHECK_DIST_VAL == 0)
                                 {
                                     transinfo.STATUS = "Approve";
                                     transinfo.APPROVAL_DATE = DateTime.Now;
                                     transinfo.APPROVAL_TIME = DateTime.Now;
                                     transinfo.FromUser = "test";
                                     transinfo.REMARKS = SettlementTYPE;
-                                    transinfo.APPROVED_BY = "ADMIN TRAVELIQ";
+                                    transinfo.APPROVED_BY = "ADMIN";
                                     transinfo.PAYMENT_TXN_DETAILS = PaymentTrnId;
                                     db.Entry(transinfo).State = System.Data.Entity.EntityState.Modified;
 
+
                                     ////Distributor Main Balanve Update and insert innfor in Account table
-                                    //Dist_Sub_MainAmount = Dist_MainBal - CHECK_DIST_VAL;
+                                    //Dist_Sub_MainAmount = Dist_MainBal - 0;
+                                    ////Dist_Sub_MainAmount = Dist_MainBal - CHECK_DIST_VAL;
+                                    ////Dist_Sub_MainAmount = 0;
                                     //Distributor_Info.BALANCE = Dist_Sub_MainAmount;
                                     //db.Entry(Distributor_Info).State = System.Data.Entity.EntityState.Modified;
                                     //if (DIST_CLOSING_AMT > 0)
                                     //{
                                     //    DIST_ADJ_CLOSING_AMT = DIST_CLOSING_AMT - CHECK_DIST_VAL;
+                                    //    //DIST_ADJ_CLOSING_AMT = 0;
                                     //}
                                     //else
                                     //{
@@ -1242,12 +1456,14 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                     //    CORELATIONID = COrelationID
                                     //};
                                     //db.TBL_ACCOUNTS.Add(DIST_objACCOUNT);
-                                    ////END Distributor Main Balanve Update and insert innfor in Account table
+                                    //END Distributor Main Balanve Update and insert innfor in Account table
+                                    //Mer_Add_MainBalance = MER_MainBal + Trans_Req_Amount - CREDITED_REQ_AMT;
                                     Mer_Add_MainBalance = MER_MainBal + Trans_Req_Amount - MER_DEBIT_BAL;
-                                    //Merchant_Info.CREDIT_LIMIT = MER_DEBIT_BAL;
                                     decimal SUBCRLIMIAMT = 0;
                                     SUBCRLIMIAMT = MER_CR_LMT_AMT - MER_DEBIT_BAL;
+
                                     Merchant_Info.CREDIT_LIMIT = SUBCRLIMIAMT;
+                                    //Merchant_Info.CREDIT_LIMIT = MER_DEBIT_BAL;
                                     Merchant_Info.BALANCE = Mer_Add_MainBalance;
                                     db.Entry(Merchant_Info).State = System.Data.Entity.EntityState.Modified;
                                     if (MER_CLOSING_AMT > 0)
@@ -1311,26 +1527,24 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                     };
                                     db.TBL_ACCOUNTS.Add(MERCH_objDECUR_AMT);
 
-
                                     TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION OBJMERCHANTCREDIT_VAL = new TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION()
                                     {
-                                        TO_MEM_ID= transinfo.TO_MEMBER,
-                                        FROM_MEM_ID =transinfo.FROM_MEMBER,
-                                        CREDIT_DATE=DateTime.Now,
-                                        CREDIT_AMOUNT= MER_DEBIT_BAL,
-                                        CREDIT_NOTE_DESCRIPTION= "CREDIT LIMIT AMOUNT LOGS",
-                                        CREDIT_STATUS=true,
-                                        GST_VAL=0,
-                                        GST_AMOUNT=0,
-                                        TDS_AMOUNT=0,
-                                        TDS_VAL=0,
-                                        CREDIT_OPENING= MER_CR_LMT_AMT,
-                                        CREDITCLOSING= SUBCRLIMIAMT,
-                                        CREDIT_TRN_TYPE="DR",
-                                        CORELATIONID= COrelationID
+                                        TO_MEM_ID = transinfo.TO_MEMBER,
+                                        FROM_MEM_ID = transinfo.FROM_MEMBER,
+                                        CREDIT_DATE = DateTime.Now,
+                                        CREDIT_AMOUNT = MER_DEBIT_BAL,
+                                        CREDIT_NOTE_DESCRIPTION = "CREDIT LIMIT AMOUNT LOGS",
+                                        CREDIT_STATUS = true,
+                                        GST_VAL = 0,
+                                        GST_AMOUNT = 0,
+                                        TDS_AMOUNT = 0,
+                                        TDS_VAL = 0,
+                                        CREDIT_OPENING = MER_CR_LMT_AMT,
+                                        CREDITCLOSING = SUBCRLIMIAMT,
+                                        CREDIT_TRN_TYPE = "DR",
+                                        CORELATIONID = COrelationID
                                     };
                                     db.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION.Add(OBJMERCHANTCREDIT_VAL);
-                                
 
                                     //TBL_MEMBER_CREDIT_ACCOUNT_LOGS MEM_CREDIT_ACNT_LOGS = new TBL_MEMBER_CREDIT_ACCOUNT_LOGS()
                                     //{
@@ -1352,352 +1566,196 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                     //db.TBL_MEMBER_CREDIT_ACCOUNT_LOGS.Add(MEM_CREDIT_ACNT_LOGS);
                                     await db.SaveChangesAsync();
                                     ContextTransaction.Commit();
-                                    //EmailHelper emailhelper = new EmailHelper();
-                                    //string mailbody = "Hi " + Merchant_Info.UName + ",<p>Your requisition has been approve of amount " + Trans_Req_Amount + " by admin (" + Distributor_Info.MEM_UNIQUE_ID + ").</p>";
-                                    //emailhelper.SendUserEmail(Merchant_Info.EMAIL_ID, "Requisition Approve", mailbody);
+
+                                    #region Email Code done by Sayan at 10-10-2020
+                                    string name = Merchant_Info.MEMBER_NAME;
+                                    string mailbody = "Hi " + Merchant_Info.UName + "(" + Merchant_Info.MEMBER_NAME + ")" + ",<p>Your requisition has been approved of amount " + Trans_Req_Amount + " by admin (" + Distributor_Info.MEM_UNIQUE_ID + ").</p>";
+                                    EmailHelper emailhelper = new EmailHelper();
+                                    string msgbody = emailhelper.GetEmailTemplate(name, mailbody, "UserEmailTemplate.html");
+                                    emailhelper.SendUserEmail(Merchant_Info.EMAIL_ID, "Great! Your Requisition Approved", msgbody);
+                                    #endregion
+
                                     return Json("Transaction Approve.", JsonRequestBehavior.AllowGet);
                                 }
                                 else
                                 {
-                                    //CHECK_DIST_VAL IS INSUFFICIANT AFTER CALULATION MERCHANT PERTIAL SETTLEMENT AMOUNT OF RS. MER_CR_LMT_AMT
-                                    string msg = "Rs. " + MER_DEBIT_BAL + " Credit Requested Amount is Insufficiant After Calculation Merchant Full Settlement Amount of Rs." + MER_CR_LMT_AMT;
-                                    return Json(msg, JsonRequestBehavior.AllowGet);
+                                    transinfo.STATUS = "Approve";
+                                    transinfo.APPROVAL_DATE = DateTime.Now;
+                                    transinfo.APPROVAL_TIME = DateTime.Now;
+                                    transinfo.FromUser = "test";
+                                    transinfo.REMARKS = SettlementTYPE;
+                                    transinfo.APPROVED_BY = "ADMIN";
+                                    transinfo.PAYMENT_TXN_DETAILS = PaymentTrnId;
+                                    db.Entry(transinfo).State = System.Data.Entity.EntityState.Modified;
+
+
+                                    ////Distributor Main Balanve Update and insert innfor in Account table
+                                    //Dist_Sub_MainAmount = Dist_MainBal - 0;
+                                    ////Dist_Sub_MainAmount = Dist_MainBal - CHECK_DIST_VAL;
+                                    ////Dist_Sub_MainAmount = 0;
+                                    //Distributor_Info.BALANCE = Dist_Sub_MainAmount;
+                                    //db.Entry(Distributor_Info).State = System.Data.Entity.EntityState.Modified;
+                                    //if (DIST_CLOSING_AMT > 0)
+                                    //{
+                                    //    DIST_ADJ_CLOSING_AMT = DIST_CLOSING_AMT - CHECK_DIST_VAL;
+                                    //    //DIST_ADJ_CLOSING_AMT = 0;
+                                    //}
+                                    //else
+                                    //{
+                                    //    DIST_ADJ_CLOSING_AMT = 0;
+                                    //}
+                                    //TBL_ACCOUNTS DIST_objACCOUNT = new TBL_ACCOUNTS()
+                                    //{
+                                    //    API_ID = 0,
+                                    //    MEM_ID = transinfo.FROM_MEMBER,
+                                    //    MEMBER_TYPE = "DISTRIBUTOR",
+                                    //    TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
+                                    //    TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
+                                    //    TRANSACTION_TIME = DateTime.Now,
+                                    //    DR_CR = "DR",
+                                    //    //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
+                                    //    AMOUNT = CHECK_DIST_VAL,
+                                    //    NARRATION = transinfo.TRANSACTION_DETAILS,
+                                    //    OPENING = DIST_CLOSING_AMT,
+                                    //    CLOSING = DIST_ADJ_CLOSING_AMT,
+                                    //    REC_NO = 0,
+                                    //    COMM_AMT = 0,
+                                    //    TDS = 0,
+                                    //    GST = 0,
+                                    //    IPAddress = "",
+                                    //    SERVICE_ID = 0,
+                                    //    CORELATIONID = COrelationID
+                                    //};
+                                    //db.TBL_ACCOUNTS.Add(DIST_objACCOUNT);
+                                    //END Distributor Main Balanve Update and insert innfor in Account table
+                                    //Mer_Add_MainBalance = MER_MainBal + Trans_Req_Amount - CREDITED_REQ_AMT;
+                                    decimal SUB_CREDItAMT = 0;
+                                    SUB_CREDItAMT = MER_CR_LMT_AMT - MER_DEBIT_BAL;
+
+                                    Mer_Add_MainBalance = MER_MainBal + Trans_Req_Amount - MER_DEBIT_BAL;
+                                    //Merchant_Info.CREDIT_LIMIT = MER_DEBIT_BAL;
+                                    Merchant_Info.CREDIT_LIMIT = SUB_CREDItAMT;
+                                    Merchant_Info.BALANCE = Mer_Add_MainBalance;
+                                    db.Entry(Merchant_Info).State = System.Data.Entity.EntityState.Modified;
+                                    if (MER_CLOSING_AMT > 0)
+                                    {
+                                        MER_ADJ_CLOSING_AMT = MER_CLOSING_AMT + Trans_Req_Amount;
+                                    }
+                                    else
+                                    {
+                                        MER_ADJ_CLOSING_AMT = Trans_Req_Amount;
+                                    }
+                                    TBL_ACCOUNTS MERCH_CreeditobjACCOUNT = new TBL_ACCOUNTS()
+                                    {
+                                        API_ID = 0,
+                                        MEM_ID = transinfo.FROM_MEMBER,
+                                        MEMBER_TYPE = MemberType,
+                                        //TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
+                                        TRANSACTION_TYPE = "DEPOSIT",
+                                        TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
+                                        TRANSACTION_TIME = DateTime.Now,
+                                        DR_CR = "CR",
+                                        //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
+                                        AMOUNT = Trans_Req_Amount,
+                                        NARRATION = transinfo.TRANSACTION_DETAILS,
+                                        OPENING = MER_CLOSING_AMT,
+                                        CLOSING = MER_ADJ_CLOSING_AMT,
+                                        REC_NO = 0,
+                                        COMM_AMT = 0,
+                                        TDS = 0,
+                                        GST = 0,
+                                        IPAddress = "",
+                                        SERVICE_ID = 0,
+                                        CORELATIONID = COrelationID
+                                    };
+                                    db.TBL_ACCOUNTS.Add(MERCH_CreeditobjACCOUNT);
+
+                                    decimal MERCH_Deduct_CR_AMT = 0;
+
+                                    MERCH_Deduct_CR_AMT = MER_ADJ_CLOSING_AMT - MER_DEBIT_BAL;
+                                    TBL_ACCOUNTS MERCH_objDECUR_AMT = new TBL_ACCOUNTS()
+                                    {
+                                        API_ID = 0,
+                                        MEM_ID = transinfo.FROM_MEMBER,
+                                        MEMBER_TYPE = MemberType,
+                                        //TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
+                                        TRANSACTION_TYPE = "CREDIT SETTLEMENT",
+                                        TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
+                                        TRANSACTION_TIME = DateTime.Now,
+                                        DR_CR = "DR",
+                                        //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
+                                        AMOUNT = MER_DEBIT_BAL,
+                                        NARRATION = transinfo.TRANSACTION_DETAILS,
+                                        OPENING = MER_ADJ_CLOSING_AMT,
+                                        CLOSING = MERCH_Deduct_CR_AMT,
+                                        REC_NO = 0,
+                                        COMM_AMT = 0,
+                                        TDS = 0,
+                                        GST = 0,
+                                        IPAddress = "",
+                                        SERVICE_ID = 0,
+                                        CORELATIONID = COrelationID
+                                    };
+                                    db.TBL_ACCOUNTS.Add(MERCH_objDECUR_AMT);
+                                    TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION OBJMERCHANTCREDIT_VAL = new TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION()
+                                    {
+                                        TO_MEM_ID = transinfo.TO_MEMBER,
+                                        FROM_MEM_ID = transinfo.FROM_MEMBER,
+                                        CREDIT_DATE = DateTime.Now,
+                                        CREDIT_AMOUNT = MER_DEBIT_BAL,
+                                        CREDIT_NOTE_DESCRIPTION = "CREDIT LIMIT AMOUNT LOGS",
+                                        CREDIT_STATUS = true,
+                                        GST_VAL = 0,
+                                        GST_AMOUNT = 0,
+                                        TDS_AMOUNT = 0,
+                                        TDS_VAL = 0,
+                                        CREDIT_OPENING = MER_CR_LMT_AMT,
+                                        CREDITCLOSING = SUB_CREDItAMT,
+                                        CREDIT_TRN_TYPE = "DR",
+                                        CORELATIONID = COrelationID
+                                    };
+                                    db.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION.Add(OBJMERCHANTCREDIT_VAL);
+
+                                    //TBL_MEMBER_CREDIT_ACCOUNT_LOGS MEM_CREDIT_ACNT_LOGS = new TBL_MEMBER_CREDIT_ACCOUNT_LOGS()
+                                    //{
+                                    //    MEM_ID = MemberCurrentUser.MEM_ID,
+                                    //    CREDIT_ID = MemberCurrentUser.MEM_ID,
+                                    //    CORELATIONID = COrelationID,
+                                    //    CREDIT_TRAN_TYPE = "DR",
+                                    //    USED_CREDIT_AMOUNT = MER_DEBIT_BAL,
+                                    //    CREDIT_OPENING_BALANCE = MER_CR_LMT_AMT,
+                                    //    CREDIT_CLOSING_BALANCE = SUB_CREDItAMT,
+                                    //    CREDIT_USED_DATE = DateTime.Now,
+                                    //    IPADDRESS = "",
+                                    //    WLP_ID = (long)Merchant_Info.UNDER_WHITE_LEVEL,
+                                    //    DIST_ID = (long)Merchant_Info.INTRODUCER,
+                                    //    SUPER_ID = 0,
+                                    //    MER_ID = MemberCurrentUser.MEM_ID,
+                                    //    NARRATION = "CREDIT LIMIT AMOUNT LOGS"
+                                    //};
+                                    //db.TBL_MEMBER_CREDIT_ACCOUNT_LOGS.Add(MEM_CREDIT_ACNT_LOGS);
+                                    await db.SaveChangesAsync();
+                                    ContextTransaction.Commit();
+
+                                    #region Email Code done by Sayan at 10-10-2020
+                                    string name = Merchant_Info.MEMBER_NAME;
+                                    string mailbody = "Hi " + Merchant_Info.UName + "(" + Merchant_Info.MEMBER_NAME + ")" + ",<p>Your requisition has been approved of amount " + Trans_Req_Amount + " by admin (" + Distributor_Info.MEM_UNIQUE_ID + ").</p>";
+                                    EmailHelper emailhelper = new EmailHelper();
+                                    string msgbody = emailhelper.GetEmailTemplate(name, mailbody, "UserEmailTemplate.html");
+                                    emailhelper.SendUserEmail(Merchant_Info.EMAIL_ID, "Great! Your Requisition Approved", msgbody);
+                                    #endregion
+
+                                    return Json("Transaction Approve.", JsonRequestBehavior.AllowGet);
                                 }
+
                             }
-                            else if (CHECK_DIST_VAL == 0)
-                            {
-                                transinfo.STATUS = "Approve";
-                                transinfo.APPROVAL_DATE = DateTime.Now;
-                                transinfo.APPROVAL_TIME = DateTime.Now;
-                                transinfo.FromUser = "test";
-                                transinfo.REMARKS = SettlementTYPE;
-                                transinfo.APPROVED_BY = "ADMIN TRAVELIQ";
-                                transinfo.PAYMENT_TXN_DETAILS = PaymentTrnId;
-                                db.Entry(transinfo).State = System.Data.Entity.EntityState.Modified;
-
-
-                                ////Distributor Main Balanve Update and insert innfor in Account table
-                                //Dist_Sub_MainAmount = Dist_MainBal - 0;
-                                ////Dist_Sub_MainAmount = Dist_MainBal - CHECK_DIST_VAL;
-                                ////Dist_Sub_MainAmount = 0;
-                                //Distributor_Info.BALANCE = Dist_Sub_MainAmount;
-                                //db.Entry(Distributor_Info).State = System.Data.Entity.EntityState.Modified;
-                                //if (DIST_CLOSING_AMT > 0)
-                                //{
-                                //    DIST_ADJ_CLOSING_AMT = DIST_CLOSING_AMT - CHECK_DIST_VAL;
-                                //    //DIST_ADJ_CLOSING_AMT = 0;
-                                //}
-                                //else
-                                //{
-                                //    DIST_ADJ_CLOSING_AMT = 0;
-                                //}
-                                //TBL_ACCOUNTS DIST_objACCOUNT = new TBL_ACCOUNTS()
-                                //{
-                                //    API_ID = 0,
-                                //    MEM_ID = transinfo.FROM_MEMBER,
-                                //    MEMBER_TYPE = "DISTRIBUTOR",
-                                //    TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
-                                //    TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                                //    TRANSACTION_TIME = DateTime.Now,
-                                //    DR_CR = "DR",
-                                //    //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
-                                //    AMOUNT = CHECK_DIST_VAL,
-                                //    NARRATION = transinfo.TRANSACTION_DETAILS,
-                                //    OPENING = DIST_CLOSING_AMT,
-                                //    CLOSING = DIST_ADJ_CLOSING_AMT,
-                                //    REC_NO = 0,
-                                //    COMM_AMT = 0,
-                                //    TDS = 0,
-                                //    GST = 0,
-                                //    IPAddress = "",
-                                //    SERVICE_ID = 0,
-                                //    CORELATIONID = COrelationID
-                                //};
-                                //db.TBL_ACCOUNTS.Add(DIST_objACCOUNT);
-                                //END Distributor Main Balanve Update and insert innfor in Account table
-                                //Mer_Add_MainBalance = MER_MainBal + Trans_Req_Amount - CREDITED_REQ_AMT;
-                                Mer_Add_MainBalance = MER_MainBal + Trans_Req_Amount - MER_DEBIT_BAL;
-                                decimal SUBCRLIMIAMT = 0;
-                                SUBCRLIMIAMT = MER_CR_LMT_AMT - MER_DEBIT_BAL;
-
-                                Merchant_Info.CREDIT_LIMIT = SUBCRLIMIAMT;
-                                //Merchant_Info.CREDIT_LIMIT = MER_DEBIT_BAL;
-                                Merchant_Info.BALANCE = Mer_Add_MainBalance;
-                                db.Entry(Merchant_Info).State = System.Data.Entity.EntityState.Modified;
-                                if (MER_CLOSING_AMT > 0)
-                                {
-                                    MER_ADJ_CLOSING_AMT = MER_CLOSING_AMT + Trans_Req_Amount;
-                                }
-                                else
-                                {
-                                    MER_ADJ_CLOSING_AMT = Trans_Req_Amount;
-                                }
-                                TBL_ACCOUNTS MERCH_CreeditobjACCOUNT = new TBL_ACCOUNTS()
-                                {
-                                    API_ID = 0,
-                                    MEM_ID = transinfo.FROM_MEMBER,
-                                    MEMBER_TYPE = MemberType,
-                                    //TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
-                                    TRANSACTION_TYPE = "DEPOSIT",
-                                    TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                                    TRANSACTION_TIME = DateTime.Now,
-                                    DR_CR = "CR",
-                                    //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
-                                    AMOUNT = Trans_Req_Amount,
-                                    NARRATION = transinfo.TRANSACTION_DETAILS,
-                                    OPENING = MER_CLOSING_AMT,
-                                    CLOSING = MER_ADJ_CLOSING_AMT,
-                                    REC_NO = 0,
-                                    COMM_AMT = 0,
-                                    TDS = 0,
-                                    GST = 0,
-                                    IPAddress = "",
-                                    SERVICE_ID = 0,
-                                    CORELATIONID = COrelationID
-                                };
-                                db.TBL_ACCOUNTS.Add(MERCH_CreeditobjACCOUNT);
-
-                                decimal MERCH_Deduct_CR_AMT = 0;
-
-                                MERCH_Deduct_CR_AMT = MER_ADJ_CLOSING_AMT - MER_DEBIT_BAL;
-                                TBL_ACCOUNTS MERCH_objDECUR_AMT = new TBL_ACCOUNTS()
-                                {
-                                    API_ID = 0,
-                                    MEM_ID = transinfo.FROM_MEMBER,
-                                    MEMBER_TYPE = MemberType,
-                                    //TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
-                                    TRANSACTION_TYPE = "CREDIT SETTLEMENT",
-                                    TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                                    TRANSACTION_TIME = DateTime.Now,
-                                    DR_CR = "DR",
-                                    //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
-                                    AMOUNT = MER_DEBIT_BAL,
-                                    NARRATION = transinfo.TRANSACTION_DETAILS,
-                                    OPENING = MER_ADJ_CLOSING_AMT,
-                                    CLOSING = MERCH_Deduct_CR_AMT,
-                                    REC_NO = 0,
-                                    COMM_AMT = 0,
-                                    TDS = 0,
-                                    GST = 0,
-                                    IPAddress = "",
-                                    SERVICE_ID = 0,
-                                    CORELATIONID = COrelationID
-                                };
-                                db.TBL_ACCOUNTS.Add(MERCH_objDECUR_AMT);
-
-                                TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION OBJMERCHANTCREDIT_VAL = new TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION()
-                                {
-                                    TO_MEM_ID = transinfo.TO_MEMBER,
-                                    FROM_MEM_ID = transinfo.FROM_MEMBER,
-                                    CREDIT_DATE = DateTime.Now,
-                                    CREDIT_AMOUNT = MER_DEBIT_BAL,
-                                    CREDIT_NOTE_DESCRIPTION = "CREDIT LIMIT AMOUNT LOGS",
-                                    CREDIT_STATUS = true,
-                                    GST_VAL = 0,
-                                    GST_AMOUNT = 0,
-                                    TDS_AMOUNT = 0,
-                                    TDS_VAL = 0,
-                                    CREDIT_OPENING = MER_CR_LMT_AMT,
-                                    CREDITCLOSING = SUBCRLIMIAMT,
-                                    CREDIT_TRN_TYPE = "DR",
-                                    CORELATIONID = COrelationID
-                                };
-                                db.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION.Add(OBJMERCHANTCREDIT_VAL);
-
-                                //TBL_MEMBER_CREDIT_ACCOUNT_LOGS MEM_CREDIT_ACNT_LOGS = new TBL_MEMBER_CREDIT_ACCOUNT_LOGS()
-                                //{
-                                //    MEM_ID = MemberCurrentUser.MEM_ID,
-                                //    CREDIT_ID = MemberCurrentUser.MEM_ID,
-                                //    CORELATIONID = COrelationID,
-                                //    CREDIT_TRAN_TYPE = "DR",
-                                //    USED_CREDIT_AMOUNT = MER_DEBIT_BAL,
-                                //    CREDIT_OPENING_BALANCE = MER_CR_LMT_AMT,
-                                //    CREDIT_CLOSING_BALANCE = SUBCRLIMIAMT,
-                                //    CREDIT_USED_DATE = DateTime.Now,
-                                //    IPADDRESS = "",
-                                //    WLP_ID = (long)Merchant_Info.UNDER_WHITE_LEVEL,
-                                //    DIST_ID = (long)Merchant_Info.INTRODUCER,
-                                //    SUPER_ID = 0,
-                                //    MER_ID = MemberCurrentUser.MEM_ID,
-                                //    NARRATION = "CREDIT LIMIT AMOUNT LOGS"
-                                //};
-                                //db.TBL_MEMBER_CREDIT_ACCOUNT_LOGS.Add(MEM_CREDIT_ACNT_LOGS);
-                                await db.SaveChangesAsync();
-                                ContextTransaction.Commit();
-                                //EmailHelper emailhelper = new EmailHelper();
-                                //string mailbody = "Hi " + Merchant_Info.UName + ",<p>Your requisition has been approve of amount " + Trans_Req_Amount + " by admin (" + Distributor_Info.MEM_UNIQUE_ID + ").</p>";
-                                //emailhelper.SendUserEmail(Merchant_Info.EMAIL_ID, "Requisition Approve", mailbody);
-                                return Json("Transaction Approve.", JsonRequestBehavior.AllowGet);
-                            }
-                            else
-                            {
-                                transinfo.STATUS = "Approve";
-                                transinfo.APPROVAL_DATE = DateTime.Now;
-                                transinfo.APPROVAL_TIME = DateTime.Now;
-                                transinfo.FromUser = "test";
-                                transinfo.REMARKS = SettlementTYPE;
-                                transinfo.APPROVED_BY = "ADMIN TRAVELIQ";
-                                transinfo.PAYMENT_TXN_DETAILS = PaymentTrnId;
-                                db.Entry(transinfo).State = System.Data.Entity.EntityState.Modified;
-
-
-                                ////Distributor Main Balanve Update and insert innfor in Account table
-                                //Dist_Sub_MainAmount = Dist_MainBal - 0;
-                                ////Dist_Sub_MainAmount = Dist_MainBal - CHECK_DIST_VAL;
-                                ////Dist_Sub_MainAmount = 0;
-                                //Distributor_Info.BALANCE = Dist_Sub_MainAmount;
-                                //db.Entry(Distributor_Info).State = System.Data.Entity.EntityState.Modified;
-                                //if (DIST_CLOSING_AMT > 0)
-                                //{
-                                //    DIST_ADJ_CLOSING_AMT = DIST_CLOSING_AMT - CHECK_DIST_VAL;
-                                //    //DIST_ADJ_CLOSING_AMT = 0;
-                                //}
-                                //else
-                                //{
-                                //    DIST_ADJ_CLOSING_AMT = 0;
-                                //}
-                                //TBL_ACCOUNTS DIST_objACCOUNT = new TBL_ACCOUNTS()
-                                //{
-                                //    API_ID = 0,
-                                //    MEM_ID = transinfo.FROM_MEMBER,
-                                //    MEMBER_TYPE = "DISTRIBUTOR",
-                                //    TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
-                                //    TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                                //    TRANSACTION_TIME = DateTime.Now,
-                                //    DR_CR = "DR",
-                                //    //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
-                                //    AMOUNT = CHECK_DIST_VAL,
-                                //    NARRATION = transinfo.TRANSACTION_DETAILS,
-                                //    OPENING = DIST_CLOSING_AMT,
-                                //    CLOSING = DIST_ADJ_CLOSING_AMT,
-                                //    REC_NO = 0,
-                                //    COMM_AMT = 0,
-                                //    TDS = 0,
-                                //    GST = 0,
-                                //    IPAddress = "",
-                                //    SERVICE_ID = 0,
-                                //    CORELATIONID = COrelationID
-                                //};
-                                //db.TBL_ACCOUNTS.Add(DIST_objACCOUNT);
-                                //END Distributor Main Balanve Update and insert innfor in Account table
-                                //Mer_Add_MainBalance = MER_MainBal + Trans_Req_Amount - CREDITED_REQ_AMT;
-                                decimal SUB_CREDItAMT = 0;
-                                SUB_CREDItAMT = MER_CR_LMT_AMT - MER_DEBIT_BAL;
-
-                                Mer_Add_MainBalance = MER_MainBal + Trans_Req_Amount - MER_DEBIT_BAL;
-                                //Merchant_Info.CREDIT_LIMIT = MER_DEBIT_BAL;
-                                Merchant_Info.CREDIT_LIMIT = SUB_CREDItAMT;
-                                Merchant_Info.BALANCE = Mer_Add_MainBalance;
-                                db.Entry(Merchant_Info).State = System.Data.Entity.EntityState.Modified;
-                                if (MER_CLOSING_AMT > 0)
-                                {
-                                    MER_ADJ_CLOSING_AMT = MER_CLOSING_AMT + Trans_Req_Amount;
-                                }
-                                else
-                                {
-                                    MER_ADJ_CLOSING_AMT = Trans_Req_Amount;
-                                }
-                                TBL_ACCOUNTS MERCH_CreeditobjACCOUNT = new TBL_ACCOUNTS()
-                                {
-                                    API_ID = 0,
-                                    MEM_ID = transinfo.FROM_MEMBER,
-                                    MEMBER_TYPE = MemberType,
-                                    //TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
-                                    TRANSACTION_TYPE = "DEPOSIT",
-                                    TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                                    TRANSACTION_TIME = DateTime.Now,
-                                    DR_CR = "CR",
-                                    //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
-                                    AMOUNT = Trans_Req_Amount,
-                                    NARRATION = transinfo.TRANSACTION_DETAILS,
-                                    OPENING = MER_CLOSING_AMT,
-                                    CLOSING = MER_ADJ_CLOSING_AMT,
-                                    REC_NO = 0,
-                                    COMM_AMT = 0,
-                                    TDS = 0,
-                                    GST = 0,
-                                    IPAddress = "",
-                                    SERVICE_ID = 0,
-                                    CORELATIONID = COrelationID
-                                };
-                                db.TBL_ACCOUNTS.Add(MERCH_CreeditobjACCOUNT);
-
-                                decimal MERCH_Deduct_CR_AMT = 0;
-
-                                MERCH_Deduct_CR_AMT = MER_ADJ_CLOSING_AMT - MER_DEBIT_BAL;
-                                TBL_ACCOUNTS MERCH_objDECUR_AMT = new TBL_ACCOUNTS()
-                                {
-                                    API_ID = 0,
-                                    MEM_ID = transinfo.FROM_MEMBER,
-                                    MEMBER_TYPE = MemberType,
-                                    //TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
-                                    TRANSACTION_TYPE = "CREDIT SETTLEMENT",
-                                    TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                                    TRANSACTION_TIME = DateTime.Now,
-                                    DR_CR = "DR",
-                                    //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
-                                    AMOUNT = MER_DEBIT_BAL,
-                                    NARRATION = transinfo.TRANSACTION_DETAILS,
-                                    OPENING = MER_ADJ_CLOSING_AMT,
-                                    CLOSING = MERCH_Deduct_CR_AMT,
-                                    REC_NO = 0,
-                                    COMM_AMT = 0,
-                                    TDS = 0,
-                                    GST = 0,
-                                    IPAddress = "",
-                                    SERVICE_ID = 0,
-                                    CORELATIONID = COrelationID
-                                };
-                                db.TBL_ACCOUNTS.Add(MERCH_objDECUR_AMT);
-                                TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION OBJMERCHANTCREDIT_VAL = new TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION()
-                                {
-                                    TO_MEM_ID = transinfo.TO_MEMBER,
-                                    FROM_MEM_ID = transinfo.FROM_MEMBER,
-                                    CREDIT_DATE = DateTime.Now,
-                                    CREDIT_AMOUNT = MER_DEBIT_BAL,
-                                    CREDIT_NOTE_DESCRIPTION = "CREDIT LIMIT AMOUNT LOGS",
-                                    CREDIT_STATUS = true,
-                                    GST_VAL = 0,
-                                    GST_AMOUNT = 0,
-                                    TDS_AMOUNT = 0,
-                                    TDS_VAL = 0,
-                                    CREDIT_OPENING = MER_CR_LMT_AMT,
-                                    CREDITCLOSING = SUB_CREDItAMT,
-                                    CREDIT_TRN_TYPE = "DR",
-                                    CORELATIONID = COrelationID
-                                };
-                                db.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION.Add(OBJMERCHANTCREDIT_VAL);
-
-                                //TBL_MEMBER_CREDIT_ACCOUNT_LOGS MEM_CREDIT_ACNT_LOGS = new TBL_MEMBER_CREDIT_ACCOUNT_LOGS()
-                                //{
-                                //    MEM_ID = MemberCurrentUser.MEM_ID,
-                                //    CREDIT_ID = MemberCurrentUser.MEM_ID,
-                                //    CORELATIONID = COrelationID,
-                                //    CREDIT_TRAN_TYPE = "DR",
-                                //    USED_CREDIT_AMOUNT = MER_DEBIT_BAL,
-                                //    CREDIT_OPENING_BALANCE = MER_CR_LMT_AMT,
-                                //    CREDIT_CLOSING_BALANCE = SUB_CREDItAMT,
-                                //    CREDIT_USED_DATE = DateTime.Now,
-                                //    IPADDRESS = "",
-                                //    WLP_ID = (long)Merchant_Info.UNDER_WHITE_LEVEL,
-                                //    DIST_ID = (long)Merchant_Info.INTRODUCER,
-                                //    SUPER_ID = 0,
-                                //    MER_ID = MemberCurrentUser.MEM_ID,
-                                //    NARRATION = "CREDIT LIMIT AMOUNT LOGS"
-                                //};
-                                //db.TBL_MEMBER_CREDIT_ACCOUNT_LOGS.Add(MEM_CREDIT_ACNT_LOGS);
-                                await db.SaveChangesAsync();
-                                ContextTransaction.Commit();
-                                //EmailHelper emailhelper = new EmailHelper();
-                                //string mailbody = "Hi " + Merchant_Info.UName + ",<p>Your requisition has been approve of amount " + Trans_Req_Amount + " by admin (" + Distributor_Info.MEM_UNIQUE_ID + ").</p>";
-                                //emailhelper.SendUserEmail(Merchant_Info.EMAIL_ID, "Requisition Approve", mailbody);
-                                return Json("Transaction Approve.", JsonRequestBehavior.AllowGet);
-                            }
-
                         }
+                        #endregion
                     }
-                    #endregion
-
+                    else
+                    {
+                        return Json("This Transaction is already approve or declined.", JsonRequestBehavior.AllowGet);
+                    }
 
 
 
@@ -1994,10 +2052,16 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                     transinfo.APPROVED_BY = "White Label";
                     db.Entry(transinfo).State = System.Data.Entity.EntityState.Modified;
                     await db.SaveChangesAsync();
-                    EmailHelper emailhelper = new EmailHelper();
                     var memberlist = await db.TBL_MASTER_MEMBER.Where(x => x.MEM_ID == transinfo.FROM_MEMBER).FirstOrDefaultAsync();
-                    string mailbody = "Hi " + memberlist.UName + ",<p>Your requisition has been declined.</p>";
-                    emailhelper.SendUserEmail(memberlist.EMAIL_ID, "Requisition Decline", mailbody);
+
+                    #region Email Code done by Sayan at 10-10-2020
+                    string name = memberlist.MEMBER_NAME;
+                    string mailbody = "Hi " + memberlist.UName + "(" + memberlist.MEMBER_NAME + ")" + ",<p>Your requisition has been declined of amount:- "+transinfo.AMOUNT+" by Admin. Sorry for the inconvenience.</p>"+ ".<br /> Regards, <br/>< br />BOOM Travels";
+                    EmailHelper emailhelper = new EmailHelper();
+                    string msgbody = emailhelper.GetEmailTemplate(name, mailbody, "UserEmailTemplate.html");
+                    emailhelper.SendUserEmail(memberlist.EMAIL_ID, "Oops! Requisition Declined", msgbody);
+                    #endregion
+
                     ContextTransaction.Commit();
                     return Json(new { Result = "true" });
                 }

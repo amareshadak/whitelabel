@@ -4792,6 +4792,28 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
         }
         #endregion
 
+        #region Flight Price Calender
+        public ActionResult GetFlightPriceCalender(string DepartureDate, string ArrivalDate, int TripType, string FromSourceCode, string ToDestinationCode)
+        {
+            try
+            {
+                dynamic fareCalender = MultiLinkAirAPI.FareCalender(
+                    DepartureDate,
+                    ArrivalDate,
+                    TripType,
+                    FromSourceCode,
+                    ToDestinationCode);
+
+                var data = JsonConvert.SerializeObject(fareCalender);
+                return Json(data, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        #endregion
+
         public ActionResult BookedFlightInformaiton()
         {
             if ((TempData["IsShowPrintTicket"] as string) == "Show")
@@ -4846,6 +4868,18 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
         {
             try
             {
+                var db = new DBContext();
+                string StateName = string.Empty;
+                var GetMemberInfo = db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == CurrentMerchant.MEM_ID);
+                var getState = db.TBL_STATES.FirstOrDefault(x => x.STATEID == GetMemberInfo.STATE_ID);
+                if (getState != null)
+                { StateName = getState.STATENAME; }
+                else
+                { StateName = ""; }
+                string CompAddress = GetMemberInfo.ADDRESS + "," + GetMemberInfo.CITY + "," + StateName + "," + GetMemberInfo.PIN;
+                string Companyname = GetMemberInfo.COMPANY;
+                string CompanyEmail = GetMemberInfo.EMAIL_ID;
+                string CompanyMobile = GetMemberInfo.MEMBER_MOBILE;
                 string AIRADDITIONALAMOUNT = System.Configuration.ConfigurationManager.AppSettings["AIRADDITIONALAMOUNT"];
                 //ViewBag.Additionalcharge = AIRADDITIONALAMOUNT;
                 var Updatestatus = _db.TBL_FLIGHT_BOOKING_DETAILS.FirstOrDefault(x => x.REF_NO == refId);
@@ -4866,7 +4900,8 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                 }
                 var data = JsonConvert.SerializeObject(PrintFlghtInvoice);
                 //return Json(data, JsonRequestBehavior.AllowGet);
-                return Json(new { result = data, AdditionalCharge = AIRADDITIONALAMOUNT, ProcessingCharge = Updatestatus.USER_MARKUP });
+                //return Json(new { result = data, AdditionalCharge = AIRADDITIONALAMOUNT, ProcessingCharge = Updatestatus.USER_MARKUP });
+                return Json(new { result = data, AdditionalCharge = AIRADDITIONALAMOUNT, ProcessingCharge = Updatestatus.USER_MARKUP, Address = CompAddress, CompName = Companyname, CompEmail = CompanyEmail, CompContact = CompanyMobile });
 
             }
             catch (Exception ex)
@@ -4879,6 +4914,18 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
         {
             try
             {
+                var db = new DBContext();
+                string StateName = string.Empty;
+                var GetMemberInfo = db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == CurrentMerchant.MEM_ID);
+                var getState = db.TBL_STATES.FirstOrDefault(x => x.STATEID == GetMemberInfo.STATE_ID);
+                if (getState != null)
+                { StateName = getState.STATENAME; }
+                else
+                { StateName = ""; }
+                string CompAddress = GetMemberInfo.ADDRESS + "," + GetMemberInfo.CITY + "," + StateName + "," + GetMemberInfo.PIN;
+                string Companyname = GetMemberInfo.COMPANY;
+                string CompanyEmail = GetMemberInfo.EMAIL_ID;
+                string CompanyMobile = GetMemberInfo.MEMBER_MOBILE;
                 string AIRADDITIONALAMOUNT = System.Configuration.ConfigurationManager.AppSettings["AIRADDITIONALAMOUNT"];
                 //ViewBag.Additionalcharge = AIRADDITIONALAMOUNT;
                 var Updatestatus = _db.TBL_FLIGHT_BOOKING_DETAILS.FirstOrDefault(x => x.REF_NO == refId);
@@ -4899,7 +4946,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                 }
                 var data = JsonConvert.SerializeObject(PrintFlghtInvoice);
                
-                return Json(new { result = data, AdditionalCharge = AIRADDITIONALAMOUNT, ProcessingCharge = Updatestatus.USER_MARKUP });
+                return Json(new { result = data, AdditionalCharge = AIRADDITIONALAMOUNT, ProcessingCharge = Updatestatus.USER_MARKUP,Address= CompAddress,CompName= Companyname,CompEmail= CompanyEmail,CompContact= CompanyMobile });
                 //return Json(new { result = data,AdditionalCharge= AIRADDITIONALAMOUNT ,ProcessingCharge= Updatestatus.USER_MARKUP });
 
             }
@@ -4914,6 +4961,18 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
         {
             try
             {
+                var db = new DBContext();
+                string StateName = string.Empty;
+                var GetMemberInfo = db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == CurrentMerchant.MEM_ID);
+                var getState = db.TBL_STATES.FirstOrDefault(x => x.STATEID == GetMemberInfo.STATE_ID);
+                if (getState != null)
+                { StateName = getState.STATENAME; }
+                else
+                { StateName = ""; }
+                string CompAddress = GetMemberInfo.ADDRESS + "," + GetMemberInfo.CITY + "," + StateName + "," + GetMemberInfo.PIN;
+                string Companyname = GetMemberInfo.COMPANY;
+                string CompanyEmail = GetMemberInfo.EMAIL_ID;
+                string CompanyMobile = GetMemberInfo.MEMBER_MOBILE;
                 string AIRADDITIONALAMOUNT = System.Configuration.ConfigurationManager.AppSettings["AIRADDITIONALAMOUNT"];                
                 var Updatestatus = _db.TBL_FLIGHT_BOOKING_DETAILS.FirstOrDefault(x => x.REF_NO == refId);                
                 dynamic PrintFlghtInvoice = MultiLinkAirAPI.GetTicketInformation(refId, "", PNR, "", "", "");
@@ -4929,8 +4988,9 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                     _db.Entry(Updatestatus).State = System.Data.Entity.EntityState.Modified;
                     _db.SaveChanges();
                 }
-                var data = JsonConvert.SerializeObject(PrintFlghtInvoice);                
-                return Json(new { result = data, AdditionalCharge = AIRADDITIONALAMOUNT, ProcessingCharge = Updatestatus.USER_MARKUP });
+                var data = JsonConvert.SerializeObject(PrintFlghtInvoice);
+                //return Json(new { result = data, AdditionalCharge = AIRADDITIONALAMOUNT, ProcessingCharge = Updatestatus.USER_MARKUP });
+                return Json(new { result = data, AdditionalCharge = AIRADDITIONALAMOUNT, ProcessingCharge = Updatestatus.USER_MARKUP, Address = CompAddress, CompName = Companyname, CompEmail = CompanyEmail, CompContact = CompanyMobile });
             }
             catch (Exception ex)
             {

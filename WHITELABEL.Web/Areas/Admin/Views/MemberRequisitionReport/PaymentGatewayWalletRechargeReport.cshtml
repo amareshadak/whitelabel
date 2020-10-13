@@ -1,0 +1,165 @@
+﻿@using NonFactors.Mvc.Grid;
+@using WHITELABEL.Web.Helper;
+@model WHITELABEL.Data.Models.TBL_PAYMENT_GATEWAY_RESPONSE
+@{
+    ViewBag.Title = "Payment Gateway Wallet Recharge Report";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<script src="~/Areas/Admin/AdminHelperJS/MemberApilevel/ChannelLinkJs.js"></script>
+<div class="form-horizontal padding-top-20">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row example-row">
+                        <div class="col-md-12">@Html.AjaxGrid(Url.Action("PaymentGatewayWalletRechargeReportIndexGrid", "MemberRequisitionReport", new { area = "Admin" }))</div>
+                    </div>
+                </div>
+                <div class="card-footer text-right">
+                    @*<button id="btnExport" class="btn btn-info btn-xs">EXPORT</button>*@
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <div id="ProcessRechargePaymentgatewayWallet" class="modal scale fade printRechargeTransd" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog modal-lg" style="margin-bottom:100px;">
+            @using (Ajax.BeginForm("POSTProcessRechargewallet", "MemberRequisitionReport", new AjaxOptions { Confirm = "Do you want to process transaction", OnSuccess = "OnSuccessRechargewallet", OnFailure = "OnFailureRechargewallet", LoadingElementId = "progressRechargewallet" }, new { area = "Admin", @id = "ProcessRechargewallet" }))
+            {
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="row" style="width:95%;">
+                            <h3 style="text-align:center"> Process Payment Gateway Transaction</h3>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <div style="clear:both;"></div>
+                        </div>
+                    </div>
+                    <div class="modal-body" style="max-height:700px;">
+                        <div class="col-md-12" style="border-bottom:1px solid #ccc; margin-bottom:30px; text-align:center;">
+                            <div style="clear:both;"></div>
+                        </div>
+                        <div class="col-md-12">
+                            <div>
+                                <div style="width:100%; float:left;">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-5" style="width:40%; float:left;">Txn Ref No </label>
+                                        <div class="col-md-7" style="width:60%; float:right; border-bottom-color:black;">
+                                            <div class="">
+                                                <div class="">
+                                                    @Html.EditorFor(model => model.PAY_REF_NO, new { htmlAttributes = new { @class = "form-control", @placeholder = "", @style = "border-bottom-color:black;", @readonly = "readonly", id = "txtPAY_REF_NO" } })
+                                                    @Html.HiddenFor(model => model.SLN, new { id = "hdn_BillDeskId" })
+                                                    @Html.HiddenFor(model => model.MEM_ID, new { id = "hdn_BillDeskMEM_ID" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div style="clear:both;"></div>
+                                    </div>
+                                </div>
+                                <div style="width:100%; float:left;">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-5" style="width:40%; float:left;">Txn Amount </label>
+                                        <div class="col-md-7" style="width:60%; float:right; border-bottom-color:black;">
+                                            <div class="">
+                                                <div class="">
+                                                    @Html.EditorFor(model => model.TRANSACTION_AMOUNT, new { htmlAttributes = new { @class = "form-control", @placeholder = "", @style = "border-bottom-color:black;", @readonly = "readonly", id = "txtTRANSACTION_AMOUNT" } })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div style="clear:both;"></div>
+                                    </div>
+                                </div>
+                                <div style="width:100%; float:left;">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-5" style="width:40%; float:left;">Txn Code </label>
+                                        <div class="col-md-7" style="width:60%; float:right; border-bottom-color:black;">
+                                            <div class="">
+                                                <div class="">
+                                                    @Html.EditorFor(model => model.RES_CODE, new { htmlAttributes = new { @class = "form-control", @placeholder = "", @style = "border-bottom-color:black;", @readonly = "readonly", id = "txtRES_CODE" } })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div style="clear:both;"></div>
+                                    </div>
+                                </div>
+                                <div style="width:100%; float:left;">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-5" style="width:40%; float:left;">Txn Status </label>
+                                        <div class="col-md-7" style="width:60%; float:right; border-bottom-color:black;">
+                                            <div class="">
+                                                <div class="">
+                                                    @Html.EditorFor(model => model.RES_STATUS, new { htmlAttributes = new { @class = "form-control", @placeholder = "", @style = "border-bottom-color:black;", @readonly = "readonly", id = "txtRES_STATUS" } })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div style="clear:both;"></div>
+                                    </div>
+                                </div>
+                                <div style="width:100%; float:left;">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-5" style="width:40%; float:left;">Txn Date </label>
+                                        <div class="col-md-7" style="width:60%; float:right; border-bottom-color:black;">
+                                            <div class="">
+                                                <div class="">
+                                                    @Html.EditorFor(model => model.RES_DATE, new { htmlAttributes = new { @class = "form-control", @placeholder = "", @style = "border-bottom-color:black;", @readonly = "readonly", id = "txtRES_DATE" } })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div style="clear:both;"></div>
+                                    </div>
+                                </div>
+                                <div style="clear:both;"></div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="modal-footer text-center">
+                        <input type="submit" value="Process Transaction" class="btn btn-primary" />
+                        @*<a href="#" class="btn btn-primary" id="PrintInvoice" onclick="PrintDiv();">Tag OP. Txn</a>*@
+                    </div>
+                </div><!--.modal-content-->
+            }
+        </div><!--.modal-dialog-->
+    </div>
+</div>
+<div class="preloader hidden" id="progressRechargewallet" style="display:none;">
+    <div id="loading"></div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#progressRechargewallet').removeClass("hidden");
+        $('#progressRechargewallet').hide();
+    })
+    function OnSuccessRechargewallet(response) {
+        var message = response;
+        $("#ProcessRechargewallet").trigger("reset");
+        bootbox.alert({
+            message: message,
+            size: 'small',
+            callback: function () {
+                console.log(message);
+                var url = "/Admin/MemberRequisitionReport/PaymentGatewayWalletRechargeReport";
+                window.location.href = url;
+            }
+        });
+    }
+    function OnFailureRechargewallet(response) {
+        bootbox.alert({
+            message: "Please try again later",
+            size: 'small',
+            callback: function () {
+                console.log(message);
+                var url = "/Admin/MemberRequisitionReport/PaymentGatewayWalletRechargeReport";
+                window.location.href = url;
+            }
+        });
+    }
+</script>
+
+

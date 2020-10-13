@@ -157,8 +157,8 @@
                     <div class="clearfix"></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" onclick="TransactionDecline($('#sln').val(),$('#txnBankPaymentDetails').val());">Decline</button>
-                    <button type="button" class="btn btn-success" onclick="updateStatus($('#sln').val(),$('#txnBankPaymentDetails').val());">Approve</button>
+                    <button type="button" class="btn btn-danger" onclick="TransactionDecline($('#sln').val(),$('#txnBankPaymentDetails').val());"  id="BtnDeclineReq">Decline</button>
+                    <button type="button" class="btn btn-success" onclick="updateStatus($('#sln').val(),$('#txnBankPaymentDetails').val());" id="BtnApproveReq" >Approve</button>
                 </div>
             </div><!--.modal-content-->
         </div><!--.modal-dialog-->
@@ -170,6 +170,16 @@
     
     <script type="text/javascript">
         $(document).ready(function () {
+
+            $("#BtnApproveReq").on("click", function () {
+                $(this).attr("disabled", "disabled");
+                ApproveEnable();
+            });
+            $("#BtnDeclineReq").on("click", function () {
+                $(this).attr("disabled", "disabled");
+                DeclineEnable();
+            });
+
             $('#progressRequisition').removeClass("hidden");
             $('#progressRequisition').hide();
 
@@ -221,7 +231,12 @@
                 },
             });
         });
-
+        function ApproveEnable() {            
+            setTimeout('$("#BtnApproveReq").removeAttr("disabled")', 5000);
+        }
+        function DeclineEnable() {
+            setTimeout('$("#BtnDeclineReq").removeAttr("disabled")', 5000);
+        }
     </script>
     <script type="text/javascript">
     $("#btnExportDistributorrecoard").click(function () {

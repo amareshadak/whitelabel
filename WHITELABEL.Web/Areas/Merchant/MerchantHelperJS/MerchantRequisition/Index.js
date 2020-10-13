@@ -58,10 +58,14 @@ function DisplayButton() {
     var MemberType = "";
     if (document.getElementById("checkRequisitionTypeDist").checked) {
         MemberType = "Distributor";
+		const reqType = "Distributor";
+        $('#hdnRequisitionSendto').val(reqType);
         
     }
     if (document.getElementById("checkRequisitionTypeAdmin").checked) {
         MemberType = "Admin";
+		        const reqType = "Admin";
+        $('#hdnRequisitionSendto').val(reqType);
         //GetBankListAccordnigtoSelect(MemberType);
     }
     if (DistributorchkYes.checked) {
@@ -96,15 +100,20 @@ function PAymentGatewaydiv() {
     var MemberType = "";
     if (document.getElementById("checkRequisitionTypeDist").checked) {
         MemberType = "Distributor";
-
+const reqType = "Distributor";
+        $('#hdnRequisitionSendto').val(reqType);
     }
     if (document.getElementById("checkRequisitionTypeAdmin").checked) {
         MemberType = "Admin";
+		const reqType = "Admin";
+        $('#hdnRequisitionSendto').val(reqType);
         //GetBankListAccordnigtoSelect(MemberType);
     }
     if (Paymentgatewaycheckdiv.checked) {
         $('#checkbyRequisition').hide();
         $('#Paymentgateway').show();
+		const reqType = "PaymentGateway";
+        $('#hdnRequisitionSendto').val(reqType);
     }
     else if (DistributorchkYes.checked) {
         $('#div_DIstributor').show();

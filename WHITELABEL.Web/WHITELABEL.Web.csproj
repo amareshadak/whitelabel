@@ -461,6 +461,7 @@
     <Compile Include="Helper\Decrypt.cs" />
     <Compile Include="Helper\DMR_MobileWare.cs" />
     <Compile Include="Helper\DomainNameCheck.cs" />
+    <Compile Include="Helper\EmailClassHelper.cs" />
     <Compile Include="Helper\EmailHelper.cs" />
     <Compile Include="Helper\Encrypt.cs" />
     <Compile Include="Helper\InstantPayApi.cs" />
@@ -1073,7 +1074,13 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\fonts\slick.svg" />
     <Content Include="Content\Gridmvc.css" />
+    <Content Include="Content\MvcGrid\bootstrap.min.css" />
+    <Content Include="Content\MvcGrid\cover.css" />
     <Content Include="Content\MvcGrid\mvc-grid.css" />
+    <Content Include="Content\PriceDatepickerTemplate\datepicker.html" />
+    <Content Include="Content\PriceDatepickerTemplate\day.html" />
+    <Content Include="Content\PriceDatepickerTemplate\month.html" />
+    <Content Include="Content\PriceDatepickerTemplate\year.html" />
     <Content Include="Content\slick-theme.css" />
     <Content Include="Content\slick.css" />
     <Content Include="Content\static-airlines-master\.idea\vcs.xml" />
@@ -1693,6 +1700,12 @@
     <Content Include="Content\static-airlines-master\logos\zy.png" />
     <Content Include="Content\typeahead.css" />
     <Content Include="dashboard.v1.html" />
+    <Content Include="EmailTemplate\img\air.jpg" />
+    <Content Include="EmailTemplate\img\t7_ico_facebook.jpg" />
+    <Content Include="EmailTemplate\img\t7_ico_instagram.jpg" />
+    <Content Include="EmailTemplate\img\t7_ico_linkedin.jpg" />
+    <Content Include="EmailTemplate\img\t7_ico_twitter.jpg" />
+    <Content Include="EmailTemplate\UserEmailTemplate.html" />
     <Content Include="favicon.ico" />
     <Content Include="flight_p3.html" />
     <Content Include="flight_r.html" />
@@ -2834,6 +2847,8 @@
     <Content Include="Assets\js\plugin\slick\fonts\slick.ttf" />
     <Content Include="Assets\js\plugin\slick\fonts\slick.woff" />
     <Content Include="Assets\js\plugin\slick\fonts\slickd41d.eot" />
+    <Content Include="Areas\Admin\Views\MemberRequisitionReport\PaymentGatewayWalletRechargeReport.cshtml" />
+    <Content Include="Areas\Admin\Views\MemberRequisitionReport\PaymentGatewayWalletRechargeReportIndexGrid.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\dirPagination.js" />

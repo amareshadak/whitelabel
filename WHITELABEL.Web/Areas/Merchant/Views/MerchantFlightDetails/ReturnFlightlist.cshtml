@@ -320,7 +320,7 @@
        .stickyHpy {
            position: sticky;
            top: 63px;
-           z-index: 9;
+           /*z-index: 9;*/
            background-color: #ccc;
        }
 
@@ -575,7 +575,7 @@
        .paxMobile {
            position: absolute;
            background: #fff;
-           border: 1px solid #eaeaea;
+           border: 1px solid #eaeaea;z-index: 2
            width: auto;
            border-radius: 3px;
            -webkit-border-radius: 3px;
@@ -810,7 +810,7 @@
             <div class="full-content bg-white" id="Bill_page">
                 <div class="row example-row" style="min-height:350px;">
 
-                    <div class="card" style="width:100%; z-index: 2;">
+                    <div class="card" style="width:100%;">
                         <div class="card-body" ng-controller="FlightSearchWidgetController">
                             <div class="blueBg padTB15 fl width100 clr marginB20" id="searchWrapOuterBox">
                                 <div class="fltHpyWrp">
@@ -1205,12 +1205,16 @@
                                             </div>
                                             <div class="txtRight padT20"></div>
                                         </div>
-                                        <div class="dF alignItemsCenter padL5 padB3 justifyEnd fltHpySumryPrc" style="width:20%">
+                                        <div class="dF alignItemsCenter padL5 padB3 justifyEnd fltHpySumryPrc" style="width:20%">         
                                             <span class="padR15  alignItemsCenter  flexCol">
                                                 <span class="alignItemsCenter dF padT5">
                                                     <i class="icon-rupee ico13"></i>
-                                                    <span class="ico24 quicks fb" ng-cloak>
+                                                    <span class="ico24 quicks fb" style="text-decoration:{{ displayNetAmount ? 'line-through ' : 'node' }}" ng-cloak>
+                                                        
                                                         र {{bookingTotalAmount(selectedDeptFlight,selectedReturnFlight)}}
+                                                    </span>&nbsp;&nbsp;&nbsp;
+                                                    <span class="ico15 quicks fb" ng-show="displayNetAmount">
+                                                        र {{getDeptureNetFare(selectedDeptFlight[0].SrNo) + getReturnNetFare(selectedReturnFlight[0].SrNo)}}
                                                     </span>
                                                 </span>
                                                 <span class="reserveWrp padT5">
@@ -1226,6 +1230,14 @@
                                                 </span>
                                             </span>
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="row col-12 mt-2">
+                                    <div class="col" title="Display net amount">
+                                        <button ng-click="displayNetAmount = !displayNetAmount " class="btn btn-primary btn-sm pull-right" type="submit">
+                                            <span ng-show="displayNetAmount"><i class="fa fa-eye" aria-hidden="true"></i></span>
+                                            <span ng-hide="displayNetAmount"><i class="fa fa-eye-slash" aria-hidden="true"></i></span>
+                                        </button>
                                     </div>
                                 </div>
                                 <div class="col-md-6 material-animate">
@@ -1305,8 +1317,14 @@
                                                                        ng-click="setDeptureSameFareFlight(fare.TrackNo,fare.FlightNo,$parent.$index)" />
                                                                 <label class="form-check-label"
                                                                        for="amountRb{{$index}}{{$parent.$index}}">
-                                                                    र {{getFloatNumber(fare.TotalAmount) + additionalAddedAmount}} <span ng-show="fare.FlightRemarks.length < 12"> {{fare.FlightRemarks}}</span>
+                                                                    <span style="text-decoration:{{ displayNetAmount ? 'line-through ' : 'node' }}"> र {{getFloatNumber(fare.TotalAmount) + additionalAddedAmount}} </span>
+                                                                    <span ng-show="fare.FlightRemarks.length < 12"> {{fare.FlightRemarks}}</span>
+                                                                    <br />
+                                                                    <span ng-show="displayNetAmount"> र {{getDeptureNetFare(fare.SrNo)}} </span>
                                                                 </label>
+
+
+
                                                             </div>
                                                         </div>
 
@@ -1529,9 +1547,16 @@
                                                                        id="returnAmountRb"
                                                                        ng-checked="fare.TrackNo == selectedReturnFlight[0].TrackNo"
                                                                        ng-click="setreturnSameFareFlight(fare.TrackNo,fare.FlightNo,$parent.$index)" />
-                                                                <label class="form-check-label"
+                                                                @*<label class="form-check-label"
                                                                        for="amountRb{{$index}}{{$parent.$index}}">
                                                                     र {{getFloatNumber(fare.TotalAmount) + additionalAddedAmount}} <span ng-show="fare.FlightRemarks.length < 12"> {{fare.FlightRemarks}}</span>
+                                                                </label>*@
+                                                                <label class="form-check-label"
+                                                                       for="amountRb{{$index}}{{$parent.$index}}">
+                                                                    <span style="text-decoration:{{ displayNetAmount ? 'line-through ' : 'node' }}"> र {{getFloatNumber(fare.TotalAmount) + additionalAddedAmount}} </span>
+                                                                    <span ng-show="fare.FlightRemarks.length < 12"> {{fare.FlightRemarks}}</span>
+                                                                    <br />
+                                                                    <span ng-show="displayNetAmount"> र {{getReturnNetFare(fare.SrNo)}} </span>
                                                                 </label>
                                                             </div>
                                                         </div>

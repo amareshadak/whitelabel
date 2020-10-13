@@ -4,9 +4,12 @@
     Layout = "~/Areas/Merchant/Views/Shared/_RetailerLayout.cshtml";
 }
 
-
-<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+@*<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.css" rel="stylesheet" type="text/css" />*@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
+<script src="//momentjs.com/downloads/moment.min.js"></script>
+@*`<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">*@
 <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+
 <script src="~/Areas/Merchant/MerchantHelperJS/FlightBooking/app.js"></script>
 <script src="~/Areas/Merchant/MerchantHelperJS/FlightBooking/AirportAutocomplete.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -36,50 +39,72 @@
                                     <div class="col-4 ">
                                         <div class="form-group">
                                             <label>From</label>
-                                            <input type="text" ng-model="fromAirportDetails" placeholder="From" uib-typeahead="items as items.CITYNAME for items in getAirport($viewValue)" typeahead-loading="fromLoadingAirport" typeahead-no-results="fromNoResults" class="form-control">
+                                            <div class="input-group">
+                                                <input type="text" ng-model="fromAirportDetails" placeholder="From" uib-typeahead="items as items.CITYNAME for items in getAirport($viewValue)" typeahead-loading="fromLoadingAirport" typeahead-no-results="fromNoResults" class="form-control">
+                                                <span class="input-group-addon"><i class="fa fa-plane-departure"></i></span>
+                                            </div>
+                                            @*<input type="text" ng-model="fromAirportDetails" placeholder="From" uib-typeahead="items as items.CITYNAME for items in getAirport($viewValue)" typeahead-loading="fromLoadingAirport" typeahead-no-results="fromNoResults" class="form-control">*@
                                             <i ng-show="fromLoadingAirport" class="glyphicon glyphicon-refresh"></i>
                                             <div ng-show="fromNoResults" class="text-danger">
                                                 <i class="glyphicon glyphicon-remove"></i> No Results Found
-                                            </div>
-                                            @*<div angucomplete-alt id="txtAutocomplete" placeholder="Type airport name" pause="100"
-                                                 selected-object="SelectedAirport" local-data="Airports" search-fields="CITYNAME" ng-model="Airport.AirportsName"
-                                                 title-field="CITYNAME" minlength="1" input-class="form-control" match-class="highlight">
-                                            </div>
-                                            <input type="hidden" id="AirportCode" ng-model="SelectedAirport.CITYCODE" />
-                                            <div ng-hide="SelectedAirport" ng-cloak>
-                                                {{SelectedAirport.CITYCODE}}
-                                            </div>*@
+                                            </div>                                       
                                         </div>
                                     </div>
                                     <div class="col-4">
                                         <div class="form-group">
                                             <label>To</label>
-                                            <input type="text" ng-model="toAirportDetails" placeholder="Destination" uib-typeahead="items as items.CITYNAME for items in getAirport($viewValue)" typeahead-loading="toLoadingAirport" typeahead-no-results="toNoResults" class="form-control">
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="fa fa-plane-arrival"></i></span>
+                                                <input type="text" ng-model="toAirportDetails" placeholder="Destination" uib-typeahead="items as items.CITYNAME for items in getAirport($viewValue)" typeahead-loading="toLoadingAirport" typeahead-no-results="toNoResults" class="form-control">
+                                            </div>
+                                            @*<input type="text" ng-model="toAirportDetails" placeholder="Destination" uib-typeahead="items as items.CITYNAME for items in getAirport($viewValue)" typeahead-loading="toLoadingAirport" typeahead-no-results="toNoResults" class="form-control">*@
                                             <i ng-show="toLoadingAirport" class="glyphicon glyphicon-refresh"></i>
                                             <div ng-show="toNoResults" class="text-danger">
                                                 <i class="glyphicon glyphicon-remove"></i> No Results Found
-                                            </div>
-                                            @*<div angucomplete-alt id="txtTOAutocomplete" placeholder="Type airport name" pause="100"
-                                                 selected-object="ToAirportName" local-data="Airports" search-fields="CITYNAME" ng-model="Airport.ToAirportsName"
-                                                 title-field="CITYNAME" minlength="3" input-class="form-control" match-class="highlight">
-                                            </div>
-                                            <div ng-hide="ToAirportName" ng-cloak>
-                                                {{ToAirportName.CITYCODE}}
-                                            </div>*@
+                                            </div>                                            
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row justify-content-md-center">
                                     <div class="col-4 ">
                                         <div class="form-group">
-                                            <label>Departing</label>
-                                            <input type="text" name="FromDate" id="datepickerFromDate" class="form-control fromdateVal" placeholder="From Date" ng-model="FromDate" autocomplete="off" />
+                                            @*<label>Departing</label>
+    <input type="text" name="FromDate" id="datepickerFromDate" class="form-control fromdateVal" placeholder="From Date" ng-model="FromDate" autocomplete="off" />*@
+                                            <div class="width16 fl calenderInnerBox padR20">
+                                                <div class="white ico12 op6 padB5 txtTransUpper">Departure Date</div>
+                                                @*<div id="fromEle_srp" class="col-md-12 pad0">*@
+                                                <div id="fromEle_srp">
+                                                    <input id="FromDate" name="FromDate" type="text"
+                                                           uib-datepicker-popup="EEE, dd MMM" popup-placement="bottom"
+                                                           datepicker-options="{showWeeks:false}"
+                                                           show-button-bar="false"
+                                                           ng-model="FromDate" ng-model-options="{updateOn: 'blur',  debounce: {default: 500, blur: 0}}"
+                                                           ng-keyup="cancel($event)" ng-change="MigrationHistoryDetails()" is-open="startDatePopup.opened"
+                                                           ng-focus="openStartDatePicker()"
+                                                           class="form-control" placeholder="Start Date" />
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-4">
                                         <div class="form-group">
-                                            <label>Return</label>
-                                            <input type="text" name="ToDate" id="datepickerToDate" class="form-control ToDateVal" placeholder="To Date" ng-change="setToDate()" ng-model="ToDate" ng-disabled="Airport.Tripmode==1" autocomplete="off" />
+                                            @*<label>Return</label>
+    <input type="text" name="ToDate" id="datepickerToDate" class="form-control ToDateVal" placeholder="To Date" ng-change="setToDate()" ng-model="ToDate" ng-disabled="Airport.Tripmode==1" autocomplete="off" />*@
+                                            <div class="width16 fl calenderInnerBox padR20">
+                                                <div class="white ico12 op6 padB5 txtTransUpper">Return Date</div>
+                                                @*<div id="toEle_srp" class="col-md-12 pad0">*@
+                                                <div id="toEle_srp">
+                                                    <input id="ToDate" name="ToDate" type="text"
+                                                           uib-datepicker-popup="EEE, dd MMM" popup-placement="bottom"
+                                                           datepicker-options="{showWeeks:false, minDate:FromDate}"
+                                                           show-button-bar="false"
+                                                           ng-model="ToDate" ng-model-options="{updateOn: 'blur', debounce: {default: 500, blur: 0}}"
+                                                           ng-keyup="cancel($event)" ng-change="MigrationHistoryDetails()" is-open="endDatePopup.opened"
+                                                           ng-focus="openEndDatePicker()"
+                                                           ng-disabled="Airport.Tripmode==1"
+                                                           class="form-control" placeholder="End Date" />
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

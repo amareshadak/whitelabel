@@ -158,9 +158,18 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                         changepass.PIN = objval.PIN;
                         db.Entry(changepass).State = System.Data.Entity.EntityState.Modified;
                         await db.SaveChangesAsync();
-                        EmailHelper objsms = new EmailHelper();
-                        string Regmsg = "Hi " + changepass.MEM_UNIQUE_ID + " \r\n. You have successfully update your profile.\r\n Regards\r\n BOOM Travels";
-                        objsms.SendUserEmail(changepass.EMAIL_ID, "Your profile is update successfully.", Regmsg);
+
+                        #region Email Code done by Sayan at 11-10-2020
+                        string name = changepass.MEMBER_NAME;
+                        string Regmsg = "Hi " + changepass.MEM_UNIQUE_ID + "(" + changepass.MEMBER_NAME + ")" + " \r\n. You have successfully updated your profile.\r\n Regards,\r\n BOOM Travels";
+                        EmailHelper emailhelper = new EmailHelper();
+                        string msgbody = emailhelper.GetEmailTemplate(name, Regmsg, "UserEmailTemplate.html");
+                        emailhelper.SendUserEmail(changepass.EMAIL_ID.Trim(), "Your profile has been updated successfully!", msgbody);
+                        #endregion
+
+                        //EmailHelper objsms = new EmailHelper();
+                        //string Regmsg = "Hi " + changepass.MEM_UNIQUE_ID + " \r\n. You have successfully update your profile.\r\n Regards\r\n BOOM Travels";
+                        //objsms.SendUserEmail(changepass.EMAIL_ID, "Your profile is update successfully.", Regmsg);
                     }
 
                     //throw new Exception();

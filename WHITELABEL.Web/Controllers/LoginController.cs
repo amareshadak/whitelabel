@@ -1325,15 +1325,18 @@ namespace WHITELABEL.Web.Controllers
                                                 CompanyName = x.COMPANY
                                             }).FirstOrDefault();
                         objsupermem.BALANCE = 0;
+                        decimal AmountVal = 0;
                         if (objsupermem.BLOCKED_BALANCE == null)
                         {
                             objsupermem.BLOCKED_BALANCE = 0;
                             objsupermem.BALANCE = 0;
+                            AmountVal = 0;
                         }
                         else
                         {
                             objsupermem.BLOCKED_BALANCE = objsupermem.BLOCKED_BALANCE;
                             objsupermem.BALANCE = objsupermem.BLOCKED_BALANCE;
+                            AmountVal = (decimal)objsupermem.BLOCKED_BALANCE;
                         }
                         objsupermem.EMAIL_ID = objsupermem.EMAIL_ID.ToLower();
                         objsupermem.UNDER_WHITE_LEVEL = logochecking.mem_id;
@@ -1392,7 +1395,40 @@ namespace WHITELABEL.Web.Controllers
                             db.TBL_WHITELABLE_SERVICE.Add(objser);
                             await db.SaveChangesAsync();
                         }
+                        TBL_ACCOUNTS MemberObj = new TBL_ACCOUNTS()
+                        {
+                            API_ID = 0,
+                            MEM_ID = long.Parse(objsupermem.MEM_ID.ToString()),
+                            MEMBER_TYPE = "MEMBER",
+                            TRANSACTION_TYPE = "ADD MEMBER",
+                            TRANSACTION_DATE = DateTime.Now,
+                            TRANSACTION_TIME = DateTime.Now,
+                            DR_CR = "CR",
+                            //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
+                            AMOUNT = AmountVal,
+                            NARRATION = "Add Member",
+                            OPENING = 0,
+                            CLOSING = AmountVal,
+                            REC_NO = 0,
+                            COMM_AMT = 0,
+                            TDS = 0,
+                            GST = 0,
+                            IPAddress = "",
+                            SERVICE_ID = 0,
+                            CORELATIONID = ""
+                        };
+                        db.TBL_ACCOUNTS.Add(MemberObj);
+                        await db.SaveChangesAsync();
                         ContextTransaction.Commit();
+
+                        #region Email Code done by Sayan at 11-10-2020
+                        string name = objsupermem.MEMBER_NAME;
+                        string Regmsg = "Hi " + objsupermem.MEM_UNIQUE_ID + "(" + objsupermem.MEMBER_NAME + ")" + " \r\n. You have successfully joined in Boom Travels. For any query please contact your Admin. \r\n Regards,\r\n Boom Travels";
+                        EmailHelper emailhelper = new EmailHelper();
+                        string msgbody = emailhelper.GetEmailTemplate(name, Regmsg, "UserEmailTemplate.html");
+                        emailhelper.SendUserEmail(objsupermem.EMAIL_ID.Trim(), "Welcome to Boom Travels!", msgbody);
+                        #endregion
+
                         return Json("You have joined successfully in Boom Travels", JsonRequestBehavior.AllowGet);
                     }
                     else

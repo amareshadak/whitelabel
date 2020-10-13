@@ -74,6 +74,7 @@ function updateStatus(transid, PaymentTrnDetails) {
         },
         callback: function (result) {
             if (result) {
+                $('#progressDistributorRequisition').show();
                 //var trandate = $("#TransactionDate").val();
                 //var TransationStatus = $("#TransationStatus").val();
                 var TransationStatus = "1";
@@ -103,6 +104,7 @@ function updateStatus(transid, PaymentTrnDetails) {
                     beforeSend: function () {
                     },
                     success: function (data) {
+                        $('#progressDistributorRequisition').hide();
                         var messageval = data;
                         $('.mvc-grid').mvcgrid('reload');
                         $(".overlaydiv").fadeOut("slow");

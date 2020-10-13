@@ -264,13 +264,18 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
 
                         }
                         value.BALANCE = 0;
+                        decimal AmountVal = 0;
                         if (value.BLOCKED_BALANCE == null)
                         {
                             value.BLOCKED_BALANCE = 0;
+                            value.BALANCE = 0;
+                            AmountVal = 0;
                         }
                         else
                         {
                             value.BLOCKED_BALANCE = value.BLOCKED_BALANCE;
+                            value.BALANCE = value.BLOCKED_BALANCE;
+                            AmountVal = (decimal)value.BLOCKED_BALANCE;
                         }
                         //string GetUniqueNo = String.Format("{0:d5}", (DateTime.Now.Ticks / 10) % 10000);
                         //string UniqId = "TIQ" + GetUniqueNo;
@@ -362,11 +367,40 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                             db.TBL_WHITELABLE_SERVICE.Add(objser);
                             await db.SaveChangesAsync();
                         }
+                        TBL_ACCOUNTS MemberObj = new TBL_ACCOUNTS()
+                        {
+                            API_ID = 0,
+                            MEM_ID = long.Parse(value.MEM_ID.ToString()),
+                            MEMBER_TYPE = "RETAILER",
+                            TRANSACTION_TYPE = "ADD RETAILER",
+                            TRANSACTION_DATE = DateTime.Now,
+                            TRANSACTION_TIME = DateTime.Now,
+                            DR_CR = "CR",
+                            //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
+                            AMOUNT = AmountVal,
+                            NARRATION = "Add Retailer",
+                            OPENING = 0,
+                            CLOSING = AmountVal,
+                            REC_NO = 0,
+                            COMM_AMT = 0,
+                            TDS = 0,
+                            GST = 0,
+                            IPAddress = "",
+                            SERVICE_ID = 0,
+                            CORELATIONID = ""
+                        };
+                        db.TBL_ACCOUNTS.Add(MemberObj);
+                        await db.SaveChangesAsync();
                         ViewBag.savemsg = "Data Saved Successfully";
                         Session["msg"] = "Data Saved Successfully";
-                        EmailHelper objsms = new EmailHelper();
-                        string Regmsg = "Hi " + value.MEM_UNIQUE_ID + "\r\n Welcome to BOOM Travels.\r\n.Your User Name:- " + UniqId + ".\n\r Your Password:- " + value.User_pwd + ".\r\nRegards\r\nBoom Travels";
-                        objsms.SendUserEmail(value.EMAIL_ID, "Welome BOOM Travels", Regmsg);
+
+                        #region Email Code done by Sayan at 10-10-2020
+                        string name = value.MEMBER_NAME;
+                        string Regmsg = "Hi " + value.MEM_UNIQUE_ID + "(" + value.MEMBER_NAME + ")" + "\r\n Welcome to BOOM Travels.\r\n.Your User Name:- " + UniqId + ".\n\r Your Password:- " + value.User_pwd + ".\r\nRegards\r\nBoom Travels";
+                        EmailHelper emailhelper = new EmailHelper();
+                        string msgbody = emailhelper.GetEmailTemplate(name, Regmsg, "UserEmailTemplate.html");
+                        emailhelper.SendUserEmail(value.EMAIL_ID.Trim(), "Welcome to BOOM Travels", msgbody);
+                        #endregion
                         //ContextTransaction.Commit();
                     }
                     else
@@ -443,7 +477,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                         }
                         //CheckUser.EMAIL_ID = value.EMAIL_ID;
                         CheckUser.SECURITY_PIN_MD5 = value.SECURITY_PIN_MD5;
-                        CheckUser.BLOCKED_BALANCE = value.BLOCKED_BALANCE;
+                        //CheckUser.BLOCKED_BALANCE = value.BLOCKED_BALANCE;
                         CheckUser.DUE_CREDIT_BALANCE = 0;
                         CheckUser.CREDIT_BALANCE = 0;
                         CheckUser.IS_TRAN_START = true;
@@ -454,9 +488,9 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                         CheckUser.OLD_MEMBER_ID = value.OLD_MEMBER_ID;
                         db.Entry(CheckUser).State = System.Data.Entity.EntityState.Modified;
                         await db.SaveChangesAsync();
-                        EmailHelper objsms = new EmailHelper();
-                        string Regmsg = "Hi " + CheckUser.MEM_UNIQUE_ID + " \r\n. Your profile information is updated successfully.\r\n Regards\r\n BOOM Travels";
-                        objsms.SendUserEmail(value.EMAIL_ID, "Your Profile is Updated.", Regmsg);
+                        //EmailHelper objsms = new EmailHelper();
+                        //string Regmsg = "Hi " + CheckUser.MEM_UNIQUE_ID + " \r\n. Your profile information is updated successfully.\r\n Regards\r\n BOOM Travels";
+                        //objsms.SendUserEmail(value.EMAIL_ID, "Your Profile is Updated.", Regmsg);
                         ViewBag.savemsg = "Data Updated Successfully";
                         Session["msg"] = "Data Updated Successfully";
                     }
