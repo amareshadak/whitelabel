@@ -68,33 +68,54 @@
                                 <div class="row justify-content-md-center">
                                     <div class="col-4 ">
                                         <div class="form-group">
-                                            @*<label>Departing</label>
-    <input type="text" name="FromDate" id="datepickerFromDate" class="form-control fromdateVal" placeholder="From Date" ng-model="FromDate" autocomplete="off" />*@
+                                            <input type="hidden" id="hdn-search-triptype" value="{{tripType}}" />
+                                            <input type="hidden" id="hdn-search-from-airport" value="{{fromAirportDetails.CITYCODE}}" />
+                                            <input type="hidden" id="hdn-search-to-airport" value="{{toAirportDetails.CITYCODE}}" />
+                                            <input type="hidden" id="hdn-search-start-date" value="{{(FromDate | date : 'dd/MM/yyyy')}}" />
+                                            <input type="hidden" id="hdn-search-end-date" value="{{(ToDate  | date : 'dd/MM/yyyy')}}" />
+                                            <input type="hidden" id="hdn-search-datepicker-type" value="{{(ToDate  | date : 'dd/MM/yyyy')}}" />
+
+                                            <input type="hidden" id="hdn-search-datepicker-mode" value="{{ endDatePopup.opened ? 'START' : 'END' }}" />
                                             <div class="width16 fl calenderInnerBox padR20">
                                                 <div class="white ico12 op6 padB5 txtTransUpper">Departure Date</div>
-                                                @*<div id="fromEle_srp" class="col-md-12 pad0">*@
                                                 <div id="fromEle_srp">
-                                                    <input id="FromDate" name="FromDate" type="text"
+                                                    <input datepicker-template-url="~/Content/PriceDatepickerTemplate/datepicker.html"  id="startDate" name="startDate" type="text"
+                                                           uib-datepicker-popup="EEE, dd MMM" popup-placement="bottom"
+                                                           datepicker-options="{showWeeks:false , minDate: newDt }"
+                                                           show-button-bar="false"
+                                                           ng-model="FromDate" ng-model-options="{updateOn: 'blur',  debounce: {default: 500, blur: 0}}"
+                                                           ng-keyup="cancel($event)" is-open="startDatePopup.opened"
+                                                           ng-focus="openStartDatePicker()"
+                                                           class="form-control" placeholder="Start Date" />
+                                                    @*<input id="FromDate" name="FromDate" type="text"
                                                            uib-datepicker-popup="EEE, dd MMM" popup-placement="bottom"
                                                            datepicker-options="{showWeeks:false}"
                                                            show-button-bar="false"
                                                            ng-model="FromDate" ng-model-options="{updateOn: 'blur',  debounce: {default: 500, blur: 0}}"
                                                            ng-keyup="cancel($event)" ng-change="MigrationHistoryDetails()" is-open="startDatePopup.opened"
                                                            ng-focus="openStartDatePicker()"
-                                                           class="form-control" placeholder="Start Date" />
+                                                           class="form-control" placeholder="Start Date" />*@
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-4">
                                         <div class="form-group">
-                                            @*<label>Return</label>
-    <input type="text" name="ToDate" id="datepickerToDate" class="form-control ToDateVal" placeholder="To Date" ng-change="setToDate()" ng-model="ToDate" ng-disabled="Airport.Tripmode==1" autocomplete="off" />*@
+
                                             <div class="width16 fl calenderInnerBox padR20">
                                                 <div class="white ico12 op6 padB5 txtTransUpper">Return Date</div>
                                                 @*<div id="toEle_srp" class="col-md-12 pad0">*@
                                                 <div id="toEle_srp">
-                                                    <input id="ToDate" name="ToDate" type="text"
+                                                    <input datepicker-template-url="~/Content/PriceDatepickerTemplate/datepicker.html"  id="endDate" name="endDate" type="text"
+                                                           uib-datepicker-popup="EEE, dd MMM" popup-placement="bottom"
+                                                           datepicker-options="{showWeeks:false, minDate:FromDate}"
+                                                           show-button-bar="false"
+                                                           ng-model="ToDate" ng-model-options="{updateOn: 'blur', debounce: {default: 500, blur: 0}}"
+                                                           ng-keyup="cancel($event)" is-open="endDatePopup.opened"
+                                                           ng-focus="openEndDatePicker()"
+                                                           ng-disabled="Airport.Tripmode==1"
+                                                           class="form-control" placeholder="End Date" />
+                                                    @*<input id="ToDate" name="ToDate" type="text"
                                                            uib-datepicker-popup="EEE, dd MMM" popup-placement="bottom"
                                                            datepicker-options="{showWeeks:false, minDate:FromDate}"
                                                            show-button-bar="false"
@@ -102,7 +123,7 @@
                                                            ng-keyup="cancel($event)" ng-change="MigrationHistoryDetails()" is-open="endDatePopup.opened"
                                                            ng-focus="openEndDatePicker()"
                                                            ng-disabled="Airport.Tripmode==1"
-                                                           class="form-control" placeholder="End Date" />
+                                                           class="form-control" placeholder="End Date" />*@
                                                 </div>
                                             </div>
                                         </div>
@@ -248,3 +269,63 @@
    
 </script>
 
+<script>
+
+    function getMonthNumber(name) {
+        var months = [
+            'January',
+            'February',
+            'March',
+            'April',
+            'May',
+            'June',
+            'July',
+            'August',
+            'September',
+            'October',
+            'November',
+            'December'
+        ];
+
+        return `${(months.indexOf(name) + 1)}`.length == 1 ? `0${(months.indexOf(name) + 1)}` : (months.indexOf(name) + 1);
+    }
+    async function changeMonth() {
+        if ($('#hdn-search-datepicker-mode').val() == 'END') {
+            let value = $('#monthValue').text();
+            if (value) {
+                let month = getMonthNumber(value.split(' ')[0]);
+                let date = moment(`${month}/01/${new moment().format(value.split(' ')[1])}`).format('MMM');
+
+                const url = `/Merchant/MerchantFlightDetails/GetFlightPriceCalender?DepartureDate=${new moment().format('DD')}/${month}/${value.split(' ')[1]}&ArrivalDate=&TripType=1&FromSourceCode=${$('#hdn-search-from-airport').val()}&ToDestinationCode=${$('#hdn-search-to-airport').val()}`
+                const response = await fetch(url);
+                const result = await response.json();
+                let priceCalender = JSON.parse(result).GetFareCalendarResponse.FlightDetails;
+
+                for (var i = 0; i < priceCalender.length; i++) {
+                    let id = `#${date}${priceCalender[i].TravelDate}`;
+                    $(id).text(`र ${parseFloat(priceCalender[i].TravelFare).toFixed(2)}`);
+                }
+            }
+        }
+        else {
+            let value = $('#monthValue').text();
+            if (value) {
+                let month = getMonthNumber(value.split(' ')[0]);
+                let date = moment(`${month}/01/${new moment().format(value.split(' ')[1])}`).format('MMM');
+
+                const url = `/Merchant/MerchantFlightDetails/GetFlightPriceCalender?DepartureDate=${new moment().format('DD')}/${month}/${value.split(' ')[1]}&ArrivalDate=&TripType=1&FromSourceCode=${$('#hdn-search-to-airport').val()}&ToDestinationCode=${$('#hdn-search-from-airport').val()}`
+                const response = await fetch(url);
+                const result = await response.json();
+                let priceCalender = JSON.parse(result).GetFareCalendarResponse.FlightDetails;
+
+                for (var i = 0; i < priceCalender.length; i++) {
+                    let id = `#${date}${priceCalender[i].TravelDate}`;
+                    $(id).text(`र ${parseFloat(priceCalender[i].TravelFare).toFixed(2)}`);
+                }
+            }
+        }
+
+    }
+
+
+</script>

@@ -1,6 +1,7 @@
 ﻿
 //var app = angular.module('AirportAutocompleteoduleApp', ['angucomplete-alt', 'angular.filter']); //add angucomplete-alt dependency in app
-app.controller('AirportAutocompleteController', function ($scope, $http, $window, $location, $filter) {
+//app.controller('AirportAutocompleteController', function ($scope, $http, $window, $location, $filter) {
+app.controller('AirportAutocompleteController', function ($scope, $http, $window, $location, $filter, $timeout) {
     $scope.numberToDisplay = 10;
     $scope.flightsearchResult = [];
     $scope.index = 0;
@@ -24,6 +25,23 @@ app.controller('AirportAutocompleteController', function ($scope, $http, $window
     $scope.openEndDatePicker = function () {
         $scope.endDatePopup.opened = true;
     };
+    $scope.$watch('startDatePopup.opened', function (oldValue, newValue) {
+        if ($scope.startDatePopup.opened) {
+            $timeout(function () {
+                changeMonth();
+            }, 1000);
+        }
+    });
+
+
+    $scope.$watch('endDatePopup.opened', function (oldValue, newValue) {
+        if ($scope.endDatePopup.opened) {
+            $timeout(function () {
+                changeMonth();
+            }, 1000);
+        }
+    });
+
 
 
     $scope.AddMulticitySearchInfo = new Array();
