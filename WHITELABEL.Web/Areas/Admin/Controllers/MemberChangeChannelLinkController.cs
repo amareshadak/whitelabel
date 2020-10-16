@@ -246,6 +246,9 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 Distinfor.INTRODUCER = objvalchange.SUPER_ID;
                 Distinfor.COMPANY_GST_NO = "1234567890";
                 db.Entry(Distinfor).State = System.Data.Entity.EntityState.Modified;
+                var FlightMarkUp = db.TBL_FLIGHT_MARKUP.FirstOrDefault(x => x.MEM_ID == objvalchange.DISTRIBUTOR_ID);
+                FlightMarkUp.DIST_ID = objvalchange.SUPER_ID;
+                db.Entry(FlightMarkUp).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
                 return Json("Merchant introducer id tag successfully");
             }
@@ -269,6 +272,9 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 Distinfor.INTRODUCER = objvalchange.DISTRIBUTOR_ID;
                 Distinfor.COMPANY_GST_NO = "1234567890";
                 db.Entry(Distinfor).State = System.Data.Entity.EntityState.Modified;
+                var FlightMarkUp = db.TBL_FLIGHT_MARKUP.FirstOrDefault(x => x.MEM_ID == objvalchange.MEM_ID);
+                FlightMarkUp.DIST_ID= objvalchange.DISTRIBUTOR_ID;
+                db.Entry(FlightMarkUp).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
                 return Json("Super id change successfully");
             }

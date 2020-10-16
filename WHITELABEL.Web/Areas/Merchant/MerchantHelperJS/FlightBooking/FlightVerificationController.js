@@ -1,6 +1,7 @@
 ﻿app.controller('FlightVerificationController', ['FlightServices', '$scope', '$http', '$window', function (FlightServices, $scope, $http, $window) {
     
     $scope.additionalAddedAmount = parseFloat(document.getElementById('AIRADDITIONALAMOUNT').value);
+    $scope.InternationaladditionalAddedAmount = parseFloat(document.getElementById('INTERAIRADDITIONALAMOUNT').value);
 
     $scope.adult = 0;
     $scope.child = 0;

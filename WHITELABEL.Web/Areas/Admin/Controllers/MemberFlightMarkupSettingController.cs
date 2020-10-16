@@ -101,7 +101,9 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                            MEM_MODIFIED_DATE = x.MODIFIED_DATE,
                                            MEM_STATUS = x.STATUS,
                                            MEM_ASSIGN_STATUS = x.ASSIGN_TYPE,
-                                           ASSIGN_BY = x.ASSIGN_BY
+                                           ASSIGN_BY = x.ASSIGN_BY,
+                                           DIST_NAME=dbcontext.TBL_MASTER_MEMBER.FirstOrDefault(s=>s.MEM_ID==x.DIST_ID).MEMBER_NAME,
+                                           DIST_MEM_ID = dbcontext.TBL_MASTER_MEMBER.FirstOrDefault(s => s.MEM_ID == x.DIST_ID).MEM_UNIQUE_ID,
                                        }).AsEnumerable().Select((z, index) => new TBL_FLIGHT_MARKUP
                                        {
                                            Serial_No = index + 1,
@@ -119,7 +121,9 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                            ASSIGN_TYPE = z.MEM_ASSIGN_STATUS,
                                            ASSIGN_DATE = z.MEM_ASSiGN_DATE,
                                            MODIFIED_DATE = z.MEM_MODIFIED_DATE,
-                                           ASSIGN_BY = z.ASSIGN_BY
+                                           ASSIGN_BY = z.ASSIGN_BY,
+                                           DIST_NAME=z.DIST_NAME,
+                                           DIST_MEM_ID=z.DIST_MEM_ID
                                        }).ToList();
                     return PartialView("IndexGrid", Member_Info);
                 }
@@ -143,7 +147,9 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                            MEM_MODIFIED_DATE = x.MODIFIED_DATE,
                                            MEM_STATUS = x.STATUS,
                                            MEM_ASSIGN_STATUS = x.ASSIGN_TYPE,
-                                           ASSIGN_BY = x.ASSIGN_BY
+                                           ASSIGN_BY = x.ASSIGN_BY,
+                                           DIST_NAME = dbcontext.TBL_MASTER_MEMBER.FirstOrDefault(s => s.MEM_ID == x.DIST_ID).MEMBER_NAME,
+                                           DIST_MEM_ID = dbcontext.TBL_MASTER_MEMBER.FirstOrDefault(s => s.MEM_ID == x.DIST_ID).MEM_UNIQUE_ID,
                                        }).AsEnumerable().Select((z, index) => new TBL_FLIGHT_MARKUP
                                        {
                                            Serial_No = index + 1,
@@ -161,7 +167,9 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                            ASSIGN_TYPE = z.MEM_ASSIGN_STATUS,
                                            ASSIGN_DATE = z.MEM_ASSiGN_DATE,
                                            MODIFIED_DATE = z.MEM_MODIFIED_DATE,
-                                           ASSIGN_BY = z.ASSIGN_BY
+                                           ASSIGN_BY = z.ASSIGN_BY,
+                                           DIST_NAME = z.DIST_NAME,
+                                           DIST_MEM_ID = z.DIST_MEM_ID
                                        }).ToList();
                     return PartialView("IndexGrid", Member_Info);
                 }
@@ -202,7 +210,9 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                            MEM_MODIFIED_DATE = x.MODIFIED_DATE,
                                            MEM_STATUS = x.STATUS,
                                            MEM_ASSIGN_STATUS = x.ASSIGN_TYPE,
-                                           ASSIGN_BY = x.ASSIGN_BY
+                                           ASSIGN_BY = x.ASSIGN_BY,
+                                           DIST_NAME=db.TBL_MASTER_MEMBER.FirstOrDefault(s=>s.MEM_ID==x.DIST_ID).MEMBER_NAME,
+                                           DIST_MEM_ID= db.TBL_MASTER_MEMBER.FirstOrDefault(s => s.MEM_ID == x.DIST_ID).MEM_UNIQUE_ID
                                        }).AsEnumerable().Select((z, index) => new TBL_FLIGHT_MARKUP
                                        {
                                            Serial_No = index + 1,
@@ -220,7 +230,9 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                            ASSIGN_TYPE = z.MEM_ASSIGN_STATUS,
                                            ASSIGN_DATE = z.MEM_ASSiGN_DATE,
                                            MODIFIED_DATE = z.MEM_MODIFIED_DATE,
-                                           ASSIGN_BY = z.ASSIGN_BY
+                                           ASSIGN_BY = z.ASSIGN_BY,
+                                           DIST_MEM_ID=z.DIST_MEM_ID,
+                                           DIST_NAME=z.DIST_NAME
                                        }).FirstOrDefault();
 
                     return Json(new { Result = Member_Info, Status = "0" }, JsonRequestBehavior.AllowGet);

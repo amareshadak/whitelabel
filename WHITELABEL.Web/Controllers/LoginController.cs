@@ -1425,7 +1425,8 @@ namespace WHITELABEL.Web.Controllers
                             DOMESTIC_MARKUP=0,
                             ASSIGN_DATE=DateTime.Now,
                             STATUS=0,
-                            ASSIGN_TYPE="MARK UP ASSIGN"
+                            ASSIGN_TYPE="MARK UP ASSIGN",
+                            DIST_ID = 0
                         };
                         db.TBL_FLIGHT_MARKUP.Add(objflight);
                         await db.SaveChangesAsync();
@@ -2131,7 +2132,7 @@ namespace WHITELABEL.Web.Controllers
                 string DomaineName = Request.Url.Host;
                 var logochecking = (from x in db.TBL_MASTER_MEMBER
                                     join y in db.TBL_WHITE_LEVEL_HOSTING_DETAILS
-                                     on x.MEM_ID equals y.MEM_ID
+                                     on x.MEM_ID equals y.MEM_ID                                     
                                     //where y.DOMAIN == DomaineName && y.STATUS == 1
                                     where y.DOMAIN.Contains(DomaineName) && y.STATUS == 1
                                     select new
@@ -2289,6 +2290,17 @@ namespace WHITELABEL.Web.Controllers
                                 //};
                                 //db.TBL_TRACE_MEMBER_LOGIN_DETAILS.Add(objlogin);
                                 //db.SaveChanges();
+                                var FlightMarkup = db.TBL_FLIGHT_MARKUP.FirstOrDefault(x => x.MEM_ID == DistGetMember.MEM_ID);
+                                if (FlightMarkup != null)
+                                {
+                                    Session["AIRADDITIONALAMOUNT"] = FlightMarkup.DOMESTIC_MARKUP;
+                                    Session["INTERAIRADDITIONALAMOUNT"] = FlightMarkup.INTERNATIONAL_MARKUP;
+                                }
+                                else
+                                {
+                                    Session["AIRADDITIONALAMOUNT"] = "0";
+                                    Session["INTERAIRADDITIONALAMOUNT"] = "0";
+                                }
                                 Session["MerchantUserId"] = DistGetMember.MEM_ID;
                                 Session["MerchantUserName"] = DistGetMember.UName;
                                 Session["MerchantRailID"] = DistGetMember.RAIL_ID_QUANTITY;

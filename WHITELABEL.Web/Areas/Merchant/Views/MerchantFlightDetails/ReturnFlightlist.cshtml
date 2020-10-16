@@ -1291,6 +1291,7 @@
                                                                     <span>{{flight[0].AirlineCode}}-{{flight[0].FlightNo}}</span>
                                                                     <br />
                                                                     <span>Class: {{flight[0].FlightClass}}</span>
+                                                                    {{flight[0].TrackNo}}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1338,7 +1339,7 @@
                                                                        ng-click="setDeptureSameFareFlight(fare.TrackNo,fare.FlightNo,$parent.$index)" />
                                                                 <label class="form-check-label"
                                                                        for="amountRb{{$index}}{{$parent.$index}}">
-                                                                    <span style="text-decoration:{{ displayNetAmount ? 'line-through ' : 'node' }}"> र {{getFloatNumber(fare.TotalAmount) + additionalAddedAmount}} </span>
+                                                                    <span style="text-decoration:{{ displayNetAmount ? 'line-through ' : 'node' }}"> र {{getFloatNumber(fare.TotalAmount)}}@*{{getFloatNumber(fare.TotalAmount) + additionalAddedAmount}}*@ </span>
                                                                     <span ng-show="fare.FlightRemarks.length < 12"> {{fare.FlightRemarks}}</span>
                                                                     <br />
                                                                     <span ng-show="displayNetAmount"> र {{getDeptureNetFare(fare.SrNo)}} </span>
@@ -1462,7 +1463,7 @@
                                                                     <td>{{getDeptureOtherFare(flight[0].SrNo)}}/-</td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td>Additional Charges</td>
+                                                                    <td>Convenience Fee</td>
                                                                     <td>{{additionalAddedAmount}}/-</td>
                                                                 </tr>
                                                                 <tr>
@@ -1523,6 +1524,7 @@
                                                                     <span>{{flight[0].AirlineCode}}-{{flight[0].FlightNo}}</span>
                                                                     <br />
                                                                     <span>Class: {{flight[0].FlightClass}}</span>
+                                                                    {{flight[0].TrackNo}}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1574,7 +1576,7 @@
                                                                 </label>*@
                                                                 <label class="form-check-label"
                                                                        for="amountRb{{$index}}{{$parent.$index}}">
-                                                                    <span style="text-decoration:{{ displayNetAmount ? 'line-through ' : 'node' }}"> र {{getFloatNumber(fare.TotalAmount) + additionalAddedAmount}} </span>
+                                                                    <span style="text-decoration:{{ displayNetAmount ? 'line-through ' : 'node' }}"> र {{getFloatNumber(fare.TotalAmount)}}@*{{getFloatNumber(fare.TotalAmount) + additionalAddedAmount}}*@ </span>
                                                                     <span ng-show="fare.FlightRemarks.length < 12"> {{fare.FlightRemarks}}</span>
                                                                     <br />
                                                                     <span ng-show="displayNetAmount"> र {{getReturnNetFare(fare.SrNo)}} </span>
@@ -1695,7 +1697,7 @@
                                                                     <td>{{getreturnOtherFare(flight[0].SrNo)}}/-</td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td>Additional Charges</td>
+                                                                    <td>Convenience Fee</td>
                                                                     <td>{{additionalAddedAmount}}/-</td>
                                                                 </tr>
                                                                 <tr>

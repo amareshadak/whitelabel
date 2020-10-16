@@ -1,5 +1,6 @@
 ﻿app.controller('RoundTripDetailsController', ['FlightServices', '$scope', '$http', '$window', function (FlightServices, $scope, $http, $window) {
     $scope.additionalAddedAmount = parseFloat(document.getElementById('AIRADDITIONALAMOUNT').value);
+    $scope.InternationaladditionalAddedAmount = parseFloat(document.getElementById('INTERAIRADDITIONALAMOUNT').value);
 
     $scope.adult = 0;
     $scope.child = 0;
@@ -228,7 +229,7 @@
             $scope.deptureFareDetails = JSON.parse(data.outBoundData).VerifyFlightDetailResponse.FareDetails[0];
             $scope.returnFareDetails = JSON.parse(data.inBoundData).VerifyFlightDetailResponse.FareDetails[0];
             $scope.setTotalFare();
-            //debugger;
+            debugger;
             $scope.TotalAmount = parseFloat($scope.deptureFareDetails.TotalAmount) + parseFloat($scope.returnFareDetails.TotalAmount);
             //// $scope.flightDetails = flightDetails;
             //// $scope.fareDetails = fareDetails;
@@ -536,6 +537,7 @@
 
     $scope.totalAmountCalculation = function (amount) {
         if (amount) {
+            debugger;
             return parseFloat(amount) + ($scope.additionalAddedAmount == 0 ? 0 : ($scope.additionalAddedAmount * 2)) + parseFloat($scope.userMarkup);
         }
         return 0;

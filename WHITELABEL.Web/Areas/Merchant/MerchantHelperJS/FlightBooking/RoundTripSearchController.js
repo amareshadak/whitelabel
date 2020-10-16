@@ -1,6 +1,7 @@
 ﻿app.controller('RoundTripSearchController', ['FlightServices', '$scope', '$http', '$window', '$filter', function (FlightServices, $scope, $http, $window, $filter) {
     $scope.displayNetAmount = false;
-    $scope.additionalAddedAmount =  parseFloat(document.getElementById('AIRADDITIONALAMOUNT').value);
+    $scope.additionalAddedAmount = parseFloat(document.getElementById('AIRADDITIONALAMOUNT').value);
+    $scope.InternationaladditionalAddedAmount = parseFloat(document.getElementById('INTERAIRADDITIONALAMOUNT').value);
 
     $scope.getFloatNumber = function (n) {
         if (n) {
@@ -950,11 +951,12 @@
     }
 
     $scope.bookingTotalAmount = function (DerpAmt, RetAmt) {
-
+        debugger;
         if (DerpAmt.length > 0 && RetAmt.length > 0) {
             let TotalAmt = 0;
             if (DerpAmt[0].TotalAmount && RetAmt[0].TotalAmount != undefined) {
-                TotalAmt = parseFloat(DerpAmt[0].TotalAmount) + parseFloat(RetAmt[0].TotalAmount) + ($scope.additionalAddedAmount == 0 ? 0 : ($scope.additionalAddedAmount * 2));
+                //TotalAmt = parseFloat(DerpAmt[0].TotalAmount) + parseFloat(RetAmt[0].TotalAmount) + ($scope.additionalAddedAmount == 0 ? 0 : ($scope.additionalAddedAmount * 2));
+                TotalAmt = parseFloat(DerpAmt[0].TotalAmount) + parseFloat(RetAmt[0].TotalAmount);
             }
             else {
                 TotalAmt = 0;

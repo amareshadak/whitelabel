@@ -23,6 +23,7 @@
         public DateTime? MODIFIED_DATE { get; set; }
         public int STATUS { get; set; }
         public string ASSIGN_TYPE { get; set; }
+        public long DIST_ID { get; set; }
         [NotMapped]
         public string MEMBER_UNIQUE_ID { get; set; }
         [NotMapped]
@@ -41,5 +42,9 @@
         public string FromUser { get; set; }
         [NotMapped]
         public long Serial_No { get; set; }
+        [NotMapped]
+        public string DIST_NAME { get; set; }
+        [NotMapped]
+        public string DIST_MEM_ID { get; set; }
     }
 }

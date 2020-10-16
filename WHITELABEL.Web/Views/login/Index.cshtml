@@ -51,7 +51,7 @@
                                 <input type="password" name="passlogin" placeholder="Password" id="txtloginPassword" class="input_login">
                                 @*<input type="checkbox" id="login_check" name="checkbox" class="checkbox_login">
                                     <label for="login_check" class="remember_me">Remember me</label>*@
-                                <a href="#" class="forgot_link">Forget password?</a>
+                                <a href="@Url.Action("ForgotPassword","Login")" class="forgot_link">Forget password?</a>
 
                                 <div style="text-align:center; top: 20px; font-size:12px; color:#FF0000;" id="informationMessage">@*@ViewBag.Message*@<span id="errormsg"></span></div>
                                 <div class="have_an_acnt"></div>
@@ -612,7 +612,10 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        
+        $('#txtloginPassword').keypress(function (e) {
+            if (e.keyCode == 13)
+                $('#btnLogin').click();
+        });
         $('#btnLogin').prop('disabled', false);
         $('#txtloginUsername').css('border-color', '');
         $('#txtloginPassword').css('border-color', '');

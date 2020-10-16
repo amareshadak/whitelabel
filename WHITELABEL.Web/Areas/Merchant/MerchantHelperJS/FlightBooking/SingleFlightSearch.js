@@ -2,6 +2,7 @@
 
 
     $scope.additionalAddedAmount = parseFloat(document.getElementById('AIRADDITIONALAMOUNT').value);
+    $scope.InternationaladditionalAddedAmount = parseFloat(document.getElementById('INTERAIRADDITIONALAMOUNT').value);
     $scope.displayNetAmount = false;
     $scope.lower_price_bound = 0;
     $scope.upper_price_bound = 1000;

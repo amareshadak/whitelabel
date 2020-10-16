@@ -398,8 +398,9 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                             DOMESTIC_MARKUP = 0,
                             ASSIGN_DATE = DateTime.Now,
                             STATUS = 0,
-                            ASSIGN_TYPE = "MARK UP ASSIGN"
-                        };
+                            ASSIGN_TYPE = "MARK UP ASSIGN",
+                            DIST_ID= MemberCurrentUser.MEM_ID
+                    };
                         db.TBL_FLIGHT_MARKUP.Add(objflight);
                         await db.SaveChangesAsync();
                         ViewBag.savemsg = "Data Saved Successfully";

@@ -1,4 +1,4 @@
-﻿using System;
+﻿ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -613,7 +613,8 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                 decimal Holding_Amount = 0;
                 decimal UserMarkUp_Value = 0;
                 decimal.TryParse(userMarkup, out UserMarkUp_Value);
-                string AIRADDITIONALAMOUNT = System.Configuration.ConfigurationManager.AppSettings["AIRADDITIONALAMOUNT"];
+                //string AIRADDITIONALAMOUNT = System.Configuration.ConfigurationManager.AppSettings["AIRADDITIONALAMOUNT"];
+                string AIRADDITIONALAMOUNT = Session["AIRADDITIONALAMOUNT"].ToString();
                 string GSTValue = System.Configuration.ConfigurationManager.AppSettings["GSTVALUE"];
                 string HOLDCHARGES = System.Configuration.ConfigurationManager.AppSettings["HOLDCHARGES"];
                 decimal.TryParse(AIRADDITIONALAMOUNT, out AirAdditionalCharge);
@@ -1194,7 +1195,8 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                         childVal = int.Parse(child);
                         infant = TicketInfo[Ticketcount - 1].Infant;
                         InfantVal = int.Parse(infant);
-                        string AIRADDITIONALAMOUNT_Value = System.Configuration.ConfigurationManager.AppSettings["AIRADDITIONALAMOUNT"];
+                        //string AIRADDITIONALAMOUNT_Value = System.Configuration.ConfigurationManager.AppSettings["AIRADDITIONALAMOUNT"];
+                        string AIRADDITIONALAMOUNT_Value = Session["AIRADDITIONALAMOUNT"].ToString();
                         decimal Additional_AMt = 0;
                         decimal.TryParse(AIRADDITIONALAMOUNT_Value, out Additional_AMt);
                         TotalFlightBaseFare = FareDetails[0].TotalFlightBaseFare;
@@ -2295,7 +2297,8 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
             decimal Holding_Amount = 0;
             decimal UserMarkUp_Value = 0;
             decimal.TryParse(userMarkup, out UserMarkUp_Value);
-            string AIRADDITIONALAMOUNT = System.Configuration.ConfigurationManager.AppSettings["AIRADDITIONALAMOUNT"];
+            //string AIRADDITIONALAMOUNT = System.Configuration.ConfigurationManager.AppSettings["AIRADDITIONALAMOUNT"];
+            string AIRADDITIONALAMOUNT = Session["AIRADDITIONALAMOUNT"].ToString();
             string GSTValue = System.Configuration.ConfigurationManager.AppSettings["GSTVALUE"];
             string HOLDCHARGES = System.Configuration.ConfigurationManager.AppSettings["HOLDCHARGES"];
             decimal.TryParse(AIRADDITIONALAMOUNT, out AirAdditionalCharge);
@@ -2882,7 +2885,8 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                         childVal = int.Parse(child);
                         infant = TicketInfo[Ticketcount - 1].Infant;
                         InfantVal = int.Parse(infant);
-                        string AIRADDITIONALAMOUNT_Value = System.Configuration.ConfigurationManager.AppSettings["AIRADDITIONALAMOUNT"];
+                        //string AIRADDITIONALAMOUNT_Value = System.Configuration.ConfigurationManager.AppSettings["AIRADDITIONALAMOUNT"];
+                        string AIRADDITIONALAMOUNT_Value = Session["AIRADDITIONALAMOUNT"].ToString();
                         decimal Additional_AMt = 0;
                         decimal.TryParse(AIRADDITIONALAMOUNT_Value, out Additional_AMt);
                         TotalFlightBaseFare = FareDetails[0].TotalFlightBaseFare;
@@ -3773,7 +3777,8 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
             decimal Holding_Amount = 0;
             decimal UserMarkUp_Value = 0;
             decimal.TryParse(userMarkup, out UserMarkUp_Value);
-            string AIRADDITIONALAMOUNT = System.Configuration.ConfigurationManager.AppSettings["AIRADDITIONALAMOUNT"];
+            //string AIRADDITIONALAMOUNT = System.Configuration.ConfigurationManager.AppSettings["AIRADDITIONALAMOUNT"];
+            string AIRADDITIONALAMOUNT = Session["AIRADDITIONALAMOUNT"].ToString();
             string GSTValue = System.Configuration.ConfigurationManager.AppSettings["GSTVALUE"];
             string HOLDCHARGES = System.Configuration.ConfigurationManager.AppSettings["HOLDCHARGES"];
             decimal.TryParse(AIRADDITIONALAMOUNT, out AirAdditionalCharge);
@@ -4119,7 +4124,8 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                     childVal = int.Parse(child);
                     infant = TicketInfo[Ticketcount - 1].Infant;
                     InfantVal = int.Parse(infant);
-                    string AIRADDITIONALAMOUNT_Value = System.Configuration.ConfigurationManager.AppSettings["AIRADDITIONALAMOUNT"];
+                    //string AIRADDITIONALAMOUNT_Value = System.Configuration.ConfigurationManager.AppSettings["AIRADDITIONALAMOUNT"];
+                    string AIRADDITIONALAMOUNT_Value = Session["AIRADDITIONALAMOUNT"].ToString();
                     decimal Additional_AMt = 0;
                     decimal.TryParse(AIRADDITIONALAMOUNT_Value, out Additional_AMt);
                     TotalFlightBaseFare = FareDetails[0].TotalFlightBaseFare;
@@ -4317,7 +4323,8 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
             decimal Holding_Amount = 0;
             decimal UserMarkUp_Value = 0;
             decimal.TryParse(userMarkup, out UserMarkUp_Value);
-            string AIRADDITIONALAMOUNT = System.Configuration.ConfigurationManager.AppSettings["AIRADDITIONALAMOUNT"];
+            //string AIRADDITIONALAMOUNT = System.Configuration.ConfigurationManager.AppSettings["AIRADDITIONALAMOUNT"];
+            string AIRADDITIONALAMOUNT = Session["AIRADDITIONALAMOUNT"].ToString();
             string GSTValue = System.Configuration.ConfigurationManager.AppSettings["GSTVALUE"];
             string HOLDCHARGES = System.Configuration.ConfigurationManager.AppSettings["HOLDCHARGES"];
             decimal.TryParse(AIRADDITIONALAMOUNT, out AirAdditionalCharge);
@@ -4663,7 +4670,8 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                     childVal = int.Parse(child);
                     infant = TicketInfo[Ticketcount - 1].Infant;
                     InfantVal = int.Parse(infant);
-                    string AIRADDITIONALAMOUNT_Value = System.Configuration.ConfigurationManager.AppSettings["AIRADDITIONALAMOUNT"];
+                    //string AIRADDITIONALAMOUNT_Value = System.Configuration.ConfigurationManager.AppSettings["AIRADDITIONALAMOUNT"];
+                    string AIRADDITIONALAMOUNT_Value = Session["AIRADDITIONALAMOUNT"].ToString();
                     decimal Additional_AMt = 0;
                     decimal.TryParse(AIRADDITIONALAMOUNT_Value, out Additional_AMt);
                     TotalFlightBaseFare = FareDetails[0].TotalFlightBaseFare;
@@ -4881,7 +4889,8 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                 string Companyname = GetMemberInfo.COMPANY;
                 string CompanyEmail = GetMemberInfo.EMAIL_ID;
                 string CompanyMobile = GetMemberInfo.MEMBER_MOBILE;
-                string AIRADDITIONALAMOUNT = System.Configuration.ConfigurationManager.AppSettings["AIRADDITIONALAMOUNT"];
+                //string AIRADDITIONALAMOUNT = System.Configuration.ConfigurationManager.AppSettings["AIRADDITIONALAMOUNT"];
+                string AIRADDITIONALAMOUNT = Session["AIRADDITIONALAMOUNT"].ToString();
                 //ViewBag.Additionalcharge = AIRADDITIONALAMOUNT;
                 var Updatestatus = _db.TBL_FLIGHT_BOOKING_DETAILS.FirstOrDefault(x => x.REF_NO == refId);
                 //ViewBag.processingCharge = Updatestatus.USER_MARKUP;
@@ -4927,7 +4936,8 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                 string Companyname = GetMemberInfo.COMPANY;
                 string CompanyEmail = GetMemberInfo.EMAIL_ID;
                 string CompanyMobile = GetMemberInfo.MEMBER_MOBILE;
-                string AIRADDITIONALAMOUNT = System.Configuration.ConfigurationManager.AppSettings["AIRADDITIONALAMOUNT"];
+                //string AIRADDITIONALAMOUNT = System.Configuration.ConfigurationManager.AppSettings["AIRADDITIONALAMOUNT"];
+                string AIRADDITIONALAMOUNT = Session["AIRADDITIONALAMOUNT"].ToString();
                 //ViewBag.Additionalcharge = AIRADDITIONALAMOUNT;
                 var Updatestatus = _db.TBL_FLIGHT_BOOKING_DETAILS.FirstOrDefault(x => x.REF_NO == refId);
                 //ViewBag.processingCharge = Updatestatus.USER_MARKUP;
@@ -4974,7 +4984,8 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                 string Companyname = GetMemberInfo.COMPANY;
                 string CompanyEmail = GetMemberInfo.EMAIL_ID;
                 string CompanyMobile = GetMemberInfo.MEMBER_MOBILE;
-                string AIRADDITIONALAMOUNT = System.Configuration.ConfigurationManager.AppSettings["AIRADDITIONALAMOUNT"];                
+                //string AIRADDITIONALAMOUNT = System.Configuration.ConfigurationManager.AppSettings["AIRADDITIONALAMOUNT"];                
+                string AIRADDITIONALAMOUNT = Session["AIRADDITIONALAMOUNT"].ToString();
                 var Updatestatus = _db.TBL_FLIGHT_BOOKING_DETAILS.FirstOrDefault(x => x.REF_NO == refId);                
                 dynamic PrintFlghtInvoice = MultiLinkAirAPI.GetTicketInformation(refId, "", PNR, "", "", "");
                 var TicketStatus = PrintFlghtInvoice.PNRDetailsResponse.TicketDetails[0].Status.Value;
@@ -5024,7 +5035,8 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                 decimal Holding_Amount = 0;
                 decimal UserMarkUp_Value = 0;
                 decimal.TryParse(uMark, out UserMarkUp_Value);
-                string AIRADDITIONALAMOUNT = System.Configuration.ConfigurationManager.AppSettings["AIRADDITIONALAMOUNT"];
+                //string AIRADDITIONALAMOUNT = System.Configuration.ConfigurationManager.AppSettings["AIRADDITIONALAMOUNT"];
+                string AIRADDITIONALAMOUNT = Session["AIRADDITIONALAMOUNT"].ToString();
                 string GSTValue = System.Configuration.ConfigurationManager.AppSettings["GSTVALUE"];
                 string HOLDCHARGES = System.Configuration.ConfigurationManager.AppSettings["HOLDCHARGES"];
                 decimal.TryParse(AIRADDITIONALAMOUNT, out AirAdditionalCharge);

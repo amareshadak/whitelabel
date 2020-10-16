@@ -1,6 +1,7 @@
 ﻿app.controller('ReturnFlightSearchController', ['FlightServices', '$scope', '$http', '$window', '$filter', function (FlightServices, $scope, $http, $window, $filter) {
 
     $scope.additionalAddedAmount = parseFloat(document.getElementById('AIRADDITIONALAMOUNT').value);
+    $scope.InternationaladditionalAddedAmount = parseFloat(document.getElementById('INTERAIRADDITIONALAMOUNT').value);
 
     $scope.getFloatNumber = function (n) {
         if (n) {

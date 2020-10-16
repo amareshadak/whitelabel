@@ -17,9 +17,10 @@
                                         columns.Add(model => model.MEMBER_COMPANY).Titled("Company").Filterable(true).Sortable(true);
                                         columns.Add(model => model.MEMBER_MOBILE).Titled("Mobile").Filterable(true).Sortable(true);
                                         columns.Add(model => model.MEMBER_ADDRESS).Titled("Address").Filterable(true).Sortable(true);
+                                        columns.Add(model => model.DIST_MEM_ID+" - "+model.DIST_NAME).Titled("Introducer").Filterable(true).Sortable(true);
                                         columns.Add(model => model.INTERNATIONAL_MARKUP).Titled("Internation MarkUp").Filterable(true).Sortable(true);
                                         columns.Add(model => model.DOMESTIC_MARKUP).Titled("Domestic MarkUp").Filterable(true).Sortable(true);
-                                        columns.Add(model => model.SLN).Titled("Process TXN").Encoded(false).Filterable(false).Sortable(false)
+                                        columns.Add(model => model.SLN).Titled("Tag Flight MarkUp").Encoded(false).Filterable(false).Sortable(false)
                      .RenderedAs(model => "<a class='btn btn-primary btn-xs' style='color:white;' data-toggle='modal' data-target='.FlightMarkupTagg' id='ProcessFlightMarkupTagging' data-id='" + model.SLN + "' onclick='FetchFlightMarkupTagging(" + model.SLN + ");'>Tag MarkUp</a>");
                                     })
                                     .Css("css-classes")

@@ -950,12 +950,12 @@
                                                                    ng-checked="{{flight[0] == fare}}" />
                                                             <label class="form-check-label"
                                                                    for="amountRb{{$index}}{{$parent.$index}}">
-                                                                र {{getFloatNumber(fare.TotalAmount) + additionalAddedAmount}} {{fare.FlightRemarks}}
+                                                                र {{getFloatNumber(fare.TotalAmount)}} @*{{getFloatNumber(fare.TotalAmount) + additionalAddedAmount}}*@ {{fare.FlightRemarks}}
                                                             </label>
                                                         </div>
                                                     </div>
                                                     <div class="col-4 p-1 text-center">
-                                                        <span style="font-size: larger; font-weight: bold;text-decoration:{{ displayNetAmount ? 'line-through ' : 'node' }}" class="ml-4">र {{getFloatNumber(flight[0].TotalAmount) + additionalAddedAmount}}</span>
+                                                        <span style="font-size: larger; font-weight: bold;text-decoration:{{ displayNetAmount ? 'line-through ' : 'node' }}" class="ml-4">र {{getFloatNumber(flight[0].TotalAmount)}}@*{{getFloatNumber(flight[0].TotalAmount) + additionalAddedAmount}}*@</span>
                                                         <br />
                                                         <span ng-show="displayNetAmount" style="font-size: larger; font-weight: bold;" class="ml-4">र {{getNetFare(flight[0].SrNo)}}</span>
 
@@ -1076,7 +1076,7 @@
                                                                 <td>{{getOtherFare(flight[0].SrNo)}}/-</td>
                                                             </tr>
                                                             <tr>
-                                                                <td>Additional Charges</td>
+                                                                <td>Convenience Fee</td>
                                                                 <td>{{additionalAddedAmount}}/-</td>
                                                             </tr>
                                                             <tr>

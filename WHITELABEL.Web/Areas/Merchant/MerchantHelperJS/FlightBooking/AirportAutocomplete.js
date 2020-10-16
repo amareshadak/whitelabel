@@ -8,7 +8,26 @@ app.controller('AirportAutocompleteController', function ($scope, $http, $window
     $scope.filterhtml = false;
     $scope.selectedAirlines = new Array();
     $scope.airlines = new Array();
+    
+    //$scope.showcalendar = function ($event) {
+    //    $scope.endDatePopup.opened = true;
+    //    $scope.$watch('endDatePopup.opened', function (oldValue, newValue) {
+    //        debugger;
+    //        if ($scope.endDatePopup.opened) {
+    //            $timeout(function () {
+    //                changeMonth();
+    //            }, 1000);
+    //        }
+    //    });
+    //};
 
+    $scope.InterchangeLocation = function (Dept, Return) {
+        
+        const DeptureVal = Dept;
+        const ReturnVal = Return;
+        $scope.fromAirportDetails = Return;
+        $scope.toAirportDetails = Dept;
+    }
     $scope.newDt = new Date();
     $scope.startDatePopup = {
         opened: false
@@ -35,6 +54,7 @@ app.controller('AirportAutocompleteController', function ($scope, $http, $window
 
 
     $scope.$watch('endDatePopup.opened', function (oldValue, newValue) {
+        debugger;
         if ($scope.endDatePopup.opened) {
             $timeout(function () {
                 changeMonth();
@@ -163,7 +183,7 @@ app.controller('AirportAutocompleteController', function ($scope, $http, $window
     //Airport.TravellType
     $scope.Airport = { Tripmode : 1 };
     $scope.SerachFlights = function () {
-        debugger;
+        
         var Tripmode = $scope.Airport.Tripmode;
         if (Tripmode != '3') {
             var date_to = "";
