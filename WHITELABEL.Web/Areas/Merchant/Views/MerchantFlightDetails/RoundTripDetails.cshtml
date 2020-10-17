@@ -579,7 +579,7 @@
 <script src="~/Areas/Merchant/MerchantHelperJS/FlightBooking/FlightServices.js"></script>
 <script src="~/Areas/Merchant/MerchantHelperJS/FlightBooking/RoundTripDetailsController.js"></script>
 
-<div ng-app="AirportAutocompleteoduleApp" class="display-animation" ng-controller="RoundTripDetailsController" ng-init="loadFlightDetails('@ViewBag.TrackNo','@ViewBag.TripMode');populatePesengerList('@ViewBag.AdultCount','@ViewBag.ChildCount','@ViewBag.InfantCount');" id="FlightBookingControllerId" ng-cloak>
+<div ng-app="AirportAutocompleteoduleApp" class="display-animation" ng-controller="RoundTripDetailsController" ng-init="loadFlightDetails('@ViewBag.TrackNo','@ViewBag.TripMode','@ViewBag.OriginCode','@ViewBag.DestinationCode');populatePesengerList('@ViewBag.AdultCount','@ViewBag.ChildCount','@ViewBag.InfantCount');" id="FlightBookingControllerId" ng-cloak>
     <div class="content" style="margin-top:20px;">
         <div class="display-animation">
             <div class="full-content margin-bottom-40 bg-white" id="Bill_page">
@@ -1130,7 +1130,7 @@
                                                 <td class="text-right">{{totalTaxAndCharges}}/-</td>
                                             </tr>
                                             <tr>
-                                                <td>Additional Charges x 2</td>
+                                                <td>Convenience Fee x 2</td>
                                                 <td class="text-right">{{(additionalAddedAmount == 0 ? 0 : (additionalAddedAmount * 2))}}/-</td>
                                             </tr>
                                             <tr>
@@ -1139,7 +1139,7 @@
                                             </tr>
                                             <tr>
                                                 <td><b>Total</b></td>
-                                                <td class="text-right"><b>{{totalAmountCalculation(totalAmount)}}/- {{TotalAmount}}</b></td>
+                                                <td class="text-right"><b>{{totalAmountCalculation(totalAmount)}}/- @*{{TotalAmount}}*@</b></td>
                                             </tr>
                                         </table>
                                         

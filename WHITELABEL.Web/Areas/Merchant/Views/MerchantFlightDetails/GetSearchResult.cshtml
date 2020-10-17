@@ -960,7 +960,10 @@
                                                         <span ng-show="displayNetAmount" style="font-size: larger; font-weight: bold;" class="ml-4">र {{getNetFare(flight[0].SrNo)}}</span>
 
                                                         <input type="button" data-cy="bookBtn" value="BOOK" class="button fr fltbook fb widthF105 fb quicks"
-                                                               ng-click="getFlightDetails(AdultCount,ChildCount,InfantCount,flight[0].TrackNo,TripMode)" />
+                                                               ng-click="getFlightDetails(AdultCount,ChildCount,InfantCount,flight[0].TrackNo,TripMode,flight[0].FromAirportCode,flight[flight.length - 1].ToAirportCode)" />
+
+                                                        @*<input type="button" data-cy="bookBtn" value="BOOK" class="button fr fltbook fb widthF105 fb quicks"
+                                                               ng-click="getFlightDetails(AdultCount,ChildCount,InfantCount,flight[0].TrackNo,TripMode)" />*@
 
                                                     </div>
                                                 </div>
@@ -1075,13 +1078,14 @@
                                                                 <td>Other Amoutn (<span>{{AdultCount}} {{AdultCount > 1 ? 'Adults' : 'Adult'}}</span> <span ng-show="ChildCount > 0">, {{ChildCount}} {{ChildCount > 1 ? 'Childs' : 'Child'}}</span><span ng-show="InfantCount > 0">, {{InfantCount}} {{InfantCount > 1 ? 'Infants' : 'Infant'}}</span>)</td>
                                                                 <td>{{getOtherFare(flight[0].SrNo)}}/-</td>
                                                             </tr>
-                                                            <tr>
+                                                            <tr style="display:none;">
                                                                 <td>Convenience Fee</td>
                                                                 <td>{{additionalAddedAmount}}/-</td>
                                                             </tr>
                                                             <tr>
                                                                 <td>Total Fare (<span>{{AdultCount}} {{AdultCount > 1 ? 'Adults' : 'Adult'}}</span> <span ng-show="ChildCount > 0">, {{ChildCount}} {{ChildCount > 1 ? 'Childs' : 'Child'}}</span><span ng-show="InfantCount > 0">, {{InfantCount}} {{InfantCount > 1 ? 'Infants' : 'Infant'}}</span>)</td>
-                                                                <td><b>{{getFloatNumber(flight[0].TotalAmount) + additionalAddedAmount}}/- </b></td>
+                                                                <td><b>{{getFloatNumber(flight[0].TotalAmount)}}/- </b></td>
+                                                                @*<td><b>{{getFloatNumber(flight[0].TotalAmount) + additionalAddedAmount}}/- </b></td>*@
                                                             </tr>
                                                         </table>
 

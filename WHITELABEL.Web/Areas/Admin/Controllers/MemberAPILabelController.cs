@@ -701,16 +701,24 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
             try
             {
                 initpage();////
-                EmailHelper emailhelper = new EmailHelper();
+                //EmailHelper emailhelper = new EmailHelper();
                 var db = new DBContext();
                 long memId = long.Parse(id);
                 var meminfo = await db.TBL_MASTER_MEMBER.Where(x => x.MEM_ID == memId).FirstOrDefaultAsync();
                 if (meminfo != null)
                 {
-                    //string decriptpass = Decrypt.DecryptMe(meminfo.User_pwd);
+                    #region Email Code done by sayan at 13-10-2020
+                    string name = meminfo.MEMBER_NAME;
                     string password = meminfo.User_pwd;
-                    string mailbody = "Hi " + meminfo.UName + ",<p>Your WHITE LABEL LOGIN USER ID:- " + meminfo.EMAIL_ID + " and  PASSWORD IS:- " + password + "</p>";
-                    emailhelper.SendUserEmail(meminfo.EMAIL_ID, "White Label Password", mailbody);
+                    string Regmsg = "Hi <b>" + meminfo.UName + " " + "(" + meminfo.MEMBER_NAME + ")" + "</b>. Your Admin has been sent your login credentials. Your Boom Travels Login USER ID:- <b>" + meminfo.EMAIL_ID + "</b> and  PASSWORD is:- <b>" + password + "</b>.<br /><br/> Regards, <br/><br/>Boom Travels.";
+                    EmailHelper emailhelper = new EmailHelper();
+                    string usermsgbody = emailhelper.GetEmailTemplate(name, Regmsg, "UserEmailTemplate.html");
+                    emailhelper.SendUserEmail(meminfo.EMAIL_ID.Trim(), "You Have Received Your Boom Travels User Id & Password!", usermsgbody);
+                    #endregion
+                    ////string decriptpass = Decrypt.DecryptMe(meminfo.User_pwd);
+                    //string password = meminfo.User_pwd;
+                    //string mailbody = "Hi " + meminfo.UName + ",<p>Your WHITE LABEL LOGIN USER ID:- " + meminfo.EMAIL_ID + " and  PASSWORD IS:- " + password + "</p>";
+                    //emailhelper.SendUserEmail(meminfo.EMAIL_ID, "White Label Password", mailbody);
                 }
                 return Json(new { Result = "true" });
             }

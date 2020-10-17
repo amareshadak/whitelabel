@@ -418,6 +418,7 @@
     }
 
     $scope.RoundtripgetFlightDetails = function (Adult, Children, Infant, TrackNo, TripMode) {
+        debugger;
         window.location.href = '/Merchant/MerchantFlightDetails/FlightBookingDetails?TrackNo=' + TrackNo + '&PsgnAdult=' + Adult + '&PsgnChildren=' + Children + '&PsgnInfant=' + Infant + '&TripMode=' + TripMode;
     };
 

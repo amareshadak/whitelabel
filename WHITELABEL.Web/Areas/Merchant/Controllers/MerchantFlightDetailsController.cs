@@ -244,7 +244,8 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
             ViewBag.Infant = Infant;
             return View("~/Areas/Merchant/Views/MerchantFlightDetails/ReturnFlightlist.cshtml");
         }
-        public ActionResult FlightBookingDetails(string TrackNo = "", string PsgnAdult = "", string PsgnChildren = "", string PsgnInfant = "", string TripMode = "")
+        //public ActionResult FlightBookingDetails(string TrackNo = "", string PsgnAdult = "", string PsgnChildren = "", string PsgnInfant = "", string TripMode = "")
+        public ActionResult FlightBookingDetails(string TrackNo = "", string PsgnAdult = "", string PsgnChildren = "", string PsgnInfant = "", string TripMode = "",string OriginCode = "",string DestinationCode = "")
         {
             if (Session["MerchantUserId"] != null)
             {
@@ -260,7 +261,8 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                     ViewBag.AdultCount = PassAdult;
                     ViewBag.ChildCount = PassChild;
                     ViewBag.InfantCount = PassInfant;
-
+                    ViewBag.OriginCode = OriginCode;
+                    ViewBag.DestinationCode = DestinationCode;
                     if (TripMode == "1") // One Way Trip
                     {
                         return View("~/Areas/Merchant/Views/MerchantFlightDetails/FlightBookingDetails.cshtml");
@@ -326,14 +328,49 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
 
         #region Flight details verification page
         [HttpPost]
-        public JsonResult GetFlightVerificationDetails(string TrackNo, string TripMode)
+        public JsonResult GetFlightVerificationDetails(string TrackNo, string TripMode,string OriginCode,string DestinationCode)
         {
             try
             {
-
+                decimal AdditionalAmount = 0;
+                var db = new DBContext();
+                var GetOriginAirportInfo = db.TBL_AIRPORT_DETAILS.FirstOrDefault(x => x.CITYCODE == OriginCode);
+                var GetDestinationAirportInfo = db.TBL_AIRPORT_DETAILS.FirstOrDefault(x => x.CITYCODE == DestinationCode);
+                var GetAdditionalAmt = db.TBL_FLIGHT_MARKUP.FirstOrDefault(x => x.MEM_ID == CurrentMerchant.MEM_ID);
+                if (GetAdditionalAmt != null)
+                {
+                    if (GetOriginAirportInfo.AIRPORT_TYPE == "domestic" && GetDestinationAirportInfo.AIRPORT_TYPE == "domestic")
+                    {
+                        AdditionalAmount = GetAdditionalAmt.DOMESTIC_MARKUP;
+                    }
+                    else if (GetOriginAirportInfo.AIRPORT_TYPE == "domestic" && GetDestinationAirportInfo.AIRPORT_TYPE == "International")
+                    {
+                        AdditionalAmount = GetAdditionalAmt.INTERNATIONAL_MARKUP;
+                    }
+                    else if (GetOriginAirportInfo.AIRPORT_TYPE == "International" && GetDestinationAirportInfo.AIRPORT_TYPE == "domestic")
+                    {
+                        AdditionalAmount = GetAdditionalAmt.INTERNATIONAL_MARKUP;
+                    }
+                    else if (GetOriginAirportInfo.AIRPORT_TYPE == "International" && GetDestinationAirportInfo.AIRPORT_TYPE == "International")
+                    {
+                        AdditionalAmount = GetAdditionalAmt.INTERNATIONAL_MARKUP;
+                    }
+                    else
+                    {
+                        AdditionalAmount = 0;
+                    }
+                }
+                else
+                {
+                    AdditionalAmount = 0;
+                }
+                
                 dynamic VerifyFlight = MultiLinkAirAPI.VerifyFlightDetails(TrackNo, TripMode);
                 var data = JsonConvert.SerializeObject(VerifyFlight);
-                return Json(data, JsonRequestBehavior.AllowGet);
+                //return Json(data, JsonRequestBehavior.AllowGet);
+
+                return Json(new { data = data, AdditionalAmount = AdditionalAmount}, JsonRequestBehavior.AllowGet);
+
                 //var fetchToken = db.TBL_API_TOKEN.FirstOrDefault();
                 //if (BookingValue != null && ReturnResultIndex != "0")
                 //{
@@ -361,15 +398,49 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
 
         #region Round Trip Flight Details Verification
         [HttpPost]
-        public JsonResult GetRoundTripFlightVerificationDetails(string outBoundTrackNo, string inBoundTrackNo, string TripMode)
+        //public JsonResult GetRoundTripFlightVerificationDetails(string outBoundTrackNo, string inBoundTrackNo, string TripMode)
+        public JsonResult GetRoundTripFlightVerificationDetails(string outBoundTrackNo, string inBoundTrackNo, string TripMode, string OriginCode, string DestinationCode)
         {
             try
             {
+                decimal AdditionalAmount = 0;
+                var db = new DBContext();
+                var GetOriginAirportInfo = db.TBL_AIRPORT_DETAILS.FirstOrDefault(x => x.CITYCODE == OriginCode);
+                var GetDestinationAirportInfo = db.TBL_AIRPORT_DETAILS.FirstOrDefault(x => x.CITYCODE == DestinationCode);
+                var GetAdditionalAmt = db.TBL_FLIGHT_MARKUP.FirstOrDefault(x => x.MEM_ID == CurrentMerchant.MEM_ID);
+                if (GetAdditionalAmt != null)
+                {
+                    if (GetOriginAirportInfo.AIRPORT_TYPE == "domestic" && GetDestinationAirportInfo.AIRPORT_TYPE == "domestic")
+                    {
+                        AdditionalAmount = GetAdditionalAmt.DOMESTIC_MARKUP;
+                    }
+                    else if (GetOriginAirportInfo.AIRPORT_TYPE == "domestic" && GetDestinationAirportInfo.AIRPORT_TYPE == "International")
+                    {
+                        AdditionalAmount = GetAdditionalAmt.INTERNATIONAL_MARKUP;
+                    }
+                    else if (GetOriginAirportInfo.AIRPORT_TYPE == "International" && GetDestinationAirportInfo.AIRPORT_TYPE == "domestic")
+                    {
+                        AdditionalAmount = GetAdditionalAmt.INTERNATIONAL_MARKUP;
+                    }
+                    else if (GetOriginAirportInfo.AIRPORT_TYPE == "International" && GetDestinationAirportInfo.AIRPORT_TYPE == "International")
+                    {
+                        AdditionalAmount = GetAdditionalAmt.INTERNATIONAL_MARKUP;
+                    }
+                    else
+                    {
+                        AdditionalAmount = 0;
+                    }
+                }
+                else
+                {
+                    AdditionalAmount = 0;
+                }
                 dynamic outBoundResponce = MultiLinkAirAPI.VerifyFlightDetails(outBoundTrackNo, TripMode);
                 dynamic inBoundResponce = MultiLinkAirAPI.VerifyFlightDetails(inBoundTrackNo, TripMode);
                 var outBoundData = JsonConvert.SerializeObject(outBoundResponce);
                 var inBoundData = JsonConvert.SerializeObject(inBoundResponce);
-                return Json(new { outBoundData, inBoundData }, JsonRequestBehavior.AllowGet);
+                //return Json(new { outBoundData, inBoundData }, JsonRequestBehavior.AllowGet);   
+                return Json(new { outBoundData, inBoundData, AdditionalAmount = AdditionalAmount }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
@@ -3691,6 +3762,8 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
             decimal TotalBookAmt = 0;
             int deptcnt = 0;
             int retncnt = 0;
+            string ReturnDeptResponse = "";
+            string ReturnResponse = "";
             decimal.TryParse(FlightAmt, out TotalBookAmt);
             var getmemberinfo = _db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == CurrentMerchant.MEM_ID);
             if (getmemberinfo.BALANCE > TotalBookAmt)
@@ -3698,8 +3771,15 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                 string ReturnDepature = ReturnOnewayBooking(Deptreq, userMarkup, FlightAmt, ReturnFlightAmt, TripMode, deptSegment, returnSegment);
                 
                 string Returnway = ReturnOnewayBooking(Retntreq, userMarkup, FlightAmt, ReturnFlightAmt, TripMode, deptSegment, returnSegment);
-
-                return Json("Your wallet balance is insufficient to book a ticket.", JsonRequestBehavior.AllowGet);
+                if (ReturnDepature == "Return Booking is Success")
+                { ReturnDeptResponse = "Round Trip Depature Booking is done"; }
+                else
+                { ReturnDeptResponse = "Round Trip Depature Booking is not done"; }
+                if (Returnway == "Return Booking is Success")
+                { ReturnResponse = "Round Trip Return Booking is done"; }
+                else
+                { ReturnResponse = "Round Trip Return Booking is not done"; }
+                return Json(new { result = ReturnDeptResponse,ReturnRes= ReturnResponse });
             }
             else
             {
@@ -3752,20 +3832,22 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
             string SeqNoRtn = "";
             DateTime R_DeptDate = new DateTime();
             DateTime R_RetnDate = new DateTime();
+            
             if (TripMode == "R")
             {
                 var SegInfodept = sengList.Where(x => x.TrackNo.Contains("O")).ToList();
                 var SegInforeturn = sengList.Where(x => x.TrackNo.Contains("R")).ToList();
                 Dept_FlightNo = SegInfodept[0].FlightNo;
                 Dept_airlineCode = SegInfodept[0].AirlineCode;
-                retn_FlightNo = SegInforeturn[0].FlightNo;
-                retn_airlineCode = SegInforeturn[0].AirlineCode;
+                //retn_FlightNo = SegInforeturn[0].FlightNo;
+                //retn_airlineCode = SegInforeturn[0].AirlineCode;
                 cntDept = SegInfodept.Count();
-                cntretn = SegInforeturn.Count();
+                //cntretn = SegInforeturn.Count();
                 SeqNoDept = SegInfodept[0].SegmentSeqNo;
-                SeqNoRtn = SegInforeturn[0].SegmentSeqNo;
-                R_DeptDate = Convert.ToDateTime(SegInfodept[0].DepDate);
-                R_RetnDate = Convert.ToDateTime(SegInforeturn[0].DepDate);
+                //SeqNoRtn = SegInforeturn[0].SegmentSeqNo;
+                //R_DeptDate = Convert.ToDateTime(SegInfodept[0].DepDate);
+                R_DeptDate = DateTime.ParseExact(SegInfodept[0].DepDate, "dd/MM/yyyy", null); 
+                //R_RetnDate = Convert.ToDateTime(SegInforeturn[0].DepDate);
             }
             var PassngFlight = beforeApiExecute.RequestXml.BookTicketRequest.Passengers;
             var PassngFlightCount = beforeApiExecute.RequestXml.BookTicketRequest.Passengers.Passenger.Count;
@@ -4168,10 +4250,10 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                             flightTicketInfo.TICKET_TYPE = TicketType;
                             flightTicketInfo.TICKET_NO = Ref_no;
                             flightTicketInfo.IS_DOMESTIC = IsDomestic;
-                            //flightTicketInfo.AIRLINE_CODE = Airlinecode;
-                            //flightTicketInfo.FLIGHT_NO = FlightNo;
-                            //flightTicketInfo.FROM_AIRPORT = FromAirport;
-                            //flightTicketInfo.TO_AIRPORT = ToAirport;
+                            flightTicketInfo.AIRLINE_CODE = Airlinecode;
+                            flightTicketInfo.FLIGHT_NO = FlightNo;
+                            flightTicketInfo.FROM_AIRPORT = FromAirport;
+                            flightTicketInfo.TO_AIRPORT = ToAirport;
                             flightTicketInfo.BOOKING_DATE = DateTime.Now;
                             flightTicketInfo.DEPT_DATE = DeptDate;
                             flightTicketInfo.DEPT_TIME = Depttime;
@@ -4241,14 +4323,15 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                     _db.SaveChanges();
                     ContextTransaction.Commit();
                     #endregion
-                    TempData["IsShowPrintTicket"] = "Show";
-                    return Json(data, JsonRequestBehavior.AllowGet);
+                    return "Return Booking is Success";
+                    //TempData["IsShowPrintTicket"] = "Show";
+                    //return Json(data, JsonRequestBehavior.AllowGet);
                 }
                 catch (Exception ex)
                 {
                     ContextTransaction.Rollback();
                     //string check = RefundAmount(COrelationID, TripMode);
-                    return "Try again later";
+                    return "Return Dept Fail";
                     throw;
                 }
             }
@@ -4304,8 +4387,8 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                 var SegInforeturn = sengList.Where(x => x.TrackNo.Contains("R")).ToList();
                 Dept_FlightNo = SegInfodept[0].FlightNo;
                 Dept_airlineCode = SegInfodept[0].AirlineCode;
-                retn_FlightNo = SegInforeturn[0].FlightNo;
-                retn_airlineCode = SegInforeturn[0].AirlineCode;
+                //retn_FlightNo = SegInforeturn[0].FlightNo;
+                //retn_airlineCode = SegInforeturn[0].AirlineCode;
                 cntDept = SegInfodept.Count();
                 cntretn = SegInforeturn.Count();
                 SeqNoDept = SegInfodept[0].SegmentSeqNo;
@@ -4787,14 +4870,15 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                     _db.SaveChanges();
                     ContextTransaction.Commit();
                     #endregion
-                    TempData["IsShowPrintTicket"] = "Show";
-                    return Json(data, JsonRequestBehavior.AllowGet);
+                    //TempData["IsShowPrintTicket"] = "Show";
+                    //return Json(data, JsonRequestBehavior.AllowGet);
+                    return "Return Retn Success";
                 }
                 catch (Exception ex)
                 {
                     ContextTransaction.Rollback();
                     //string check = RefundAmount(COrelationID, TripMode);
-                    return "Try again later";
+                    return "Return Retn Fail";
                     throw;
                 }
             }

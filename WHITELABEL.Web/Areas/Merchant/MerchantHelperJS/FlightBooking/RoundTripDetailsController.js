@@ -198,8 +198,8 @@
 
 
 
-    $scope.loadFlightDetails = function (trackNo, tripMode) {
-        //debugger;
+    $scope.loadFlightDetails = function (trackNo, tripMode, OriginCode, DestinationCode) {
+        debugger;
         const track = trackNo.split(',');
         const outBound = track[0];
         const inBound = track[1];
@@ -208,14 +208,14 @@
 
 
 
-        const data = { outBoundTrackNo: outBound, inBoundTrackNo: inBound, TripMode: tripMode };
+        const data = { outBoundTrackNo: outBound, inBoundTrackNo: inBound, TripMode: tripMode, OriginCode: OriginCode, DestinationCode: DestinationCode };
         const service = FlightServices.getRoundTripFlightVerificationDetails(data);
         service.then(function (response) {
-            //debugger;
+            debugger;
             const data = response.data;
             const outBoundFlight = JSON.parse(data.outBoundData).VerifyFlightDetailResponse.FlightDetails;
             const inBoundFlight = JSON.parse(data.inBoundData).VerifyFlightDetailResponse.FlightDetails;
-
+            const ADDITIONALAMT = data.AdditionalAmount;
 
             console.log(outBoundFlight);
             console.log(inBoundFlight);
@@ -242,7 +242,7 @@
             // $scope.additionaServicesObj.RequestXml.GetAdditionalServicesRequest.TrackNo = $scope.flightDetails[0].TrackNo;
             // $scope.loadAdditionalServices();
             $scope.loadSegment();
-
+            $scope.additionalAddedAmount = ADDITIONALAMT;
         });
     }
 
@@ -425,28 +425,41 @@
 
         service.then(function (response) {
             try {
-                let data = JSON.parse(response.data);
-                if (data.BookTicketResponses.BookTicketResponse.length > 0) {
+                debugger;
+                let data =response.data;
+                const DeptRes = data.result;
+                const RetRes = data.ReturnRes;
                     //$('#modelTicketConfirmed').modal('show');
                     bootbox.alert({
-                        message: "Your booking is confirmed.",
+                        message: DeptRes + " AND " + RetRes,
                         callback: function () {
                             var URL = "/Merchant/MerchantFlightDetails/BookedFlightInformaiton"
                             $window.location.href = URL;
                             console.log('This was logged in the callback!');
                         }
                     });
-                }
-                else {
-                    bootbox.alert({
-                        message: "Please check all the information and submit again.",
-                        callback: function () {
-                            //var URL = "/Merchant/MerchantFlightDetails/FlightBookingDetails";
-                            //$window.location.href = URL;
-                            //console.log('This was logged in the callback!');
-                        }
-                    });
-                }
+                //let data = JSON.parse(response.data);
+                //if (data.BookTicketResponses.BookTicketResponse.length > 0) {
+                //    //$('#modelTicketConfirmed').modal('show');
+                //    bootbox.alert({
+                //        message: "Your booking is confirmed.",
+                //        callback: function () {
+                //            var URL = "/Merchant/MerchantFlightDetails/BookedFlightInformaiton"
+                //            $window.location.href = URL;
+                //            console.log('This was logged in the callback!');
+                //        }
+                //    });
+                //}
+                //else {
+                //    bootbox.alert({
+                //        message: "Please check all the information and submit again.",
+                //        callback: function () {
+                //            //var URL = "/Merchant/MerchantFlightDetails/FlightBookingDetails";
+                //            //$window.location.href = URL;
+                //            //console.log('This was logged in the callback!');
+                //        }
+                //    });
+                //}
             } catch (e) {
                 bootbox.alert({
                     message: "Please check all the information and submit again.",

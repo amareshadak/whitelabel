@@ -471,15 +471,15 @@
         return parseFloat(minutes); // + ":" + (seconds < 10 ? '0' : '') + seconds;
     }
 
-    $scope.getFlightDetails = function (Adult, Children, Infant, TrackNo, TripMode) {
-
+    $scope.getFlightDetails = function (Adult, Children, Infant, TrackNo, TripMode, FromAirportCode, ToAirportCode) {
+        debugger;
         var Tracevalue = JSON.parse(window.localStorage.getItem("SearchTraceDetails"));
 
         const diffInMilliseconds = Math.abs(new Date() - new Date(Tracevalue.Time));
 
         if (millisToMinutesAndSeconds(diffInMilliseconds) <= 15) {
             //window.location.href = '/Merchant/MerchantFlightBooking/FlightBooking?BookingValue=' + item + '&token=' + TraceId + '&Passenger=' + Passenger + '&TripMode=' + TripMode + '&IsLCC=' + IsLCC;;
-            window.location.href = '/Merchant/MerchantFlightDetails/FlightBookingDetails?TrackNo=' + TrackNo + '&PsgnAdult=' + Adult + '&PsgnChildren=' + Children + '&PsgnInfant=' + Infant + '&TripMode=' + TripMode;
+            window.location.href = '/Merchant/MerchantFlightDetails/FlightBookingDetails?TrackNo=' + TrackNo + '&PsgnAdult=' + Adult + '&PsgnChildren=' + Children + '&PsgnInfant=' + Infant + '&TripMode=' + TripMode + '&OriginCode=' + FromAirportCode + '&DestinationCode='+ToAirportCode;
         }
         else {
             bootbox.alert({

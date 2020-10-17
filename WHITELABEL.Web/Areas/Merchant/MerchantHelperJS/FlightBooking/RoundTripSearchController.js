@@ -944,6 +944,7 @@
     }
 
     $scope.totalAmountCalculation = function (amount) {
+        debugger;
         if (amount) {
             return parseFloat(amount) + $scope.additionalAddedAmount;
         }
@@ -965,8 +966,10 @@
         }
     }
 
-    $scope.roundtripgetFlightDetails = function (Adult, Children, Infant, TrackNo, TripMode) {
-        window.location.href = '/Merchant/MerchantFlightDetails/FlightBookingDetails?TrackNo=' + TrackNo + '&PsgnAdult=' + Adult + '&PsgnChildren=' + Children + '&PsgnInfant=' + Infant + '&TripMode=' + TripMode;
+    $scope.roundtripgetFlightDetails = function (Adult, Children, Infant, TrackNo, TripMode, OriginDeptCode, DestinationReturnCode) {
+        debugger;
+        //window.location.href = '/Merchant/MerchantFlightDetails/FlightBookingDetails?TrackNo=' + TrackNo + '&PsgnAdult=' + Adult + '&PsgnChildren=' + Children + '&PsgnInfant=' + Infant + '&TripMode=' + TripMode;
+        window.location.href = '/Merchant/MerchantFlightDetails/FlightBookingDetails?TrackNo=' + TrackNo + '&PsgnAdult=' + Adult + '&PsgnChildren=' + Children + '&PsgnInfant=' + Infant + '&TripMode=' + TripMode + '&OriginCode=' + OriginDeptCode + '&DestinationCode=' + DestinationReturnCode;
     };
 
 

@@ -1,7 +1,7 @@
 ﻿app.controller('FlightVerificationController', ['FlightServices', '$scope', '$http', '$window', function (FlightServices, $scope, $http, $window) {
     
-    $scope.additionalAddedAmount = parseFloat(document.getElementById('AIRADDITIONALAMOUNT').value);
-    $scope.InternationaladditionalAddedAmount = parseFloat(document.getElementById('INTERAIRADDITIONALAMOUNT').value);
+    //$scope.additionalAddedAmount = parseFloat(document.getElementById('AIRADDITIONALAMOUNT').value);
+    //$scope.InternationaladditionalAddedAmount = parseFloat(document.getElementById('INTERAIRADDITIONALAMOUNT').value);
 
     $scope.adult = 0;
     $scope.child = 0;
@@ -129,19 +129,23 @@
         return '';
     }
 
-    $scope.totalAmountCalculation = function (amount) {
+    $scope.totalAmountCalculation = function (amount) {        
         if (amount) {
+            debugger;
             return parseFloat(amount) + $scope.additionalAddedAmount + parseFloat($scope.userMarkup);
         }
         return 0;
     }
 
-    $scope.loadFlightDetails = function (trackNo, tripMode) {
-        const data = { TrackNo: trackNo, TripMode: tripMode };
+    $scope.loadFlightDetails = function (trackNo, tripMode, OriginCode, DestinationCode) {
+        const data = { TrackNo: trackNo, TripMode: tripMode, OriginCode: OriginCode, DestinationCode: DestinationCode };
         const service = FlightServices.getFlightVerificationDetails(data);
         service.then(function (response) {
-      
-            const data = response.data;
+            debugger;
+            const Resdata = response.data;
+            //const data = response.data;
+            const data = response.data.data;
+            const AdditionalAmount = Resdata.AdditionalAmount;
             const verifyFlightDetailResponse = JSON.parse(data).VerifyFlightDetailResponse;
             const flightDetails = verifyFlightDetailResponse.FlightDetails;
             const fareDetails = verifyFlightDetailResponse.FareDetails;
@@ -150,7 +154,7 @@
             $scope.fareDetails = fareDetails;
             $scope.detailsLoadingError = verifyFlightDetailResponse.Error;
             $scope.trackNumber = $scope.flightDetails[0].TrackNo;
-
+            $scope.additionalAddedAmount = AdditionalAmount;
             console.log(verifyFlightDetailResponse)
            
 
