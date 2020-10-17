@@ -138,6 +138,15 @@
         });
         return request;
     }
+    this.ResheduleBookedTicket = function (data) {
+        debugger;
+        var request = $http({
+            method: "POST",
+            data: data,
+            url: "/Merchant/MerchantFlightDetails/ResheduleBookedTicket"
+        });
+        return request;
+    }
     this.getFullCancellationBooedPassangerList = function (data) {
         debugger;
         var request = $http({

@@ -123,6 +123,7 @@
     <Compile Include="Models\TBL_RAIL_DSC_INFORMATION.cs" />
     <Compile Include="Models\TBL_RAIL_ID_ALLOCATION.cs" />
     <Compile Include="Models\TBL_REMITTER_BENEFICIARY_INFO.cs" />
+    <Compile Include="Models\TBL_RESCHEDULE_BOOKED_TICKET_DETAILS.cs" />
     <Compile Include="Models\TBL_SERVICE_PROVIDERS.cs" />
     <Compile Include="Models\TBL_SETTINGS_BANK_DETAILS.cs" />
     <Compile Include="Models\TBL_SETTINGS_SCREEN.cs" />

@@ -199,7 +199,7 @@
 
 
     $scope.loadFlightDetails = function (trackNo, tripMode, OriginCode, DestinationCode) {
-        debugger;
+        
         const track = trackNo.split(',');
         const outBound = track[0];
         const inBound = track[1];
@@ -211,7 +211,7 @@
         const data = { outBoundTrackNo: outBound, inBoundTrackNo: inBound, TripMode: tripMode, OriginCode: OriginCode, DestinationCode: DestinationCode };
         const service = FlightServices.getRoundTripFlightVerificationDetails(data);
         service.then(function (response) {
-            debugger;
+            
             const data = response.data;
             const outBoundFlight = JSON.parse(data.outBoundData).VerifyFlightDetailResponse.FlightDetails;
             const inBoundFlight = JSON.parse(data.inBoundData).VerifyFlightDetailResponse.FlightDetails;
@@ -223,13 +223,13 @@
             $scope.deptureFlight = outBoundFlight;// flightDetails.filter(x => x.SrNo.charAt(x.SrNo.length - 1) === 'O');
             $scope.returnFlight = inBoundFlight;// flightDetails.filter(x => x.SrNo.charAt(x.SrNo.length - 1) === 'R');
 
-             debugger;
+            // debugger;
 
             const fareDetails = JSON.parse(data.outBoundData).VerifyFlightDetailResponse.FareDetails;
             $scope.deptureFareDetails = JSON.parse(data.outBoundData).VerifyFlightDetailResponse.FareDetails[0];
             $scope.returnFareDetails = JSON.parse(data.inBoundData).VerifyFlightDetailResponse.FareDetails[0];
             $scope.setTotalFare();
-            debugger;
+           
             $scope.TotalAmount = parseFloat($scope.deptureFareDetails.TotalAmount) + parseFloat($scope.returnFareDetails.TotalAmount);
             //// $scope.flightDetails = flightDetails;
             //// $scope.fareDetails = fareDetails;
@@ -377,7 +377,7 @@
     }
 
     $scope.bookFlightRequest = function (isFormInvalid) {
-        debugger;
+     //   debugger;
         if (isFormInvalid) {
             return false;
         }
@@ -424,8 +424,7 @@
         const service = FlightServices.getFlightReturnBookeServices(req);
 
         service.then(function (response) {
-            try {
-                debugger;
+            try {                
                 let data =response.data;
                 const DeptRes = data.result;
                 const RetRes = data.ReturnRes;
@@ -550,7 +549,7 @@
 
     $scope.totalAmountCalculation = function (amount) {
         if (amount) {
-            debugger;
+            
             return parseFloat(amount) + ($scope.additionalAddedAmount == 0 ? 0 : ($scope.additionalAddedAmount * 2)) + parseFloat($scope.userMarkup);
         }
         return 0;

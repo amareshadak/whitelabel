@@ -197,6 +197,55 @@
     };
 
 
+
+    $scope.GetRecheduleBookTicket = function (refid, corelation, SLN) {
+        debugger;
+        
+        $scope.BookedReferenceNumber = refid;
+        $scope.BookedcorelationNumber = corelation;
+        $scope.BookingId = SLN;
+
+        $('#RecheduleBookedTicket').modal('show');
+        //const data = { refId: refid, corelation: corelation, SLN: SLN };
+        //const service = FlightServices.getBooedPassangerList(data);
+        //service.then(function (response) {
+        //    debugger;
+        //    //let data = JSON.parse(response.data);
+        //    $scope.BookedTicketPassangerList = response.data;
+        //    $scope.lst = [];
+        //    $('#RecheduleBookedTicket').modal('show');
+        //    console.log(data);
+        //});
+    };
+
+    $scope.ResheduleSubmit = function (BookingId, rechedulereason, BookedReferenceNumber, BookedcorelationNumber) {
+        debugger;
+        const rechedulereasonValue=rechedulereason;
+        const BReferenceNumber = BookedReferenceNumber;
+        const Bookedcorelation = BookedcorelationNumber;
+        const BookingIdVal = BookingId;
+
+        
+        const data = { refId: BReferenceNumber, corelation: Bookedcorelation, BookingId: BookingIdVal, RescheduleingText: rechedulereasonValue };
+        const service = FlightServices.ResheduleBookedTicket(data);
+        service.then(function (response) {
+            debugger;
+            const msg = response.data;
+            bootbox.alert({
+                message: msg,
+                callback: function () {
+                    //$('#RecheduleBookedTicket').modal('hide');
+                    var URL = "/Merchant/MerchantFlightDetails/BookedFlightInformaiton";
+                    $window.location.href = URL;
+                    //console.log('This was logged in the callback!');
+                }
+            });
+           
+            console.log(data);
+        });
+    };
+
+
     $scope.getAirDate = function (airDate) {
         if (!airDate) return new Date();
         const dateMomentObject = moment(airDate, "DD/MM/YYYY");

@@ -5990,5 +5990,137 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                 return Json(false, JsonRequestBehavior.AllowGet);
             }
         }
+
+        [HttpPost]
+        public JsonResult ResheduleBookedTicket(string refId, string corelation, string BookingId, string RescheduleingText)
+        {
+            try
+            {
+                var db = new DBContext();
+                long SlNo = 0;
+                long.TryParse(BookingId,out SlNo);
+                var FlightBookingInfo = db.TBL_FLIGHT_BOOKING_DETAILS.FirstOrDefault(x => x.SLN == SlNo);
+                var GetRechedultInfo=db.TBL_RESCHEDULE_BOOKED_TICKET_DETAILS.FirstOrDefault(x => x.REF_NO == refId && x.CORELATION_ID== corelation);
+                if (GetRechedultInfo != null)
+                {
+                    GetRechedultInfo.RESCHEDULE_REMARK = RescheduleingText;
+                    GetRechedultInfo.RESCHEDULE_DATE = DateTime.Now;
+                    GetRechedultInfo.RESCHEDULE_AMOUNT = 0;
+                    GetRechedultInfo.RESCHEDULE_STATUS = "Pending";
+                    db.Entry(GetRechedultInfo).State = System.Data.Entity.EntityState.Modified;
+                    FlightBookingInfo.RESCHEDULE_REMARK = "RECHEDULE UNDER PROCESS";
+                    db.Entry(FlightBookingInfo).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                    return Json("Flight rechedule process is under process", JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    TBL_RESCHEDULE_BOOKED_TICKET_DETAILS objrechedule = new TBL_RESCHEDULE_BOOKED_TICKET_DETAILS()
+                    {
+                        MEM_ID= FlightBookingInfo.MEM_ID,
+                        DIST_ID= FlightBookingInfo.DIST_ID,
+                        WLP_ID = FlightBookingInfo.WLP_ID,
+                        CORELATION_ID = FlightBookingInfo.CORELATION_ID,
+                        PNR = FlightBookingInfo.PNR,
+                        REF_NO = FlightBookingInfo.REF_NO,
+                        TRACK_NO = FlightBookingInfo.TRACK_NO,
+                        TRIP_MODE = FlightBookingInfo.TRIP_MODE,
+                        TICKET_NO = FlightBookingInfo.TICKET_NO,
+                        TICKET_TYPE = FlightBookingInfo.TICKET_TYPE,
+                        IS_DOMESTIC = FlightBookingInfo.IS_DOMESTIC,
+                        AIRLINE_CODE = FlightBookingInfo.AIRLINE_CODE,
+                        FLIGHT_NO = FlightBookingInfo.FLIGHT_NO,
+                        FROM_AIRPORT = FlightBookingInfo.FROM_AIRPORT,
+                        TO_AIRPORT = FlightBookingInfo.TO_AIRPORT,
+                        BOOKING_DATE = FlightBookingInfo.BOOKING_DATE,
+                        DEPT_DATE = FlightBookingInfo.DEPT_DATE,
+                        DEPT_TIME = FlightBookingInfo.DEPT_TIME,
+                        ARRIVE_DATE = FlightBookingInfo.ARRIVE_DATE,
+                        ARRIVE_TIME = FlightBookingInfo.ARRIVE_TIME,
+                        NO_OF_ADULT = FlightBookingInfo.NO_OF_ADULT,
+                        NO_OF_CHILD = FlightBookingInfo.NO_OF_CHILD,
+                        NO_OF_INFANT = FlightBookingInfo.NO_OF_INFANT,
+                        TOTAL_FLIGHT_BASE_FARE = FlightBookingInfo.TOTAL_FLIGHT_BASE_FARE,
+                        TOTAL_FLIGHT_TAX = FlightBookingInfo.TOTAL_FLIGHT_TAX,
+                        TOTAL_PASSANGER_TAX = FlightBookingInfo.TOTAL_PASSANGER_TAX,
+                        TOTAL_FLIGHT_SERVICE_CHARGES = FlightBookingInfo.TOTAL_FLIGHT_SERVICE_CHARGES,
+                        TOTAL_FLIGHT_ADDITIONAL_CHARGE = FlightBookingInfo.TOTAL_FLIGHT_ADDITIONAL_CHARGE,
+                        TOTAL_FLIGHT_CUTE_FEE = FlightBookingInfo.TOTAL_FLIGHT_CUTE_FEE,
+                        TOTAL_FLIGHT_MEAL_FEE = FlightBookingInfo.TOTAL_FLIGHT_MEAL_FEE,
+                        TOTAL_AIRPORT_FEE = FlightBookingInfo.TOTAL_AIRPORT_FEE,
+                        TOTAL_FLIGHT_CONVENIENCE_FEE = FlightBookingInfo.TOTAL_FLIGHT_CONVENIENCE_FEE,
+                        TOTAL_FLIGHT_AMT = FlightBookingInfo.TOTAL_FLIGHT_AMT,
+                        TOTAL_COMMISSION_AMT = FlightBookingInfo.TOTAL_COMMISSION_AMT,
+                        TOTAL_TDS_AMT = FlightBookingInfo.TOTAL_TDS_AMT,
+                        TOTAL_SERVICES_TAX = FlightBookingInfo.TOTAL_SERVICES_TAX,
+                        TOTAL_BAGGAGE_ALLOWES = FlightBookingInfo.TOTAL_BAGGAGE_ALLOWES,
+                        STATUS = FlightBookingInfo.STATUS,
+                        IS_CANCELLATION = FlightBookingInfo.IS_CANCELLATION,
+                        FLIGHT_CANCELLATION_ID = FlightBookingInfo.FLIGHT_CANCELLATION_ID,
+                        CANCELLATION_DATE = FlightBookingInfo.CANCELLATION_DATE,
+                        IS_HOLD = FlightBookingInfo.IS_HOLD,
+                        BOOKING_HOLD_ID = FlightBookingInfo.BOOKING_HOLD_ID,
+                        HOLD_DATE = FlightBookingInfo.HOLD_DATE,
+                        API_RESPONSE = FlightBookingInfo.API_RESPONSE,
+                        USER_MARKUP = FlightBookingInfo.USER_MARKUP,
+                        ADMIN_MARKUP = FlightBookingInfo.ADMIN_MARKUP,
+                        COMM_SLAP = FlightBookingInfo.COMM_SLAP,
+                        ADMIN_GST = FlightBookingInfo.ADMIN_GST,
+                        ADMIN_sGST = FlightBookingInfo.ADMIN_sGST,
+                        ADMIN_cGST = FlightBookingInfo.ADMIN_cGST,
+                        ADMIN_iGST = FlightBookingInfo.ADMIN_iGST,
+                        FLIGHT_BOOKING_DATE = FlightBookingInfo.FLIGHT_BOOKING_DATE,
+                        BOOKING_STATUS = FlightBookingInfo.BOOKING_STATUS,
+                        MAIN_CLASS = FlightBookingInfo.MAIN_CLASS,
+                        BOOKING_CLASS = FlightBookingInfo.BOOKING_CLASS,
+                        USER_MARKUP_GST = FlightBookingInfo.USER_MARKUP_GST,
+                        USER_MARKUP_cGST = FlightBookingInfo.USER_MARKUP_cGST,
+                        USER_MARKUP_sGST = FlightBookingInfo.USER_MARKUP_sGST,
+                        USER_MARKUP_iGST = FlightBookingInfo.USER_MARKUP_iGST,
+                        OP_MODE = FlightBookingInfo.OP_MODE,
+                        HOLD_CHARGE = FlightBookingInfo.HOLD_CHARGE,
+                        HOLD_CGST = FlightBookingInfo.HOLD_CGST,
+                        HOLD_SGST = FlightBookingInfo.HOLD_SGST,
+                        HOLD_IGST = FlightBookingInfo.HOLD_IGST,
+                        API_CANCELLATION_RESPONSE = FlightBookingInfo.API_CANCELLATION_RESPONSE,
+                        PASSAGER_SEGMENT = FlightBookingInfo.PASSAGER_SEGMENT,
+                        API_REQUEST = FlightBookingInfo.API_REQUEST,
+                        Cancellation_status = FlightBookingInfo.Cancellation_status,
+                        STOPAGE = FlightBookingInfo.STOPAGE,
+                        COMPANY_GST_NO = FlightBookingInfo.COMPANY_GST_NO,
+                        COMPANY_NAME = FlightBookingInfo.COMPANY_NAME,
+                        COMPANY_EMAIL_ID = FlightBookingInfo.COMPANY_EMAIL_ID,
+                        COMPANY_MOBILE = FlightBookingInfo.COMPANY_MOBILE,
+                        COMPANY_GST_ADDRESS = FlightBookingInfo.COMPANY_GST_ADDRESS,
+
+                        PUBLISH_FARE = FlightBookingInfo.PUBLISH_FARE,
+                        NET_FARE = FlightBookingInfo.NET_FARE,
+                        NET_TOTAL_FARE = FlightBookingInfo.NET_TOTAL_FARE,
+                        CANCELLATION_REMARK = FlightBookingInfo.CANCELLATION_REMARK,
+                        RESCHEDULE_FARE = FlightBookingInfo.RESCHEDULE_FARE,
+                        RESCHEDULE_REMARK = RescheduleingText,
+                        RESCHEDULE_DATE =DateTime.Now,
+                        RESCHEDULE_AMOUNT = 0,
+                        RESCHEDULE_STATUS = "RECHEDULE UNDER PROCESS"                        
+                    };
+                    db.TBL_RESCHEDULE_BOOKED_TICKET_DETAILS.Add(objrechedule);
+                    FlightBookingInfo.RESCHEDULE_REMARK = "RECHEDULE UNDER PROCESS";
+                    db.Entry(FlightBookingInfo).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                    return Json("Flight rechedule process is under process",JsonRequestBehavior.AllowGet);
+                }
+
+                
+            }
+            catch (Exception ex)
+            {
+                return Json("");
+                throw;
+            }
+            
+
+        }
+
+
     }   
 }
