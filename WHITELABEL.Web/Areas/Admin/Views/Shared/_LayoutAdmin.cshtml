@@ -193,7 +193,13 @@
                         </a>
                         <div class="triangle"></div>
                     </li>
-
+                    <li class="nav-item" data-item="RDSManagment">
+                        <a class="nav-item-hold" href="#">                            
+                            <i class="fa fa-train nav-icon"></i>
+                            <span class="nav-text">RDS Managment</span>
+                        </a>
+                        <div class="triangle"></div>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-item-hold" href="@Url.Action("Index","MemberKYCVerification", new {area="Admin" })">
                             <i class="fa fa-search-plus nav-icon"></i>
@@ -226,7 +232,7 @@
                     </li>
                     <li class="nav-item" data-item="RDSReport">
                         <a class="nav-item-hold" href="#">
-                            <i class="fa fa-user nav-icon"></i>
+                            <i class="fa fa-train nav-icon"></i>
                             <span class="nav-text">RDS Report</span>
                         </a>
                         <div class="triangle"></div>
@@ -245,7 +251,50 @@
 
             <div class="sidebar-left-secondary rtl-ps-none" data-perfect-scrollbar data-suppress-scroll-x="true">
                 <!-- Submenu Dashboards -->
-
+                <ul class="childNav" data-parent="RDSManagment">
+                    <li class="nav-item">
+                        <a href="@Url.Action("Index","MemberRDSFileProcessing", new {area= "Admin" })">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name">RDS Book File Upload</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("GetAllRDSBookingList","MemberRDSFileProcessing", new {area= "Admin" })">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name">Book File List</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("AllRDSBookingList","MemberRDSFileProcessing", new {area= "Admin" })">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name">Booked Trigger Result</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("RDSCancellationFileUpload","MemberRDSFileProcessing", new {area= "Admin" })">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name">RDS Cancellation File Upload</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("TDRFILEUplaod","MemberRDSFileProcessing", new {area= "Admin" })">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name">TDR File Upload</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("GetAllRDSCancellationList","MemberRDSFileProcessing", new {area= "Admin" })">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name">Cancellation File List</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("AllRDSBookingList","MemberRDSFileProcessing", new {area= "Admin" })">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name">Booked or Non Booked PNR</span>
+                        </a>
+                    </li>
+                </ul>
                 <ul class="childNav" data-parent="DistCommission">
                     <li class="nav-item">
                         <a class="nav-item-hold" href="@Url.Action("Index","MemberCommissionSlab",new {area="Admin" })">
@@ -387,35 +436,42 @@
 
                 <ul class="childNav" data-parent="RDSReport">
                     <li class="nav-item">
-                        <a href="@Url.Action("Index", "MemberRDSInformation",new {area="Admin" })">
+                        <a href="@Url.Action("Index", "MemberRDSReports",new {area="Admin" })">
+                            @*<a href="@Url.Action("Index", "MemberRDSInformation",new {area="Admin" })">*@
                             <i class="fa fa-location-arrow nav-icon"></i>
-                            <span class="item-name">Merchant RDS Booking List</span>
+                            <span class="item-name">RDS Booking List</span>
                         </a>
                     </li>
-                    <li class="nav-item">
+                    @*<li class="nav-item">
                         <a href="@Url.Action("MerchantRdsBooking", "MemberRDSInformation",new {area="Admin" })">
                             <i class="fa fa-location-arrow nav-icon"></i>
                             <span class="item-name">Individual Merchant RDS Booking </span>
                         </a>
-                    </li>
+                    </li>*@
                     <li class="nav-item">
-                        <a href="@Url.Action("RDSCancellationReport", "MemberRDSInformation",new {area="Admin" })">
+                        <a href="@Url.Action("RDSCancellationReport", "MemberRDSReports",new {area="Admin" })">
                             <i class="fa fa-location-arrow nav-icon"></i>
-                            <span class="item-name">Merchant RDS Cancellation List</span>
+                            <span class="item-name">RDS Cancellation List</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="@Url.Action("MerchantRDSCancellationReport", "MemberRDSInformation",new {area="Admin" })">
+                        <a href="@Url.Action("RDSRefundReport", "MemberRDSReports",new {area="Admin" })">
                             <i class="fa fa-location-arrow nav-icon"></i>
-                            <span class="item-name">Individual Merchant RDS Cancellation </span>
+                            <span class="item-name"> RDS Refund List </span>
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a href="@Url.Action("RDSMisMatchRDSIdReport", "MemberRDSReports",new {area="Admin" })">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name"> RDS MisMatch Booking List </span>
+                        </a>
+                    </li>
+                    @*<li class="nav-item">
                         <a href="@Url.Action("MemberRDSRefundReport", "MemberRDSInformation",new {area="Admin" })">
                             <i class="fa fa-location-arrow nav-icon"></i>
                             <span class="item-name"> Merchant RDS Refund </span>
                         </a>
-                    </li>
+                    </li>*@
                 </ul>
 
 
@@ -489,7 +545,30 @@
                             <span class="item-name">Flight Markup Setting</span>
                         </a>
                     </li>
-
+                    <li class="nav-item">
+                        <a href="@Url.Action("Index","MemberRailwayMappingSetting",new {area="Admin" })">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name">Merchant RailId Update</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("Index","MemberRailAgentInformation",new {area="Admin" })">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name">Rail Agent Information</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("MerchantDSCFilesList","MemberRailwayMappingSetting",new {area="Admin" })">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name">Agent DSC Files List</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("Index","MemberFlightRescheduleProcess",new {area="Admin" })">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name">Flight Rescheduling List</span>
+                        </a>
+                    </li>
                 </ul>
 
             </div>

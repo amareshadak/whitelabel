@@ -1,0 +1,39 @@
+﻿@using NonFactors.Mvc.Grid;
+@using WHITELABEL.Web.Helper;
+@model IEnumerable<WHITELABEL.Data.Models.TBL_CANCEL_TR>
+@{
+    ViewBag.Title = "RdsCancellationLilstInfo";
+    Layout = null;
+}
+
+@(Html
+                                                    .Grid(Model)
+                                                    .Build(columns =>
+                                                    {
+                                                        columns.Add(model => model.id).Titled("Sln").Filterable(true).Sortable(true);
+                                                        columns.Add(model => model.tran_id).Titled("Trn Id").Filterable(true).Sortable(true);
+                                                        columns.Add(model => model.pnr_no).Titled("Pnr No").Filterable(true).Sortable(true);
+                                                        columns.Add(model => model.pnr_class).Titled("Class").Filterable(true).Sortable(true);
+                                                        columns.Add(model => model.ref_amt).Titled("Refund Amt").Filterable(true).Sortable(true);
+                                                        columns.Add(model => model.wt_at_can).Titled("Wt Auto Can").Filterable(true).Sortable(true);
+                                                        columns.Add(model => model.tran_date).Titled("Tran Date").Filterable(true).Sortable(true);
+                                                        columns.Add(model => model.tdr_can).Titled("TDR CAN").Filterable(true).Sortable(true);
+                                                        columns.Add(model => model.user_id).Titled("User ID").Filterable(true).Sortable(true);
+                                                        columns.Add(model => model.cancelID).Titled("Cancellation ID").Filterable(true).Sortable(true);
+                                                        columns.Add(model => model.reason).Titled("Remarks").Filterable(true).Sortable(true);
+
+                                                    })
+                                                     .Css("css-classes")
+               .AppendCss("table table-striped")
+                                                    .Empty("No data found")
+                                                    .Id("my-ajax-grid")
+                                                    .Pageable(pager =>
+                                                    {
+                                                        pager.PagesToDisplay = 35;
+                                                        pager.RowsPerPage = 35;
+                                                    })
+                                                    .Filterable()
+                                                    .Sortable()
+)
+
+

@@ -210,3 +210,39 @@ function FetchFlightMarkupTagging(Sln_Val) {
         }
     });
 }
+
+function FetchFlightFlightReschedule(Sln_Val) {
+    $.ajax({
+
+        url: "/MemberFlightRescheduleProcess/FetchFlightMarkUpByMember?area=Admin",
+        data: {
+
+            SlnValue: Sln_Val
+        },
+        cache: false,
+        type: "POST",
+        dataType: "json",
+        beforeSend: function () {
+        },
+        success: function (data) {
+            const Res_Data = data.Result;
+            const Res_Status = data.Status;
+            if (Res_Status == "0") {               
+                const SLn = Res_Data.SLN;
+                const MEMID = Res_Data.MEM_ID;                
+                $('#hdn_MemberId').val(SLn);
+                $('#hdn_MEM_ID').val(MEMID);                
+            }
+            else {
+                bootbox.alert({
+                    size: "small",
+                    message: Res_Data,
+                    backdrop: true
+                });
+            }
+        },
+        error: function (xhr, status, error) {
+            console.log(status);
+        }
+    });
+}

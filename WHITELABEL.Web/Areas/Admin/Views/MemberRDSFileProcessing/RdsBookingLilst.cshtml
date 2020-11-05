@@ -1,0 +1,39 @@
+﻿@using NonFactors.Mvc.Grid;
+@using WHITELABEL.Web.Helper;
+@model IEnumerable<WHITELABEL.Data.Models.TBL_BOOKING_TEMP>
+@{
+    ViewBag.Title = "RdsBookingLilst";
+    Layout = null;
+}
+
+
+
+@(Html
+                                            .Grid(Model)
+                                            .Build(columns =>
+                                            {
+                                                columns.Add(model => model.SLN).Titled("Sln").Filterable(true).Sortable(true);
+                                                columns.Add(model => model.TRN_ID).Titled("Trn Id").Filterable(true).Sortable(true);
+                                                columns.Add(model => model.PNR_NO).Titled("Pnr No").Filterable(true).Sortable(true);
+                                                columns.Add(model => model.CLIENT_TXN_ID).Titled("Client Txn Id").Filterable(true).Sortable(true);
+                                                columns.Add(model => model.BOOKING_AMT).Titled("Booking Amt").Filterable(true).Sortable(true);
+                                                columns.Add(model => model.PG_NAME).Titled("Pg Name").Filterable(true).Sortable(true);
+                                                columns.Add(model => model.PNR_CLASS).Titled("Pnr Class").Filterable(true).Sortable(true);
+                                                columns.Add(model => model.TRN_DATE).Titled("Txn Date").Filterable(true).Sortable(true);
+                                                columns.Add(model => model.USER_ID).Titled("User Id").Filterable(true).Sortable(true);
+                                                //columns.Add(model => model.SYSTEM_UPDATE_TIME).Titled("Balance").Filterable(true).Sortable(true);
+
+
+                                            })
+                                 .Css("css-classes")
+               .AppendCss("table table-striped")
+                                            .Empty("No data found")
+                                            .Id("my-ajax-grid")
+                                            .Pageable(pager =>
+                                            {
+                                                pager.PagesToDisplay = 35;
+                                                pager.RowsPerPage = 35;
+                                            })
+                                            .Filterable()
+                                            .Sortable()
+)

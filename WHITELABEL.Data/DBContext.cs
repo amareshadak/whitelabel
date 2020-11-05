@@ -81,6 +81,12 @@
         public DbSet<TBL_PAYMENT_GATEWAY_RESPONSE> TBL_PAYMENT_GATEWAY_RESPONSE { get; set; }
         public DbSet<TBL_FLIGHT_MARKUP> TBL_FLIGHT_MARKUP { get; set; }
         public DbSet<TBL_RESCHEDULE_BOOKED_TICKET_DETAILS> TBL_RESCHEDULE_BOOKED_TICKET_DETAILS { get; set; }
+        public DbSet<TBL_CANCELLATION_FILE_PATH> TBL_CANCELLATION_FILE_PATH { get; set; }
+        public DbSet<TBL_CANCELLATION_TEMP> TBL_CANCELLATION_TEMP { get; set; }
+        public DbSet<TBL_CANCEL_TR> TBL_CANCEL_TR { get; set; }
+        public DbSet<TBL_BOOKING_FILE_PATH> TBL_BOOKING_FILE_PATH { get; set; }
+        public DbSet<TBL_BOOKING_TEMP> TBL_BOOKING_TEMP { get; set; }
+        public DbSet<TBL_BOOKING_TR> TBL_BOOKING_TR { get; set; }
     }
     
 }

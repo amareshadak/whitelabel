@@ -1,0 +1,239 @@
+﻿@using NonFactors.Mvc.Grid;
+@model WHITELABEL.Data.Models.TBL_FINAL_RDS_BOOKING
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+@using (Html.BeginForm())
+{
+
+    @Html.AntiForgeryToken()
+    <div class="full-content margin-top-20">
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="col-md-12 row headcolor">
+                    <div class="col-md-4" style="text-align:left; padding-top:3px;"><i class="fa fa-list fa-3x"></i></div>
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4" style="text-align:right; padding-top:10px;">
+                        <h3>
+                            RDS Booking Report
+                        </h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="panel-heading text-right">
+                            <div class="card-title ">
+                                <div class="row">
+                                    <div class="text-left col-md-6 col-lg-4">
+                                        <a href="@(Url.Action("ExportIndex", "PowerAdminRDSInformation") + ViewContext.HttpContext.Request.QueryString)" class="btn btn-info btn-xs"><span class="ion-forward"></span> Export</a>
+                                    </div>
+                                    <div class="text-left col-md-6 col-lg-4">
+
+                                    </div>
+                                    <div class="text-right col-md-6 col-lg-4">
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div><!--.panel-heading-->
+                        <div class="panel-body">
+                            <div class="row example-row" style="margin-bottom:10px;">
+                                <div class="col-md-4">
+                                    <div class="inputer">
+                                        <div class="input-wrapper">
+                                            @Html.DropDownList("MemberService", new SelectList((ViewBag.MemberService) as SelectList, "Value", "Text"), "Select Whitelevel", new { id = "WhitelevelList", @class = "form-control" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="inputer">
+                                        <div class="input-wrapper">
+                                            @Html.DropDownList("Distributor", new SelectList(string.Empty, "Value", "Text"), "--Select Distributor--", new { @class = "form-control", id = "dddlDistributorList" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="inputer">
+                                        <div class="input-wrapper">
+                                            @Html.DropDownList("MemberService", new SelectList(string.Empty, "Value", "Text"), "--Select Merchant--", new { @class = "form-control", id = "ddlMemberList" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row example-row" style="margin-bottom:10px;">
+                                <div class="col-md-5">
+                                    <div class="form-group row">
+                                        <label class="control-label col-md-3">Date From</label>
+                                        <div class="col-md-9">
+                                            <div class="inputer">
+                                                <div class="input-wrapper">
+                                                    @Html.EditorFor(model => model.FROM_DATE, "{0:yyyy-MM-dd}", new { htmlAttributes = new { @class = "form-control date", id = "txtFromDate", @onkeydown = "return false;", @placeholder = "yyyy-MM-dd" } })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="form-group row">
+                                        <label class="control-label col-md-3">Date From</label>
+                                        <div class="col-md-9">
+                                            <div class="inputer">
+                                                <div class="input-wrapper">
+                                                    @Html.EditorFor(model => model.TO_DATE, "{0:yyyy-MM-dd}", new { htmlAttributes = new { @class = "form-control date", id = "txtToDate", @onkeydown = "return false;", @placeholder = "yyyy-MM-dd" } })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group row">
+
+                                        <div class="col-md-12">
+                                            <div class="inputer">
+                                                <div class="input-wrapper">
+                                                    <a href="#" class="btn btn-primary" id="btnSearchDAteWise">Search Date Wise</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row example-row" style="width:100%">
+                                @Html.AjaxGrid(Url.Action("IndexGrid", "MemberRDSReports",new { area="Admin"}))
+                            </div><!--.row-->
+                        </div><!--.panel-body-->
+
+                    </div><!--.panel-->
+                </div>
+            </div><!--.col-md-12-->
+        </div><!--.row-->
+    </div>
+}
+
+<script>
+    $(function () {
+        $('#txtFromDate').datepicker({
+            format: "yyyy-MM-dd",
+            language: "es",
+            autoclose: true,
+            todayHighlight: true,
+            changeMonth: true,
+            changeYear: true
+        });
+    });
+    $(function () {
+        $('#txtToDate').datepicker({
+            format: "yyyy-MM-dd",
+            language: "es",
+            autoclose: true,
+            todayHighlight: true,
+            changeMonth: true,
+            changeYear: true
+        });
+    });
+
+
+     $("#WhitelevelList").change(function () {
+         $("#dddlDistributorList").empty();
+         $("#dddlDistributorList").val("--Select--");
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetDistributorList")',
+                    dataType: 'json',
+                    data: { Disid: $("#WhitelevelList").val() },
+                    success: function (states) {
+                        $("#dddlDistributorList").append('<option selected value="">--Select Distributor--</option>');
+                        $.each(states, function (i, state) {
+                            $("#dddlDistributorList").append('<option value="' + state.IDValue + '">' +
+                                state.TextValue + '</option>');
+                        });
+                        var Whitelevelval = $('#WhitelevelList').val();
+                        var SuperIDval = $('#dddlDistributorList').val();
+                        var disval ="";
+                        var dropdownval = $('#ddlMemberList').val();
+                        var Date_From = $('#txtFromDate').val();
+                        var Date_TO = $('#txtToDate').val();
+                        $('.mvc-grid').mvcgrid({
+                            query: 'Whitelevel=' + Whitelevelval + '&Distributor=' + SuperIDval + '&Merchant=' + dropdownval + '&DateFrom=' + Date_From + '&Date_To=' + Date_TO,
+                            reload: true,
+                            reloadStarted: function () {
+                                $(".divFooterTotalComm").remove();
+                            },
+                        });
+                    },
+                    error: function (ex) {
+                    console.log(ex);
+                    }
+            });
+     })
+
+        $("#dddlDistributorList").change(function () {
+            $("#ddlMemberList").empty();
+            $("#ddlMemberList").val("--Select--");
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("GetMerchantList")',
+                    dataType: 'json',
+                    data: { Disid: $("#dddlDistributorList").val() },
+                    success: function (states) {
+                        $("#ddlMemberList").append('<option selected value="">--Select Merchant--</option>');
+                        $.each(states, function (i, state) {
+                            $("#ddlMemberList").append('<option value="' + state.IDValue + '">' +
+                                state.TextValue + '</option>');
+                        });
+                        var Whitelevelval = $('#WhitelevelList').val();
+                        var SuperIDval = $('#dddlDistributorList').val();
+                        var dropdownval = $('#ddlMemberList').val();
+                        var Date_From = $('#txtFromDate').val();
+                        var Date_TO = $('#txtToDate').val();
+                        $('.mvc-grid').mvcgrid({
+                            query: 'Whitelevel=' + Whitelevelval + '&Distributor=' + SuperIDval + '&Merchant=' + dropdownval + '&DateFrom=' + Date_From + '&Date_To=' + Date_TO,
+                            reload: true,
+                            reloadStarted: function () {
+                                $(".divFooterTotalComm").remove();
+                            },
+                        });
+                    },
+                    error: function (ex) {
+                        $("#ddlMemberList").append('<option selected value="">--Select Merchant--</option>');
+                    }
+            });
+        })
+        $("#ddlMemberList").change(function () {
+            var Whitelevelval = $('#WhitelevelList').val();
+            var SuperIDval = $('#dddlDistributorList').val();
+            var Date_From = $('#txtFromDate').val();
+            var Date_TO = $('#txtToDate').val();
+            $('.mvc-grid').mvcgrid({
+                query: 'Whitelevel=' + Whitelevelval + '&Distributor=' + SuperIDval + '&Merchant=' + this.value + '&DateFrom=' + Date_From + '&Date_To=' + Date_TO,
+                reload: true,
+                reloadStarted: function () {
+                    $(".divFooterTotalComm").remove();
+                },
+            });
+        });
+
+    $("#btnSearchDAteWise").on("click", function () {
+
+        var Whitelevelval = $('#WhitelevelList').val();
+        var SuperIDval = $('#dddlDistributorList').val();
+        var MerchantId = $('#ddlMemberList').val();
+        var Date_From = $('#txtFromDate').val();
+        var Date_TO = $('#txtToDate').val();
+        $('.mvc-grid').mvcgrid({
+            query: 'Whitelevel=' + Whitelevelval + '&Distributor=' + SuperIDval + '&Merchant=' + MerchantId + '&DateFrom=' + Date_From + '&Date_To=' + Date_TO,
+            reload: true,
+            reloadStarted: function () {
+                $(".divFooterTotalComm").remove();
+            },
+        });
+    });
+
+</script>
+

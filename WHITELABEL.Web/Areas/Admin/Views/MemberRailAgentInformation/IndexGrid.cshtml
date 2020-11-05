@@ -1,0 +1,40 @@
+﻿@using NonFactors.Mvc.Grid;
+@using WHITELABEL.Web.Helper;
+@model IEnumerable<WHITELABEL.Data.Models.TBL_RAIL_AGENT_INFORMATION>
+@{
+    Layout = null;
+    //Layout = "~/Areas/PowerAdmin/Views/Shared/_PowerAdminLayout.cshtml";
+}
+@(Html
+                                    .Grid(Model)
+                                    .Build(columns =>
+                                    {
+                                        columns.Add(model => model.SLN).Titled("Sln").Filterable(true).Sortable(true);
+                                        columns.Add(model => model.RAIL_USER_ID).Titled("Rail User Id").Filterable(true).Sortable(true);
+                                        columns.Add(model => model.TRAVEL_AGENT_NAME).Titled("Agent Name").Filterable(true).Sortable(true);
+                                        columns.Add(model => model.AGENCY_NAME).Titled("Agency Name").Filterable(true).Sortable(true);
+                                        columns.Add(model => model.OFFICE_ADDRESS).Titled("Office Address").Filterable(true).Sortable(true);
+                                        columns.Add(model => model.EMAIL_ID).Titled("Email").Filterable(true).Sortable(true);
+                                        columns.Add(model => model.MOBILE_NO).Titled("Mobile No").Filterable(true).Sortable(true);
+                                        columns.Add(model => model.PAN_NO).Titled("Pan No").Filterable(true).Sortable(true);
+                                        columns.Add(model => model.SLN).Encoded(false).Filterable(false).Sortable(false).Titled("Action")
+                                            .RenderedAs(model => "<div style='text-align:center'><a href='" + @Url.Action("GetRailwayAgentInfo", "MemberRailAgentInformation", new { area="Admin",memid = Encrypt.EncryptMe(model.SLN.ToString()) }) + "' style='margin-right:10px' title='Edit'><i class='fa fa-edit'></i></a></div>");
+                                        columns.Add(model => model.SLN).Encoded(false).Filterable(false).Sortable(false).Titled("Rail Commission")
+                                                   .RenderedAs(model => "<div style='text-align:center'><a href='javascript:void(0);' data-toggle='modal' data-target='.transdAgentRail' id='transactionvalueRailCommAdminid' data-id=" + model.SLN.ToString() + " onclick='GetRAILAGENTInfo(" + model.SLN.ToString() + "," + model.MEM_ID.ToString() + ");' style='margin-right:10px' title='Rail Commission Setting'><i class='fa fa-edit'></i></a></div>");
+                                        columns.Add(model => model.SLN).Encoded(false).Filterable(false).Sortable(false).Titled("Rail Commission Status")
+                                                   .RenderedAs(model => "<div style='text-align:center'><a href='javascript:void(0)'  title='" + (model.RAIL_COMM_TAG == true ? "Commission Set" : "Commission Not Set") + "'>" + (model.RAIL_COMM_TAG == true ? "<span style='color:green;'><b>Commission Set</b></span>" : "<span style='color:red;'><b>Commission Not Set</b></span>") + "</a></div>");
+
+                                        //columns.Add(model => (model.RAIL_COMM_TAG == true ? "Commission Set" : "Commission Not Set")).Titled("Status").Css("<style>.table - hover tbody tr: hover {background - color:red;}</style> ").Filterable(true).Sortable(true);
+                                    })
+                                     .Css("css-classes")
+                                    .AppendCss("table table-striped")
+                                    .Empty("No data found")
+                                    .Id("my-ajax-grid")
+                                    .Pageable(pager =>
+                                    {
+                                        pager.PagesToDisplay = 35;
+                                        pager.RowsPerPage = 35;
+                                    })
+                                    .Filterable()
+                                    .Sortable()
+)

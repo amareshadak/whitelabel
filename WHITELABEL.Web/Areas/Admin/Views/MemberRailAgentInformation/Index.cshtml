@@ -1,0 +1,324 @@
+﻿@using NonFactors.Mvc.Grid;
+@model WHITELABEL.Data.Models.TBL_RAIL_AGENTS_COMMISSION
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<script src="~/Areas/Admin/AdminHelperJS/MemberRailUTLJs/RAILCommissionJs.js"></script>
+@using (Html.BeginForm())
+{
+
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal padding-top-20">
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="col-md-12 row headcolor">
+                    <div class="col-md-4" style="text-align:left; padding-top:3px;"><i class="fa fa-users  fa-3x"></i> </div>
+                    <div class="col-md-8" style="text-align:right; padding-top:10px;">
+                        <h3>
+                            Railway Agent List
+                        </h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="panel-heading">
+                            @if (Session["msg"] != null)
+                            {
+                                <div id="informationMessage" class="text-center alert alert-success">
+                                    <span style="width:100%;text-align:center;">@Session["msg"].ToString() </span>
+                                    @if (Session["msg"].ToString() == "Data Updated Successfully")
+                                    {
+                                        Session.Remove("msg");
+                                    }
+                                </div>
+                            }
+                            <div class="card-title">
+                                <div class="text-left">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <div class="form-group row">
+                                <div class="col-md-3"></div>
+                                <div class="col-md-6 row">
+                                    <div class="col-md-4"><label style="text-align:left;">Enter Search Details</label></div>
+                                    <div class="col-md-8">
+                                        <div class="inputer">
+                                            <div class="input-wrapper">
+                                                @Html.EditorFor(m => m.RAIL_AGENT_ID, new { htmlAttributes = new { @id = "txtRailMemberaName", style = " width:100%; padding:5px;", placeholder = "Enter Search Details", @class = "form-control" } })
+                                                @Html.HiddenFor(model => model.Rail_table_Id, new { id = "RailIDMemberId" })
+                                            </div>
+                                            <span class="help-block"><small>@Html.ValidationMessageFor(model => model.Rail_table_Id, "", new { @class = "text-danger" })</small></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <a href="#" class="btn btn-primary" id="btnSearchList">Search</a>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">@Html.AjaxGrid(Url.Action("IndexGrid", "MemberRailAgentInformation", new {area="Admin" }))</div>
+                        </div>
+                        <div class="panel-footer text-right">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script>
+    $(document).ready(function () {
+        window.setTimeout(function () {
+            $("#informationMessage").fadeOut('slow');
+        }, 2000);
+    });
+
+</script>
+
+<script>
+    $("#btnSearchList").on("click", function () {
+        debugger;
+        var MEm_Id = $("#txtRailMemberaName").val();
+        $('.mvc-grid').mvcgrid({
+            //query: 'MerID=' + MerId + '&DateFrom=' + Date_From + '&Date_To=' + Date_TO,
+            query: 'SearchVal=' + MEm_Id,
+            reload: true,
+            reloadStarted: function () {
+                $(".divFooterTotalComm").remove();
+            },
+        });
+    });
+    //$("#txtRailMemberaName").keydown(function () {
+    //    var MEm_Id = $("#txtRailMemberaName").val();
+    //    $('.mvc-grid').mvcgrid({
+    //        query: 'SearchVal=' + MEm_Id
+    //        //reload: true,
+    //        //reloadStarted: function () {
+    //        //    $(".divFooterTotalComm").remove();
+    //        //},
+    //    });
+    //});
+</script>
+
+
+<div id="transactionvalueRailCommAdminid" class="modal scale fade transdAgentRail" tabindex="-1" role="dialog" aria-hidden="true">
+    @using (Ajax.BeginForm("PostRailCommissionSettingInfor", "MemberRailAgentInformation", new AjaxOptions { Confirm = "Do you want to set Rail Commission", OnSuccess = "OnSuccessRailMerchantValue", OnFailure = "OnFailureRailMerchant", LoadingElementId = "progressRailMerchant" }, new { area="Admin",@id = "ADDRailMerchant" }))
+    {
+        @Html.HiddenFor(model => model.Rail_table_Id, new { @id = "hdn_Rail_table_Id" })
+        @Html.HiddenFor(model => model.SLN, new { @id = "hdn_SLN_Id" })
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="modal-dialog" style="max-width:800px; margin-top:100px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Rail Agent Commission Setting</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body row">
+                    <div class="col-md-6 row">
+                        <div class="col-md-5" style="padding-top:5px;">White Label Tagged: </div>
+                        <div class="col-md-7">
+                            <div class="inputer">
+                                <div class="input-wrapper">
+                                    @Html.EditorFor(model => model.WLP_NAME, new { htmlAttributes = new { @class = "form-control", @placeholder = "White Label Name", @readonly = "readonly", @id = "txtWLP_Name" } })
+                                    @Html.HiddenFor(model => model.WLP_ID, new { @ID = "hdn_WLP_ID" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 row">
+                        <div class="col-md-5" style="padding-top:5px;">Distributor Tagged: </div>
+                        <div class="col-md-7">
+                            <div class="inputer">
+                                <div class="input-wrapper">
+                                    @Html.EditorFor(model => model.DIST_NAME, new { htmlAttributes = new { @class = "form-control", @placeholder = "Distributor Name", @readonly = "readonly", @id = "txtDIST_Name" } })
+                                    @Html.HiddenFor(model => model.DIST_ID, new { @ID = "hdn_DIST_ID" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 row" style="margin-bottom:5px;">
+                        <div class="col-md-2">Rail Agent ID: </div>
+                        <div class="col-md-10" style="padding-left:40px;">
+                            <div class="inputer">
+                                <div class="input-wrapper">
+                                    @Html.EditorFor(model => model.RAIL_AGENT_ID, new { htmlAttributes = new { @class = "form-control", @placeholder = "Rail Agent Id", @readonly = "readonly", @id = "txtRailAgentId" } })
+                                    @Html.HiddenFor(model => model.MEM_ID, new { @ID = "hdn_MEM_ID" })
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 row" style="margin-bottom:5px;">
+                        <div class="col-md-5">PG Charge Apply: </div>
+                        <div class="col-md-7">
+                            <div class="inputer">
+                                <div class="input-wrapper">
+                                    @Html.DropDownListFor(m => m.PG_Charges_Apply_Val, new List<SelectListItem>
+                                                                            {
+                                                                                new SelectListItem{Text="No", Value="0"},
+                                                                                new SelectListItem{Text="Yes", Value="1"}},
+                                                                                new { id = "ddlPG_Charges_Apply", @class = "form-control" })
+                                </div>
+                                <span class="help-block"><small>@Html.ValidationMessageFor(model => model.PG_Charges_Apply_Val, "", new { @class = "text-danger" })</small></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 row" style="margin-bottom:5px;">
+                        <div class="col-md-5">PG Max Charge value: </div>
+                        <div class="col-md-7">
+                            <div class="inputer">
+                                <div class="input-wrapper">
+                                    @Html.EditorFor(model => model.PG_MAX_VALUE, new { htmlAttributes = new { @class = "form-control", @placeholder = "PG Max Value", @id = "txtPG_MAX_Val_Name" } })
+                                </div>
+                                <span class="help-block"><small>@Html.ValidationMessageFor(model => model.PG_MAX_VALUE, "", new { @class = "text-danger" })</small></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 row" style="margin-bottom:5px;">
+                        <div class="col-md-5">PG Charge <= 2000: </div>
+                        <div class="col-md-7">
+                            <div class="inputer">
+                                <div class="input-wrapper">
+                                    @Html.EditorFor(model => model.PG_EQUAL_LESS_2000, new { htmlAttributes = new { @class = "form-control", @placeholder = "PG Value <= 2000", @id = "txtPG_EQUAL_LESS_2000" } })
+                                </div>
+                                <span class="help-block"><small>@Html.ValidationMessageFor(model => model.PG_EQUAL_LESS_2000, "", new { @class = "text-danger" })</small></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 row" style="margin-bottom:5px;">
+                        <div class="col-md-5">PG Value > 2000: </div>
+                        <div class="col-md-7">
+                            <div class="inputer">
+                                <div class="input-wrapper">
+                                    @Html.EditorFor(model => model.PG_EQUAL_GREATER_2000, new { htmlAttributes = new { @class = "form-control", @placeholder = "PG Value >= 2000", @id = "txtPG_EQUAL_GREATER_2000" } })
+                                </div>
+                                <span class="help-block"><small>@Html.ValidationMessageFor(model => model.PG_EQUAL_GREATER_2000, "", new { @class = "text-danger" })</small></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 row" style="margin-bottom:5px;">
+                        <div class="col-md-5">PG Charged GST Apply: </div>
+                        <div class="col-md-7">
+                            <div class="inputer">
+                                <div class="input-wrapper">
+                                    @Html.DropDownListFor(m => m.PG_GST_STATUS, new List<SelectListItem>
+                                                                            {
+                                                                                new SelectListItem{Text="No", Value="No"},
+                                                                                new SelectListItem{Text="Yes", Value="Yes"}},
+                                                                                new { id = "ddlPG_GST_STATUS", @class = "form-control" })
+                                </div>
+                                <span class="help-block"><small>@Html.ValidationMessageFor(model => model.PG_GST_STATUS, "", new { @class = "text-danger" })</small></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 row" style="margin-bottom:5px;">
+                        <div class="col-md-5">Addn Charge Apply: </div>
+                        <div class="col-md-7">
+                            <div class="inputer">
+                                <div class="input-wrapper">
+                                    @Html.DropDownListFor(m => m.Additional_Charges_Apply_Val, new List<SelectListItem>
+                                                                            {
+                                                                                new SelectListItem{Text="No", Value="0"},
+                                                                                new SelectListItem{Text="Yes", Value="1"}},
+                                                                                new { id = "ddlAdditional_Charges_Apply", @class = "form-control" })
+                                </div>
+                                <span class="help-block"><small>@Html.ValidationMessageFor(model => model.Additional_Charges_Apply_Val, "", new { @class = "text-danger" })</small></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 row" style="margin-bottom:5px;">
+                        <div class="col-md-5">Addn Charge Max Value: </div>
+                        <div class="col-md-7">
+                            <div class="inputer">
+                                <div class="input-wrapper">
+                                    @Html.EditorFor(model => model.ADDITIONAL_CHARGE_MAX_VAL, new { htmlAttributes = new { @class = "form-control", @placeholder = "Addn Charge Max Val", @id = "txtADDITIONAL_CHARGE_MAX_VAL" } })
+                                </div>
+                                <span class="help-block"><small>@Html.ValidationMessageFor(model => model.ADDITIONAL_CHARGE_MAX_VAL, "", new { @class = "text-danger" })</small></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 row" style="margin-bottom:5px;">
+                        <div class="col-md-5">Addn Charge AC: </div>
+                        <div class="col-md-7">
+                            <div class="inputer">
+                                <div class="input-wrapper">
+                                    @Html.EditorFor(model => model.ADDITIONAL_CHARGE_AC, new { htmlAttributes = new { @class = "form-control", @placeholder = "Addn Charge A/C", @id = "txtADDITIONAL_CHARGE_AC" } })
+                                </div>
+                                <span class="help-block"><small>@Html.ValidationMessageFor(model => model.ADDITIONAL_CHARGE_AC, "", new { @class = "text-danger" })</small></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 row" style="margin-bottom:5px;">
+                        <div class="col-md-5">Addn Charge Non AC: </div>
+                        <div class="col-md-7">
+                            <div class="inputer">
+                                <div class="input-wrapper">
+                                    @Html.EditorFor(model => model.ADDITIONAL_CHARGE_NON_AC, new { htmlAttributes = new { @class = "form-control", @placeholder = "Addn Charge Non A/C", @id = "txtADDITIONAL_CHARGE_NON_AC" } })
+                                </div>
+                                <span class="help-block"><small>@Html.ValidationMessageFor(model => model.ADDITIONAL_CHARGE_NON_AC, "", new { @class = "text-danger" })</small></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 row" style="margin-bottom:5px;">
+                        <div class="col-md-5">Addn Charged GST Apply: </div>
+                        <div class="col-md-7">
+                            <div class="inputer">
+                                <div class="input-wrapper">
+                                    @Html.DropDownListFor(m => m.ADDITIONAL_GST_STATUS, new List<SelectListItem>
+                                                                            {
+                                                                                new SelectListItem{Text="No", Value="No"},
+                                                                                new SelectListItem{Text="Yes", Value="Yes"}},
+                                                                                new { id = "ddlADDITIONAL_GST_STATUS", @class = "form-control" })
+                                </div>
+                                <span class="help-block"><small>@Html.ValidationMessageFor(model => model.ADDITIONAL_GST_STATUS, "", new { @class = "text-danger" })</small></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-md-12" style="text-align:center">
+                        <input type="submit" value="Set Rail Commission" class="btn btn-primary" id="btnsubmitMer" />
+                    </div>
+                </div>
+            </div><!--.modal-content-->
+        </div>
+    }
+    <!--.modal-dialog-->
+</div>
+<div class="preloader hidden" id="progressRailMerchant" style="display:none;">
+    <div id="loading"></div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#progressRailMerchant').removeClass("hidden");
+        $('#progressRailMerchant').hide();
+    })
+    function OnSuccessRailMerchantValue(response) {
+        var message = response;
+        $("#ADDRailMerchant").trigger("reset");
+        bootbox.alert({
+            message: message,
+            size: 'small',
+            callback: function () {
+                console.log(message);
+                var url = "/Admin/MemberRailAgentInformation/Index";
+                window.location.href = url;
+
+            }
+        })
+    }
+    function OnFailureRailMerchant(response) {
+        alert("Error occured.");
+    }
+</script>
+

@@ -1,0 +1,257 @@
+﻿@using NonFactors.Mvc.Grid;
+@model WHITELABEL.Data.Models.TBL_MASTER_MEMBER
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="form-horizontal padding-top-20">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-12 row headcolor">
+                <div class="col-md-4" style="text-align:left; padding-top:3px;"><i class="fa fa-users  fa-3x"></i> </div>
+                <div class="col-md-8" style="text-align:right; padding-top:10px;">
+                    <h3>
+                        Merchant Information Update
+                    </h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="panel-heading">
+                        @if (Session["msg"] != null)
+                        {
+                            <div id="informationMessage" class="text-center alert alert-success">
+                                <span style="width:100%;text-align:center;">@Session["msg"].ToString() </span>
+                                @if (Session["msg"].ToString() == "Data Updated Successfully")
+                                {
+                                    Session.Remove("msg");
+                                }
+                            </div>
+                        }
+                        <div class="card-title">
+                            <div class="text-left">
+                                @*<a href="@(Url.Action("ExportIndex","PowerAdminMerchantSearch") + ViewContext.HttpContext.Request.QueryString)" class="btn btn-info btn-xs"><span class="ion-forward"></span> Export</a>*@
+                                @*<a href="#" id="btnExportWhiteLevelrecoard" class="btn btn-info btn-xs"><span class="ion-forward"></span>Export</a>*@
+                                <button id="btnExportWhiteLevelrecoard" class="btn btn-info btn-xs"><span class="ion-forward"></span>Export</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row example-row" style="margin-bottom:10px;">
+                            <div class="col-md-4">
+                                <div class="inputer">
+                                    <div class="input-wrapper">
+                                        @*@Html.DropDownList("MemberService", new SelectList((ViewBag.MemberService) as SelectList, "Value", "Text"), "--Select Whitelevel--", new { id = "WhitelevelList", @class = "selectpicker" })*@
+                                        @Html.DropDownList("MemberService", new SelectList((ViewBag.MemberService) as SelectList, "Value", "Text"), "--Select Whitelevel--", new { id = "WhitelevelList", @class = "form-control" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="inputer">
+                                    <div class="input-wrapper">
+
+                                        @Html.DropDownList("Super", new SelectList(string.Empty, "Value", "Text"), "--Select Distributor--", new { @class = "form-control", id = "SuperList" })
+                                        @*@Html.DropDownList("Super", new SelectList(string.Empty, "Value", "Text"), "--Select Distributor--", new { @class = "selectpicker", id = "SuperList" })*@
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="inputer">
+                                    <div class="input-wrapper">
+                                        @Html.DropDownList("MemberService", new SelectList(string.Empty, "Value", "Text"), "--Select Merchant--", new { @class = "form-control", id = "MemberList" })
+                                        @*@Html.EditorFor(model => model.MerchantName, new { htmlAttributes = new { @class = "form-control", id = "MemberList" } })
+                                            <input type="hidden" id="hfmemberDomain" name="memberDomainId" />*@
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">@Html.AjaxGrid(Url.Action("MerchantIndexgrid", "MemberRailwayMappingSetting", new {area="Admin" }))</div>
+                    </div>
+                    <div class="panel-footer text-right">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@*<script type="text/javascript">
+    $(document).ready(function () {
+        $("#WhitelevelList").searchable({
+            maxListSize: 200, // if list size are less than maxListSize, show them all
+            maxMultiMatch: 300, // how many matching entries should be displayed
+            exactMatch: false, // Exact matching on search
+            wildcards: true, // Support for wildcard characters (*, ?)
+            ignoreCase: true, // Ignore case sensitivity
+            latency: 200, // how many millis to wait until starting search
+            warnMultiMatch: 'top {0} matches ...',
+            warnNoMatch: 'no matches ...',
+            zIndex: 'auto'
+        });
+    });
+    $(document).ready(function () {
+        $("#SuperList").searchable({
+            maxListSize: 200, // if list size are less than maxListSize, show them all
+            maxMultiMatch: 300, // how many matching entries should be displayed
+            exactMatch: false, // Exact matching on search
+            wildcards: true, // Support for wildcard characters (*, ?)
+            ignoreCase: true, // Ignore case sensitivity
+            latency: 200, // how many millis to wait until starting search
+            warnMultiMatch: 'top {0} matches ...',
+            warnNoMatch: 'no matches ...',
+            zIndex: 'auto'
+        });
+    });
+    $(document).ready(function () {
+        $("#MemberList").searchable({
+            maxListSize: 200, // if list size are less than maxListSize, show them all
+            maxMultiMatch: 300, // how many matching entries should be displayed
+            exactMatch: false, // Exact matching on search
+            wildcards: true, // Support for wildcard characters (*, ?)
+            ignoreCase: true, // Ignore case sensitivity
+            latency: 200, // how many millis to wait until starting search
+            warnMultiMatch: 'top {0} matches ...',
+            warnNoMatch: 'no matches ...',
+            zIndex: 'auto'
+        });
+    });
+
+
+</script>*@
+
+
+<script>
+    $("#MemberList").change(function () {
+        var WhiteLevelval = $('#WhitelevelList').val();
+        var Superval = $('#SuperList').val();
+        $('.mvc-grid').mvcgrid({
+            query: 'WhiteLevel=' + WhiteLevelval + '&Distributor=' + Superval + '&Merchant=' + this.value,
+            reload: true
+        });
+    });
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#WhitelevelList").change(function () {
+            $("#SuperList").empty();
+            $("#SuperList").val("--Select--");
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetDistributor")',
+                dataType: 'json',
+                data: { Disid: $("#WhitelevelList").val() },
+                success: function (states) {
+                    $("#SuperList").append('<option selected value="">--Select Distributor--</option>');
+                    $.each(states, function (i, state) {
+                        $("#SuperList").append('<option value="' + state.IDValue + '">' +
+                            state.TextValue + '</option>');
+                    });
+                    var WhiteLevelval = $('#WhitelevelList').val();
+                    var Superval = $('#SuperList').val();
+                    var dropdownval = $('#MemberList').val();
+                    $('.mvc-grid').mvcgrid({
+                        //query: 'WhiteLevel=' + WhiteLevelval + '&SuperId=' + Superval + '&Distributor=' + Distributorval + '&Merchant=' + dropdownval + '&Status=' + status,
+                        query: 'WhiteLevel=' + WhiteLevelval + '&Distributor=' + Superval + '&Merchant=' + dropdownval,
+                        reload: true,
+                        reloadStarted: function () {
+                            $(".divFooterTotalComm").remove();
+                        },
+                    });
+                },
+                error: function (ex) {
+                    $("#SuperList").append('<option selected value="">--Select Distributor--</option>');
+                    $("#MemberList").append('<option selected value="">--Select Merchant--</option>');
+                    var WhiteLevelval = $('#WhitelevelList').val();
+                    var Superval = $('#SuperList').val();
+                    var dropdownval = $('#MemberList').val();
+                    $('.mvc-grid').mvcgrid({
+                        query: 'WhiteLevel=' + WhiteLevelval + '&Distributor=' + Superval + '&Merchant=' + dropdownval,
+                        //query: 'WhiteLevel=' + WhiteLevelval + '&SuperId=' + Superval + '&Distributor=' + Distributorval + '&Merchant=' + dropdownval + '&Status=' + status,
+                        reload: true,
+                        reloadStarted: function () {
+                            $(".divFooterTotalComm").remove();
+                        },
+                    });
+                }
+            });
+            return false;
+        })
+        $("#SuperList").change(function () {
+            $("#MemberList").empty();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetMerchant")',
+                dataType: 'json',
+                data: { Disid: $("#SuperList").val() },
+                success: function (states) {
+                    $("#MemberList").append('<option selected value="">--Select Merchant--</option>');
+                    $.each(states, function (i, state) {
+                        $("#MemberList").append('<option value="' + state.IDValue + '">' +
+                            state.TextValue + '</option>');
+                    });
+                    var WhiteLevelval = $('#WhitelevelList').val();
+                    var Superval = $('#SuperList').val();
+                    var dropdownval = $('#MemberList').val();
+                    $("#btnExportWhiteLevelrecoard").attr("disabled", false );
+                    $('.mvc-grid').mvcgrid({
+                        query: 'WhiteLevel=' + WhiteLevelval + '&Distributor=' + Superval + '&Merchant=' + dropdownval,
+                        //query: 'WhiteLevel=' + WhiteLevelval + '&SuperId=' + Superval + '&Distributor=' + Distributorval + '&Merchant=' + dropdownval + '&Status=' + status,
+                        reload: true,
+                        reloadStarted: function () {
+                            $(".divFooterTotalComm").remove();
+                        },
+                    });
+                },
+                error: function (ex) {
+                    $("#MemberList").append('<option selected value="">--Select Merchant--</option>');
+                }
+            });
+            return false;
+        })
+    });
+</script>
+@*<script type="text/javascript">
+    $(document).ready(function () {
+        $("#MemberList").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/PowerAdminMerchantSearch/GetmerchantInformationList",
+                    data: "{ 'Prefix': '" + request.term + "'}",
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return item;
+                        }))
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            },
+            select: function (e, i) {
+                $("#hfmemberDomain").val(i.item.val);
+            },
+            minLength: 1
+        });
+    })
+</script>*@
+
+<script>
+    $(document).ready(function () {
+        $("#btnExportWhiteLevelrecoard").attr("disabled", true);      
+    });
+</script>
+<script type="text/javascript">
+    $("#btnExportWhiteLevelrecoard").click(function () {
+        var url = '@(Url.Action("ExportIndex", "PowerAdminMerchantSearch") + ViewContext.HttpContext.Request.QueryString)?Disid=' + $("#SuperList").val();
+        window.location.href = url;
+    })
+</script>

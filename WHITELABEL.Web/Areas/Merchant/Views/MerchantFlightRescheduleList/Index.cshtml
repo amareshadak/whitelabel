@@ -1,0 +1,31 @@
+﻿@using NonFactors.Mvc.Grid;
+@model WHITELABEL.Data.Models.TBL_RESCHEDULE_BOOKED_TICKET_DETAILS
+@{
+    ViewBag.Title = "Reschedule List";
+    Layout = "~/Areas/Merchant/Views/Shared/_RetailerLayout.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="row">
+        <div class="col-md-12 padding-top-20">
+            <div class="card">
+                <div class="card-body">
+                    <div class="panel-heading text-right">
+                    </div><!--.panel-heading-->
+                    <div class="panel-body">
+                        
+                        <div class="row example-row" style="width:100%">
+                            @Html.AjaxGrid(Url.Action("IndexGrid", "MerchantFlightRescheduleList", new { area = "Merchant" }))
+                        </div><!--.row-->
+                    </div><!--.panel-body-->
+
+                </div><!--.panel-->
+            </div>
+        </div><!--.col-md-12-->
+    </div><!--.row-->
+
+    
+}
+

@@ -292,7 +292,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                         value.DUE_CREDIT_BALANCE = 0;
                         value.CREDIT_BALANCE = 0;
                         value.IS_TRAN_START = true;
-                        value.MEM_UNIQUE_ID = value.UName;
+                        //value.MEM_UNIQUE_ID = value.UName;
                         db.TBL_MASTER_MEMBER.Add(value);
                         await db.SaveChangesAsync();
                         string aadhaarfilename = string.Empty;
@@ -385,7 +385,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
 
                         string name = value.MEMBER_NAME;
                         string sub = "Welcome to Boom Travels.";
-                        string usermsgdesc = "Dear <b>" + value.MEMBER_NAME + "</b> You have successfully joined in Boom Travels.<br /><p>Your User Id:- " + value.EMAIL_ID + " <br/>Password:- " + value.User_pwd + " </p> "+"<br /> Regards, <br/>< br />BOOM Travels";
+                        string usermsgdesc = "Dear <b>" + value.MEMBER_NAME + "</b> You have successfully joined in Boom Travels.<br /><p>Your User Id:- " + UniqId + " <br/>Password:- " + value.User_pwd + " </p> "+"<br /> Regards, <br/>< br />BOOM Travels";
                         EmailHelper emailhelper = new EmailHelper();
                         string usermsgbody = emailhelper.GetEmailTemplate(name, usermsgdesc, "UserEmailTemplate.html");
                         emailhelper.SendUserEmail(value.EMAIL_ID, sub, usermsgbody);
@@ -710,7 +710,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                     #region Email Code done by sayan at 13-10-2020
                     string name = meminfo.MEMBER_NAME;
                     string password = meminfo.User_pwd;
-                    string Regmsg = "Hi <b>" + meminfo.UName + " " + "(" + meminfo.MEMBER_NAME + ")" + "</b>. Your Admin has been sent your login credentials. Your Boom Travels Login USER ID:- <b>" + meminfo.EMAIL_ID + "</b> and  PASSWORD is:- <b>" + password + "</b>.<br /><br/> Regards, <br/><br/>Boom Travels.";
+                    string Regmsg = "Hi <b>" + meminfo.UName + " " + "(" + meminfo.MEMBER_NAME + ")" + "</b>. Your Admin has been sent your login credentials. Your Boom Travels Login USER ID:- <b>" + meminfo.MEM_UNIQUE_ID + "</b> and  PASSWORD is:- <b>" + password + "</b>.<br /><br/> Regards, <br/><br/>Boom Travels.";
                     EmailHelper emailhelper = new EmailHelper();
                     string usermsgbody = emailhelper.GetEmailTemplate(name, Regmsg, "UserEmailTemplate.html");
                     emailhelper.SendUserEmail(meminfo.EMAIL_ID.Trim(), "You Have Received Your Boom Travels User Id & Password!", usermsgbody);

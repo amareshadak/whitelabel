@@ -223,8 +223,14 @@
             $scope.deptureFlight = outBoundFlight;// flightDetails.filter(x => x.SrNo.charAt(x.SrNo.length - 1) === 'O');
             $scope.returnFlight = inBoundFlight;// flightDetails.filter(x => x.SrNo.charAt(x.SrNo.length - 1) === 'R');
 
-            // debugger;
-
+            debugger;
+            
+            if ($scope.returnFlight[0].HoldAllowed == 'Y' && $scope.deptureFlight[0].HoldAllowed == 'Y') {
+                $scope.flightDetails = 'Y';
+            }
+            else {
+                $scope.flightDetails = 'N';
+            }
             const fareDetails = JSON.parse(data.outBoundData).VerifyFlightDetailResponse.FareDetails;
             $scope.deptureFareDetails = JSON.parse(data.outBoundData).VerifyFlightDetailResponse.FareDetails[0];
             $scope.returnFareDetails = JSON.parse(data.inBoundData).VerifyFlightDetailResponse.FareDetails[0];
@@ -428,7 +434,8 @@
                 let data =response.data;
                 const DeptRes = data.result;
                 const RetRes = data.ReturnRes;
-                    //$('#modelTicketConfirmed').modal('show');
+                //$('#modelTicketConfirmed').modal('show');
+                if (DeptRes != '') {
                     bootbox.alert({
                         message: DeptRes + " AND " + RetRes,
                         callback: function () {
@@ -437,6 +444,18 @@
                             console.log('This was logged in the callback!');
                         }
                     });
+                }
+                else {
+                    bootbox.alert({
+                        message: RetRes,
+                        callback: function () {
+                            //var URL = "/Merchant/MerchantFlightDetails/BookedFlightInformaiton"
+                            //$window.location.href = URL;
+                            console.log('This was logged in the callback!');
+                        }
+                    });
+                }
+                    
                 //let data = JSON.parse(response.data);
                 //if (data.BookTicketResponses.BookTicketResponse.length > 0) {
                 //    //$('#modelTicketConfirmed').modal('show');
@@ -475,58 +494,113 @@
 
     };
 
-
     $scope.holdingFlightRequest = function (isFormInvalid) {
-
+        //   debugger;
         if (isFormInvalid) {
             return false;
         }
-
-        $scope.bookingRequestObj.RequestXml.BookTicketRequest.TrackNo = $scope.trackNumber;
-        $scope.bookingRequestObj.RequestXml.BookTicketRequest.MobileNo = $scope.mobileNumber;
-        $scope.bookingRequestObj.RequestXml.BookTicketRequest.AltMobileNo = $scope.altMobileNo;
-        $scope.bookingRequestObj.RequestXml.BookTicketRequest.Email = $scope.emailAddress;
-        $scope.bookingRequestObj.RequestXml.BookTicketRequest.Passengers.Passenger = $scope.passengers;
-        $scope.bookingRequestObj.RequestXml.BookTicketRequest.Segments.Segment = $scope.segments;
-        $scope.bookingRequestObj.RequestXml.BookTicketRequest.AdditionalServices.AdditionalService = $scope.additionaServices.filter(function (x) { return x.IsSelected; });
-        $scope.bookingRequestObj.RequestXml.BookTicketRequest.TotalAmount = $scope.TotalAmount;
+        let OutSegmentValue = $scope.inBoundSegment;
+        let inSegmentValue = $scope.outBoundSegment;
+        let DeptFareVal = $scope.deptureFareDetails;
+        let DeptDeatil = $scope.deptureFlight;
+        let outBoundObj = angular.copy($scope.bookingRequestObj);
+        outBoundObj.RequestXml.BookTicketRequest.TrackNo = DeptDeatil[0].TrackNo;
+        outBoundObj.RequestXml.BookTicketRequest.MobileNo = $scope.mobileNumber;
+        outBoundObj.RequestXml.BookTicketRequest.AltMobileNo = $scope.altMobileNo;
+        outBoundObj.RequestXml.BookTicketRequest.Email = $scope.emailAddress;
+        outBoundObj.RequestXml.BookTicketRequest.Email = $scope.emailAddress;
+        outBoundObj.RequestXml.BookTicketRequest.Passengers.Passenger = $scope.passengers;
+        outBoundObj.RequestXml.BookTicketRequest.Segments.Segment = OutSegmentValue;
+        outBoundObj.RequestXml.BookTicketRequest.AdditionalServices.AdditionalService = $scope.additionaServices.filter(function (x) { return x.IsSelected; });
+        outBoundObj.RequestXml.BookTicketRequest.TotalAmount = DeptFareVal.TotalAmount;
         if ($scope.flightDetails[0].HoldAllowed == 'Y') {
-            $scope.bookingRequestObj.RequestXml.BookTicketRequest.HoldAllowed = 'Y';
-            $scope.bookingRequestObj.RequestXml.BookTicketRequest.HoldCharge = $scope.flightDetails[0].HoldCharges;
+            outBoundObj.RequestXml.BookTicketRequest.HoldAllowed = 'Y';
+            outBoundObj.RequestXml.BookTicketRequest.HoldCharge = $scope.flightDetails[0].HoldCharges;
+        }
+        const DeptTotalFareAmt = DeptFareVal.TotalAmount;
+        let InboundFareDetails = $scope.returnFareDetails;
+        let InboundFlightDeatil = $scope.returnFlight;
+        let InBoundObj = angular.copy($scope.bookingRequestObj);
+        InBoundObj.RequestXml.BookTicketRequest.TrackNo = InboundFlightDeatil[0].TrackNo;
+        InBoundObj.RequestXml.BookTicketRequest.MobileNo = $scope.mobileNumber;
+        InBoundObj.RequestXml.BookTicketRequest.AltMobileNo = $scope.altMobileNo;
+        InBoundObj.RequestXml.BookTicketRequest.Email = $scope.emailAddress;
+        InBoundObj.RequestXml.BookTicketRequest.Email = $scope.emailAddress;
+        InBoundObj.RequestXml.BookTicketRequest.Passengers.Passenger = $scope.passengers;
+        InBoundObj.RequestXml.BookTicketRequest.Segments.Segment = inSegmentValue;
+        InBoundObj.RequestXml.BookTicketRequest.AdditionalServices.AdditionalService = $scope.additionaServices.filter(function (x) { return x.IsSelected; });
+        InBoundObj.RequestXml.BookTicketRequest.TotalAmount = InboundFareDetails.TotalAmount;
+        if ($scope.flightDetails[0].HoldAllowed == 'Y') {
+            InBoundObj.RequestXml.BookTicketRequest.HoldAllowed = 'Y';
+            InBoundObj.RequestXml.BookTicketRequest.HoldCharge = $scope.flightDetails[0].HoldCharges;
         }
 
+        const ReturnTotalFareAmt = InboundFareDetails.TotalAmount;
 
-        // console.log(JSON.stringify($scope.bookingRequestObj))
-        // const reqObj = { "RequestXml": { "Authenticate": { "InterfaceCode": "", "InterfaceAuthKey": "", "AgentCode": "", "Password": "" }, "BookTicketRequest": { "TrackNo": "0$48957|4|27AO", "MobileNo": "9879879846", "AltMobileNo": "9549879849", "Email": "amareshadak@gmail.com", "Address": "", "ClientRequestID": "", "Passengers": { "Passenger": [{ "PaxSeqNo": 1, "Title": "Mr", "FirstName": "Amaresh", "LastName": "Adak", "PassengerType": "A", "DateOfBirth": "10/04/1991", "PassportNo": "RTTTTGGBGB56351", "PassportExpDate": "", "PassportIssuingCountry": "IND", "NationalityCountry": "IND", "label": "Adult 1", "$$hashKey": "object:3" }] }, "Segments": { "Segment": [{ "TrackNo": "0$48957|4|27AO", "SegmentSeqNo": 1, "AirlineCode": "UK", "FlightNo": "720", "FromAirportCode": "CCU", "ToAirportCode": "DEL", "DepDate": "16/08/2020", "DepTime": "07:10", "ArrDate": "16/08/2020", "ArrTime": "09:35", "FlightClass": "Q", "MainClass": "Y" }, { "TrackNo": "0$48957|4|27AO", "SegmentSeqNo": 2, "AirlineCode": "UK", "FlightNo": "1400", "FromAirportCode": "DEL", "ToAirportCode": "BOM", "DepDate": "16/08/2020", "DepTime": "13:00", "ArrDate": "16/08/2020", "ArrTime": "15:10", "FlightClass": "Q", "MainClass": "Y" }] }, "AdditionalServices": { "AdditionalService": [] }, "TotalAmount": "9895", "MerchantCode": "PAY9zJhspxq7m", "MerchantKey": "eSpbcYMkPoZYFPcE8FnZ", "SaltKey": "WHJIIcNjVXaZj03TnDme", "IsTicketing": "Yes" } } };
-        // console.log(reqObj);
+        //$scope.bookingRequestObj.RequestXml.BookTicketRequest.TrackNo = $scope.trackNumber;
+        //$scope.bookingRequestObj.RequestXml.BookTicketRequest.MobileNo = $scope.mobileNumber;
+        //$scope.bookingRequestObj.RequestXml.BookTicketRequest.AltMobileNo = $scope.altMobileNo;
+        //$scope.bookingRequestObj.RequestXml.BookTicketRequest.Email = $scope.emailAddress;
+        //$scope.bookingRequestObj.RequestXml.BookTicketRequest.Passengers.Passenger = $scope.passengers;
+        //$scope.bookingRequestObj.RequestXml.BookTicketRequest.Segments.Segment = $scope.segments;
+        //$scope.bookingRequestObj.RequestXml.BookTicketRequest.AdditionalServices.AdditionalService = $scope.additionaServices.filter(function (x) { return x.IsSelected; });
+        //$scope.bookingRequestObj.RequestXml.BookTicketRequest.TotalAmount = $scope.TotalAmount;
 
-        const req = { req: JSON.stringify($scope.bookingRequestObj), userMarkup: $scope.userMarkup, FlightAmt: $scope.TotalAmount, TripMode: 'R', deptSegment: JSON.stringify($scope.deptureFlight), returnSegment: JSON.stringify($scope.returnFlight) };
-        const service = FlightServices.getFlightHoldingServices(req);
+
+        const req = { Deptreq: JSON.stringify(outBoundObj), Retntreq: JSON.stringify(InBoundObj), userMarkup: $scope.userMarkup, FlightAmt: DeptTotalFareAmt, ReturnFlightAmt: ReturnTotalFareAmt, TripMode: 'R', deptSegment: JSON.stringify($scope.deptureFlight), returnSegment: JSON.stringify($scope.returnFlight) };
+        const service = FlightServices.getFlightReturnHoldBookServices(req);
 
         service.then(function (response) {
             try {
-                let data = JSON.parse(response.data);
-                if (data.BookTicketResponses.BookTicketResponse.length > 0) {
-                    //$('#modelTicketConfirmed').modal('show');
+                let data = response.data;
+                const DeptRes = data.result;
+                const RetRes = data.ReturnRes;
+                //$('#modelTicketConfirmed').modal('show');
+                if (DeptRes != '')
+                {
                     bootbox.alert({
-                        message: "Holding confirmed.",
+                        message: DeptRes + " AND " + RetRes,
                         callback: function () {
-                            var URL = "/Merchant/MerchantFlightDetails";
+                            var URL = "/Merchant/MerchantFlightDetails/BookedFlightInformaiton"
                             $window.location.href = URL;
                             console.log('This was logged in the callback!');
                         }
                     });
                 }
-                else {
+                else
+                {
                     bootbox.alert({
-                        message: "Please check all the information and submit again.",
+                        message: RetRes,
                         callback: function () {
-                            //var URL = "/Merchant/MerchantFlightDetails/FlightBookingDetails";
+                            //var URL = "/Merchant/MerchantFlightDetails/BookedFlightInformaiton"
                             //$window.location.href = URL;
-                            //console.log('This was logged in the callback!');
+                            console.log('This was logged in the callback!');
                         }
                     });
                 }
+                
+                //let data = JSON.parse(response.data);
+                //if (data.BookTicketResponses.BookTicketResponse.length > 0) {
+                //    //$('#modelTicketConfirmed').modal('show');
+                //    bootbox.alert({
+                //        message: "Your booking is confirmed.",
+                //        callback: function () {
+                //            var URL = "/Merchant/MerchantFlightDetails/BookedFlightInformaiton"
+                //            $window.location.href = URL;
+                //            console.log('This was logged in the callback!');
+                //        }
+                //    });
+                //}
+                //else {
+                //    bootbox.alert({
+                //        message: "Please check all the information and submit again.",
+                //        callback: function () {
+                //            //var URL = "/Merchant/MerchantFlightDetails/FlightBookingDetails";
+                //            //$window.location.href = URL;
+                //            //console.log('This was logged in the callback!');
+                //        }
+                //    });
+                //}
             } catch (e) {
                 bootbox.alert({
                     message: "Please check all the information and submit again.",
@@ -543,6 +617,60 @@
 
     };
 
+    //$scope.holdingFlightRequest = function (isFormInvalid) {
+    //    if (isFormInvalid) {
+    //        return false;
+    //    }
+    //    $scope.bookingRequestObj.RequestXml.BookTicketRequest.TrackNo = $scope.trackNumber;
+    //    $scope.bookingRequestObj.RequestXml.BookTicketRequest.MobileNo = $scope.mobileNumber;
+    //    $scope.bookingRequestObj.RequestXml.BookTicketRequest.AltMobileNo = $scope.altMobileNo;
+    //    $scope.bookingRequestObj.RequestXml.BookTicketRequest.Email = $scope.emailAddress;
+    //    $scope.bookingRequestObj.RequestXml.BookTicketRequest.Passengers.Passenger = $scope.passengers;
+    //    $scope.bookingRequestObj.RequestXml.BookTicketRequest.Segments.Segment = $scope.segments;
+    //    $scope.bookingRequestObj.RequestXml.BookTicketRequest.AdditionalServices.AdditionalService = $scope.additionaServices.filter(function (x) { return x.IsSelected; });
+    //    $scope.bookingRequestObj.RequestXml.BookTicketRequest.TotalAmount = $scope.TotalAmount;
+    //    if ($scope.flightDetails[0].HoldAllowed == 'Y') {
+    //        $scope.bookingRequestObj.RequestXml.BookTicketRequest.HoldAllowed = 'Y';
+    //        $scope.bookingRequestObj.RequestXml.BookTicketRequest.HoldCharge = $scope.flightDetails[0].HoldCharges;
+    //    }
+    //    const req = { req: JSON.stringify($scope.bookingRequestObj), userMarkup: $scope.userMarkup, FlightAmt: $scope.TotalAmount, TripMode: 'R', deptSegment: JSON.stringify($scope.deptureFlight), returnSegment: JSON.stringify($scope.returnFlight) };
+    //    const service = FlightServices.getFlightHoldingServices(req);
+    //    service.then(function (response) {
+    //        try {
+    //            let data = JSON.parse(response.data);
+    //            if (data.BookTicketResponses.BookTicketResponse.length > 0) {
+    //                //$('#modelTicketConfirmed').modal('show');
+    //                bootbox.alert({
+    //                    message: "Holding confirmed.",
+    //                    callback: function () {
+    //                        var URL = "/Merchant/MerchantFlightDetails";
+    //                        $window.location.href = URL;
+    //                        console.log('This was logged in the callback!');
+    //                    }
+    //                });
+    //            }
+    //            else {
+    //                bootbox.alert({
+    //                    message: "Please check all the information and submit again.",
+    //                    callback: function () {
+    //                        //var URL = "/Merchant/MerchantFlightDetails/FlightBookingDetails";
+    //                        //$window.location.href = URL;
+    //                        //console.log('This was logged in the callback!');
+    //                    }
+    //                });
+    //            }
+    //        } catch (e) {
+    //            bootbox.alert({
+    //                message: "Please check all the information and submit again.",
+    //                callback: function () {
+    //                    //var URL = "/Merchant/MerchantFlightDetails/FlightBookingDetails";
+    //                    //$window.location.href = URL;
+    //                    //console.log('This was logged in the callback!');
+    //                }
+    //            });
+    //        }
+    //    });
+    //};
     $scope.PrintFlightInvoice = function (ref_no, Pnr) {
         debugger;
     };

@@ -1435,7 +1435,7 @@ namespace WHITELABEL.Web.Controllers
 
                         #region Email Code done by Sayan at 11-10-2020
                         string name = objsupermem.MEMBER_NAME;
-                        string Regmsg = "Hi " + objsupermem.MEM_UNIQUE_ID + "(" + objsupermem.MEMBER_NAME + ")." + " You have successfully joined in Boom Travels. For any query please contact your Admin."+ "<br/> Regards, <br/><br/> BOOM Travels.";
+                        string Regmsg = "Hi " + objsupermem.MEMBER_NAME + "(" + objsupermem.MEMBER_NAME + ")." + " You have successfully joined in Boom Travels. For any query please contact your Admin."+ "<br/> Regards, <br/><br/> BOOM Travels.";
                         EmailHelper emailhelper = new EmailHelper();
                         string msgbody = emailhelper.GetEmailTemplate(name, Regmsg, "UserEmailTemplate.html");
                         emailhelper.SendUserEmail(objsupermem.EMAIL_ID.Trim(), "Welcome to Boom Travels!", msgbody);

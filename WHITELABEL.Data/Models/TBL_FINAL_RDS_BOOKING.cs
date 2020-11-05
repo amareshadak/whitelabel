@@ -31,7 +31,7 @@
         public long MER_ID { get; set; }
         public string MER_RAIL_ID { get; set; }
         public long BOOKING_MER_ID { get; set; }
-        public long BOOKING_MER_RAIL_ID { get; set; }
+        public string BOOKING_MER_RAIL_ID { get; set; }
         public bool PG_CHARGE_APPLY { get; set; }
         public decimal PG_CHARGE_MAX_VAL { get; set; }
         public decimal PG_CHARGE_LESS_THAN_2000 { get; set; }
@@ -58,5 +58,7 @@
         public string FROM_DATE { get; set; }
         [NotMapped]
         public string TO_DATE { get; set; }
+        [NotMapped]
+        public long SerialNo { get; set; }
     }
 }

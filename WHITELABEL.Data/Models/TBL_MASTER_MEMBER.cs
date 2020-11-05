@@ -162,6 +162,76 @@
         public string SuperName { get; set; }
         [NotMapped]
         public string DistributorName { get; set; }
+        [NotMapped]
+        public string MerchantName { get; set; }
+        [NotMapped]
+        public string RAIL_USER_ID { get; set; }
+        [NotMapped]
+        public string IRCTC_LOGIN_ID { get; set; }
+        [NotMapped]
+        //[Required(ErrorMessage = "Travel agent name is required")]
+        [MaxLength(350, ErrorMessage = "Travel agent name is not greater then 350 digit")]
+        [MinLength(5, ErrorMessage = "Travel agent name is not less then 5 digit")]
+        public string TRAVEL_AGENT_NAME { get; set; }
+        [NotMapped]
+        //[Required(ErrorMessage = "Agency name is required")]
+        [MaxLength(500, ErrorMessage = "Agency name is not greater then 500 digit")]
+        [MinLength(5, ErrorMessage = "Agency name is not less then 5 digit")]
+        public string AGENCY_NAME { get; set; }
+        [NotMapped]
+        //[Required(ErrorMessage = "Office address is required")]
+        public string OFFICE_ADDRESS { get; set; }
+        [NotMapped]
+        //[Required(ErrorMessage = "Residence address is required")]
+        public string RESIDENCE_ADDRESS { get; set; }
+        [NotMapped]
+        [Display(Name = "Email")]
+        [DataType(DataType.EmailAddress)]
+        [MaxLength(250, ErrorMessage = "Email is not greater then 250 digit")]
+        [MinLength(10, ErrorMessage = "Email is not less then 10 digit")]
+        public string AGENTEMAIL_ID { get; set; }
+        [NotMapped]
+        //[Required]
+        [Display(Name = "Mobile No")]
+        [MaxLength(15, ErrorMessage = "Mobile no is not greater then 15 digit")]
+        [MinLength(10, ErrorMessage = "Mobile no is not less then 10 digit")]
+        [RegularExpression("^[0-9]*$", ErrorMessage = "Mobile must be number")]
+        public string MOBILE_NO { get; set; }
+        [NotMapped]
+        public string OFFICE_PHONE { get; set; }
+        [NotMapped]
+        [Display(Name = "Member Mobile")]
+        [StringLength(10, ErrorMessage = "Pan no must be 10 digit")]
+        [RegularExpression("^[0-9a-zA-Z ]+$", ErrorMessage = "Enter valid Pan no")]
+        public string AGENTPAN_NO { get; set; }
+        [NotMapped]
+        public string DIGITAL_CERTIFICATE_DETAILS { get; set; }
+        [NotMapped]
+        //[Required(ErrorMessage = "Certificate begin date is required")]
+        public DateTime? CERTIFICATE_BEGIN_DATE { get; set; }
+        [NotMapped]
+        //[Required(ErrorMessage = "Certificate end date is required")]
+        public DateTime? CERTIFICATE_END_DATE { get; set; }
+        [NotMapped]
+        public string USER_STATE { get; set; }
+        [NotMapped]
+        public string AGENT_VERIFIED_STATUS { get; set; }
+        [NotMapped]
+        public string DEACTIVATION_REASON { get; set; }
+        [NotMapped]
+        public string AADHAAR_VERIFICATION_STATUS { get; set; }
+        [NotMapped]
+        public DateTime? ENTRY_DATE { get; set; }
+        [NotMapped]
+        public string FLAG1 { get; set; }
+        [NotMapped]
+        public string FLAG2 { get; set; }
+        [NotMapped]
+        public bool STATUS { get; set; }
+        [NotMapped]
+        [Required]
+        [Display(Name = "Please Select State")]
+        public long AGENT_STATE_ID { get; set; }
     }
 
 

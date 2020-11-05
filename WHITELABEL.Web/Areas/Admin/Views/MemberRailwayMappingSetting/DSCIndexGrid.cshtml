@@ -1,0 +1,39 @@
+﻿
+@using NonFactors.Mvc.Grid;
+@using WHITELABEL.Web.Helper;
+@*@model IGrid<WHITELABEL.Data.Models.TBL_MASTER_MEMBER>*@
+@model IEnumerable<WHITELABEL.Data.Models.TBL_RAIL_DSC_INFORMATION>
+@{
+    ViewBag.Title = "DSCIndexGrid";
+    Layout = null;
+    //Layout = "~/Views/Shared/_LayoutPowerAdmin.cshtml";
+}
+
+@(Html
+                                            .Grid(Model)
+                                            .Build(columns =>
+                                            {
+                                                columns.Add(model => model.SLN).Titled("Sln").Filterable(true).Sortable(true);
+                                                columns.Add(model => model.RAIL_USER_ID).Titled("Name").Filterable(true).Sortable(true);
+                                                columns.Add(model => model.MerchantName).Titled("Merchant Name").Encoded(false);
+                                                columns.Add(model => model.DistributorName).Titled("Distributor Name").Encoded(false);
+                                                columns.Add(model => model.CREATE_DATE).Titled("Uploaded Date").Encoded(false);
+                                                columns.Add(model => model.SLN).Titled("Uploaded Date").Encoded(false)
+                                                    //.RenderedAs(model => model.SLN + "<br /> <a href='javascript:void(0)' onclick='showimages(\"" + model.DSC_DOC_Path + "\")'>View Image</a>  " + Html.ActionLink("Download", "downloadfiles", "PowerAdminMerchantSearch", new { type = "Aadhaar", memid = Encrypt.EncryptMe(model.SLN.ToString()) }, new { }));
+                                                    .RenderedAs(model => model.DSC_DOC_Path + "<br /> " + Html.ActionLink("Download", "downloadfiles", "MemberRailwayMappingSetting", new { area = "Admin", memid = Encrypt.EncryptMe(model.SLN.ToString()) }, new { }));
+
+
+                                            })
+                                             .Css("css-classes")
+                                            .AppendCss("table table-striped")
+                                            .Empty("No data found")
+                                            .Id("my-ajax-grid")
+                                            .Pageable(pager =>
+                                            {
+                                                pager.PagesToDisplay = 35;
+                                                pager.RowsPerPage = 35;
+                                            })
+                                            .Filterable()
+                                            .Sortable()
+)
+

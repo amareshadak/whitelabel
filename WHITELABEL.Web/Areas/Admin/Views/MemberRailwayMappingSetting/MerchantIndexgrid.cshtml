@@ -1,0 +1,47 @@
+﻿@using NonFactors.Mvc.Grid;
+@using WHITELABEL.Web.Helper;
+@model IEnumerable<WHITELABEL.Data.Models.TBL_MASTER_MEMBER>
+@{
+    ViewBag.Title = "MerchantIndexgrid";
+    Layout = null;
+    //Layout = "~/Areas/PowerAdmin/Views/Shared/_PowerAdminLayout.cshtml";
+}
+
+
+
+@(Html
+                                .Grid(Model)
+                                .Build(columns =>
+                                {
+                                    columns.Add(model => model.MEM_UNIQUE_ID).Titled("Member Unique Id").Filterable(true).Sortable(true);
+                                    columns.Add(model => model.EMAIL_ID).Titled("Email").Filterable(true).Sortable(true);
+                                    columns.Add(model => model.MEMBER_NAME).Titled("Name").Filterable(true).Sortable(true);
+                                    columns.Add(model => model.COMPANY).Titled("Company").Filterable(true).Sortable(true);
+                                    columns.Add(model => model.MEMBER_MOBILE).Titled("Mobile").Filterable(true).Sortable(true);
+                                    columns.Add(model => model.RAIL_ID).Titled("Rail User Id").Filterable(true).Sortable(true);
+                                    columns.Add(model => model.SECURITY_PIN_MD5).Titled("M Pin").Filterable(true).Sortable(true);
+                                    columns.Add(model => (model.ACTIVE_MEMBER == true ? "Active" : "Deactive")).Titled("Status").Css("<style>.table - hover tbody tr: hover {background - color:red;}</style> ").Filterable(true).Sortable(true);
+                                    columns.Add(model => model.MEM_ID).Encoded(false).Filterable(false).Sortable(false).Titled("Edit Password")
+                                 .RenderedAs(model => "<div style='text-align:center'><a href='" + @Url.Action("ChangeMemberPassword", "MemberRailwayMappingSetting", new { area = "Admin", memid = Encrypt.EncryptMe(model.MEM_ID.ToString()) }) + "' style='margin-right:10px' title='Edit'><i class='fa fa-eye'></i></a></div>");
+
+                                    columns.Add(model => model.MEM_ID).Encoded(false).Filterable(false).Sortable(false).Titled("Action")
+                                        .RenderedAs(model => "<div style='text-align:center'><a href='" + @Url.Action("GetMerchantDetails", "MemberRailwayMappingSetting", new { area = "Admin", memid = Encrypt.EncryptMe(model.MEM_ID.ToString()) }) + "' style='margin-right:10px' title='Edit'><i class='fa fa-edit'></i></a></div>");
+
+                                    columns.Add(model => model.MEM_ID).Titled("RDS Tagging").Encoded(false).Filterable(false).Sortable(false)
+                                                    .RenderedAs(model => "<div style='text-align:center'><a href='" + @Url.Action("ServiceDetails", "MemberRailServiceTagging", new { area = "Admin", memid = Encrypt.EncryptMe(model.MEM_ID.ToString()) }) + "' title='Services'><i class='fa fa-cogs'></i></a></a></div>");
+
+                                })
+                                 .Css("css-classes")
+               .AppendCss("table table-striped")
+                                .Empty("No data found")
+                                .Id("my-ajax-grid")
+                                .Pageable(pager =>
+                                {
+                                    pager.PagesToDisplay = 35;
+                                    pager.RowsPerPage = 35;
+                                })
+                                .Filterable()
+                                .Sortable()
+)
+
+

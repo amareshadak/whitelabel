@@ -95,5 +95,11 @@
         public DateTime? RESCHEDULE_DATE { get; set; }
         public decimal? RESCHEDULE_AMOUNT { get; set; }
         public string RESCHEDULE_STATUS { get; set; }
+        public string RESCHEDULE_REPLY { get; set; }
+        public DateTime? RESCHEDULE_REPLY_DATE { get; set; }
+        [NotMapped]
+        public string FROM_DATE { get; set; }
+        [NotMapped]
+        public long Serial_No { get; set; }
     }
 }

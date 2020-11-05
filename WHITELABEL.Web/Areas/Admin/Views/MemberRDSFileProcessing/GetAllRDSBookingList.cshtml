@@ -1,0 +1,142 @@
+﻿@using NonFactors.Mvc.Grid;
+@{
+    ViewBag.Title = "Get All RDSBooking List";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+<div class="full-content margin-top-20">
+    <div class="row">
+
+        <div class="col-md-12 row">
+            @*@if (TempData["msgVal"] != null)
+                {
+                    <div id="informationMessage" class="text-center alert alert-success">
+                        <span style="width:100%;text-align:center;">@TempData["msgVal"].ToString() </span>
+                    </div>
+                }*@
+        </div>
+        <div class="col-md-12">
+            <div class="col-md-12 row headcolor">
+                <div class="col-md-4" style="text-align:left; padding-top:3px;"><i class="fa fa-list fa-3x"></i></div>
+                <div class="col-md-4"></div>
+                <div class="col-md-4" style="text-align:right; padding-top:10px;">
+                    <h3>RDS Booking file Upload</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="col-md-12" style="text-align:right;">
+                        @using (Ajax.BeginForm("TriggerBookingRDSFiles", "MemberRDSFileProcessing", new AjaxOptions { Confirm = "Do you want to confirm to trigger booking file", OnSuccess = "OnSuccessTriggeredRdsBooking", OnFailure = "OnFailureTriggeredRdsBooking", LoadingElementId = "progressTriggeredRdsBooking" }, new { area="Admin",@id = "TriggeredRdsBooking" }))
+
+
+                        {
+                            <div style="padding-bottom:20px;">
+                                <input type="submit" value="Submit Booking Trigger" class="btn btn-primary" id="btnsubmit1" />
+                            </div>
+                        }
+                    </div>
+
+
+                    <div class="col-md-12 row">
+
+                        <div class="col-lg-4 col-md-6 col-sm-6">
+                            <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-rupee-sign fa-4x"></i>
+                                    <div class="content" style="max-width:100%;">
+                                        <p class="text-muted mt-2 mb-0">Total Booking Amount</p>
+                                        <p class="text-primary text-24 line-height-1 mb-2">@ViewBag.BookingAmt</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-6 col-sm-6">
+                            <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
+                                <div class="card-body text-center">
+                                    <i class="i-Add-User"></i>
+                                    <div class="content" style="max-width:100%;">
+                                        <p class="text-muted mt-2 mb-0">Total No Of PNR</p>
+                                        <p class="text-primary text-24 line-height-1 mb-2">@ViewBag.BookingPnrNo</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-6 col-sm-6">
+                            <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
+                                <div class="card-body text-center">
+                                    <i class="fa fa-users fa-4x"></i>
+                                    <div class="content" style="max-width:100%;">
+                                        <p class="text-muted mt-2 mb-0">No Of Ticketing Franchie</p>
+                                        <p class="text-primary text-24 line-height-1 mb-2">@ViewBag.BookingAgentPNR</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    @using (Html.BeginForm())
+                    {
+
+                        @Html.AntiForgeryToken()
+                        <div class="col-md-12 row">
+                            @Html.AjaxGrid(Url.Action("RdsBookingLilst", "MemberRDSFileProcessing",new { area="Admin"}))
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    $(document).ready(function () {
+        window.setTimeout(function () {
+            $("#informationMessage").fadeOut('slow');
+        }, 2000);
+    });
+
+</script>
+
+
+<div class="preloader hidden" id="progressTriggeredRdsBooking">
+    <div id="loading"></div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#progressTriggeredRdsBooking').removeClass("hidden");
+        $('#progressTriggeredRdsBooking').hide();
+    })
+    function OnSuccessTriggeredRdsBooking(response) {
+        $('#progressTriggeredRdsBooking').removeClass("hidden");
+        $('#progressTriggeredRdsBooking').hide();
+        $('#loading').removeClass("hidden");
+        $('#loading').hide();
+        $('.mvc-grid').mvcgrid('reload');
+        var message = response;
+        $("#TriggeredRdsBooking").trigger("reset");
+        //$("#FingerPrintForm").trigger("reset");
+        bootbox.alert({
+            message: message,
+            size: 'small',
+            callback: function () {
+                var url = "/Admin/MemberRDSFileProcessing/AllRDSBookingList";
+                window.location.href = url;
+                console.log(message);
+            }
+        })
+        $('.mvc-grid').mvcgrid('reload');
+    }
+    function OnFailureTriggeredRdsBooking(response) {
+        alert("Error occured.");
+    }
+</script>
+
+

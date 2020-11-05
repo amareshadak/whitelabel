@@ -3760,11 +3760,16 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
             string COrelationID = Settings.GetUniqueKey(CurrentMerchant.MEM_ID.ToString());
             int Deptstopage = 0;
             decimal TotalBookAmt = 0;
+            decimal OnewayAmount = 0;
+            decimal.TryParse(FlightAmt, out OnewayAmount);
+            decimal ReturnAmount = 0;
+            decimal.TryParse(ReturnFlightAmt, out ReturnAmount);
+            TotalBookAmt = OnewayAmount + ReturnAmount;
             int deptcnt = 0;
             int retncnt = 0;
             string ReturnDeptResponse = "";
             string ReturnResponse = "";
-            decimal.TryParse(FlightAmt, out TotalBookAmt);
+            //decimal.TryParse(FlightAmt, out TotalBookAmt);
             var getmemberinfo = _db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == CurrentMerchant.MEM_ID);
             if (getmemberinfo.BALANCE > TotalBookAmt)
             {
@@ -3783,7 +3788,47 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
             }
             else
             {
-                return Json("Your wallet balance is insufficient to book a ticket.", JsonRequestBehavior.AllowGet);
+                return Json(new { result = "", ReturnRes = "Your wallet balance is insufficient to book a ticket." }, JsonRequestBehavior.AllowGet);
+                //return Json("Your wallet balance is insufficient to book a ticket.", JsonRequestBehavior.AllowGet);
+            }
+
+        }
+        [HttpPost]
+        public JsonResult FlightReturnHoldBookingRequest(string Deptreq, string Retntreq, string userMarkup, string FlightAmt, string ReturnFlightAmt, string TripMode, string deptSegment = "", string returnSegment = "")
+        {
+            string COrelationID = Settings.GetUniqueKey(CurrentMerchant.MEM_ID.ToString());
+            int Deptstopage = 0;
+            decimal TotalBookAmt = 0;
+            decimal OnewayAmount = 0;
+            decimal.TryParse(FlightAmt,out OnewayAmount);
+            decimal ReturnAmount = 0;
+            decimal.TryParse(ReturnFlightAmt, out ReturnAmount);
+            TotalBookAmt = OnewayAmount + ReturnAmount;
+            int deptcnt = 0;
+            int retncnt = 0;
+            string ReturnDeptResponse = "";
+            string ReturnResponse = "";
+            //decimal.TryParse(FlightAmt, out TotalBookAmt);
+            var getmemberinfo = _db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == CurrentMerchant.MEM_ID);
+            if (getmemberinfo.BALANCE > TotalBookAmt)
+            {
+                string ReturnDepature = ReturnHoldBooking(Deptreq, userMarkup, FlightAmt, ReturnFlightAmt, TripMode, deptSegment, returnSegment);
+
+                string Returnway = ReturnHoldBooking(Retntreq, userMarkup, FlightAmt, ReturnFlightAmt, TripMode, deptSegment, returnSegment);
+                if (ReturnDepature == "Return Booking is Success")
+                { ReturnDeptResponse = "Round Trip Depature Booking is done"; }
+                else
+                { ReturnDeptResponse = "Round Trip Depature Booking is not done"; }
+                if (Returnway == "Return Booking is Success")
+                { ReturnResponse = "Round Trip Return Booking is done"; }
+                else
+                { ReturnResponse = "Round Trip Return Booking is not done"; }
+                return Json(new { result = ReturnDeptResponse, ReturnRes = ReturnResponse });
+            }
+            else
+            {
+                return Json(new { result = "", ReturnRes = "Your wallet balance is insufficient to book a ticket." }, JsonRequestBehavior.AllowGet);
+                //return Json("Your wallet balance is insufficient to book a ticket.", JsonRequestBehavior.AllowGet);
             }
 
         }
@@ -4147,6 +4192,555 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                     //var APIStatus = VerifyFlight.BookTicketResponse.Error;
                     var getStatus = VerifyFlight.BookTicketResponses.BookTicketResponse[0].TicketDetails[0].Status.Value;
                     if (getStatus == "Acknowledged" || getStatus == "Completed")
+                    {
+                        ContextTransaction.Commit();
+                    }
+                    else
+                    {
+                        ContextTransaction.Rollback();
+                        //return Json("Please try again later", JsonRequestBehavior.AllowGet);
+                        return "Please try again later";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ContextTransaction.Rollback();
+                    return "false";
+                    //return Json(false, JsonRequestBehavior.AllowGet);
+                    throw;
+                }
+            }
+            using (System.Data.Entity.DbContextTransaction ContextTransaction = _db.Database.BeginTransaction())
+            {
+                try
+                {
+                    BookTicketResponsesDTO BookingResponse = JsonConvert.DeserializeObject<BookTicketResponsesDTO>(ResValue);
+                    int count = BookingResponse.BookTicketResponses.BookTicketResponse.Count;
+                    var data = JsonConvert.SerializeObject(VerifyFlight);
+                    string APIRes = Convert.ToString(data);
+                    var TicketInfo = BookingResponse.BookTicketResponses.BookTicketResponse[0].TicketDetails.ToList();
+                    var Ticketcount = BookingResponse.BookTicketResponses.BookTicketResponse[0].TicketDetails.Count;
+                    var FareDetails = BookingResponse.BookTicketResponses.BookTicketResponse[0].FlightFareDetails.ToList();
+                    var FareDetailsCount = BookingResponse.BookTicketResponses.BookTicketResponse[0].FlightFareDetails.Count;
+                    var PassengerDetails = BookingResponse.BookTicketResponses.BookTicketResponse[0].PassengerDetails.ToList();
+                    var lstpnsg = BookingResponse.BookTicketResponses.BookTicketResponse[0].PassengerDetails;
+                    var val_Pnsg = JsonConvert.SerializeObject(lstpnsg);
+                    string pnsgRes = Convert.ToString(val_Pnsg);
+                    BookingDate = TicketInfo[Ticketcount - 1].BookingDateTime;
+                    BookingStatus = TicketInfo[Ticketcount - 1].Status;
+                    Ref_no = TicketInfo[Ticketcount - 1].RefNo;
+                    PNR = FareDetails[FareDetailsCount - 1].AirlinePNRNumber;
+                    TicketType = TicketInfo[Ticketcount - 1].TicketType;
+                    IsDomestic = (TicketInfo[Ticketcount - 1].IsDomestic == "Yes" ? true : false);
+                    Airlinecode = FareDetails[0].AirlineCode;
+                    FlightNo = FareDetails[0].FlightNo;
+                    MainClass = FareDetails[0].MainClass;
+                    BookingClass = FareDetails[0].BookingClass;
+                    FromAirport = FareDetails[0].FromAirportCode;
+                    ToAirport = FareDetails[FareDetailsCount - 1].ToAirportCode;
+                    DeptDate = FareDetails[0].DepartureDate;
+                    string DATEofJourney = DeptDate;
+                    DateTime dateofJourey = DateTime.Parse(DATEofJourney, new System.Globalization.CultureInfo("pt-BR"));
+                    //DateTime dateofJourey =Convert.ToDateTime(DATEofJourney);
+                    DeptDate = FareDetails[0].DepartureTime;
+                    arivDate = FareDetails[FareDetailsCount - 1].ArrivalDate;
+                    arivtime = FareDetails[FareDetailsCount - 1].ArriveTime;
+                    adult = TicketInfo[Ticketcount - 1].Adult;
+                    AdultVal = int.Parse(adult);
+                    child = TicketInfo[Ticketcount - 1].Child;
+                    childVal = int.Parse(child);
+                    infant = TicketInfo[Ticketcount - 1].Infant;
+                    InfantVal = int.Parse(infant);
+                    //string AIRADDITIONALAMOUNT_Value = System.Configuration.ConfigurationManager.AppSettings["AIRADDITIONALAMOUNT"];
+                    string AIRADDITIONALAMOUNT_Value = Session["AIRADDITIONALAMOUNT"].ToString();
+                    decimal Additional_AMt = 0;
+                    decimal.TryParse(AIRADDITIONALAMOUNT_Value, out Additional_AMt);
+                    TotalFlightBaseFare = FareDetails[0].TotalFlightBaseFare;
+                    Publish_Fare = decimal.Parse(TotalFlightBaseFare) + Additional_AMt;
+                    TotalBaseFare = decimal.Parse(TotalFlightBaseFare);
+                    TotalFlightTax = FareDetails[0].TotalFlightTax;
+                    TotalTaxFare = decimal.Parse(TotalFlightTax);
+                    TotalFlightPassengerTax = FareDetails[0].TotalFlightPassengerTax;
+                    TotalPngsTaxFare = decimal.Parse(TotalFlightPassengerTax);
+                    TotalFlightAdditionalCharges = FareDetails[0].TotalFlightAdditionalCharges;
+                    TotalAdditionalFare = decimal.Parse(TotalFlightAdditionalCharges);
+                    TotalFlightCuteFee = FareDetails[0].TotalFlightCuteFee;
+                    TotalCuteFare = decimal.Parse(TotalFlightCuteFee);
+                    TOTAL_FLIGHT_MEAL_FEE = FareDetails[0].TotalFlightSkyCafeMealFee;
+                    TotalTOTAL_FLIGHT_MEAL_FEEare = decimal.Parse(TOTAL_FLIGHT_MEAL_FEE);
+                    TotalFlightAmount = FareDetails[0].TotalFlightAmount;
+                    TotalAmt = decimal.Parse(TotalFlightAmount);
+                    NET_FARE = TotalAmt;
+                    NET_TOTAL_FARE = NET_FARE + Additional_AMt;
+                    TotalCommissionAMtCharge = FareDetails[0].TotalFlightCommissionAmount;
+                    TotalCommAmt = decimal.Parse(TotalCommissionAMtCharge);
+                    TotalServiceCharge = FareDetails[0].TotalServiceCharge;
+                    TotalServiceAmt = decimal.Parse(TotalServiceCharge);
+                    TDSAmount = FareDetails[0].TDSAmount;
+                    TotalTDSAmountAmt = decimal.Parse(TDSAmount);
+                    ServiceTax = FareDetails[0].ServiceTax;
+                    TotalServiceTaxAmt = decimal.Parse(ServiceTax);
+                    AdultCheckedIn = FareDetails[0].AdultCheckedIn;
+                    string jhjdfd = "";
+                    var GetFligtInfo = _db.TBL_FLIGHT_BOOKING_DETAILS.Where(x => x.CORELATION_ID == COrelationID).ToList();
+                    if (GetFligtInfo != null)
+                    {
+                        foreach (var ticketInfo in GetFligtInfo)
+                        {
+                            var flightTicketInfo = _db.TBL_FLIGHT_BOOKING_DETAILS.FirstOrDefault(x => x.SLN == ticketInfo.SLN);
+                            flightTicketInfo.PNR = PNR;
+                            flightTicketInfo.REF_NO = Ref_no;
+                            flightTicketInfo.TRACK_NO = "";
+                            flightTicketInfo.TRIP_MODE = "1";
+                            flightTicketInfo.TICKET_TYPE = TicketType;
+                            flightTicketInfo.TICKET_NO = Ref_no;
+                            flightTicketInfo.IS_DOMESTIC = IsDomestic;
+                            flightTicketInfo.AIRLINE_CODE = Airlinecode;
+                            flightTicketInfo.FLIGHT_NO = FlightNo;
+                            flightTicketInfo.FROM_AIRPORT = FromAirport;
+                            flightTicketInfo.TO_AIRPORT = ToAirport;
+                            flightTicketInfo.BOOKING_DATE = DateTime.Now;
+                            flightTicketInfo.DEPT_DATE = DeptDate;
+                            flightTicketInfo.DEPT_TIME = Depttime;
+                            flightTicketInfo.ARRIVE_DATE = arivDate;
+                            flightTicketInfo.ARRIVE_TIME = arivtime;
+                            flightTicketInfo.NO_OF_ADULT = AdultVal;
+                            flightTicketInfo.NO_OF_CHILD = childVal;
+                            flightTicketInfo.NO_OF_INFANT = InfantVal;
+                            flightTicketInfo.TOTAL_FLIGHT_BASE_FARE = TotalBaseFare;
+                            flightTicketInfo.TOTAL_FLIGHT_TAX = TotalTaxFare;
+                            flightTicketInfo.TOTAL_PASSANGER_TAX = TotalPngsTaxFare;
+                            flightTicketInfo.TOTAL_FLIGHT_SERVICE_CHARGES = 0;
+                            flightTicketInfo.TOTAL_FLIGHT_ADDITIONAL_CHARGE = TotalAdditionalFare;
+                            flightTicketInfo.TOTAL_FLIGHT_CUTE_FEE = TotalCuteFare;
+                            flightTicketInfo.TOTAL_FLIGHT_MEAL_FEE = TotalTOTAL_FLIGHT_MEAL_FEEare;
+                            flightTicketInfo.TOTAL_AIRPORT_FEE = 0;
+                            flightTicketInfo.TOTAL_FLIGHT_CONVENIENCE_FEE = 0;
+                            flightTicketInfo.TOTAL_FLIGHT_AMT = TotalAmt;
+                            flightTicketInfo.TOTAL_COMMISSION_AMT = TotalCommAmt;
+                            flightTicketInfo.TOTAL_TDS_AMT = TotalTDSAmountAmt;
+                            flightTicketInfo.TOTAL_SERVICES_TAX = TotalServiceTaxAmt;
+                            flightTicketInfo.TOTAL_BAGGAGE_ALLOWES = AdultCheckedIn;
+                            flightTicketInfo.STATUS = true;
+                            flightTicketInfo.IS_CANCELLATION = false;
+                            flightTicketInfo.FLIGHT_CANCELLATION_ID = "";
+                            flightTicketInfo.IS_HOLD = false;
+                            flightTicketInfo.API_RESPONSE = APIRes;
+                            flightTicketInfo.FLIGHT_BOOKING_DATE = BookingDate;
+                            flightTicketInfo.BOOKING_STATUS = BookingStatus;
+                            flightTicketInfo.MAIN_CLASS = MainClass;
+                            flightTicketInfo.BOOKING_CLASS = BookingClass;
+                            flightTicketInfo.PUBLISH_FARE = Publish_Fare;
+                            flightTicketInfo.NET_FARE = NET_FARE;
+                            flightTicketInfo.NET_TOTAL_FARE = NET_TOTAL_FARE;
+                            flightTicketInfo.CANCELLATION_REMARK = "";
+                            flightTicketInfo.RESCHEDULE_FARE = false;
+                            flightTicketInfo.RESCHEDULE_REMARK = "";
+                            _db.Entry(flightTicketInfo).State = System.Data.Entity.EntityState.Modified;
+                            //_db.SaveChanges();
+                            //ContextTransaction.Commit();
+                        }
+                    }
+                    foreach (var pnsgitem in PassengerDetails)
+                    {
+                        var val_Pnsg_Details = JsonConvert.SerializeObject(pnsgitem.Details);
+                        string Pngdetails = Convert.ToString(val_Pnsg_Details);
+                        string PngDOB = Convert.ToString(pnsgitem.BirthDate);
+                        string PnsgSeq_No = Convert.ToString(pnsgitem.SeqNo);
+                        string Png_FirstName = Convert.ToString(pnsgitem.FirstName);
+                        string Png_LastName = Convert.ToString(pnsgitem.LastName);
+                        var PnsgList = _db.TBL_FLIGHT_BOOKING_PASSENGER_LIST.FirstOrDefault(x => x.CORELATION_ID == COrelationID && x.FIRST_NAME == Png_FirstName && x.LAST_NAME == Png_LastName && x.TRIP_TYPE == "O");
+                        if (PnsgList != null)
+                        {
+                            PnsgList.PNR = PNR;
+                            PnsgList.REF_NO = Ref_no;
+                            PnsgList.DETAILS = Pngdetails;
+                            PnsgList.GENDER = pnsgitem.Gender;
+                            PnsgList.PASSENGER_RESP = pnsgRes;
+                            PnsgList.PNSG_SEQ_NO = PnsgSeq_No;
+                            PnsgList.PASSENGER_STATUS = BookingStatus;
+                            PnsgList.CANCELLATION_REMARTK = "";
+                            PnsgList.PASSPORT = "";
+                            _db.Entry(PnsgList).State = System.Data.Entity.EntityState.Modified;
+                            //_db.SaveChanges();
+                        }
+                    }
+                    _db.SaveChanges();
+                    ContextTransaction.Commit();
+                    #endregion
+                    return "Return Booking is Success";
+                    //TempData["IsShowPrintTicket"] = "Show";
+                    //return Json(data, JsonRequestBehavior.AllowGet);
+                }
+                catch (Exception ex)
+                {
+                    ContextTransaction.Rollback();
+                    //string check = RefundAmount(COrelationID, TripMode);
+                    return "Return Dept Fail";
+                    throw;
+                }
+            }
+        }
+        public string ReturnHoldBooking(string req, string userMarkup, string FlightAmt, string ReturnFlightAmt, string TripMode, string deptSegment = "", string returnSegment = "")
+        {
+            string COrelationID = Settings.GetUniqueKey(CurrentMerchant.MEM_ID.ToString());
+            int Deptstopage = 0;
+            decimal TotalBookAmt = 0;
+            int deptcnt = 0;
+            int retncnt = 0;
+            decimal.TryParse(FlightAmt, out TotalBookAmt);
+            var getmemberinfo = _db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == CurrentMerchant.MEM_ID);
+            var MemberAcntLog = _db.TBL_ACCOUNTS.Where(x => x.MEM_ID == CurrentMerchant.MEM_ID).OrderByDescending(c => c.ACC_NO).FirstOrDefault();
+            List<ReturnFlightSegments> deptureSegment = JsonConvert.DeserializeObject<List<ReturnFlightSegments>>(deptSegment);
+            List<ReturnFlightSegments> retSegment = JsonConvert.DeserializeObject<List<ReturnFlightSegments>>(returnSegment);
+            if (deptureSegment != null)
+            { deptcnt = deptureSegment.Count(); }
+            if (retSegment != null)
+            {
+                retncnt = retSegment.Count();
+            }
+            FlightBookingDTO beforeApiExecute = JsonConvert.DeserializeObject<FlightBookingDTO>(req);
+            var FlightInfo = beforeApiExecute.RequestXml.BookTicketRequest.Segments;
+            Deptstopage = FlightInfo.Segment.Count();
+            var sengList = FlightInfo.Segment.ToList();
+            string Dept_FlightNo = string.Empty;
+            string Dept_airlineCode = string.Empty;
+            string retn_FlightNo = string.Empty;
+            string retn_airlineCode = string.Empty;
+            string GSTCompanyName = string.Empty;
+            string GSTCompanyEmail = string.Empty;
+            string GSTNO = string.Empty;
+            string GSTMOBILE_NO = string.Empty;
+            string GSTADDRESS = string.Empty;
+            GSTCompanyName = beforeApiExecute.RequestXml.BookTicketRequest.GSTCompanyName;
+            GSTCompanyEmail = beforeApiExecute.RequestXml.BookTicketRequest.GSTEmailID;
+            GSTNO = beforeApiExecute.RequestXml.BookTicketRequest.GSTNo;
+            GSTMOBILE_NO = beforeApiExecute.RequestXml.BookTicketRequest.GSTMobileNo;
+            GSTADDRESS = beforeApiExecute.RequestXml.BookTicketRequest.GSTAddress;
+            int cntDept = 0;
+            int cntretn = 0;
+            string SeqNoDept = "";
+            string SeqNoRtn = "";
+            DateTime R_DeptDate = new DateTime();
+            DateTime R_RetnDate = new DateTime();
+
+            if (TripMode == "R")
+            {
+                var SegInfodept = sengList.Where(x => x.TrackNo.Contains("O")).ToList();
+                var SegInforeturn = sengList.Where(x => x.TrackNo.Contains("R")).ToList();
+                Dept_FlightNo = SegInfodept[0].FlightNo;
+                Dept_airlineCode = SegInfodept[0].AirlineCode;
+                //retn_FlightNo = SegInforeturn[0].FlightNo;
+                //retn_airlineCode = SegInforeturn[0].AirlineCode;
+                cntDept = SegInfodept.Count();
+                //cntretn = SegInforeturn.Count();
+                SeqNoDept = SegInfodept[0].SegmentSeqNo;
+                //SeqNoRtn = SegInforeturn[0].SegmentSeqNo;
+                //R_DeptDate = Convert.ToDateTime(SegInfodept[0].DepDate);
+                R_DeptDate = DateTime.ParseExact(SegInfodept[0].DepDate, "dd/MM/yyyy", null);
+                //R_RetnDate = Convert.ToDateTime(SegInforeturn[0].DepDate);
+            }
+            var PassngFlight = beforeApiExecute.RequestXml.BookTicketRequest.Passengers;
+            var PassngFlightCount = beforeApiExecute.RequestXml.BookTicketRequest.Passengers.Passenger.Count;
+            var FltAmt = beforeApiExecute.RequestXml.BookTicketRequest.TotalAmount;
+            int Flightcount = beforeApiExecute.RequestXml.BookTicketRequest.Segments.Segment.Count;
+            #region variable Declieare     
+            decimal AirAdditionalCharge = 0;
+            decimal GSTAmount = 0;
+            decimal Holding_Amount = 0;
+            decimal UserMarkUp_Value = 0;
+            decimal.TryParse(userMarkup, out UserMarkUp_Value);
+            //string AIRADDITIONALAMOUNT = System.Configuration.ConfigurationManager.AppSettings["AIRADDITIONALAMOUNT"];
+            string AIRADDITIONALAMOUNT = Session["AIRADDITIONALAMOUNT"].ToString();
+            string GSTValue = System.Configuration.ConfigurationManager.AppSettings["GSTVALUE"];
+            string HOLDCHARGES = System.Configuration.ConfigurationManager.AppSettings["HOLDCHARGES"];
+            decimal.TryParse(AIRADDITIONALAMOUNT, out AirAdditionalCharge);
+            decimal.TryParse(GSTValue, out GSTAmount);
+            decimal.TryParse(HOLDCHARGES, out Holding_Amount);
+            string BookingDate = string.Empty;
+            string Ref_no = string.Empty;
+            string PNR = string.Empty;
+            string adult = string.Empty;
+            int AdultVal = 0;
+            int childVal = 0;
+            int InfantVal = 0;
+            string child = string.Empty;
+            string infant = string.Empty;
+            bool IsDomestic = false;
+            string TicketType = string.Empty;
+            string Airlinecode = string.Empty;
+            string FlightNo = string.Empty;
+            string FromAirport = string.Empty;
+            string ToAirport = string.Empty;
+            string DeptDate = string.Empty;
+            string Depttime = string.Empty;
+            string arivDate = string.Empty;
+            string arivtime = string.Empty;
+            string TotalFlightBaseFare = string.Empty;
+            decimal TotalBaseFare = 0;
+            string TotalFlightTax = string.Empty;
+            decimal TotalTaxFare = 0;
+            string TotalFlightPassengerTax = string.Empty;
+            decimal TotalPngsTaxFare = 0;
+            string TotalFlightAdditionalCharges = string.Empty;
+            decimal TotalAdditionalFare = 0;
+            string TotalFlightCuteFee = string.Empty;
+            decimal TotalCuteFare = 0;
+            string TOTAL_FLIGHT_MEAL_FEE = string.Empty;
+            decimal TotalTOTAL_FLIGHT_MEAL_FEEare = 0;
+            string TotalFlightAmount = string.Empty;
+            decimal TotalAmt = 0;
+            string TotalCommissionAMtCharge = string.Empty;
+            decimal TotalCommAmt = 0;
+            string TotalServiceCharge = string.Empty;
+            decimal TotalServiceAmt = 0;
+            string TDSAmount = string.Empty;
+            decimal TotalTDSAmountAmt = 0;
+            string ServiceTax = string.Empty;
+            decimal TotalServiceTaxAmt = 0;
+            string AdultCheckedIn = string.Empty;
+            string MainClass = string.Empty;
+            string BookingClass = string.Empty;
+            string BookingStatus = string.Empty;
+            decimal AdminGST = 0;
+            decimal Publish_Fare = 0;
+            decimal NET_FARE = 0;
+            decimal NET_TOTAL_FARE = 0;
+            decimal RESCHEDULE_FARE = 0;
+            string ResValue = string.Empty;
+            dynamic VerifyFlight = null;
+            using (System.Data.Entity.DbContextTransaction ContextTransaction = _db.Database.BeginTransaction())
+            {
+                try
+                {
+                    AdminGST = ((AirAdditionalCharge * GSTAmount) / 118);
+                    decimal UserMarkupGST = 0;
+                    UserMarkupGST = ((UserMarkUp_Value * GSTAmount) / 118);
+                    TBL_FLIGHT_BOOKING_DETAILS objflightOne = new TBL_FLIGHT_BOOKING_DETAILS()
+                    {
+                        MEM_ID = CurrentMerchant.MEM_ID,
+                        DIST_ID = getmemberinfo.INTRODUCER,
+                        WLP_ID = getmemberinfo.UNDER_WHITE_LEVEL,
+                        CORELATION_ID = COrelationID,
+                        PNR = PNR,
+                        REF_NO = Ref_no,
+                        TRACK_NO = "",
+                        TRIP_MODE = TripMode,
+                        TICKET_NO = Ref_no,
+                        TICKET_TYPE = TripMode,
+                        IS_DOMESTIC = false,
+                        //AIRLINE_CODE = FlightInfo.Segment[0].AirlineCode,
+                        //FLIGHT_NO = FlightInfo.Segment[0].FlightNo,
+                        AIRLINE_CODE = Dept_airlineCode,
+                        FLIGHT_NO = Dept_FlightNo,
+                        //FROM_AIRPORT = deptureSegment.Segment[0].FromAirportCode,
+                        //FROM_AIRPORT = RetdeptFromAir,
+                        //TO_AIRPORT = RetdeptToAir,
+                        FROM_AIRPORT = deptureSegment[0].FromAirportCode,
+                        TO_AIRPORT = deptureSegment[deptcnt - 1].ToAirportCode,
+                        //TO_AIRPORT = deptureSegment.Segment[Flightcount - 1].ToAirportCode,
+                        BOOKING_DATE = DateTime.Now,
+                        DEPT_DATE = DeptDate,
+                        DEPT_TIME = Depttime,
+                        ARRIVE_DATE = arivDate,
+                        ARRIVE_TIME = arivtime,
+                        NO_OF_ADULT = AdultVal,
+                        NO_OF_CHILD = childVal,
+                        NO_OF_INFANT = InfantVal,
+                        TOTAL_FLIGHT_BASE_FARE = 0,
+                        TOTAL_FLIGHT_TAX = 0,
+                        TOTAL_PASSANGER_TAX = 0,
+                        TOTAL_FLIGHT_SERVICE_CHARGES = 0,
+                        TOTAL_FLIGHT_ADDITIONAL_CHARGE = 0,
+                        TOTAL_FLIGHT_CUTE_FEE = 0,
+                        TOTAL_FLIGHT_MEAL_FEE = 0,
+                        TOTAL_AIRPORT_FEE = 0,
+                        TOTAL_FLIGHT_CONVENIENCE_FEE = 0,
+                        TOTAL_FLIGHT_AMT = Convert.ToDecimal(FltAmt),
+                        TOTAL_COMMISSION_AMT = TotalCommAmt,
+                        TOTAL_TDS_AMT = TotalTDSAmountAmt,
+                        TOTAL_SERVICES_TAX = TotalServiceTaxAmt,
+                        TOTAL_BAGGAGE_ALLOWES = AdultCheckedIn,
+                        STATUS = true,
+                        IS_CANCELLATION = false,
+                        FLIGHT_CANCELLATION_ID = "",
+                        IS_HOLD = true,
+                        BOOKING_HOLD_ID = Ref_no,
+                        HOLD_DATE = DateTime.Now,
+                        API_RESPONSE = "",
+                        FLIGHT_BOOKING_DATE = BookingDate,
+                        MAIN_CLASS = FlightInfo.Segment[0].MainClass,
+                        BOOKING_CLASS = FlightInfo.Segment[0].FlightClass,
+                        BOOKING_STATUS = "PENDING",
+                        USER_MARKUP = UserMarkUp_Value,
+                        ADMIN_MARKUP = AirAdditionalCharge,
+                        COMM_SLAP = 0,
+                        ADMIN_GST = AdminGST,
+                        ADMIN_cGST = 0,
+                        ADMIN_sGST = 0,
+                        ADMIN_iGST = 0,
+                        USER_MARKUP_GST = UserMarkupGST,
+                        USER_MARKUP_cGST = 0,
+                        USER_MARKUP_sGST = 0,
+                        USER_MARKUP_iGST = 0,
+                        OP_MODE = "HOLD",
+                        HOLD_CHARGE = 0,
+                        HOLD_CGST = 0,
+                        HOLD_IGST = 0,
+                        HOLD_SGST = 0,
+                        PASSAGER_SEGMENT = SeqNoDept,
+                        API_REQUEST = req,
+                        STOPAGE = (cntDept - 1),
+                        COMPANY_NAME = GSTCompanyName,
+                        COMPANY_EMAIL_ID = GSTCompanyEmail,
+                        COMPANY_GST_NO = GSTNO,
+                        COMPANY_MOBILE = GSTMOBILE_NO,
+                        COMPANY_GST_ADDRESS = GSTADDRESS,
+                    };
+                    _db.TBL_FLIGHT_BOOKING_DETAILS.Add(objflightOne);
+                    //_db.SaveChanges();
+                    foreach (var pnsgitem in PassngFlight.Passenger)
+                    {
+                        //var val_Pnsg_Details = JsonConvert.SerializeObject(pnsgitem.Details);
+                        //string Pngdetails = Convert.ToString(val_Pnsg_Details);
+                        //string PngDOB = Convert.ToString(pnsgitem.BirthDate);
+                        //string PnsgSeq_No = Convert.ToString(pnsgitem.SeqNo);
+                        var val_Pnsg_Details = "";
+                        string Pngdetails = "";
+                        string PngDOB = Convert.ToString(pnsgitem.DateOfBirth);
+                        string PnsgSeq_No = Convert.ToString(pnsgitem.PaxSeqNo);
+                        TBL_FLIGHT_BOOKING_PASSENGER_LIST objpnsg = new TBL_FLIGHT_BOOKING_PASSENGER_LIST()
+                        {
+                            MEM_ID = CurrentMerchant.MEM_ID,
+                            REF_NO = Ref_no,
+                            PNR = PNR,
+                            TITLE = pnsgitem.Title,
+                            FIRST_NAME = pnsgitem.FirstName,
+                            LAST_NAME = pnsgitem.LastName,
+                            PASSENGER_TYPE = pnsgitem.PassengerType,
+                            GENDER = "",
+                            BIRTH_DATE = PngDOB,
+                            DETAILS = Pngdetails,
+                            PASSENGER_RESP = "",
+                            CREATE_DATE = DateTime.Now,
+                            PNSG_SEQ_NO = PnsgSeq_No,
+                            CORELATION_ID = COrelationID,
+                            PASSENGER_STATUS = "PENDING",
+                            CancelReqNo = "",
+                            TRIP_TYPE = "O",
+                            DOJ = R_DeptDate,
+                            FLIGHT_SEGMENT = SeqNoDept,
+                            FROM_AIRPORT = deptureSegment[0].FromAirportCode,
+                            TO_AIRPORT = deptureSegment[deptcnt - 1].ToAirportCode
+                        };
+                        _db.TBL_FLIGHT_BOOKING_PASSENGER_LIST.Add(objpnsg);
+                        //_db.SaveChanges();
+                    }
+                    decimal mmainBlc = 0;
+                    decimal SubMainBlc = 0;
+                    decimal Closing = 0;
+                    decimal mainClosing = 0;
+                    decimal T_Amount = TotalBookAmt + UserMarkUp_Value + AirAdditionalCharge;
+                    //var Member_MainBlc = _db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == CurrentMerchant.MEM_ID);
+                    if (getmemberinfo.BALANCE != null)
+                    {
+                        decimal.TryParse(getmemberinfo.BALANCE.ToString(), out mmainBlc);
+                        //SubMainBlc = mmainBlc - TotalAmt;  //TotalBookAmt
+                        SubMainBlc = mmainBlc - T_Amount;
+                        getmemberinfo.BALANCE = SubMainBlc;
+                    }
+                    else
+                    {
+                        //SubMainBlc = mmainBlc - TotalAmt;
+                        SubMainBlc = mmainBlc - T_Amount;
+                        getmemberinfo.BALANCE = SubMainBlc;
+                    }
+                    getmemberinfo.BALANCE = SubMainBlc;
+                    _db.Entry(getmemberinfo).State = System.Data.Entity.EntityState.Modified;
+                    //_db.SaveChanges();
+                    //var MemberAcntLog = _db.TBL_ACCOUNTS.Where(x => x.MEM_ID == CurrentMerchant.MEM_ID).OrderByDescending(c => c.ACC_NO).FirstOrDefault();
+                    if (MemberAcntLog != null)
+                    {
+                        Closing = MemberAcntLog.CLOSING;
+                        //mainClosing = Closing - TotalAmt;
+                        mainClosing = Closing - T_Amount;
+                    }
+                    else
+                    {
+                        Closing = MemberAcntLog.CLOSING;
+                        //mainClosing = Closing - TotalAmt;
+                        mainClosing = Closing - T_Amount;
+                    }
+                    TBL_ACCOUNTS objCommPer = new TBL_ACCOUNTS()
+                    {
+                        API_ID = 0,
+                        MEM_ID = CurrentMerchant.MEM_ID,
+                        MEMBER_TYPE = "RETAILER",
+                        TRANSACTION_TYPE = "FLIGHT BOOKING",
+                        TRANSACTION_DATE = System.DateTime.Now,
+                        TRANSACTION_TIME = DateTime.Now,
+                        DR_CR = "DR",
+                        //AMOUNT = TotalAmt,
+                        AMOUNT = T_Amount,
+                        NARRATION = "Debit amount for flight booking",
+                        OPENING = Closing,
+                        CLOSING = mainClosing,
+                        REC_NO = 0,
+                        COMM_AMT = 0,
+                        GST = (float)GSTAmount,
+                        TDS = 0,
+                        IPAddress = "",
+                        TDS_PERCENTAGE = 0,
+                        //GST_PERCENTAGE = AdminGST,
+                        GST_PERCENTAGE = 0,
+                        WHITELEVEL_ID = (long)getmemberinfo.UNDER_WHITE_LEVEL,
+                        //SUPER_ID = (long)SUP_MEM_ID,
+                        SUPER_ID = 0,
+                        DISTRIBUTOR_ID = (long)getmemberinfo.INTRODUCER,
+                        SERVICE_ID = 0,
+                        CORELATIONID = COrelationID,
+                        REC_COMM_TYPE = "",
+                        COMM_VALUE = 0,
+                        NET_COMM_AMT = 0,
+                        TDS_DR_COMM_AMT = 0,
+                        CGST_COMM_AMT_INPUT = 0,
+                        CGST_COMM_AMT_OUTPUT = 0,
+                        SGST_COMM_AMT_INPUT = 0,
+                        SGST_COMM_AMT_OUTPUT = 0,
+                        IGST_COMM_AMT_INPUT = 0,
+                        IGST_COMM_AMT_OUTPUT = 0,
+                        TOTAL_GST_COMM_AMT_INPUT = 0,
+                        TOTAL_GST_COMM_AMT_OUTPUT = 0,
+                        TDS_RATE = 0,
+                        CGST_RATE = 0,
+                        SGST_RATE = 0,
+                        IGST_RATE = 0,
+                        TOTAL_GST_RATE = 0,
+                        COMM_SLAB_ID = 0,
+                        STATE_ID = getmemberinfo.STATE_ID,
+                        FLAG1 = 0,
+                        FLAG2 = 0,
+                        FLAG3 = 0,
+                        FLAG4 = 0,
+                        FLAG5 = 0,
+                        FLAG6 = 0,
+                        FLAG7 = 0,
+                        FLAG8 = 0,
+                        FLAG9 = 0,
+                        FLAG10 = 0,
+                        VENDOR_ID = 0
+                    };
+                    _db.TBL_ACCOUNTS.Add(objCommPer);
+                    _db.SaveChanges();
+                    #endregion
+                    #region Booking Api call
+                    //dynamic VerifyFlight = null;
+                    VerifyFlight = MultiLinkAirAPI.BookedFlightTicket(req, COrelationID);
+                    ResValue = Convert.ToString(VerifyFlight);
+                    //var APIStatus = VerifyFlight.BookTicketResponse.Error;
+                    var getStatus = VerifyFlight.BookTicketResponses.BookTicketResponse[0].TicketDetails[0].Status.Value;
+                    //if (getStatus == "On Hold" || getStatus == "Completed")
+                    if (getStatus == "On Hold")
                     {
                         ContextTransaction.Commit();
                     }

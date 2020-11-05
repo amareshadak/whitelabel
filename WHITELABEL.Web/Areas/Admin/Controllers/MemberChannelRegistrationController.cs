@@ -447,7 +447,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                     objsupermem.DUE_CREDIT_BALANCE = 0;
                     objsupermem.CREDIT_BALANCE = 0;
                     objsupermem.IS_TRAN_START = true;
-                    objsupermem.MEM_UNIQUE_ID = objsupermem.UName;
+                    //objsupermem.MEM_UNIQUE_ID = objsupermem.UName;
                     db.TBL_MASTER_MEMBER.Add(objsupermem);
                     await db.SaveChangesAsync();
                     string aadhaarfilename = string.Empty;
@@ -541,7 +541,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
 
                     #region Email Code done by sayan at 10-10-2020
                     string name = objsupermem.MEMBER_NAME;
-                    string Regmsg = "Hi " + objsupermem.MEM_UNIQUE_ID + "(" + objsupermem.MEMBER_NAME + ")" + "\r\n Welcome to BOOM Travels.\r\n.Your User Name:- " + UniqId + ".\n\r Your Password:- " + objsupermem.User_pwd + ".\r\nRegards\r\nBoom Travels";
+                    string Regmsg = "Hi " + objsupermem.MEMBER_NAME + "(" + objsupermem.MEMBER_NAME + ")" + "\r\n Welcome to BOOM Travels.\r\n.Your User Name:- " + UniqId + ".\n\r Your Password:- " + objsupermem.User_pwd + ".\r\nRegards\r\nBoom Travels";
                     EmailHelper emailhelper = new EmailHelper();
                     string msgbody = emailhelper.GetEmailTemplate(name, Regmsg, "UserEmailTemplate.html");
                     emailhelper.SendUserEmail(objsupermem.EMAIL_ID.Trim(), "Welome to BOOM Travels", msgbody);
@@ -703,7 +703,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                     objsupermem.DUE_CREDIT_BALANCE = 0;
                     objsupermem.CREDIT_BALANCE = 0;
                     objsupermem.IS_TRAN_START = true;
-                    objsupermem.MEM_UNIQUE_ID = objsupermem.UName;
+                    //objsupermem.MEM_UNIQUE_ID = objsupermem.UName;
                     db.TBL_MASTER_MEMBER.Add(objsupermem);
                     await db.SaveChangesAsync();
                     string aadhaarfilename = string.Empty;
@@ -797,7 +797,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
 
                     #region Email Code done by Sayan at 10-10-2020
                     string name = objsupermem.MEMBER_NAME;
-                    string Regmsg = "Hi " + objsupermem.MEM_UNIQUE_ID + "(" + objsupermem.MEMBER_NAME + ")" + "\r\n Welcome to BOOM Travels.\r\n.Your User Name:- " + UniqId + ".\n\r Your Password:- " + objsupermem.User_pwd + ".<br /> Regards, <br/>< br />BOOM Travels";
+                    string Regmsg = "Hi " + objsupermem.MEMBER_NAME + "(" + objsupermem.MEMBER_NAME + ")" + "\r\n Welcome to BOOM Travels.\r\n.Your User Name:- " + UniqId + ".\n\r Your Password:- " + objsupermem.User_pwd + ".<br /> Regards, <br/>< br />BOOM Travels";
                     EmailHelper emailhelper = new EmailHelper();
                     string msgbody = emailhelper.GetEmailTemplate(name, Regmsg, "UserEmailTemplate.html");
                     emailhelper.SendUserEmail(objsupermem.EMAIL_ID.Trim(), "Welcome to BOOM Travels", msgbody);

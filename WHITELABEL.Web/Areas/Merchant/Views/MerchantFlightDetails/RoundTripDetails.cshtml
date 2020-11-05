@@ -1090,9 +1090,11 @@
                                                         <div class="alert_msg info_msg fl"><b class="status_info fl">Note: </b><span class="status_cont">Please check all the above information carefully before procced.</span></div>
                                                     </div>
                                                     <div class="col-md-2 col-sm-2 col-xs-12">
-                                                        <button ng-click="holdingFlightRequest(travellerForm.$invalid)"  type="submit" ng-show="flightDetails[0].HoldAllowed == 'Y'" class="button orange btn-block"><div>Hold Ticket</div></button>
+                                                        @*<button ng-click="holdingFlightRequest(travellerForm.$invalid)"  type="submit" ng-show="flightDetails[0].HoldAllowed == 'Y'" class="button orange btn-block"><div>Hold Ticket</div></button>*@
+                                                        <button ng-click="holdingFlightRequest(travellerForm.$invalid)" type="submit" ng-show="flightDetails == 'Y'" class="button orange btn-block"><div>Hold Ticket</div></button>
                                                     </div>
                                                     <div class="col-md-3 col-sm-3 col-xs-12">
+                                                        {{flightDetails[0].HoldAllowed}}
                                                         <button ng-click="bookFlightRequest(travellerForm.$invalid)" type="submit" class="button orange btn-block">Issue Ticket</button>
                                                     </div>
                                                 </div>

@@ -83,6 +83,12 @@
     <Compile Include="Models\TBL_AUTH_AUDIT_LOG.cs" />
     <Compile Include="Models\TBL_BALANCE_TRANSFER_LOGS.cs" />
     <Compile Include="Models\TBL_BANK_MASTER.cs" />
+    <Compile Include="Models\TBL_BOOKING_FILE_PATH.cs" />
+    <Compile Include="Models\TBL_BOOKING_TEMP.cs" />
+    <Compile Include="Models\TBL_BOOKING_TR.cs" />
+    <Compile Include="Models\TBL_CANCELLATION_FILE_PATH.cs" />
+    <Compile Include="Models\TBL_CANCELLATION_TEMP.cs" />
+    <Compile Include="Models\TBL_CANCEL_TR.cs" />
     <Compile Include="Models\TBL_CIRCLE_OPERATOR.cs" />
     <Compile Include="Models\TBL_COMM_SLAB_DMR_PAYMENT.cs" />
     <Compile Include="Models\TBL_COMM_SLAB_MOBILE_RECHARGE.cs" />
