@@ -10,7 +10,15 @@
                 req: val,
             }
         }).then(function (response) {
-            return response.data;
+            const msgval = response.data;
+            if (msgval == '1') {
+                location.reload();
+                const url = "/Login/Index";
+                window.location.href = url;
+                return response.data;
+            }
+            else { return response.data; }
+            //return response.data;
         });
     };
 

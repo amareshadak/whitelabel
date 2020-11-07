@@ -19,6 +19,7 @@ using log4net;
 using static WHITELABEL.Web.Helper.Tek_TravelAPI;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Web.Security;
 
 namespace WHITELABEL.Web.Areas.Merchant.Controllers
 {
@@ -479,37 +480,52 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
         {
             try
             {
-                var db = new DBContext();
-                ////var airportlist = db.TBL_AIRPORT_DETAILS.Where(x => x.CITYNAME.Contains(pretext)).ToList();
-                //var airportlist = db.TBL_AIRPORT_DETAILS.Where(x=> x.CITYCODE.ToLower().StartsWith(req.ToLower()) || x.CITYNAME.ToLower().StartsWith(req.ToLower())).Select(z => new
-                var airportlist = (from x in db.TBL_AIRPORT_DETAILS
-                                   where x.CITYCODE.StartsWith(req) || x.CITYNAME.StartsWith(req)
-                                   orderby x.AIRPORT_TYPE, x.COUNTRYCODE
-                                   select new
-                                   {
-                                       ID = x.ID,
-                                       CITYCODE = x.CITYCODE,
-                                       //CITYNAME = z.CITYNAME + " " + z.CITYCODE,
-                                       CITYNAME = x.CITYNAME + " " + x.CITYCODE + " (" + (x.AIRPORT_TYPE == "domestic" ? "INDIA" : "International") + ")",
-                                       COUNTRYCODE = x.COUNTRYCODE,
-                                       AIRPORT_TYPE = x.AIRPORT_TYPE,
-                                       ISACTIVE = x.ISACTIVE
-                                   }).Take(10).ToList();
-                //var airportlist = db.TBL_AIRPORT_DETAILS.Where(x => x.CITYCODE.ToLower().StartsWith(req.ToLower()) || x.CITYNAME.ToLower().StartsWith(req.ToLower())).Select(z => new
-                //{
-                //    ID = z.ID,
-                //    CITYCODE = z.CITYCODE,
-                //    //CITYNAME = z.CITYNAME + " " + z.CITYCODE,
-                //    CITYNAME = z.CITYNAME + " " + z.CITYCODE +" ("+(z.AIRPORT_TYPE== "domestic"?"INDIA": "International")+")",
-                //    COUNTRYCODE = z.COUNTRYCODE,
-                //    AIRPORT_TYPE = z.AIRPORT_TYPE,
-                //    ISACTIVE = z.ISACTIVE
-                //}).Take(10).OrderBy(x=> x.AIRPORT_TYPE).ThenBy(x=>x.COUNTRYCODE).ToList();
-                return new JsonResult { Data = airportlist, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                if (Session["MerchantUserId"] != null)
+                {
+                    var db = new DBContext();
+                    ////var airportlist = db.TBL_AIRPORT_DETAILS.Where(x => x.CITYNAME.Contains(pretext)).ToList();
+                    //var airportlist = db.TBL_AIRPORT_DETAILS.Where(x=> x.CITYCODE.ToLower().StartsWith(req.ToLower()) || x.CITYNAME.ToLower().StartsWith(req.ToLower())).Select(z => new
+                    var airportlist = (from x in db.TBL_AIRPORT_DETAILS
+                                       where x.CITYCODE.StartsWith(req) || x.CITYNAME.StartsWith(req)
+                                       orderby x.AIRPORT_TYPE, x.COUNTRYCODE
+                                       select new
+                                       {
+                                           ID = x.ID,
+                                           CITYCODE = x.CITYCODE,
+                                           //CITYNAME = z.CITYNAME + " " + z.CITYCODE,
+                                           CITYNAME = x.CITYNAME + " " + x.CITYCODE + " (" + (x.AIRPORT_TYPE == "domestic" ? "INDIA" : "International") + ")",
+                                           COUNTRYCODE = x.COUNTRYCODE,
+                                           AIRPORT_TYPE = x.AIRPORT_TYPE,
+                                           ISACTIVE = x.ISACTIVE
+                                       }).Take(10).ToList();
+                    //var airportlist = db.TBL_AIRPORT_DETAILS.Where(x => x.CITYCODE.ToLower().StartsWith(req.ToLower()) || x.CITYNAME.ToLower().StartsWith(req.ToLower())).Select(z => new
+                    //{
+                    //    ID = z.ID,
+                    //    CITYCODE = z.CITYCODE,
+                    //    //CITYNAME = z.CITYNAME + " " + z.CITYCODE,
+                    //    CITYNAME = z.CITYNAME + " " + z.CITYCODE +" ("+(z.AIRPORT_TYPE== "domestic"?"INDIA": "International")+")",
+                    //    COUNTRYCODE = z.COUNTRYCODE,
+                    //    AIRPORT_TYPE = z.AIRPORT_TYPE,
+                    //    ISACTIVE = z.ISACTIVE
+                    //}).Take(10).OrderBy(x=> x.AIRPORT_TYPE).ThenBy(x=>x.COUNTRYCODE).ToList();
+                    return new JsonResult { Data = airportlist, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                }
+                else
+                {
+                    FormsAuthentication.SignOut();
+                    Session["MerchantUserId"] = null;
+                    Session["MerchantUserName"] = null;
+                    Session.Clear();
+                    Session.Remove("MerchantUserId");
+                    Session.Remove("MerchantUserName");
+                    //RedirectToAction("Index", "Login", new { area = "" });
+                    return new JsonResult { Data = "1", JsonRequestBehavior = JsonRequestBehavior.AllowGet };                    
+                }
             }
             catch (Exception ex)
             {
                 throw ex;
+                
             }
         }
 
