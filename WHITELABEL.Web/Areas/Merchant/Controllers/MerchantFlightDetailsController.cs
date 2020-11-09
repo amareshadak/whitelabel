@@ -614,7 +614,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
         }
         [HttpPost]
         //public JsonResult FlightBookingRequest(string req, string userMarkup,string TotalAmount)
-        public JsonResult FlightBookingRequest(string req, string userMarkup, string FlightAmt, string TripMode, string deptSegment = "", string returnSegment = "")
+        public JsonResult FlightBookingRequest(string req, string userMarkup, string FlightAmt, string TripMode,string NetAmount, string deptSegment = "", string returnSegment = "")
         {
             string COrelationID = Settings.GetUniqueKey(CurrentMerchant.MEM_ID.ToString());
             int Deptstopage = 0;
@@ -743,6 +743,10 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                 decimal RESCHEDULE_FARE = 0;
                 string ResValue = string.Empty;
                 dynamic VerifyFlight = null;
+                decimal TotalNetAmount=0;
+                decimal FlightNetAmount = 0;
+                decimal AgentCommAmt = 0;
+                decimal AgentCommTDS = 0; 
                 using (System.Data.Entity.DbContextTransaction ContextTransaction = _db.Database.BeginTransaction())
                 {
                     try
@@ -751,6 +755,13 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                         AdminGST = ((AirAdditionalCharge * GSTAmount) / 118);
                         decimal UserMarkupGST = 0;
                         UserMarkupGST = ((UserMarkUp_Value * GSTAmount) / 118);
+
+                        decimal.TryParse(NetAmount, out FlightNetAmount);
+                        AgentCommAmt = FlightNetAmount - TotalBookAmt;
+                        AgentCommTDS = ((AgentCommAmt * 5) / 100);
+                        TotalNetAmount = FlightNetAmount+ AgentCommTDS;
+
+
                         if (TripMode == "O")
                         {
                             TBL_FLIGHT_BOOKING_DETAILS objflight = new TBL_FLIGHT_BOOKING_DETAILS()
@@ -825,6 +836,11 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                                 COMPANY_GST_NO = GSTNO,
                                 COMPANY_MOBILE = GSTMOBILE_NO,
                                 COMPANY_GST_ADDRESS = GSTADDRESS,
+                                NET_COMM_FARE= TotalNetAmount,
+                                FARE_COMMISSION= AgentCommAmt,
+                                FARE_COMMISSION_TDS= AgentCommTDS,
+                                TCS_AMOUNTON_INT_FLIGHT=0,
+                                INT_FLIGHT_PANCARD=""
                             };
                             _db.TBL_FLIGHT_BOOKING_DETAILS.Add(objflight);
                             //_db.SaveChanges();
@@ -945,6 +961,11 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                                 COMPANY_GST_NO = GSTNO,
                                 COMPANY_MOBILE = GSTMOBILE_NO,
                                 COMPANY_GST_ADDRESS = GSTADDRESS,
+                                NET_COMM_FARE = TotalNetAmount,
+                                FARE_COMMISSION = AgentCommAmt,
+                                FARE_COMMISSION_TDS = AgentCommTDS,
+                                TCS_AMOUNTON_INT_FLIGHT = 0,
+                                INT_FLIGHT_PANCARD = ""
                             };
                             _db.TBL_FLIGHT_BOOKING_DETAILS.Add(objflightOne);
                             TBL_FLIGHT_BOOKING_DETAILS objflightreturn = new TBL_FLIGHT_BOOKING_DETAILS()
@@ -1025,6 +1046,11 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                                 COMPANY_GST_NO = GSTNO,
                                 COMPANY_MOBILE = GSTMOBILE_NO,
                                 COMPANY_GST_ADDRESS = GSTADDRESS,
+                                NET_COMM_FARE = TotalNetAmount,
+                                FARE_COMMISSION = AgentCommAmt,
+                                FARE_COMMISSION_TDS = AgentCommTDS,
+                                TCS_AMOUNTON_INT_FLIGHT = 0,
+                                INT_FLIGHT_PANCARD = ""
                             };
                             _db.TBL_FLIGHT_BOOKING_DETAILS.Add(objflightreturn);
                             //_db.SaveChanges();
@@ -2306,7 +2332,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
 
         #region Flight holding Request
         [HttpPost]
-        public JsonResult FlightHoldingRequest(string req, string userMarkup, string FlightAmt, string TripMode, string deptSegment = "", string returnSegment = "")
+        public JsonResult FlightHoldingRequest(string req, string userMarkup, string FlightAmt, string TripMode, string NetAmount, string deptSegment = "", string returnSegment = "")
         {
             string COrelationID = Settings.GetUniqueKey(CurrentMerchant.MEM_ID.ToString());
 
@@ -2423,6 +2449,13 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
             decimal AdminGST = 0;
             dynamic VerifyFlight = null;
             string ResValue = string.Empty;
+
+            decimal TotalNetAmount = 0;
+            decimal FlightNetAmount = 0;
+            decimal AgentCommAmt = 0;
+            decimal AgentCommTDS = 0;
+
+
             List<ReturnFlightSegments> deptureSegment = JsonConvert.DeserializeObject<List<ReturnFlightSegments>>(deptSegment);
             List<ReturnFlightSegments> retSegment = JsonConvert.DeserializeObject<List<ReturnFlightSegments>>(returnSegment);
             if (deptureSegment != null)
@@ -2443,6 +2476,12 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                         AdminGST = ((Holding_Amount * GSTAmount) / 118);
                         decimal UserMarkupGST = 0;
                         UserMarkupGST = ((Holding_Amount * GSTAmount) / 118);
+
+                        decimal.TryParse(NetAmount, out FlightNetAmount);
+                        AgentCommAmt = FlightNetAmount - TotalBookAmt;
+                        AgentCommTDS = ((AgentCommAmt * 5) / 100);
+                        TotalNetAmount = FlightNetAmount + AgentCommTDS;
+
                         if (TripMode == "O")
                         {
                             TBL_FLIGHT_BOOKING_DETAILS objflight = new TBL_FLIGHT_BOOKING_DETAILS()
@@ -2519,6 +2558,11 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                                 COMPANY_GST_NO = GSTNO,
                                 COMPANY_MOBILE = GSTMOBILE_NO,
                                 COMPANY_GST_ADDRESS = GSTADDRESS,
+                                NET_COMM_FARE = TotalNetAmount,
+                                FARE_COMMISSION = AgentCommAmt,
+                                FARE_COMMISSION_TDS = AgentCommTDS,
+                                TCS_AMOUNTON_INT_FLIGHT = 0,
+                                INT_FLIGHT_PANCARD = ""
                             };
                             _db.TBL_FLIGHT_BOOKING_DETAILS.Add(objflight);
                             //_db.SaveChanges();
@@ -2641,6 +2685,11 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                                 COMPANY_GST_NO = GSTNO,
                                 COMPANY_MOBILE = GSTMOBILE_NO,
                                 COMPANY_GST_ADDRESS = GSTADDRESS,
+                                NET_COMM_FARE = TotalNetAmount,
+                                FARE_COMMISSION = AgentCommAmt,
+                                FARE_COMMISSION_TDS = AgentCommTDS,
+                                TCS_AMOUNTON_INT_FLIGHT = 0,
+                                INT_FLIGHT_PANCARD = ""
                             };
                             _db.TBL_FLIGHT_BOOKING_DETAILS.Add(objflightOne);
                             TBL_FLIGHT_BOOKING_DETAILS objflightreturn = new TBL_FLIGHT_BOOKING_DETAILS()
@@ -2723,6 +2772,11 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                                 COMPANY_GST_NO = GSTNO,
                                 COMPANY_MOBILE = GSTMOBILE_NO,
                                 COMPANY_GST_ADDRESS = GSTADDRESS,
+                                NET_COMM_FARE = TotalNetAmount,
+                                FARE_COMMISSION = AgentCommAmt,
+                                FARE_COMMISSION_TDS = AgentCommTDS,
+                                TCS_AMOUNTON_INT_FLIGHT = 0,
+                                INT_FLIGHT_PANCARD = ""
                             };
                             _db.TBL_FLIGHT_BOOKING_DETAILS.Add(objflightreturn);
                            // _db.SaveChanges();
@@ -3755,7 +3809,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
 
         #region ReturnBookingprocess
         [HttpPost]
-        public JsonResult FlightReturnBookingRequest(string Deptreq, string Retntreq, string userMarkup, string FlightAmt, string ReturnFlightAmt, string TripMode, string deptSegment = "", string returnSegment = "")
+        public JsonResult FlightReturnBookingRequest(string Deptreq, string Retntreq, string userMarkup, string FlightAmt, string ReturnFlightAmt, string TripMode,string DEPTNetAmt,string RetnNetAmt, string deptSegment = "", string returnSegment = "")
         {
             string COrelationID = Settings.GetUniqueKey(CurrentMerchant.MEM_ID.ToString());
             int Deptstopage = 0;
@@ -3773,9 +3827,10 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
             var getmemberinfo = _db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == CurrentMerchant.MEM_ID);
             if (getmemberinfo.BALANCE > TotalBookAmt)
             {
-                string ReturnDepature = ReturnOnewayBooking(Deptreq, userMarkup, FlightAmt, ReturnFlightAmt, TripMode, deptSegment, returnSegment);
-                
-                string Returnway = ReturnOnewayBooking(Retntreq, userMarkup, FlightAmt, ReturnFlightAmt, TripMode, deptSegment, returnSegment);
+                string ReturnDepature = ReturnOnewayBooking(Deptreq, userMarkup, FlightAmt, ReturnFlightAmt, TripMode, DEPTNetAmt, deptSegment, returnSegment);
+
+                //string Returnway = ReturnOnewayBooking(Retntreq, userMarkup, FlightAmt, ReturnFlightAmt, TripMode, RetnNetAmt, deptSegment, returnSegment);
+                string Returnway = ReturnOnewayBooking(Retntreq, userMarkup, ReturnFlightAmt, ReturnFlightAmt, TripMode, RetnNetAmt, deptSegment, returnSegment);
                 if (ReturnDepature == "Return Booking is Success")
                 { ReturnDeptResponse = "Round Trip Depature Booking is done"; }
                 else
@@ -3794,7 +3849,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
 
         }
         [HttpPost]
-        public JsonResult FlightReturnHoldBookingRequest(string Deptreq, string Retntreq, string userMarkup, string FlightAmt, string ReturnFlightAmt, string TripMode, string deptSegment = "", string returnSegment = "")
+        public JsonResult FlightReturnHoldBookingRequest(string Deptreq, string Retntreq, string userMarkup, string FlightAmt, string ReturnFlightAmt, string TripMode, string DEPTNetAmt, string RetnNetAmt, string deptSegment = "", string returnSegment = "")
         {
             string COrelationID = Settings.GetUniqueKey(CurrentMerchant.MEM_ID.ToString());
             int Deptstopage = 0;
@@ -3812,9 +3867,9 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
             var getmemberinfo = _db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == CurrentMerchant.MEM_ID);
             if (getmemberinfo.BALANCE > TotalBookAmt)
             {
-                string ReturnDepature = ReturnHoldBooking(Deptreq, userMarkup, FlightAmt, ReturnFlightAmt, TripMode, deptSegment, returnSegment);
-
-                string Returnway = ReturnHoldBooking(Retntreq, userMarkup, FlightAmt, ReturnFlightAmt, TripMode, deptSegment, returnSegment);
+                string ReturnDepature = ReturnHoldBooking(Deptreq, userMarkup, FlightAmt, ReturnFlightAmt, TripMode, DEPTNetAmt, deptSegment, returnSegment);
+                string Returnway = ReturnHoldBooking(Retntreq, userMarkup, ReturnFlightAmt, ReturnFlightAmt, TripMode, RetnNetAmt, deptSegment, returnSegment);
+                //string Returnway = ReturnHoldBooking(Retntreq, userMarkup, FlightAmt, ReturnFlightAmt, TripMode, RetnNetAmt, deptSegment, returnSegment);
                 if (ReturnDepature == "Return Booking is Success")
                 { ReturnDeptResponse = "Round Trip Depature Booking is done"; }
                 else
@@ -3835,7 +3890,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
         #endregion
 
         #region Return Depeture from
-        public string ReturnOnewayBooking(string req,  string userMarkup, string FlightAmt, string ReturnFlightAmt, string TripMode, string deptSegment = "", string returnSegment = "")
+        public string ReturnOnewayBooking(string req,  string userMarkup, string FlightAmt, string ReturnFlightAmt, string TripMode, string NetAmount,string deptSegment = "", string returnSegment = "")
         {
             string COrelationID = Settings.GetUniqueKey(CurrentMerchant.MEM_ID.ToString());
             int Deptstopage = 0;
@@ -3963,6 +4018,10 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
             decimal RESCHEDULE_FARE = 0;
             string ResValue = string.Empty;
             dynamic VerifyFlight = null;
+            decimal TotalNetAmount = 0;
+            decimal FlightNetAmount = 0;
+            decimal AgentCommAmt = 0;
+            decimal AgentCommTDS = 0;
             using (System.Data.Entity.DbContextTransaction ContextTransaction = _db.Database.BeginTransaction())
             {
                 try
@@ -3970,6 +4029,11 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                     AdminGST = ((AirAdditionalCharge * GSTAmount) / 118);
                     decimal UserMarkupGST = 0;
                     UserMarkupGST = ((UserMarkUp_Value * GSTAmount) / 118);
+
+                    decimal.TryParse(NetAmount, out FlightNetAmount);
+                    AgentCommAmt = FlightNetAmount - TotalBookAmt;
+                    AgentCommTDS = ((AgentCommAmt * 5) / 100);
+                    TotalNetAmount = FlightNetAmount + AgentCommTDS;
                     TBL_FLIGHT_BOOKING_DETAILS objflightOne = new TBL_FLIGHT_BOOKING_DETAILS()
                     {
                         MEM_ID = CurrentMerchant.MEM_ID,
@@ -4048,6 +4112,11 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                         COMPANY_GST_NO = GSTNO,
                         COMPANY_MOBILE = GSTMOBILE_NO,
                         COMPANY_GST_ADDRESS = GSTADDRESS,
+                        NET_COMM_FARE = TotalNetAmount,
+                        FARE_COMMISSION = AgentCommAmt,
+                        FARE_COMMISSION_TDS = AgentCommTDS,
+                        TCS_AMOUNTON_INT_FLIGHT = 0,
+                        INT_FLIGHT_PANCARD = ""
                     };
                     _db.TBL_FLIGHT_BOOKING_DETAILS.Add(objflightOne);
                     //_db.SaveChanges();
@@ -4292,7 +4361,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                             flightTicketInfo.REF_NO = Ref_no;
                             flightTicketInfo.TRACK_NO = "";
                             flightTicketInfo.TRIP_MODE = "1";
-                            flightTicketInfo.TICKET_TYPE = TicketType;
+                            //flightTicketInfo.TICKET_TYPE = TicketType;
                             flightTicketInfo.TICKET_NO = Ref_no;
                             flightTicketInfo.IS_DOMESTIC = IsDomestic;
                             flightTicketInfo.AIRLINE_CODE = Airlinecode;
@@ -4381,7 +4450,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                 }
             }
         }
-        public string ReturnHoldBooking(string req, string userMarkup, string FlightAmt, string ReturnFlightAmt, string TripMode, string deptSegment = "", string returnSegment = "")
+        public string ReturnHoldBooking(string req, string userMarkup, string FlightAmt, string ReturnFlightAmt, string TripMode, string NetAmount, string deptSegment = "", string returnSegment = "")
         {
             string COrelationID = Settings.GetUniqueKey(CurrentMerchant.MEM_ID.ToString());
             int Deptstopage = 0;
@@ -4509,6 +4578,10 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
             decimal RESCHEDULE_FARE = 0;
             string ResValue = string.Empty;
             dynamic VerifyFlight = null;
+            decimal TotalNetAmount = 0;
+            decimal FlightNetAmount = 0;
+            decimal AgentCommAmt = 0;
+            decimal AgentCommTDS = 0;
             using (System.Data.Entity.DbContextTransaction ContextTransaction = _db.Database.BeginTransaction())
             {
                 try
@@ -4516,6 +4589,12 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                     AdminGST = ((AirAdditionalCharge * GSTAmount) / 118);
                     decimal UserMarkupGST = 0;
                     UserMarkupGST = ((UserMarkUp_Value * GSTAmount) / 118);
+                    decimal.TryParse(NetAmount, out FlightNetAmount);
+                    AgentCommAmt = FlightNetAmount - TotalBookAmt;
+                    AgentCommTDS = ((AgentCommAmt * 5) / 100);
+                    TotalNetAmount = FlightNetAmount + AgentCommTDS;
+
+
                     TBL_FLIGHT_BOOKING_DETAILS objflightOne = new TBL_FLIGHT_BOOKING_DETAILS()
                     {
                         MEM_ID = CurrentMerchant.MEM_ID,
@@ -4596,6 +4675,11 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                         COMPANY_GST_NO = GSTNO,
                         COMPANY_MOBILE = GSTMOBILE_NO,
                         COMPANY_GST_ADDRESS = GSTADDRESS,
+                        NET_COMM_FARE = TotalNetAmount,
+                        FARE_COMMISSION = AgentCommAmt,
+                        FARE_COMMISSION_TDS = AgentCommTDS,
+                        TCS_AMOUNTON_INT_FLIGHT = 0,
+                        INT_FLIGHT_PANCARD = ""
                     };
                     _db.TBL_FLIGHT_BOOKING_DETAILS.Add(objflightOne);
                     //_db.SaveChanges();
@@ -4841,7 +4925,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                             flightTicketInfo.REF_NO = Ref_no;
                             flightTicketInfo.TRACK_NO = "";
                             flightTicketInfo.TRIP_MODE = "1";
-                            flightTicketInfo.TICKET_TYPE = TicketType;
+                           // flightTicketInfo.TICKET_TYPE = TicketType;
                             flightTicketInfo.TICKET_NO = Ref_no;
                             flightTicketInfo.IS_DOMESTIC = IsDomestic;
                             flightTicketInfo.AIRLINE_CODE = Airlinecode;

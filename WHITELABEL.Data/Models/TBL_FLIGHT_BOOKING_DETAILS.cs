@@ -92,6 +92,11 @@
         public string CANCELLATION_REMARK { get; set; }
         public bool? RESCHEDULE_FARE { get; set; }
         public string RESCHEDULE_REMARK { get; set; }
+        public decimal? NET_COMM_FARE { get; set; }
+        public decimal? FARE_COMMISSION { get; set; }
+        public decimal? FARE_COMMISSION_TDS { get; set; }
+        public decimal? TCS_AMOUNTON_INT_FLIGHT { get; set; }
+        public string INT_FLIGHT_PANCARD { get; set; }
         [NotMapped]
         public string FROM_DATE { get; set; }
         [NotMapped]

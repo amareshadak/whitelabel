@@ -1035,7 +1035,11 @@
                                             </tr>
                                             <tr>
                                                 <td><b> Total Amount</b></td>
-                                                <td class="text-right">{{totalAmountCalculation(fareDetails[0].TotalAmount)}}/-</td>
+                                                <td class="text-right">{{totalAmountCalculation(fareDetails[0].TotalAmount)}}/-
+                                                    <span style="display:none;">{{NETAmount}}{{TotalPublishFare}}</span>
+                                                
+                                                </td>
+                                                
                                             </tr>
                                         </table>
                                        
@@ -1050,6 +1054,7 @@
                                                     <span class="fr ico20 ">
                                                         <i class="icon-pee icoru15"></i>
                                                         <span>{{totalAmountCalculation(fareDetails[0].TotalAmount)}}</span>
+                                                        
                                                     </span>
                                                 </span>
                                             </span>

@@ -237,6 +237,9 @@
             $scope.setTotalFare();
            
             $scope.TotalAmount = parseFloat($scope.deptureFareDetails.TotalAmount) + parseFloat($scope.returnFareDetails.TotalAmount);
+            $scope.DeptNETAmount = parseFloat($scope.deptureFareDetails.NetAmount);
+            $scope.ReturnNETAmount = parseFloat($scope.returnFareDetails.NetAmount);
+            $scope.TotalPublishFare = parseFloat($scope.deptureFareDetails.TotalAmount) + parseFloat($scope.returnFareDetails.TotalAmount);;
             //// $scope.flightDetails = flightDetails;
             //// $scope.fareDetails = fareDetails;
             //$scope.detailsLoadingError = verifyFlightDetailResponse.Error;
@@ -383,10 +386,13 @@
     }
 
     $scope.bookFlightRequest = function (isFormInvalid) {
-     //   debugger;
+        debugger;
         if (isFormInvalid) {
             return false;
         }
+        const DeptNetAmt = $scope.DeptNETAmount;
+        const ReturnNetAmt = $scope.ReturnNETAmount;
+
         let OutSegmentValue = $scope.inBoundSegment;
         let inSegmentValue = $scope.outBoundSegment;
         let DeptFareVal = $scope.deptureFareDetails;
@@ -426,7 +432,7 @@
         //$scope.bookingRequestObj.RequestXml.BookTicketRequest.TotalAmount = $scope.TotalAmount;
 
 
-        const req = { Deptreq: JSON.stringify(outBoundObj), Retntreq: JSON.stringify(InBoundObj), userMarkup: $scope.userMarkup, FlightAmt: DeptTotalFareAmt, ReturnFlightAmt: ReturnTotalFareAmt, TripMode: 'R', deptSegment: JSON.stringify($scope.deptureFlight), returnSegment: JSON.stringify($scope.returnFlight) };
+        const req = { Deptreq: JSON.stringify(outBoundObj), Retntreq: JSON.stringify(InBoundObj), userMarkup: $scope.userMarkup, FlightAmt: DeptTotalFareAmt, ReturnFlightAmt: ReturnTotalFareAmt, TripMode: 'R', DEPTNetAmt: DeptNetAmt, RetnNetAmt: ReturnNetAmt, deptSegment: JSON.stringify($scope.deptureFlight), returnSegment: JSON.stringify($scope.returnFlight) };
         const service = FlightServices.getFlightReturnBookeServices(req);
 
         service.then(function (response) {
@@ -499,6 +505,10 @@
         if (isFormInvalid) {
             return false;
         }
+        const DeptNetAmt = $scope.DeptNETAmount;
+        const ReturnNetAmt = $scope.ReturnNETAmount;
+
+
         let OutSegmentValue = $scope.inBoundSegment;
         let inSegmentValue = $scope.outBoundSegment;
         let DeptFareVal = $scope.deptureFareDetails;
@@ -547,7 +557,7 @@
         //$scope.bookingRequestObj.RequestXml.BookTicketRequest.TotalAmount = $scope.TotalAmount;
 
 
-        const req = { Deptreq: JSON.stringify(outBoundObj), Retntreq: JSON.stringify(InBoundObj), userMarkup: $scope.userMarkup, FlightAmt: DeptTotalFareAmt, ReturnFlightAmt: ReturnTotalFareAmt, TripMode: 'R', deptSegment: JSON.stringify($scope.deptureFlight), returnSegment: JSON.stringify($scope.returnFlight) };
+        const req = { Deptreq: JSON.stringify(outBoundObj), Retntreq: JSON.stringify(InBoundObj), userMarkup: $scope.userMarkup, FlightAmt: DeptTotalFareAmt, ReturnFlightAmt: ReturnTotalFareAmt, TripMode: 'R', DEPTNetAmt: DeptNetAmt, RetnNetAmt: ReturnNetAmt, deptSegment: JSON.stringify($scope.deptureFlight), returnSegment: JSON.stringify($scope.returnFlight) };
         const service = FlightServices.getFlightReturnHoldBookServices(req);
 
         service.then(function (response) {
