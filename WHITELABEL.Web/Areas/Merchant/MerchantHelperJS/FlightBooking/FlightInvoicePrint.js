@@ -1,6 +1,8 @@
 ﻿app.controller('FlightBookingInvoicePrintController', ['FlightServices', '$scope', '$http', '$window', '$timeout', function (FlightServices, $scope, $http, $window, $timeout) {
     $scope.fromDate = null;
     $scope.toDate = null;
+    $scope.BookedStatus = "Acknowledged";
+    $scope.CurrentDate = new Date();
     $scope.viewby = 10;
     $scope.totalItems = null;
     $scope.currentPage = 4;
@@ -9,9 +11,9 @@
     $scope.GetTicketList = null;
     $scope.GetBookedFlightInvoice = function () {        
         let  data = {};
-        if ($scope.fromDate && $scope.toDate ) {
-            data = { fromDate: $scope.fromDate, toDate: $scope.toDate };
-        }
+        if ($scope.fromDate && $scope.toDate && $scope.BookedStatus) {
+            data = { fromDate: $scope.fromDate, toDate: $scope.toDate, BookedStatus: $scope.BookedStatus };
+        }        
         const service = FlightServices.getFlightBookingInvoice(data);
         service.then(function (response) {            
             const data = response.data;
@@ -217,6 +219,22 @@
         //    console.log(data);
         //});
     };
+    $scope.GetTicketInfo = function (SLN) {
+        debugger;
+        const TableID = SLN;
+        
+        const data = { BookingId: TableID };
+        const service = FlightServices.GetFligfhtBookingDetails(data);
+        service.then(function (response) {
+            debugger;
+            const FlightInformation = response.data.FlightDetails;
+            const PassangerList = response.data.PassangerList;           
+            $scope.BookedFlightInformation = FlightInformation;
+            $scope.BookedPassangerList = PassangerList;
+           
+        });
+        
+    };
 
     $scope.ResheduleSubmit = function (BookingId, rechedulereason, BookedReferenceNumber, BookedcorelationNumber) {
         debugger;
@@ -267,6 +285,53 @@
         $scope.itemsPerPage = num;
         $scope.currentPage = 1; //reset to first page
     }
+
+    $scope.calculateDateTime = function (DeptDate, DeptTime) {
+        debugger;
+        var checkStatus = "";
+
+        const CompDate = DeptDate;
+        const CompTime = DeptTime;
+        const CompDateArray = CompDate.split('/');
+        const CompTimeArray = CompTime.split(':');
+        const CompDate_Value = new Date(CompDateArray[2], CompDateArray[1], CompDateArray[0]);
+        const CompDateTime = new Date(CompDateArray[2], CompDateArray[1], CompDateArray[0], CompTimeArray[0], CompTimeArray[1]);
+        $scope.DeptDatetime = CompDateTime;
+        const Currentdate = new Date();
+        const m = Currentdate.getMonth() + 1;
+        const d = Currentdate.getDate();
+        const y = Currentdate.getFullYear();
+        const todaydate = new Date(y, m, d);
+        const DeptHr = CompTimeArray[0];
+        const SubHr = DeptHr - 2;
+        const CurrentHr = Currentdate.getHours();
+        const CurrentMin = Currentdate.getMinutes();
+        const CurrDate = new Date(y, m, d, CurrentHr, CurrentMin);
+        if (CompDateTime>= CurrDate )
+        { checkStatus = "0"; }
+        else { checkStatus = "1"; }
+        const totalMinute = diff_minutes(todaydate, CompDateTime);
+        const totalMinuteVAl = diff_minutes(CompDateTime, todaydate);
+        //if (CompDate_Value >= todaydate)
+        //{
+        //    //if (CurrentHr < DeptHr) {
+        //        checkStatus = "0";
+        //    //}
+        //    //else { checkStatus = "1"; }            
+        //}
+        //else { checkStatus = "1"; }
+        return checkStatus;
+        
+    }
+    function diff_minutes(dt2, dt1) {
+
+        //var diff = (dt2.getTime() - dt1.getTime()) / 1000;
+        var diff = (dt2 - dt1) / 1000;
+        diff /= (3600);
+        return diff;
+
+    }
+   
 
 
 }])

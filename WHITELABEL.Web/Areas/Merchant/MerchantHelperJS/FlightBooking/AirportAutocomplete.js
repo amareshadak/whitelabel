@@ -21,8 +21,7 @@ app.controller('AirportAutocompleteController', function ($scope, $http, $window
     //    });
     //};
 
-    $scope.InterchangeLocation = function (Dept, Return) {
-        
+    $scope.InterchangeLocation = function (Dept, Return) {        
         const DeptureVal = Dept;
         const ReturnVal = Return;
         $scope.fromAirportDetails = Return;

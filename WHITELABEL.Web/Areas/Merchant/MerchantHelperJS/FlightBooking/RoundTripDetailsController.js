@@ -11,6 +11,7 @@
     $scope.additionaServices = [];
     $scope.TotalAmount = 0;
     $scope.userMarkup = 0;
+    $scope.INTPanCard = '';
 
     $scope.ReturnTripDeptFrom = '';
     $scope.ReturnTripDeptTo = '';
@@ -203,7 +204,7 @@
         const track = trackNo.split(',');
         const outBound = track[0];
         const inBound = track[1];
-
+        
 
 
 
@@ -211,11 +212,12 @@
         const data = { outBoundTrackNo: outBound, inBoundTrackNo: inBound, TripMode: tripMode, OriginCode: OriginCode, DestinationCode: DestinationCode };
         const service = FlightServices.getRoundTripFlightVerificationDetails(data);
         service.then(function (response) {
-            
+            debugger;
             const data = response.data;
             const outBoundFlight = JSON.parse(data.outBoundData).VerifyFlightDetailResponse.FlightDetails;
             const inBoundFlight = JSON.parse(data.inBoundData).VerifyFlightDetailResponse.FlightDetails;
             const ADDITIONALAMT = data.AdditionalAmount;
+            const IsFlightType = data.ISFlightType;
 
             console.log(outBoundFlight);
             console.log(inBoundFlight);
@@ -223,7 +225,7 @@
             $scope.deptureFlight = outBoundFlight;// flightDetails.filter(x => x.SrNo.charAt(x.SrNo.length - 1) === 'O');
             $scope.returnFlight = inBoundFlight;// flightDetails.filter(x => x.SrNo.charAt(x.SrNo.length - 1) === 'R');
 
-            debugger;
+            
             
             if ($scope.returnFlight[0].HoldAllowed == 'Y' && $scope.deptureFlight[0].HoldAllowed == 'Y') {
                 $scope.flightDetails = 'Y';
@@ -252,6 +254,7 @@
             // $scope.loadAdditionalServices();
             $scope.loadSegment();
             $scope.additionalAddedAmount = ADDITIONALAMT;
+            $scope.IsFlightType = IsFlightType;
         });
     }
 
@@ -392,6 +395,8 @@
         }
         const DeptNetAmt = $scope.DeptNETAmount;
         const ReturnNetAmt = $scope.ReturnNETAmount;
+        const IsFlightType = $scope.IsFlightType;
+        const INTPancard = $scope.INTPanCard;
 
         let OutSegmentValue = $scope.inBoundSegment;
         let inSegmentValue = $scope.outBoundSegment;
@@ -432,7 +437,7 @@
         //$scope.bookingRequestObj.RequestXml.BookTicketRequest.TotalAmount = $scope.TotalAmount;
 
 
-        const req = { Deptreq: JSON.stringify(outBoundObj), Retntreq: JSON.stringify(InBoundObj), userMarkup: $scope.userMarkup, FlightAmt: DeptTotalFareAmt, ReturnFlightAmt: ReturnTotalFareAmt, TripMode: 'R', DEPTNetAmt: DeptNetAmt, RetnNetAmt: ReturnNetAmt, deptSegment: JSON.stringify($scope.deptureFlight), returnSegment: JSON.stringify($scope.returnFlight) };
+        const req = { Deptreq: JSON.stringify(outBoundObj), Retntreq: JSON.stringify(InBoundObj), userMarkup: $scope.userMarkup, FlightAmt: DeptTotalFareAmt, ReturnFlightAmt: ReturnTotalFareAmt, TripMode: 'R', DEPTNetAmt: DeptNetAmt, RetnNetAmt: ReturnNetAmt, ISFlightType: IsFlightType, INTPancard: INTPancard, deptSegment: JSON.stringify($scope.deptureFlight), returnSegment: JSON.stringify($scope.returnFlight) };
         const service = FlightServices.getFlightReturnBookeServices(req);
 
         service.then(function (response) {
@@ -501,13 +506,14 @@
     };
 
     $scope.holdingFlightRequest = function (isFormInvalid) {
-        //   debugger;
+           debugger;
         if (isFormInvalid) {
             return false;
         }
         const DeptNetAmt = $scope.DeptNETAmount;
         const ReturnNetAmt = $scope.ReturnNETAmount;
-
+        const IsFlightType = $scope.IsFlightType;
+        const INTPancard = $scope.INTPanCard;
 
         let OutSegmentValue = $scope.inBoundSegment;
         let inSegmentValue = $scope.outBoundSegment;
@@ -523,9 +529,10 @@
         outBoundObj.RequestXml.BookTicketRequest.Segments.Segment = OutSegmentValue;
         outBoundObj.RequestXml.BookTicketRequest.AdditionalServices.AdditionalService = $scope.additionaServices.filter(function (x) { return x.IsSelected; });
         outBoundObj.RequestXml.BookTicketRequest.TotalAmount = DeptFareVal.TotalAmount;
-        if ($scope.flightDetails[0].HoldAllowed == 'Y') {
+        //if ($scope.flightDetails[0].HoldAllowed == 'Y') {
+        if (DeptDeatil[0].HoldAllowed == 'Y') {
             outBoundObj.RequestXml.BookTicketRequest.HoldAllowed = 'Y';
-            outBoundObj.RequestXml.BookTicketRequest.HoldCharge = $scope.flightDetails[0].HoldCharges;
+            outBoundObj.RequestXml.BookTicketRequest.HoldCharge = DeptDeatil[0].HoldCharges;
         }
         const DeptTotalFareAmt = DeptFareVal.TotalAmount;
         let InboundFareDetails = $scope.returnFareDetails;
@@ -540,9 +547,10 @@
         InBoundObj.RequestXml.BookTicketRequest.Segments.Segment = inSegmentValue;
         InBoundObj.RequestXml.BookTicketRequest.AdditionalServices.AdditionalService = $scope.additionaServices.filter(function (x) { return x.IsSelected; });
         InBoundObj.RequestXml.BookTicketRequest.TotalAmount = InboundFareDetails.TotalAmount;
-        if ($scope.flightDetails[0].HoldAllowed == 'Y') {
+        //if ($scope.flightDetails[0].HoldAllowed == 'Y') {
+        if (InboundFlightDeatil[0].HoldAllowed == 'Y') {
             InBoundObj.RequestXml.BookTicketRequest.HoldAllowed = 'Y';
-            InBoundObj.RequestXml.BookTicketRequest.HoldCharge = $scope.flightDetails[0].HoldCharges;
+            InBoundObj.RequestXml.BookTicketRequest.HoldCharge =InboundFlightDeatil[0].HoldCharges;
         }
 
         const ReturnTotalFareAmt = InboundFareDetails.TotalAmount;
@@ -557,7 +565,7 @@
         //$scope.bookingRequestObj.RequestXml.BookTicketRequest.TotalAmount = $scope.TotalAmount;
 
 
-        const req = { Deptreq: JSON.stringify(outBoundObj), Retntreq: JSON.stringify(InBoundObj), userMarkup: $scope.userMarkup, FlightAmt: DeptTotalFareAmt, ReturnFlightAmt: ReturnTotalFareAmt, TripMode: 'R', DEPTNetAmt: DeptNetAmt, RetnNetAmt: ReturnNetAmt, deptSegment: JSON.stringify($scope.deptureFlight), returnSegment: JSON.stringify($scope.returnFlight) };
+        const req = { Deptreq: JSON.stringify(outBoundObj), Retntreq: JSON.stringify(InBoundObj), userMarkup: $scope.userMarkup, FlightAmt: DeptTotalFareAmt, ReturnFlightAmt: ReturnTotalFareAmt, TripMode: 'R', DEPTNetAmt: DeptNetAmt, RetnNetAmt: ReturnNetAmt, ISFlightType: IsFlightType, INTPancard: INTPancard, deptSegment: JSON.stringify($scope.deptureFlight), returnSegment: JSON.stringify($scope.returnFlight) };
         const service = FlightServices.getFlightReturnHoldBookServices(req);
 
         service.then(function (response) {
@@ -689,6 +697,13 @@
         if (amount) {
             
             return parseFloat(amount) + ($scope.additionalAddedAmount == 0 ? 0 : ($scope.additionalAddedAmount * 2)) + parseFloat($scope.userMarkup);
+        }
+        return 0;
+    }
+    $scope.totalAmountCalculationForPopUp = function (amount) {
+        if (amount) {
+
+            return parseFloat(amount) + ($scope.additionalAddedAmount == 0 ? 0 : ($scope.additionalAddedAmount * 1)) + parseFloat($scope.userMarkup);
         }
         return 0;
     }

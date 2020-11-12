@@ -23,20 +23,42 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-title">
-                    <div class="row example-row">
-                        <div class="col-md-2">Date From:- </div>
+                    <div class="row example-row" style="margin-top:20px;">
+                        <div class="col-md-1">Date From:- </div>
                         <div class="col-md-3">      
                             @*{{fromDate}}*@                                              
                             <input type="date" class="form-control" name="from" ng-model="fromDate"  placeholder="dd/MM/yyyy">
                         </div>
-                        <div class="col-md-2">Date To:- </div>
+                        <div class="col-md-1">Date To:- </div>
                         <div class="col-md-3">
                             <input type="date" class="form-control" name="to" ng-model="toDate" placeholder="dd/MM/yyyy"> 
                         </div>
                         <div class="col-md-2">
-                            <input type="button" class="btn btn-primary" value="Search" ng-disabled="!fromDate || !toDate" ng-click="GetBookedFlightInvoice()" />
+                            <select id="ddlTravalAdultType" style="width:100%" class="form-control" ng-model="BookedStatus">
+                                <option selected value="Acknowledged">Acknowledged</option>
+                                <option value="Completed">Completed</option>
+                                <option value="Cancelled">Cancelled</option>
+                                <option value="On Hold">On Hold</option>
+                                <option value="On Hold">On Hold</option>
+                                <option value="On Hold Confirm">On Hold Confirm</option>
+                                <option value="PENDING">PENDING</option> 
+                            </select>
+
+
+                            @*<select name="singleSelect" id="singleSelect" ng-model="BookedStatus" class="form-control">
+                                <option selected value="Acknowledged">Acknowledged</option>
+                                <option value="Completed">Completed</option>
+                                <option value="Cancelled">Cancelled</option>
+                                <option value="On Hold">On Hold</option>
+                                <option value="On Hold">On Hold</option>
+                                <option value="On Hold Confirm">On Hold Confirm</option>
+                                <option value="PENDING">PENDING</option>                                
+                            </select>*@
+                            </div>
+                            <div class="col-md-2">
+                                <input type="button" class="btn btn-primary" value="Search" ng-disabled="!fromDate || !toDate || !BookedStatus" ng-click="GetBookedFlightInvoice()" />
+                            </div>
                         </div>
-                    </div>
                 </div>
                 <div class="card-body">
                     <div class="panel-heading text-right">
@@ -47,15 +69,16 @@
                                 <table border="1" id="testTable">
                                     <thead class="mvc-grid-headers ">
                                         <tr>
+                                            <td>Info</td>
                                            <td>Sln</td>
                                             <td>Ticket type</td>
                                             <td>Trip</td>
                                             <td>PNR</td>
                                             <td>ref No</td>
-                                            <td>Airline code</td>
-                                            <td>Flight No</td>
+                                            @*<td>Airline code</td>
+                                            <td>Flight No</td>*@
                                             <td>Booking date</td>
-                                            <td>Base fare</td>
+                                            @*<td>Base fare</td>
                                             <td>Tax fare</td>
                                             <td>Addn Charges </td>
                                             <td>Cute Fee </td>
@@ -64,7 +87,7 @@
                                             <td>OP Mode</td>
                                             <td>Company GST No</td>
                                             <td>Company Name</td>
-                                            <td>Company Mobile No</td>
+                                            <td>Company Mobile No</td>*@
                                             <td>Cancellation Status </td>
                                             <td>Booking Status</td>
                                             <td>Check Booking Status</td>
@@ -79,6 +102,7 @@
                                     </thead>
                                     <tbody ng-repeat="m in GetTicketList.slice(((currentPage-1)*itemsPerPage), ((currentPage)*itemsPerPage))">
                                         <tr ng-cloak>
+                                            <td><a class='btn btn-primary btn-xs btn-block' style="color:white;" data-toggle="modal" data-target="#GetBookedTicketInformation" id='GetBookedTicketInformationID' data-id="{{m.SLN}}" ng-click="GetTicketInfo(m.SLN)">Info</a></td>
                                             <td>
                                                 <span style="display:none;">{{m.SLN}}</span>{{$index+1}}
                                             </td>
@@ -92,17 +116,17 @@
                                             <td>
                                                 <span>{{m.REF_NO}}</span>
                                             </td>
-                                            <td>
+                                            @*<td>
                                                 <span>{{m.AIRLINE_CODE}}</span>
                                             </td>
                                             <td>
                                                 <span>{{m.FLIGHT_NO}}</span>
-                                            </td>
+                                            </td>*@
                                             <td>
                                                 @*<span>{{getAirDate(m.BOOKING_DATE) | date : 'EEEE, dd MMM yyyy'}}</span>*@
                                                 <span>{{m.FLIGHT_BOOKING_DATE}}</span>
                                             </td>
-                                            <td>
+                                            @*<td>
                                                 <span>{{m.TOTAL_FLIGHT_BASE_FARE}}</span>
                                             </td>
                                             <td>
@@ -119,7 +143,7 @@
                                             <td><span>{{m.OP_MODE}}</span></td>
                                             <td><span>{{m.COMPANY_GST_NO}}</span></td>
                                             <td><span>{{m.COMPANY_NAME}}</span></td>
-                                            <td><span>{{m.COMPANY_MOBILE}}</span></td>
+                                            <td><span>{{m.COMPANY_MOBILE}}</span></td>*@
                                             <td>
                                                 <span class="badge badge-{{m.Cancellation_status=='Fully Cancelled'?'danger' : m.Cancellation_status=='Partially Cancelled'?'warning':'warning'}}" style="color:white;font-size:small;width:106px">{{m.Cancellation_status}}</span>
                                             </td>
@@ -127,10 +151,14 @@
                                             <span class="badge badge-{{m.IS_HOLD=='1'?'warning':'success'}}" style="color:white;font-size:small;width:106px">{{m.BOOKING_STATUS}}</span>
                                            </td>
                                             <td>
-                                                <a class='btn btn-primary btn-xs btn-block' style="color:white;" data-toggle="modal" data-target="#GetTicketInformation" id='Fetchtransactionvalueid' data-id="{{m.REF_NO}}" ng-click="BookedTicketInformationFetch(m.REF_NO,m.CORELATION_ID)">Check Details</a>
+                                                <div ng-show="m.BOOKING_STATUS=='Acknowledged'">
+                                                <a class='btn btn-primary btn-xs btn-block' style="color:white;" data-toggle="modal" data-target="#GetTicketInformation" id='Fetchtransactionvalueid' data-id="{{m.REF_NO}}" ng-click="BookedTicketInformationFetch(m.REF_NO,m.CORELATION_ID)">Check Details</a></div>
                                             </td>
-                                            <td>
-                                                <a class='btn btn-danger btn-xs btn-block' style="color:white;"  id='confirmholdTicket' data-toggle="modal" ng-click="DisplayPassangerDetails(m.REF_NO,m.CORELATION_ID,m.TICKET_TYPE,m.FROM_AIRPORT,m.TO_AIRPORT)">Cancel Ticket</a>
+                                            <td> 
+                                                @*<div ng-show="m.BOOKING_STATUS=='Completed'">*@
+                                                <div ng-show="calculateDateTime(m.DEPT_DATE,m.DEPT_TIME)=='0' && m.BOOKING_STATUS=='Completed'">                                                    
+                                                    <a class='btn btn-danger btn-xs btn-block' style="color:white;" id='confirmholdTicket' data-toggle="modal" ng-click="DisplayPassangerDetails(m.REF_NO,m.CORELATION_ID,m.TICKET_TYPE,m.FROM_AIRPORT,m.TO_AIRPORT)">Cancel Ticket</a>
+                                                </div>
                                             </td>
                                             @*<td>
                                                 <div ng-show="m.TICKET_TYPE=='R'">
@@ -139,14 +167,17 @@
                                                 
                                             </td>*@
                                             <td>
-                                                <a class='btn btn-primary btn-xs btn-block' style="color:white;" data-toggle="modal" data-target="#GetTicketInformation" id='Fetchtransactionvalueid' data-id="{{m.REF_NO}}" ng-click="CancellationTIcketStatusCheck(m.REF_NO,m.CORELATION_ID)">Check Details</a>
+                                                <div ng-show="m.BOOKING_STATUS=='Completed'">
+                                                    <a class='btn btn-primary btn-xs btn-block' style="color:white;" data-toggle="modal" data-target="#GetTicketInformation" id='Fetchtransactionvalueid' data-id="{{m.REF_NO}}" ng-click="CancellationTIcketStatusCheck(m.REF_NO,m.CORELATION_ID)">Check Details</a>
+                                                </div>
                                             </td>
-                                            <td> <div ng-show="m.IS_HOLD=='0'">
+                                            <td> @*<div ng-show="m.IS_HOLD=='0'">*@
+                                                <div ng-show="m.BOOKING_STATUS=='Completed'">
                                                     <a class='btn btn-primary btn-xs btn-block' style="color:white;" data-toggle="modal" data-target="#RecheduleBookedTicket" id='RecheduleBookedTicketID' data-id="{{m.REF_NO}}" ng-click="GetRecheduleBookTicket(m.REF_NO,m.CORELATION_ID,m.SLN)">Rechedule Ticket Details</a>
                                                 </div>
-                                                <div ng-show="m.IS_HOLD=='1'">
+                                                @*<div ng-show="m.IS_HOLD=='1'">
                                                     <a class='btn btn-danger btn-xs btn-block' style="color:white;">Rechedule Ticket Details</a>
-                                                </div>
+                                                </div>*@
                                             </td>
                                             <td>
                                                 <div ng-show="m.IS_HOLD=='0'">
@@ -183,7 +214,7 @@
       
 
 
-        <!-- Modal <!--Modal Print Ticket --> -->
+        <!--Modal Print Ticket --> 
         <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document" >
                 <div class="modal-content">
@@ -753,8 +784,143 @@
                 </div>
             </div>
         </div>
+        <!-- Get Ticket Full Details list-->
+        <div class="modal fade" id="GetBookedTicketInformation" tabindex="-1" role="dialog" aria-labelledby="GetBookedTicketInformationID" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Flight Information</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="tab-pane fade show active" id="invoice" role="tabpanel" aria-labelledby="invoice-tab">
+                            <div class="d-sm-flex mb-5" data-view="print">
+                                <span class="m-auto"></span>
+
+                            </div>
+                            <!---===== Print Area =======-->
+                            <div id="FlightInfo-area">
+                                <h3>Flight Book information</h3>
+                                <table class="table table-borderless" style="border:1px solid #000000">
+                                    <tr>
+                                        <td style="border:1px solid #000000">Ref No :</td>
+                                        <td style="border:1px solid #000000">{{BookedFlightInformation.REF_NO}}</td>
+                                        <td style="border:1px solid #000000">PNR No :</td>
+                                        <td style="border:1px solid #000000">{{BookedFlightInformation.PNR}}</td>
+                                        <td style="border:1px solid #000000">Booking Date :</td>
+                                        <td style="border:1px solid #000000">{{BookedFlightInformation.FLIGHT_BOOKING_DATE}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border:1px solid #000000">Trip Mode :</td>
+                                        <td style="border:1px solid #000000">{{BookedFlightInformation.FROM_AIRPORT}}->{{BookedFlightInformation.TO_AIRPORT}}</td>
+                                        <td style="border:1px solid #000000">Airline Code :</td>
+                                        <td style="border:1px solid #000000">{{BookedFlightInformation.AIRLINE_CODE}}</td>
+                                        <td style="border:1px solid #000000">Flight No :</td>
+                                        <td style="border:1px solid #000000">{{BookedFlightInformation.FLIGHT_NO}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border:1px solid #000000">Depature Date :</td>
+                                        <td style="border:1px solid #000000">{{BookedFlightInformation.DEPT_DATE}}->{{BookedFlightInformation.DEPT_TIME}} </td>
+                                        <td style="border:1px solid #000000">Class :</td>
+                                        <td style="border:1px solid #000000">{{BookedFlightInformation.MAIN_CLASS=='Y'?'Economy':BookedFlightInformation.MAIN_CLASS=='C'?'Business':BookedFlightInformation.MAIN_CLASS=='W'?'Premium Economy':'First Class'}}</td>
+                                        <td style="border:1px solid #000000">No of Passanger :</td>
+                                        <td style="border:1px solid #000000">{{BookedFlightInformation.NO_OF_ADULT + BookedFlightInformation.NO_OF_CHILD + BookedFlightInformation.NO_OF_INFANT}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border:1px solid #000000">Base Fare :</td>
+                                        <td style="border:1px solid #000000">{{BookedFlightInformation.TOTAL_FLIGHT_BASE_FARE}}</td>
+                                        <td style="border:1px solid #000000">Flight Tax :</td>
+                                        <td style="border:1px solid #000000">{{BookedFlightInformation.TOTAL_FLIGHT_TAX}}</td>
+                                        <td style="border:1px solid #000000">Passanger Tax:</td>
+                                        <td style="border:1px solid #000000">{{BookedFlightInformation.TOTAL_FLIGHT_SERVICE_CHARGES}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border:1px solid #000000">Flight Addn Charges :</td>
+                                        <td style="border:1px solid #000000">{{BookedFlightInformation.TOTAL_FLIGHT_ADDITIONAL_CHARGE}}</td>
+                                        <td style="border:1px solid #000000">Cute Fee:</td>
+                                        <td style="border:1px solid #000000">{{BookedFlightInformation.TOTAL_FLIGHT_CUTE_FEE}}</td>
+                                        <td style="border:1px solid #000000">Flight Service Charge:</td>
+                                        <td style="border:1px solid #000000">{{BookedFlightInformation.TOTAL_FLIGHT_SERVICE_CHARGES}}       </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border:1px solid #000000">Meal Charges :</td>
+                                        <td style="border:1px solid #000000">{{BookedFlightInformation.TOTAL_FLIGHT_MEAL_FEE}}</td>
+                                        <td style="border:1px solid #000000">Airport Fee :</td>
+                                        <td style="border:1px solid #000000">{{BookedFlightInformation.TOTAL_AIRPORT_FEE}}</td>
+                                        <td style="border:1px solid #000000">Convenince Fee :</td>
+                                        <td style="border:1px solid #000000">{{BookedFlightInformation.TOTAL_FLIGHT_CONVENIENCE_FEE}}       </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border:1px solid #000000">Total TDS :</td>
+                                        <td style="border:1px solid #000000">{{BookedFlightInformation.TOTAL_TDS_AMT}}</td>
+                                        <td style="border:1px solid #000000">Service Tax :</td>
+                                        <td style="border:1px solid #000000">{{BookedFlightInformation.TOTAL_SERVICES_TAX}}</td>
+                                        <td style="border:1px solid #000000">Booking Amount :</td>
+                                        <td style="border:1px solid #000000">{{BookedFlightInformation.TOTAL_FLIGHT_AMT}}       </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border:1px solid #000000">User MarkUp :</td>
+                                        <td style="border:1px solid #000000">{{BookedFlightInformation.USER_MARKUP}}</td>
+                                        <td style="border:1px solid #000000">Admin MarkUp :</td>
+                                        <td style="border:1px solid #000000">{{BookedFlightInformation.ADMIN_MARKUP}}</td>
+                                        <td style="border:1px solid #000000">Admin GST :</td>
+                                        <td style="border:1px solid #000000">{{BookedFlightInformation.ADMIN_GST}}       </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border:1px solid #000000">User MarkUp GST :</td>
+                                        <td style="border:1px solid #000000">{{BookedFlightInformation.USER_MARKUP_GST}}</td>
+                                        <td style="border:1px solid #000000">Hold Charge :</td>
+                                        <td style="border:1px solid #000000">{{BookedFlightInformation.HOLD_CHARGE}}</td>
+                                        <td style="border:1px solid #000000">Publish :</td>
+                                        <td style="border:1px solid #000000">{{BookedFlightInformation.PUBLISH_FARE}}       </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border:1px solid #000000">Net Fare :</td>
+                                        <td style="border:1px solid #000000">{{BookedFlightInformation.NET_FARE}}</td>
+                                        <td style="border:1px solid #000000">Total Net Fare :</td>
+                                        <td style="border:1px solid #000000">{{BookedFlightInformation.NET_TOTAL_FARE}}</td>
+                                        <td style="border:1px solid #000000">Commission :</td>
+                                        <td style="border:1px solid #000000">{{BookedFlightInformation.NET_COMM_FARE}}       </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border:1px solid #000000">Fare Commission :</td>
+                                        <td style="border:1px solid #000000">{{BookedFlightInformation.FARE_COMMISSION}}</td>
+                                        <td style="border:1px solid #000000">Fare Comm With TDS :</td>
+                                        <td style="border:1px solid #000000">{{BookedFlightInformation.FARE_COMMISSION_TDS}}</td>
+                                        <td style="border:1px solid #000000">TCS Amount :</td>
+                                        <td style="border:1px solid #000000">{{BookedFlightInformation.TCS_AMOUNTON_INT_FLIGHT}}       </td>
+                                    </tr>
 
 
+                                </table>
+                                <h3>Passenger information</h3>
+                                <table class="table table-borderless" style="border:1px solid #000000">
+                                    <tr ng-repeat="objpnsg in BookedPassangerList">
+                                        <td style="border:1px solid #000000">Passanger Name</td>  <td style="border:1px solid #000000">{{objpnsg.TITLE}} {{objpnsg.FIRST_NAME}} {{objpnsg.LAST_NAME}}</td>                                        
+                                        <td style="border:1px solid #000000">DOB</td>
+                                        <td style="border:1px solid #000000">{{objpnsg.BIRTH_DATE}}</td>
+                                        <td style="border:1px solid #000000">Status</td>
+                                        <td style="border:1px solid #000000">{{objpnsg.PASSENGER_STATUS}}</td>
+                                    </tr>
+                                    
+                                </table>
+                                @*<div ng-repeat="objpnsg in BookedPassangerList">
+                                    <
+                                    {{objpnsg.FIRST_NAME}}-{{objpnsg.LAST_NAME}}
+                                </div>*@
+                            </div>
+                            <!--==== / Print Area =====-->
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
 
