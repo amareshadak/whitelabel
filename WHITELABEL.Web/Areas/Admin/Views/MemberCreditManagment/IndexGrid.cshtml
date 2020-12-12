@@ -13,11 +13,13 @@
                                         .Build(columns =>
                                         {
                                             columns.Add(model => model.SLN).Titled("Sln").Filterable(true).Sortable(true);
+                                            columns.Add(model => model.COMPANY_NAME).Titled("Company").Filterable(true).Sortable(true);
                                             columns.Add(model => model.FromUser).Titled("Member Name ").Filterable(true).Sortable(true);
                                             columns.Add(model => model.Member_RoleName).Titled("Member Role").Filterable(true).Sortable(true);
                                             columns.Add(model => model.CREDIT_TYPE).Titled("Credit Type").Filterable(true).Sortable(true);
                                             columns.Add(model => model.CREDIT_AMOUNT).Titled("Credit Amount").Filterable(true).Sortable(true);
-                                            columns.Add(model => model.CREDIT_DATE).Titled("Credit Date").Filterable(true).Sortable(true).Formatted("{0:yyyy-MM-dd}");
+                                            columns.Add(model => model.CREDIT_DATE).Titled("Credit Date").Formatted("{0:MM/dd/yyyy}").MultiFilterable(true).Sortable(true);
+                                            columns.Add(model => model.CREDIT_DATE).Titled("Credit Time").Formatted("{0:T}").Filterable(false).Sortable(false);
                                             columns.Add(model => model.CREDIT_NOTE_DESCRIPTION).Titled("Credit Note").Filterable(true).Sortable(true);
                                             //       columns.Add(model => (model.ACTIVE_MEMBER == true ? "Active" : "Deactive")).Titled("Status").Css("<style>.table - hover tbody tr: hover {background - color:red;}</style> ").Filterable(true).Sortable(true);
                                             //       columns.Add(model => model.MEM_ID).Titled("").Encoded(false).Filterable(false).Sortable(false).Titled("Password")
@@ -44,9 +46,9 @@
                                         .Filterable()
                                         .Sortable()
 )
-<table class="divFooterTotalComm" style="width:100%">
+@*<table class="divFooterTotalComm" style="width:100%">
     <tr>
         <td style="width:25%;">Total Credit Amount:- <b>@Model.Sum(z => z.CREDIT_AMOUNT)</b></td>
         <td></td>
     </tr>
-</table>
+</table>*@

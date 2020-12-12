@@ -13,6 +13,15 @@
     $scope.TotalAmount = 0;
     $scope.userMarkup = 0;
     $scope.INTPanCard = '';
+    $scope.GSTNo = '';
+    $scope.GSTEmailID = '';
+    $scope.GSTMobileNo = '';
+    $scope.GSTCompanyName = '';
+    $scope.GSTAddress = '';
+    $scope.emailAddress = '';
+    $scope.mobileNumber = '';
+    $scope.altMobileNo = '';
+
     $scope.popoverFeesAndTax = {
         content: '',
         templateUrl: 'templateFeesAndTax.html',
@@ -132,8 +141,7 @@
     }
 
     $scope.totalAmountCalculation = function (amount) {        
-        if (amount) {
-            debugger;
+        if (amount) {            
             if ($scope.userMarkup != '') {
                 return parseFloat(amount) + $scope.additionalAddedAmount + parseFloat($scope.userMarkup);
             }
@@ -286,20 +294,31 @@
         return hours + " hr " + minutes + " m";
     }
 
+    $scope.openPopupDetails = function (isFormInvalid) {
+        if (isFormInvalid) {
+            return false;
+        }
+        else {
+            $('#PrintTicketInformation').modal('show');
+        }
+    }
+
     $scope.bookFlightRequest = function (isFormInvalid) {     
         if (isFormInvalid) {
             return false;
         }
         debugger;
+        $('#progressBookingOneway').show();
         const NetAmt = $scope.NETAmount;
         const TotalPubAmt = $scope.TotalPublishFare;
         const IsFlightType=$scope.IsFlightType;
         const INTPancard=$scope.INTPanCard;
         $scope.bookingRequestObj.RequestXml.BookTicketRequest.TrackNo = $scope.trackNumber;
         $scope.bookingRequestObj.RequestXml.BookTicketRequest.MobileNo = $scope.mobileNumber;
+        //$scope.bookingRequestObj.RequestXml.BookTicketRequest.MobileNo = '9903116214';
         $scope.bookingRequestObj.RequestXml.BookTicketRequest.AltMobileNo = $scope.altMobileNo;
         $scope.bookingRequestObj.RequestXml.BookTicketRequest.Email = $scope.emailAddress;
-
+        //$scope.bookingRequestObj.RequestXml.BookTicketRequest.Email = 'rahuls1017@gmail.com';
         $scope.bookingRequestObj.RequestXml.BookTicketRequest.GSTNo = $scope.GSTNo;
         $scope.bookingRequestObj.RequestXml.BookTicketRequest.GSTEmailID = $scope.GSTEmailID;
         $scope.bookingRequestObj.RequestXml.BookTicketRequest.GSTCompanyName = $scope.GSTCompanyName;
@@ -316,7 +335,7 @@
 
         service.then(function (response) {            
             try {
-             
+                $('#progressBookingOneway').hide();
 
                 let data = JSON.parse(response.data);
                 if (data.BookTicketResponses.BookTicketResponse.length > 0) {
@@ -384,6 +403,7 @@
         if (isFormInvalid) {
             return false;
         }
+        $('#progressBookingOneway').show();
         const NetAmt = $scope.NETAmount;
         const TotalPubAmt = $scope.TotalPublishFare;
         const IsFlightType = $scope.IsFlightType;
@@ -419,6 +439,7 @@
 
         service.then(function (response) {
             try {
+                $('#progressBookingOneway').hide();
                 let data = JSON.parse(response.data);
                 if (data.BookTicketResponses.BookTicketResponse.length > 0) {
                     //$('#modelTicketConfirmed').modal('show');

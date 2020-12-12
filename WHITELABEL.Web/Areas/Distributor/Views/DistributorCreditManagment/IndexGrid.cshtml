@@ -17,7 +17,8 @@
                                                     columns.Add(model => model.Member_RoleName).Titled("Member Role").Filterable(true).Sortable(true);
                                                     columns.Add(model => model.CREDIT_TYPE).Titled("Credit Type").Filterable(true).Sortable(true);
                                                     columns.Add(model => model.CREDIT_AMOUNT).Titled("Credit Amount").Filterable(true).Sortable(true);
-                                                    columns.Add(model => model.CREDIT_DATE).Formatted("{0:yyyy-MM-dd}").Titled("Credit Date").Filterable(true).Sortable(true);
+                                                    columns.Add(model => model.CREDIT_DATE).Formatted("{0:MM/dd/yyyy}").Titled("Credit Date").Filterable(true).Sortable(true);
+                                                    columns.Add(model => model.CREDIT_DATE).Formatted("{0:T}").Titled("Credit Time").Filterable(true).Sortable(true);
                                                     columns.Add(model => model.CREDIT_NOTE_DESCRIPTION).Titled("Credit Note").Filterable(true).Sortable(true);
                                         //       columns.Add(model => (model.ACTIVE_MEMBER == true ? "Active" : "Deactive")).Titled("Status").Css("<style>.table - hover tbody tr: hover {background - color:red;}</style> ").Filterable(true).Sortable(true);
                                         //       columns.Add(model => model.MEM_ID).Titled("").Encoded(false).Filterable(false).Sortable(false).Titled("Password")

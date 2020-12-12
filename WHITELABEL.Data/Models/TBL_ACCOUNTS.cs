@@ -83,5 +83,9 @@
         public string DR_Col { get; set; }
         [NotMapped]
         public string CR_Col { get; set; }
+        [NotMapped]
+        public string COMPANY_NAME { get; set; }
+        [NotMapped]
+        public string COMPANY_GST { get; set; }
     }
 }

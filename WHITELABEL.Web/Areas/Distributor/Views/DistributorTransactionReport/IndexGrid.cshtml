@@ -16,12 +16,13 @@
                                 columns.Add(model => model.UserName).Titled("Merchant");
                                 columns.Add(model => model.MEMBER_TYPE).Titled("Member Type");
                                 columns.Add(model => model.TRANSACTION_TYPE).Titled("Trans Type");
-                                columns.Add(model => model.TRANSACTION_DATE).Formatted("{0:yyyy-MM-dd}").Titled("Trans Date").MultiFilterable(true);
+                                columns.Add(model => model.TRANSACTION_DATE).Titled("Trans Date").Formatted("{0:MM/dd/yyyy}").MultiFilterable(true).Sortable(true);
+                                columns.Add(model => model.TRANSACTION_DATE).Titled("Trans Time").Formatted("{0:T}").Filterable(false);
                                 //columns.Add(model => model.AMOUNT).Titled("Amount");
                                 //columns.Add(model => model.DR_CR).Titled("Dr/Cr");
                                 columns.Add(model => model.OPENING).Titled("Opening Amt");
                                 columns.Add(model => model.CR_Col).Titled("Cr");
-                                columns.Add(model => model.DR_Col).Titled("Dr");                                
+                                columns.Add(model => model.DR_Col).Titled("Dr");
                                 columns.Add(model => model.CLOSING).Titled("Closing Amt");
                                 columns.Add(model => model.COMM_AMT).Titled("Commission");
 
@@ -30,18 +31,18 @@
                                     .AppendCss("table table-striped")
                             //.RowCss(model => model.STATUS == "Decline" ? "danger" : model.STATUS == "Pending" ? "info" : "")
                             .Empty("No data found")
-                            
+
                             .Id("my-ajax-grid")
                             .Pageable(pager =>
                             {
                                 pager.PagesToDisplay = 35;
                                 pager.RowsPerPage = 35;
-                                
+
                             })
                             .Filterable()
                             .Sortable()
-                            
-                           
+
+
 
 )
 

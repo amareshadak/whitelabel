@@ -36,8 +36,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 ViewBag.ControllerName = "White Label";
                 if (Session["WhiteLevelUserId"] == null)
                 {
-                    //Response.Redirect(Url.Action("Index", "Login", new { area = "" }));
-                    Response.Redirect(Url.Action("Logout", "Login", new { area = "" }));
+                    Response.Redirect(Url.Action("Logout", "AdminLogin", new { area = "Admin" }));
+                    //Response.Redirect(Url.Action("Logout", "Login", new { area = "" }));
                     return;
                 }
                 bool Islogin = false;
@@ -86,7 +86,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 Session.Remove("WhiteLevelUserId");
                 Session.Remove("WhiteLevelUserName");
                 Session.Remove("UserType");
-                return RedirectToAction("Index", "Login", new { area = "" });
+                return RedirectToAction("AdminLogin", "Login", new { area = "" });
             }
         }
         [HttpPost]
@@ -129,43 +129,158 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                  }).ToList().Distinct();
             return Json(memberService, JsonRequestBehavior.AllowGet);
         }
-        public PartialViewResult MerchantIndexgrid(string WhiteLevel = "", string Distributor = "", string Merchant = "")
+        public PartialViewResult MerchantIndexgrid(string SearchVal = "")
         {
             var dbcontext = new DBContext();
-            if (WhiteLevel == "" && Merchant == "" && Distributor == "")
+            if (SearchVal != "")
             {
-                var memberinfo = dbcontext.TBL_MASTER_MEMBER.Where(x => x.MEMBER_ROLE == 1).ToList().OrderByDescending(x => x.JOINING_DATE);
-                return PartialView("MerchantIndexgrid", memberinfo);
-            }
-            else if (WhiteLevel != "" && Distributor == "" && Merchant == "")
-            {
-                long wlpiD = 0;
-                long.TryParse(WhiteLevel, out wlpiD);
-                var memberinfo = dbcontext.TBL_MASTER_MEMBER.Where(x => x.MEMBER_ROLE == 1 && x.MEM_ID == wlpiD).ToList().OrderByDescending(x => x.JOINING_DATE);
-                return PartialView("MerchantIndexgrid", memberinfo);
-            }
-            else if (WhiteLevel != "" && Distributor != "" && Merchant == "")
-            {
-                long DistId = 0;
-                long.TryParse(Distributor, out DistId);
-                var memberinfo = dbcontext.TBL_MASTER_MEMBER.Where(x => x.MEMBER_ROLE == 4 && x.MEM_ID == DistId && x.ACTIVE_MEMBER==true).ToList().OrderByDescending(x => x.JOINING_DATE);
-                //var memberinfo = dbcontext.TBL_MASTER_MEMBER.Where(x => x.MEMBER_ROLE == 5 && x.INTRODUCER==DistId).ToList().OrderByDescending(x => x.JOINING_DATE);
-                return PartialView("MerchantIndexgrid", memberinfo);
-            }
-            else if (WhiteLevel != "" && Distributor != "" && Merchant != "")
-            {
-                long MertId = 0;
-                long.TryParse(Merchant, out MertId);
-                var memberinfo = dbcontext.TBL_MASTER_MEMBER.Where(x => x.MEM_ID == MertId && x.ACTIVE_MEMBER == true).ToList().OrderByDescending(x => x.JOINING_DATE);
+
+                //var memberinfo = dbcontext.TBL_MASTER_MEMBER.Where(x => x.UName.StartsWith(SearchVal) || x.MEMBER_MOBILE.StartsWith(SearchVal) || x.MEMBER_NAME.StartsWith(SearchVal) || x.COMPANY.StartsWith(SearchVal) || x.COMPANY_GST_NO.StartsWith(SearchVal) || x.ADDRESS.StartsWith(SearchVal) || x.CITY.StartsWith(SearchVal) || x.PIN.StartsWith(SearchVal) || x.EMAIL_ID.StartsWith(SearchVal) || x.AADHAAR_NO.StartsWith(SearchVal) || x.PAN_NO.StartsWith(SearchVal) || x.RAIL_ID.StartsWith(SearchVal) || x.FACEBOOK_ID.StartsWith(SearchVal) || x.WEBSITE_NAME.StartsWith(SearchVal) || x.MEM_UNIQUE_ID.StartsWith(SearchVal) && x.ACTIVE_MEMBER==true && x.MEMBER_ROLE==5).ToList();
+                var memberinfo = (from emp in dbcontext.TBL_MASTER_MEMBER
+                                  where (emp.UName.StartsWith(SearchVal) || emp.MEMBER_MOBILE.StartsWith(SearchVal) || emp.MEMBER_NAME.StartsWith(SearchVal) || emp.COMPANY.StartsWith(SearchVal) || emp.COMPANY_GST_NO.StartsWith(SearchVal) || emp.ADDRESS.StartsWith(SearchVal) || emp.CITY.StartsWith(SearchVal) || emp.PIN.StartsWith(SearchVal) || emp.EMAIL_ID.StartsWith(SearchVal) || emp.AADHAAR_NO.StartsWith(SearchVal) || emp.PAN_NO.StartsWith(SearchVal) || emp.RAIL_ID.StartsWith(SearchVal) || emp.FACEBOOK_ID.StartsWith(SearchVal) || emp.WEBSITE_NAME.StartsWith(SearchVal) || emp.MEM_UNIQUE_ID.StartsWith(SearchVal)) && emp.MEMBER_ROLE == 5 && emp.ACTIVE_MEMBER == true
+                                  select new
+                                  {
+                                      MEM_UNIQUE_ID = emp.MEM_UNIQUE_ID,
+                                      EMAIL_ID = emp.EMAIL_ID,
+                                      MEMBER_NAME = emp.MEMBER_NAME,
+                                      COMPANY = emp.COMPANY,
+                                      RAIL_PWD = emp.RAIL_PWD,
+                                      MEMBER_MOBILE = emp.MEMBER_MOBILE,
+                                      RAIL_ID = emp.RAIL_ID,
+                                      SECURITY_PIN_MD5 = emp.SECURITY_PIN_MD5,
+                                      ACTIVE_MEMBER = emp.ACTIVE_MEMBER,
+                                      MEM_ID = emp.MEM_ID,
+                                      RailSLN = ((dbcontext.TBL_RAIL_AGENT_INFORMATION.FirstOrDefault(c => c.MEM_ID == emp.MEM_ID).SLN) != null ? (dbcontext.TBL_RAIL_AGENT_INFORMATION.FirstOrDefault(c => c.MEM_ID == emp.MEM_ID).SLN) : 0),
+                                      RailIdTagged = ((dbcontext.TBL_RAIL_AGENT_INFORMATION.FirstOrDefault(c => c.MEM_ID == emp.MEM_ID).RAIL_COMM_TAG) == null ? false : (dbcontext.TBL_RAIL_AGENT_INFORMATION.FirstOrDefault(c => c.MEM_ID == emp.MEM_ID).RAIL_COMM_TAG) == true ? true : false)
+                                  }).AsEnumerable().Select(z => new TBL_MASTER_MEMBER
+                                  {
+                                      RailIdTagged = z.RailIdTagged,
+                                      RailSLN = z.RailSLN,
+                                      MEM_UNIQUE_ID = z.MEM_UNIQUE_ID,
+                                      EMAIL_ID = z.EMAIL_ID,
+                                      MEMBER_NAME = z.MEMBER_NAME,
+                                      COMPANY = z.COMPANY,
+                                      MEMBER_MOBILE = z.MEMBER_MOBILE,
+                                      RAIL_ID = z.RAIL_ID,
+                                      RAIL_PWD = z.RAIL_PWD,
+                                      SECURITY_PIN_MD5 = z.SECURITY_PIN_MD5,
+                                      ACTIVE_MEMBER = z.ACTIVE_MEMBER,
+                                      MEM_ID = z.MEM_ID
+                                  }).Take(5).ToList();
                 return PartialView("MerchantIndexgrid", memberinfo);
             }
             else
             {
-                var memberinfo = dbcontext.TBL_MASTER_MEMBER.Where(x => x.MEMBER_ROLE == 5 && x.ACTIVE_MEMBER == true).ToList().OrderByDescending(x => x.JOINING_DATE);
+                //var memberinfo1 = dbcontext.TBL_MASTER_MEMBER.Where(x => x.MEMBER_ROLE == 5 && x.ACTIVE_MEMBER == true).ToList();
+                var memberinfo = (from emp in dbcontext.TBL_MASTER_MEMBER
+                                   where emp.MEMBER_ROLE == 5 && emp.ACTIVE_MEMBER == true
+                                   select new
+                                   {
+                                       MEM_UNIQUE_ID = emp.MEM_UNIQUE_ID,
+                                       EMAIL_ID = emp.EMAIL_ID,
+                                       MEMBER_NAME = emp.MEMBER_NAME,
+                                       COMPANY = emp.COMPANY,
+                                       RAIL_PWD = emp.RAIL_PWD,
+                                       MEMBER_MOBILE = emp.MEMBER_MOBILE,
+                                       RAIL_ID = emp.RAIL_ID,
+                                       SECURITY_PIN_MD5 = emp.SECURITY_PIN_MD5,
+                                       ACTIVE_MEMBER = emp.ACTIVE_MEMBER,
+                                       MEM_ID = emp.MEM_ID,
+                                       RailSLN= ((dbcontext.TBL_RAIL_AGENT_INFORMATION.FirstOrDefault(c => c.MEM_ID == emp.MEM_ID).SLN) != null ? (dbcontext.TBL_RAIL_AGENT_INFORMATION.FirstOrDefault(c => c.MEM_ID == emp.MEM_ID).SLN) : 0),
+                                       RailIdTagged =((dbcontext.TBL_RAIL_AGENT_INFORMATION.FirstOrDefault(c=>c.MEM_ID==emp.MEM_ID).RAIL_COMM_TAG)==null?false: (dbcontext.TBL_RAIL_AGENT_INFORMATION.FirstOrDefault(c => c.MEM_ID == emp.MEM_ID).RAIL_COMM_TAG)==true?true: false)
+                                   }).AsEnumerable().Select(z => new TBL_MASTER_MEMBER
+                                   {
+                                       RailIdTagged = z.RailIdTagged,
+                                       RailSLN=z.RailSLN,
+                                       MEM_UNIQUE_ID = z.MEM_UNIQUE_ID,
+                                       EMAIL_ID = z.EMAIL_ID,
+                                       MEMBER_NAME = z.MEMBER_NAME,
+                                       COMPANY = z.COMPANY,
+                                       MEMBER_MOBILE = z.MEMBER_MOBILE,
+                                       RAIL_ID = z.RAIL_ID,
+                                       RAIL_PWD = z.RAIL_PWD,
+                                       SECURITY_PIN_MD5 = z.SECURITY_PIN_MD5,
+                                       ACTIVE_MEMBER = z.ACTIVE_MEMBER,
+                                       MEM_ID = z.MEM_ID
+                                   }).Take(5).ToList();
+                //                var memberinfo1 = (from e in dbcontext.TBL_RAIL_AGENT_INFORMATION
+                //                                   join d in dbcontext.TBL_MASTER_MEMBER
+                //on e.MEM_ID equals d.MEM_ID into emp
+                //                                   from employee in emp.DefaultIfEmpty()
+                //                                   where employee.MEMBER_ROLE == 5 && employee.ACTIVE_MEMBER == true
+                //                                   select new
+                //                                   {
+                //                                       MEM_UNIQUE_ID = employee.MEM_UNIQUE_ID,
+                //                                       EMAIL_ID = employee.EMAIL_ID,
+                //                                       MEMBER_NAME = employee.MEMBER_NAME,
+                //                                       COMPANY = employee.COMPANY,
+                //                                       RAIL_PWD = employee.RAIL_PWD,
+                //                                       MEMBER_MOBILE = employee.MEMBER_MOBILE,
+                //                                       RAIL_ID = employee.RAIL_ID,
+                //                                       SECURITY_PIN_MD5 = employee.SECURITY_PIN_MD5,
+                //                                       ACTIVE_MEMBER = employee.ACTIVE_MEMBER,
+                //                                       MEM_ID = employee.MEM_ID,
+                //                                       DISTRIBUTOR_ID = e.SLN,
+                //                                   }).AsEnumerable().Select(z => new TBL_MASTER_MEMBER
+                //                                   {
+                //                                       DISTRIBUTOR_ID = z.DISTRIBUTOR_ID,
+                //                                       MEM_UNIQUE_ID = z.MEM_UNIQUE_ID,
+                //                                       EMAIL_ID = z.EMAIL_ID,
+                //                                       MEMBER_NAME = z.MEMBER_NAME,
+                //                                       COMPANY = z.COMPANY,
+                //                                       MEMBER_MOBILE = z.MEMBER_MOBILE,
+                //                                       RAIL_ID = z.RAIL_ID,
+                //                                       RAIL_PWD = z.RAIL_PWD,
+                //                                       SECURITY_PIN_MD5 = z.SECURITY_PIN_MD5,
+                //                                       ACTIVE_MEMBER = z.ACTIVE_MEMBER,
+                //                                       MEM_ID = z.MEM_ID
+                //                                   }).Take(5).ToList();
+
+
+
                 return PartialView("MerchantIndexgrid", memberinfo);
             }
+            
 
         }
+
+        //public PartialViewResult MerchantIndexgrid(string WhiteLevel = "", string Distributor = "", string Merchant = "")
+        //{
+        //    var dbcontext = new DBContext();
+        //    if (WhiteLevel == "" && Merchant == "" && Distributor == "")
+        //    {
+        //        var memberinfo = dbcontext.TBL_MASTER_MEMBER.Where(x => x.MEMBER_ROLE == 1).ToList().OrderByDescending(x => x.JOINING_DATE);
+        //        return PartialView("MerchantIndexgrid", memberinfo);
+        //    }
+        //    else if (WhiteLevel != "" && Distributor == "" && Merchant == "")
+        //    {
+        //        long wlpiD = 0;
+        //        long.TryParse(WhiteLevel, out wlpiD);
+        //        var memberinfo = dbcontext.TBL_MASTER_MEMBER.Where(x => x.MEMBER_ROLE == 1 && x.MEM_ID == wlpiD).ToList().OrderByDescending(x => x.JOINING_DATE);
+        //        return PartialView("MerchantIndexgrid", memberinfo);
+        //    }
+        //    else if (WhiteLevel != "" && Distributor != "" && Merchant == "")
+        //    {
+        //        long DistId = 0;
+        //        long.TryParse(Distributor, out DistId);
+        //        var memberinfo = dbcontext.TBL_MASTER_MEMBER.Where(x => x.MEMBER_ROLE == 4 && x.MEM_ID == DistId && x.ACTIVE_MEMBER==true).ToList().OrderByDescending(x => x.JOINING_DATE);
+        //        //var memberinfo = dbcontext.TBL_MASTER_MEMBER.Where(x => x.MEMBER_ROLE == 5 && x.INTRODUCER==DistId).ToList().OrderByDescending(x => x.JOINING_DATE);
+        //        return PartialView("MerchantIndexgrid", memberinfo);
+        //    }
+        //    else if (WhiteLevel != "" && Distributor != "" && Merchant != "")
+        //    {
+        //        long MertId = 0;
+        //        long.TryParse(Merchant, out MertId);
+        //        var memberinfo = dbcontext.TBL_MASTER_MEMBER.Where(x => x.MEM_ID == MertId && x.ACTIVE_MEMBER == true).ToList().OrderByDescending(x => x.JOINING_DATE);
+        //        return PartialView("MerchantIndexgrid", memberinfo);
+        //    }
+        //    else
+        //    {
+        //        var memberinfo = dbcontext.TBL_MASTER_MEMBER.Where(x => x.MEMBER_ROLE == 5 && x.ACTIVE_MEMBER == true).ToList().OrderByDescending(x => x.JOINING_DATE);
+        //        return PartialView("MerchantIndexgrid", memberinfo);
+        //    }
+
+        //}
         public async Task<ActionResult> GetMerchantDetails(string memid = "")
         {
             if (Session["WhiteLevelUserId"] != null)
@@ -235,7 +350,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 Session.Remove("WhiteLevelUserId");
                 Session.Remove("WhiteLevelUserName");
                 Session.Remove("UserType");
-                return RedirectToAction("Index", "Login", new { area = "" });
+                return RedirectToAction("AdminLogin", "Login", new { area = "" });
             }
         }
 
@@ -506,7 +621,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 Session.Remove("WhiteLevelUserId");
                 Session.Remove("WhiteLevelUserName");
                 Session.Remove("UserType");
-                return RedirectToAction("Index", "Login", new { area = "" });
+                return RedirectToAction("AdminLogin", "Login", new { area = "" });
             }
         }
 
@@ -745,7 +860,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 Session.Remove("WhiteLevelUserId");
                 Session.Remove("WhiteLevelUserName");
                 Session.Remove("UserType");
-                return RedirectToAction("Index", "Login", new { area = "" });
+                return RedirectToAction("AdminLogin", "Login", new { area = "" });
 
             }
         }
@@ -797,6 +912,117 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 }
             }
         }
+
+        [HttpPost]
+        public async Task<JsonResult> PostRailCommissionSettingInfor(TBL_RAIL_AGENTS_COMMISSION objrailComm)
+        {
+            initpage();
+            var db = new DBContext();
+            using (System.Data.Entity.DbContextTransaction ContextTransaction = db.Database.BeginTransaction())
+            {
+                try
+                {
+                    var checkRailAgentComm = await db.TBL_RAIL_AGENTS_COMMISSION.FirstOrDefaultAsync(x => x.MEM_ID == objrailComm.MEM_ID);
+                    if (checkRailAgentComm != null)
+                    {
+                        checkRailAgentComm.PG_MAX_VALUE = objrailComm.PG_MAX_VALUE;
+                        checkRailAgentComm.PG_EQUAL_LESS_2000 = objrailComm.PG_EQUAL_LESS_2000;
+                        checkRailAgentComm.PG_EQUAL_GREATER_2000 = objrailComm.PG_EQUAL_GREATER_2000;
+                        checkRailAgentComm.PG_GST_STATUS = objrailComm.PG_GST_STATUS;
+                        checkRailAgentComm.ADDITIONAL_CHARGE_MAX_VAL = objrailComm.ADDITIONAL_CHARGE_MAX_VAL;
+                        checkRailAgentComm.ADDITIONAL_CHARGE_AC = objrailComm.ADDITIONAL_CHARGE_AC;
+                        checkRailAgentComm.ADDITIONAL_CHARGE_NON_AC = objrailComm.ADDITIONAL_CHARGE_NON_AC;
+                        checkRailAgentComm.ADDITIONAL_GST_STATUS = objrailComm.ADDITIONAL_GST_STATUS;
+                        checkRailAgentComm.COMM_UPDATE_DATE = DateTime.Now;
+                        checkRailAgentComm.STATUS = true;
+                        if (objrailComm.Additional_Charges_Apply_Val == "1")
+                        {
+                            checkRailAgentComm.ADDITIONAL_CHARGES_APPLY = true;
+                        }
+                        else
+                        {
+                            checkRailAgentComm.ADDITIONAL_CHARGES_APPLY = false;
+                        }
+                        if (objrailComm.PG_Charges_Apply_Val == "1")
+                        {
+                            checkRailAgentComm.PG_CHARGES_APPLY = true;
+                        }
+                        else
+                        {
+                            checkRailAgentComm.PG_CHARGES_APPLY = false;
+                        }
+                        db.Entry(checkRailAgentComm).State = System.Data.Entity.EntityState.Modified;
+
+                        var RailAgentid = await db.TBL_RAIL_AGENT_INFORMATION.FirstOrDefaultAsync(x => x.SLN == objrailComm.Rail_table_Id);
+                        RailAgentid.RAIL_COMM_TAG = true;
+                        db.Entry(RailAgentid).State = System.Data.Entity.EntityState.Modified;
+                        await db.SaveChangesAsync();
+                        ContextTransaction.Commit();
+                        return Json("Commission Save Successfully.", JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        bool ADDnlCharges = false;
+                        bool PGCharges = false;
+                        if (objrailComm.Additional_Charges_Apply_Val == "1")
+                        {
+                            ADDnlCharges = true;
+                        }
+                        else
+                        {
+                            ADDnlCharges = false;
+                        }
+                        if (objrailComm.PG_Charges_Apply_Val == "1")
+                        {
+                            PGCharges = true;
+                        }
+                        else
+                        {
+                            PGCharges = false;
+                        }
+
+                        TBL_RAIL_AGENTS_COMMISSION RAILCOMM = new TBL_RAIL_AGENTS_COMMISSION()
+                        {
+                            WLP_ID = objrailComm.WLP_ID,
+                            DIST_ID = objrailComm.DIST_ID,
+                            MEM_ID = objrailComm.MEM_ID,
+                            RAIL_AGENT_ID = objrailComm.RAIL_AGENT_ID,
+                            PG_MAX_VALUE = objrailComm.PG_MAX_VALUE,
+                            PG_EQUAL_LESS_2000 = objrailComm.PG_EQUAL_LESS_2000,
+                            PG_EQUAL_GREATER_2000 = objrailComm.PG_EQUAL_GREATER_2000,
+                            PG_GST_STATUS = objrailComm.PG_GST_STATUS,
+                            ADDITIONAL_CHARGE_MAX_VAL = objrailComm.ADDITIONAL_CHARGE_MAX_VAL,
+                            ADDITIONAL_CHARGE_AC = objrailComm.ADDITIONAL_CHARGE_AC,
+                            ADDITIONAL_CHARGE_NON_AC = objrailComm.ADDITIONAL_CHARGE_NON_AC,
+                            ADDITIONAL_GST_STATUS = objrailComm.ADDITIONAL_GST_STATUS,
+                            COMM_ENTRY_DATE = DateTime.Now,
+                            STATUS = true,
+                            PG_CHARGES_APPLY = PGCharges,
+                            ADDITIONAL_CHARGES_APPLY = ADDnlCharges
+                        };
+                        db.TBL_RAIL_AGENTS_COMMISSION.Add(RAILCOMM);
+                        var RailAgentid = await db.TBL_RAIL_AGENT_INFORMATION.FirstOrDefaultAsync(x => x.SLN == objrailComm.Rail_table_Id);
+                        RailAgentid.RAIL_COMM_TAG = true;
+                        db.Entry(RailAgentid).State = System.Data.Entity.EntityState.Modified;
+                        await db.SaveChangesAsync();
+                        ContextTransaction.Commit();
+                        return Json("Commission Save Successfully.", JsonRequestBehavior.AllowGet);
+                    }
+
+
+                }
+                catch (Exception ex)
+                {
+                    ContextTransaction.Rollback();
+                    Logger.Error("Controller:-  Retailer(Distributor), method:- CreateMember (POST) Line No:- 336", ex);
+                    Session["msg"] = "Please try again later";
+                    return Json("");
+                    throw ex;
+                }
+            }
+            //return Json("");
+        }
+
 
     }
 }

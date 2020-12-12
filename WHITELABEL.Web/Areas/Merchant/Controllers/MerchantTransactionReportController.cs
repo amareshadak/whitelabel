@@ -127,75 +127,186 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
             }
         }
 
-        public PartialViewResult IndexGrid(string search = "",string DateFrom="",string Date_To="")
+        //public PartialViewResult IndexGrid(string search = "",string DateFrom="",string Date_To="")
+        public PartialViewResult IndexGrid(string DateFrom = "", string Date_To = "")
         {
             var db = new DBContext();
-
-            
+            string search = "";
+            //string FromDATE = string.Empty;
+            //string TO_DATE = string.Empty;
+            //FromDATE = DateTime.Parse(DateFrom.ToString()).ToString("yyyy-MM-dd");
+            //DateTime Date_From_Val = Convert.ToDateTime(FromDATE);
+            //string From_TO = string.Empty;
+            //TO_DATE = DateTime.Parse(Date_To.ToString()).ToString("yyyy-MM-dd");
+            //DateTime Date_To_Val = Convert.ToDateTime(TO_DATE);
             if (DateFrom != "" && Date_To != "")
             {
-                //string FromDATE = string.Empty;
-                //string TO_DATE = string.Empty;
-                //FromDATE = DateTime.Parse(DateFrom.ToString()).ToString("yyyy-MM-dd");
-                //DateTime Date_From_Val = Convert.ToDateTime(FromDATE);
-                //string From_TO = string.Empty;
-                //TO_DATE = DateTime.Parse(Date_To.ToString()).ToString("yyyy-MM-dd");
-                //DateTime Date_To_Val = Convert.ToDateTime(TO_DATE);
-                var transactionlistvalue = MerchantDailyTransactionClass.GetTransactionReport(search, CurrentMerchant.MEM_ID, DateFrom, Date_To);
+                string FromDATE = string.Empty;
+                string TO_DATE = string.Empty;
+                FromDATE = DateTime.Parse(DateFrom.ToString()).ToString("yyyy-MM-dd");
+                DateTime Date_From_Val = Convert.ToDateTime(FromDATE);
+                string From_TO = string.Empty;
+                TO_DATE = DateTime.Parse(Date_To.ToString()).ToString("yyyy-MM-dd");
+                DateTime Date_To_Val = Convert.ToDateTime(TO_DATE);
+                DateTime ToDateValue = Date_To_Val.AddDays(1);
+                var transactionlistvalue = (from x in db.TBL_ACCOUNTS
+                                            join y in db.TBL_MASTER_MEMBER on x.MEM_ID equals y.MEM_ID
+                                            where y.MEM_ID == CurrentMerchant.MEM_ID && x.TRANSACTION_DATE >= Date_From_Val && x.TRANSACTION_DATE <= ToDateValue
+                                            select new
+                                            {
+                                                SLN = x.ACC_NO,
+                                                MerchantName = y.UName,
+                                                MemberType = x.MEMBER_TYPE,
+                                                Trans_Type = x.TRANSACTION_TYPE,
+                                                Trans_Date = x.TRANSACTION_DATE,
+                                                DR_CR = x.DR_CR,
+                                                Amount = x.AMOUNT,
+                                                Narration = x.NARRATION,
+                                                OpeningAmt = x.OPENING,
+                                                Closing = x.CLOSING,
+                                                CommissionAmt = x.COMM_AMT
+                                            }).AsEnumerable().Select((z, index) => new TBL_ACCOUNTS
+                                            {
+                                                SerialNo = index + 1,
+                                                ACC_NO = z.SLN,
+                                                UserName = z.MerchantName,
+                                                MEMBER_TYPE = z.MemberType,
+                                                TRANSACTION_TYPE = z.Trans_Type,
+                                                TRANSACTION_DATE = z.Trans_Date,
+                                                DR_CR = z.DR_CR,
+                                                AMOUNT = z.Amount,
+                                                NARRATION = z.Narration,
+                                                OPENING = z.OpeningAmt,
+                                                CR_Col = (z.DR_CR == "CR" ? z.Amount.ToString() : "0"),
+                                                DR_Col = (z.DR_CR == "DR" ? z.Amount.ToString() : "0"),
+                                                CLOSING = z.Closing,
+                                                COMM_AMT = z.CommissionAmt
+                                            }).OrderByDescending(a => a.TRANSACTION_DATE).ToList();
+                //}).OrderBy(m => m.SerialNo).ThenByDescending(a => a.TRANSACTION_DATE).ToList();
+                //var transactionlistvalue = MerchantDailyTransactionClass.GetTransactionReport(search, CurrentMerchant.MEM_ID, DateFrom, Date_To);
                 return PartialView("IndexGrid", transactionlistvalue);
             }
             else
             {
-
-               
-                var transactionlistvalue = MerchantDailyTransactionClass.GetTransactionReport(search, CurrentMerchant.MEM_ID, DateFrom, Date_To);
+                var transactionlistvalue = (from x in db.TBL_ACCOUNTS
+                                            join y in db.TBL_MASTER_MEMBER on x.MEM_ID equals y.MEM_ID
+                                            where y.MEM_ID == CurrentMerchant.MEM_ID
+                                            select new
+                                            {
+                                                SLN = x.ACC_NO,
+                                                MerchantName = y.UName,
+                                                MemberType = x.MEMBER_TYPE,
+                                                Trans_Type = x.TRANSACTION_TYPE,
+                                                Trans_Date = x.TRANSACTION_DATE,
+                                                DR_CR = x.DR_CR,
+                                                Amount = x.AMOUNT,
+                                                Narration = x.NARRATION,
+                                                OpeningAmt = x.OPENING,
+                                                Closing = x.CLOSING,
+                                                CommissionAmt = x.COMM_AMT
+                                            }).AsEnumerable().Select((z, index) => new TBL_ACCOUNTS
+                                            {
+                                                SerialNo = index + 1,
+                                                ACC_NO = z.SLN,
+                                                UserName = z.MerchantName,
+                                                MEMBER_TYPE = z.MemberType,
+                                                TRANSACTION_TYPE = z.Trans_Type,
+                                                TRANSACTION_DATE = z.Trans_Date,
+                                                DR_CR = z.DR_CR,
+                                                AMOUNT = z.Amount,
+                                                NARRATION = z.Narration,
+                                                OPENING = z.OpeningAmt,
+                                                CR_Col = (z.DR_CR == "CR" ? z.Amount.ToString() : "0"),
+                                                DR_Col = (z.DR_CR == "DR" ? z.Amount.ToString() : "0"),
+                                                CLOSING = z.Closing,
+                                                COMM_AMT = z.CommissionAmt
+                                            }).OrderByDescending(a => a.TRANSACTION_DATE).ToList();
+                //}).OrderBy(m => m.SerialNo).ThenByDescending(a => a.TRANSACTION_DATE).ToList();
+                //var transactionlistvalue = MerchantDailyTransactionClass.GetTransactionReport(search, CurrentMerchant.MEM_ID, DateFrom, Date_To);
                 return PartialView("IndexGrid", transactionlistvalue);
             }
-
-           
         }
 
         // Admin/WL
-        public FileResult ExportIndexMerchantTransReport(string statusval, string DateFrom = "", string Date_To = "")
+        public FileResult ExportIndexMerchantTransReport(string DateFrom = "", string Date_To = "")
         {
             // Using EPPlus from nuget
+            string statusval = "";
             using (ExcelPackage package = new ExcelPackage())
             {
                 Int32 row = 2;
                 Int32 col = 1;
                 var db = new DBContext();
-
-
                 package.Workbook.Worksheets.Add("Data");
                 IGrid<TBL_ACCOUNTS> grid = CreateExportMerchantTableGrid(statusval, DateFrom, Date_To);
                 ExcelWorksheet sheet = package.Workbook.Worksheets["Data"];
-
                 foreach (IGridColumn column in grid.Columns)
                 {
                     sheet.Cells[1, col].Value = column.Title;
                     sheet.Column(col++).Width = 18;
                 }
-
                 foreach (IGridRow<TBL_ACCOUNTS> gridRow in grid.Rows)
                 {
                     col = 1;
                     foreach (IGridColumn column in grid.Columns)
                         sheet.Cells[row, col++].Value = column.ValueFor(gridRow);
-
                     row++;
                 }
-
-                //return File(package.GetAsByteArray(), "application/unknown");
-                return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                return File(package.GetAsByteArray(), "application/unknown", "TransactionalReport.xlsx");
+                ////return File(package.GetAsByteArray(), "application/unknown");
+                //return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
             }
         }
 
         private IGrid<TBL_ACCOUNTS> CreateExportMerchantTableGrid(string statusval, string DateFrom = "", string Date_To = "")
         {
             var db = new DBContext();
-             var  transactionlistvalue = MerchantDailyTransactionClass.GetTransactionReport(statusval, CurrentMerchant.MEM_ID, DateFrom, Date_To);            
+            //var  transactionlistvalue = MerchantDailyTransactionClass.GetTransactionReport(statusval, CurrentMerchant.MEM_ID, DateFrom, Date_To);            
+            if (DateFrom != "" && Date_To != "")
+            {
+                string FromDATE = string.Empty;
+                string TO_DATE = string.Empty;
+                FromDATE = DateTime.Parse(DateFrom.ToString()).ToString("yyyy-MM-dd");
+                DateTime Date_From_Val = Convert.ToDateTime(FromDATE);
+                string From_TO = string.Empty;
+                TO_DATE = DateTime.Parse(Date_To.ToString()).ToString("yyyy-MM-dd");
+                DateTime Date_To_Val = Convert.ToDateTime(TO_DATE);
+                DateTime ToDateValue = Date_To_Val.AddDays(1);
+                var transactionlistvalue = (from x in db.TBL_ACCOUNTS
+                                            join y in db.TBL_MASTER_MEMBER on x.MEM_ID equals y.MEM_ID
+                                            where y.MEM_ID == CurrentMerchant.MEM_ID && x.TRANSACTION_DATE >= Date_From_Val && x.TRANSACTION_DATE <= ToDateValue
+                                            select new
+                                            {
+                                                SLN = x.ACC_NO,
+                                                MerchantName = y.UName,
+                                                MemberType = x.MEMBER_TYPE,
+                                                Trans_Type = x.TRANSACTION_TYPE,
+                                                Trans_Date = x.TRANSACTION_DATE,
+                                                DR_CR = x.DR_CR,
+                                                Amount = x.AMOUNT,
+                                                Narration = x.NARRATION,
+                                                OpeningAmt = x.OPENING,
+                                                Closing = x.CLOSING,
+                                                CommissionAmt = x.COMM_AMT
+                                            }).AsEnumerable().Select((z, index) => new TBL_ACCOUNTS
+                                            {
+                                                SerialNo = index + 1,
+                                                ACC_NO = z.SLN,
+                                                UserName = z.MerchantName,
+                                                MEMBER_TYPE = z.MemberType,
+                                                TRANSACTION_TYPE = z.Trans_Type,
+                                                TRANSACTION_DATE = z.Trans_Date,
+                                                DR_CR = z.DR_CR,
+                                                AMOUNT = z.Amount,
+                                                NARRATION = z.Narration,
+                                                OPENING = z.OpeningAmt,
+                                                CR_Col = (z.DR_CR == "CR" ? z.Amount.ToString() : "0"),
+                                                DR_Col = (z.DR_CR == "DR" ? z.Amount.ToString() : "0"),
+                                                CLOSING = z.Closing,
+                                                COMM_AMT = z.CommissionAmt
+                                            }).OrderBy(m => m.SerialNo).ThenByDescending(a => a.TRANSACTION_DATE).ToList();
                 long mem_id = long.Parse(CurrentMerchant.MEM_ID.ToString());
-                
+
                 IGrid<TBL_ACCOUNTS> grid = new Grid<TBL_ACCOUNTS>(transactionlistvalue);
                 grid.ViewContext = new ViewContext { HttpContext = HttpContext };
                 grid.Query = Request.QueryString;
@@ -205,10 +316,10 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                 //grid.Columns.Add(model => model.MEMBER_TYPE).Titled("Merchant Type");
                 grid.Columns.Add(model => model.TRANSACTION_TYPE).Titled("Transaction Type");
                 grid.Columns.Add(model => model.TRANSACTION_DATE).Titled("Transaction Date").Formatted("{0:yyyy-MM-dd}");
-            grid.Columns.Add(model => model.OPENING).Titled("Opening");
-            grid.Columns.Add(model => model.CR_Col).Titled("CR");
-            grid.Columns.Add(model => model.DR_Col).Titled("DR");
-            //grid.Columns.Add(model => model.AMOUNT).Titled("Amount");
+                grid.Columns.Add(model => model.OPENING).Titled("Opening");
+                grid.Columns.Add(model => model.CR_Col).Titled("CR");
+                grid.Columns.Add(model => model.DR_Col).Titled("DR");
+                //grid.Columns.Add(model => model.AMOUNT).Titled("Amount");
                 //grid.Columns.Add(model => model.NARRATION).Titled("Narration");
                 grid.Columns.Add(model => model.CLOSING).Titled("Closing");
                 grid.Columns.Add(model => model.COMM_AMT).Titled("Commission Amt.");
@@ -223,7 +334,76 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                 }
 
                 return grid;
-            
+            }
+            else
+            {
+                var transactionlistvalue = (from x in db.TBL_ACCOUNTS
+                                            join y in db.TBL_MASTER_MEMBER on x.MEM_ID equals y.MEM_ID
+                                            where y.MEM_ID == CurrentMerchant.MEM_ID
+                                            select new
+                                            {
+                                                SLN = x.ACC_NO,
+                                                MerchantName = y.UName,
+                                                MemberType = x.MEMBER_TYPE,
+                                                Trans_Type = x.TRANSACTION_TYPE,
+                                                Trans_Date = x.TRANSACTION_DATE,
+                                                DR_CR = x.DR_CR,
+                                                Amount = x.AMOUNT,
+                                                Narration = x.NARRATION,
+                                                OpeningAmt = x.OPENING,
+                                                Closing = x.CLOSING,
+                                                CommissionAmt = x.COMM_AMT
+                                            }).AsEnumerable().Select((z, index) => new TBL_ACCOUNTS
+                                            {
+                                                SerialNo = index + 1,
+                                                ACC_NO = z.SLN,
+                                                UserName = z.MerchantName,
+                                                MEMBER_TYPE = z.MemberType,
+                                                TRANSACTION_TYPE = z.Trans_Type,
+                                                TRANSACTION_DATE = z.Trans_Date,
+                                                DR_CR = z.DR_CR,
+                                                AMOUNT = z.Amount,
+                                                NARRATION = z.Narration,
+                                                OPENING = z.OpeningAmt,
+                                                CR_Col = (z.DR_CR == "CR" ? z.Amount.ToString() : "0"),
+                                                DR_Col = (z.DR_CR == "DR" ? z.Amount.ToString() : "0"),
+                                                CLOSING = z.Closing,
+                                                COMM_AMT = z.CommissionAmt
+                                            }).OrderBy(m => m.SerialNo).ThenByDescending(a => a.TRANSACTION_DATE).ToList();
+                long mem_id = long.Parse(CurrentMerchant.MEM_ID.ToString());
+
+                IGrid<TBL_ACCOUNTS> grid = new Grid<TBL_ACCOUNTS>(transactionlistvalue);
+                grid.ViewContext = new ViewContext { HttpContext = HttpContext };
+                grid.Query = Request.QueryString;
+
+                grid.Columns.Add(model => model.SerialNo).Titled("Sln No.");
+                grid.Columns.Add(model => model.UserName).Titled("User Name");
+                //grid.Columns.Add(model => model.MEMBER_TYPE).Titled("Merchant Type");
+                grid.Columns.Add(model => model.TRANSACTION_TYPE).Titled("Transaction Type");
+                grid.Columns.Add(model => model.TRANSACTION_DATE).Titled("Transaction Date").Formatted("{0:yyyy-MM-dd}");
+                grid.Columns.Add(model => model.OPENING).Titled("Opening");
+                grid.Columns.Add(model => model.CR_Col).Titled("CR");
+                grid.Columns.Add(model => model.DR_Col).Titled("DR");
+                //grid.Columns.Add(model => model.AMOUNT).Titled("Amount");
+                //grid.Columns.Add(model => model.NARRATION).Titled("Narration");
+                grid.Columns.Add(model => model.CLOSING).Titled("Closing");
+                grid.Columns.Add(model => model.COMM_AMT).Titled("Commission Amt.");
+                grid.Pager = new GridPager<TBL_ACCOUNTS>(grid);
+                grid.Processors.Add(grid.Pager);
+                grid.Pager.RowsPerPage = 1000000;
+
+                foreach (IGridColumn column in grid.Columns)
+                {
+                    column.Filter.IsEnabled = true;
+                    column.Sort.IsEnabled = true;
+                }
+
+                return grid;
+
+            }
+
+
+
         }
 
         public ActionResult DailyTransaction()
@@ -838,9 +1018,9 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
 
                     row++;
                 }
-
-                return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-                //return File(fileContents: package.GetAsByteArray(), contentType: "application/unknown");
+                return File(package.GetAsByteArray(), "application/unknown", "RDSCancellationReport.xlsx");
+                //return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                ////return File(fileContents: package.GetAsByteArray(), contentType: "application/unknown");
             }
         }
     }

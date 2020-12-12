@@ -108,9 +108,9 @@ app.controller('AirportAutocompleteController', function ($scope, $http, $window
     }
 
     //New Add For Traveler List
-    $scope.adultTypeTrv = '1';
-    $scope.ChildTypeTrv = '';
-    $scope.InfantTypeTrv = '';
+    $scope.adultTypeTrv = 1;
+    $scope.ChildTypeTrv = 0;
+    $scope.InfantTypeTrv = 0;
     $scope.Tripmode = '1';
     
     //End Add For Traveler List

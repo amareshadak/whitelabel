@@ -633,9 +633,16 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
             decimal TotalBookAmt = 0;
             int deptcnt = 0;
             int retncnt = 0;
+            decimal BlockBal = 0;
+            decimal AddMainBal = 0;
+            decimal MainBALL = 0;
             decimal.TryParse(FlightAmt, out TotalBookAmt);
             var getmemberinfo = _db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == CurrentMerchant.MEM_ID);
-            if (getmemberinfo.BALANCE > TotalBookAmt)
+            decimal.TryParse(getmemberinfo.BLOCKED_BALANCE.ToString(), out BlockBal);
+            decimal.TryParse(getmemberinfo.BALANCE.ToString(), out MainBALL);
+            AddMainBal = MainBALL - BlockBal;
+            //if (getmemberinfo.BALANCE > TotalBookAmt)
+            if (AddMainBal > TotalBookAmt)
             {
                 var MemberAcntLog = _db.TBL_ACCOUNTS.Where(x => x.MEM_ID == CurrentMerchant.MEM_ID).OrderByDescending(c => c.ACC_NO).FirstOrDefault();
                 List<ReturnFlightSegments> deptureSegment = JsonConvert.DeserializeObject<List<ReturnFlightSegments>>(deptSegment);
@@ -1495,6 +1502,8 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                         ContextTransaction.Commit();
                         #endregion
                         TempData["IsShowPrintTicket"] = "Show";
+                        TempData["IsShowRef_NoTicket"] = Ref_no;
+                        TempData["IsShowPNRTicket"] = PNR;
                         return Json(data, JsonRequestBehavior.AllowGet);
                     }
                     catch (Exception ex)
@@ -2490,6 +2499,9 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
             decimal AgentCommTDS = 0;
             decimal TCSAmt = 0;
 
+            decimal BlockBal = 0;
+            decimal AddMainBal = 0;
+            decimal MainBALL = 0;
             List<ReturnFlightSegments> deptureSegment = JsonConvert.DeserializeObject<List<ReturnFlightSegments>>(deptSegment);
             List<ReturnFlightSegments> retSegment = JsonConvert.DeserializeObject<List<ReturnFlightSegments>>(returnSegment);
             if (deptureSegment != null)
@@ -2500,7 +2512,12 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
             }
             var MemberAcntLog = _db.TBL_ACCOUNTS.Where(x => x.MEM_ID == CurrentMerchant.MEM_ID).OrderByDescending(c => c.ACC_NO).FirstOrDefault();
             var getmemberinfo = _db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == CurrentMerchant.MEM_ID);
-            if (getmemberinfo.BALANCE > TotalBookAmt)
+            decimal.TryParse(getmemberinfo.BLOCKED_BALANCE.ToString(), out BlockBal);
+            decimal.TryParse(getmemberinfo.BALANCE.ToString(), out MainBALL);
+            AddMainBal = MainBALL - BlockBal;
+            //if (getmemberinfo.BALANCE > TotalBookAmt)
+            if (AddMainBal > TotalBookAmt)
+            //if (getmemberinfo.BALANCE > TotalBookAmt)
             {
                 using (System.Data.Entity.DbContextTransaction ContextTransaction = _db.Database.BeginTransaction())
                 {
@@ -3872,20 +3889,38 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
             int retncnt = 0;
             string ReturnDeptResponse = "";
             string ReturnResponse = "";
+            string Returnway = "";
+            decimal BlockBal = 0;
+            decimal AddMainBal = 0;
+            decimal MainBALL = 0;
             //decimal.TryParse(FlightAmt, out TotalBookAmt);
             var getmemberinfo = _db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == CurrentMerchant.MEM_ID);
-            if (getmemberinfo.BALANCE > TotalBookAmt)
+            decimal.TryParse(getmemberinfo.BLOCKED_BALANCE.ToString(), out BlockBal);
+            decimal.TryParse(getmemberinfo.BALANCE.ToString(), out MainBALL);
+            AddMainBal = MainBALL - BlockBal;
+            //if (getmemberinfo.BALANCE > TotalBookAmt)
+            if (AddMainBal > TotalBookAmt)
+            //if (getmemberinfo.BALANCE > TotalBookAmt)
             {
                 string ReturnDepature = ReturnOnewayBooking(Deptreq, userMarkup, FlightAmt, ReturnFlightAmt, TripMode, DEPTNetAmt, deptSegment, returnSegment,"O", ISFlightType, INTPancard);
-
-                //string Returnway = ReturnOnewayBooking(Retntreq, userMarkup, FlightAmt, ReturnFlightAmt, TripMode, RetnNetAmt, deptSegment, returnSegment);
-                string Returnway = ReturnOnewayBooking(Retntreq, userMarkup, ReturnFlightAmt, ReturnFlightAmt, TripMode, RetnNetAmt, deptSegment, returnSegment,"R", ISFlightType, INTPancard);
+                
+                //string Returnway = ReturnOnewayBooking(Retntreq, userMarkup, ReturnFlightAmt, ReturnFlightAmt, TripMode, RetnNetAmt, deptSegment, returnSegment,"R", ISFlightType, INTPancard);
                 if (ReturnDepature == "Return Booking is Success")
-                { ReturnDeptResponse = "Round Trip Depature Booking is done"; }
+                {
+                    Returnway = ReturnOnewayBooking(Retntreq, userMarkup, ReturnFlightAmt, ReturnFlightAmt, TripMode, RetnNetAmt, deptSegment, returnSegment, "R", ISFlightType, INTPancard);
+
+                    ReturnDeptResponse = "Round Trip Depature Booking is done";
+                    TempData["IsShowPrintTicket"] = "Show";
+                }
                 else
-                { ReturnDeptResponse = "Round Trip Depature Booking is not done"; }
+                {
+                    ReturnDeptResponse = "Round Trip Depature Booking is not done";
+                }
                 if (Returnway == "Return Booking is Success")
-                { ReturnResponse = "Round Trip Return Booking is done"; }
+                {
+                    ReturnResponse = "Round Trip Return Booking is done";
+                    TempData["IsShowPrintTicket"] = "Show";
+                }
                 else
                 { ReturnResponse = "Round Trip Return Booking is not done"; }
                 return Json(new { result = ReturnDeptResponse,ReturnRes= ReturnResponse });
@@ -3912,9 +3947,16 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
             int retncnt = 0;
             string ReturnDeptResponse = "";
             string ReturnResponse = "";
+            decimal BlockBal = 0;
+            decimal AddMainBal = 0;
+            decimal MainBALL = 0;
             //decimal.TryParse(FlightAmt, out TotalBookAmt);
             var getmemberinfo = _db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == CurrentMerchant.MEM_ID);
-            if (getmemberinfo.BALANCE > TotalBookAmt)
+            decimal.TryParse(getmemberinfo.BLOCKED_BALANCE.ToString(), out BlockBal);
+            decimal.TryParse(getmemberinfo.BALANCE.ToString(), out MainBALL);
+            AddMainBal = MainBALL - BlockBal;
+            //if (getmemberinfo.BALANCE > TotalBookAmt)
+            if (AddMainBal > TotalBookAmt)
             {
                 string ReturnDepature = ReturnHoldBooking(Deptreq, userMarkup, FlightAmt, ReturnFlightAmt, TripMode, DEPTNetAmt, deptSegment, returnSegment,"O", ISFlightType, INTPancard);
                 string Returnway = ReturnHoldBooking(Retntreq, userMarkup, ReturnFlightAmt, ReturnFlightAmt, TripMode, RetnNetAmt, deptSegment, returnSegment,"R", ISFlightType, INTPancard);
@@ -4504,6 +4546,8 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                     _db.SaveChanges();
                     ContextTransaction.Commit();
                     #endregion
+                    TempData["IsShowRef_NoTicket"] = Ref_no;
+                    TempData["IsShowPNRTicket"] = PNR;
                     return "Return Booking is Success";
                     //TempData["IsShowPrintTicket"] = "Show";
                     //return Json(data, JsonRequestBehavior.AllowGet);
@@ -5678,7 +5722,16 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
         {
             if ((TempData["IsShowPrintTicket"] as string) == "Show")
             {
-                ViewBag.IsShowPrintTicket = "Show";
+                string Ref_No = TempData["IsShowRef_NoTicket"].ToString();
+                string PNR = TempData["IsShowPNRTicket"].ToString();
+                dynamic PrintFlghtInvoice = MultiLinkAirAPI.printBookTicket(Ref_No, "", PNR, "", "", "");
+                var TicketStatus = PrintFlghtInvoice.PNRDetailsResponse.TicketDetails[0].Status.Value;
+                if (TicketStatus == "Completed")
+                {
+                    ViewBag.IsShowPrintTicket = "Show";
+                }
+                else
+                { ViewBag.IsShowPrintTicket = ""; } 
             }
             return View();
         }
@@ -5695,18 +5748,36 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
             }
         }
         [HttpPost]
-        public JsonResult FlightBookingInvoice(DateTime? fromDate, DateTime? toDate,string BookedStatus)
+        public JsonResult FlightBookingInvoice(DateTime? fromDate, DateTime? toDate,string BookedStatus,string PNRNo="")
         {
             initpage();
             try
             {
                 var db = new DBContext();
-                if (fromDate != null && toDate != null)
+                if (fromDate != null && toDate != null && BookedStatus!="--Select--")
                 {
                     DateTime valueFrom = Convert.ToDateTime(toDate);
                     DateTime ToDateVal = valueFrom.AddDays(1);
                     //var GetBookedFlightList = _db.TBL_FLIGHT_BOOKING_DETAILS.Where(x => x.MEM_ID == CurrentMerchant.MEM_ID && x.BOOKING_STATUS != "Cancelled" && x.BOOKING_DATE >= fromDate && x.BOOKING_DATE<= ToDateVal).OrderByDescending(z => z.BOOKING_DATE).ToList();
-                    var GetBookedFlightList = _db.TBL_FLIGHT_BOOKING_DETAILS.Where(x => x.MEM_ID == CurrentMerchant.MEM_ID && x.BOOKING_DATE >= fromDate && x.BOOKING_DATE <= ToDateVal && x.BOOKING_STATUS== BookedStatus).OrderByDescending(z => z.BOOKING_DATE).ToList();
+                    var GetBookedFlightList = _db.TBL_FLIGHT_BOOKING_DETAILS.Where(x => x.MEM_ID == CurrentMerchant.MEM_ID && x.BOOKING_DATE >= fromDate && x.BOOKING_DATE <= ToDateVal && x.BOOKING_STATUS == BookedStatus).OrderByDescending(z => z.BOOKING_DATE).ToList();
+                    return Json(GetBookedFlightList, JsonRequestBehavior.AllowGet);
+                }
+                else if (PNRNo != "" && BookedStatus!= "--Select--")
+                {
+                    var GetBookedFlightList = _db.TBL_FLIGHT_BOOKING_DETAILS.Where(x => x.MEM_ID == CurrentMerchant.MEM_ID && x.PNR== PNRNo && x.BOOKING_STATUS == BookedStatus).OrderByDescending(z => z.BOOKING_DATE).ToList();
+
+                    return Json(GetBookedFlightList, JsonRequestBehavior.AllowGet);
+                }
+                else if (PNRNo == "" && BookedStatus != "--Select--")
+                {
+                    var GetBookedFlightList = _db.TBL_FLIGHT_BOOKING_DETAILS.Where(x => x.MEM_ID == CurrentMerchant.MEM_ID && x.BOOKING_STATUS == BookedStatus).OrderByDescending(z => z.BOOKING_DATE).ToList();
+
+                    return Json(GetBookedFlightList, JsonRequestBehavior.AllowGet);
+                }
+                else if (PNRNo != "" && BookedStatus == "--Select--")
+                {
+                    var GetBookedFlightList = _db.TBL_FLIGHT_BOOKING_DETAILS.Where(x => x.MEM_ID == CurrentMerchant.MEM_ID && x.PNR == PNRNo).OrderByDescending(z => z.BOOKING_DATE).ToList();
+
                     return Json(GetBookedFlightList, JsonRequestBehavior.AllowGet);
                 }
                 else
@@ -5740,6 +5811,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                 string Companyname = GetMemberInfo.COMPANY;
                 string CompanyEmail = GetMemberInfo.EMAIL_ID;
                 string CompanyMobile = GetMemberInfo.MEMBER_MOBILE;
+                string COMPANY_GST_NO = GetMemberInfo.COMPANY_GST_NO;
                 //string AIRADDITIONALAMOUNT = System.Configuration.ConfigurationManager.AppSettings["AIRADDITIONALAMOUNT"];
                 string AIRADDITIONALAMOUNT = Session["AIRADDITIONALAMOUNT"].ToString();
                 //ViewBag.Additionalcharge = AIRADDITIONALAMOUNT;
@@ -5762,7 +5834,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                 var data = JsonConvert.SerializeObject(PrintFlghtInvoice);
                 //return Json(data, JsonRequestBehavior.AllowGet);
                 //return Json(new { result = data, AdditionalCharge = AIRADDITIONALAMOUNT, ProcessingCharge = Updatestatus.USER_MARKUP });
-                return Json(new { result = data, AdditionalCharge = AIRADDITIONALAMOUNT, ProcessingCharge = Updatestatus.USER_MARKUP, Address = CompAddress, CompName = Companyname, CompEmail = CompanyEmail, CompContact = CompanyMobile });
+                return Json(new { result = data, AdditionalCharge = AIRADDITIONALAMOUNT, ProcessingCharge = Updatestatus.USER_MARKUP, Address = CompAddress, CompName = Companyname, CompEmail = CompanyEmail, CompContact = CompanyMobile, CompGSTNo = COMPANY_GST_NO });
 
             }
             catch (Exception ex)
@@ -5770,6 +5842,151 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                 return Json(false, JsonRequestBehavior.AllowGet);
             }
         }
+        [HttpPost]
+        public JsonResult PrintWithOutFareInvoice(string refId, string PNR)
+        {
+            try
+            {
+                var db = new DBContext();
+                string StateName = string.Empty;
+                var GetMemberInfo = db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == CurrentMerchant.MEM_ID);
+                var getState = db.TBL_STATES.FirstOrDefault(x => x.STATEID == GetMemberInfo.STATE_ID);
+                if (getState != null)
+                { StateName = getState.STATENAME; }
+                else
+                { StateName = ""; }
+                string CompAddress = GetMemberInfo.ADDRESS + "," + GetMemberInfo.CITY + "," + StateName + "," + GetMemberInfo.PIN;
+                string Companyname = GetMemberInfo.COMPANY;
+                string CompanyEmail = GetMemberInfo.EMAIL_ID;
+                string CompanyMobile = GetMemberInfo.MEMBER_MOBILE;
+                string COMPANY_GST_NO = GetMemberInfo.COMPANY_GST_NO;
+                //string AIRADDITIONALAMOUNT = System.Configuration.ConfigurationManager.AppSettings["AIRADDITIONALAMOUNT"];
+                string AIRADDITIONALAMOUNT = Session["AIRADDITIONALAMOUNT"].ToString();
+                //ViewBag.Additionalcharge = AIRADDITIONALAMOUNT;
+                var Updatestatus = _db.TBL_FLIGHT_BOOKING_DETAILS.FirstOrDefault(x => x.REF_NO == refId);
+                //ViewBag.processingCharge = Updatestatus.USER_MARKUP;
+                dynamic PrintFlghtInvoice = MultiLinkAirAPI.printBookTicket(refId, "", PNR, "", "", "");
+                var TicketStatus = PrintFlghtInvoice.PNRDetailsResponse.TicketDetails[0].Status.Value;
+                if (TicketStatus == "Completed" || TicketStatus == "Fully Cancelled" || TicketStatus == "Partially Cancelled")
+                {
+                    //var Updatestatus = _db.TBL_FLIGHT_BOOKING_DETAILS.FirstOrDefault(x => x.REF_NO == refId);
+                    Updatestatus.BOOKING_STATUS = TicketStatus;
+                    if (TicketStatus == "Fully Cancelled")
+                    {
+                        Updatestatus.IS_CANCELLATION = true;
+                        Updatestatus.CANCELLATION_DATE = DateTime.Now;
+                    }
+                    _db.Entry(Updatestatus).State = System.Data.Entity.EntityState.Modified;
+                    _db.SaveChanges();
+                }
+                var data = JsonConvert.SerializeObject(PrintFlghtInvoice);
+                //return Json(data, JsonRequestBehavior.AllowGet);
+                //return Json(new { result = data, AdditionalCharge = AIRADDITIONALAMOUNT, ProcessingCharge = Updatestatus.USER_MARKUP });
+                return Json(new { result = data, AdditionalCharge = AIRADDITIONALAMOUNT, ProcessingCharge = Updatestatus.USER_MARKUP, Address = CompAddress, CompName = Companyname, CompEmail = CompanyEmail, CompContact = CompanyMobile, CompGSTNo = COMPANY_GST_NO });
+
+            }
+            catch (Exception ex)
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpPost]
+        public JsonResult PrintPublishFareInvoice(string refId, string PNR)
+        {
+            try
+            {
+                var db = new DBContext();
+                string StateName = string.Empty;
+                var GetMemberInfo = db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == CurrentMerchant.MEM_ID);
+                var getState = db.TBL_STATES.FirstOrDefault(x => x.STATEID == GetMemberInfo.STATE_ID);
+                if (getState != null)
+                { StateName = getState.STATENAME; }
+                else
+                { StateName = ""; }
+                string CompAddress = GetMemberInfo.ADDRESS + "," + GetMemberInfo.CITY + "," + StateName + "," + GetMemberInfo.PIN;
+                string Companyname = GetMemberInfo.COMPANY;
+                string CompanyEmail = GetMemberInfo.EMAIL_ID;
+                string CompanyMobile = GetMemberInfo.MEMBER_MOBILE;
+                string COMPANY_GST_NO = GetMemberInfo.COMPANY_GST_NO;
+                //string AIRADDITIONALAMOUNT = System.Configuration.ConfigurationManager.AppSettings["AIRADDITIONALAMOUNT"];
+                string AIRADDITIONALAMOUNT = Session["AIRADDITIONALAMOUNT"].ToString();
+                //ViewBag.Additionalcharge = AIRADDITIONALAMOUNT;
+                var Updatestatus = _db.TBL_FLIGHT_BOOKING_DETAILS.FirstOrDefault(x => x.REF_NO == refId);
+                //ViewBag.processingCharge = Updatestatus.USER_MARKUP;
+                dynamic PrintFlghtInvoice = MultiLinkAirAPI.printBookTicket(refId, "", PNR, "", "", "");
+                var TicketStatus = PrintFlghtInvoice.PNRDetailsResponse.TicketDetails[0].Status.Value;
+                if (TicketStatus == "Completed" || TicketStatus == "Fully Cancelled" || TicketStatus == "Partially Cancelled")
+                {
+                    //var Updatestatus = _db.TBL_FLIGHT_BOOKING_DETAILS.FirstOrDefault(x => x.REF_NO == refId);
+                    Updatestatus.BOOKING_STATUS = TicketStatus;
+                    if (TicketStatus == "Fully Cancelled")
+                    {
+                        Updatestatus.IS_CANCELLATION = true;
+                        Updatestatus.CANCELLATION_DATE = DateTime.Now;
+                    }
+                    _db.Entry(Updatestatus).State = System.Data.Entity.EntityState.Modified;
+                    _db.SaveChanges();
+                }
+                var data = JsonConvert.SerializeObject(PrintFlghtInvoice);
+                //return Json(data, JsonRequestBehavior.AllowGet);
+                //return Json(new { result = data, AdditionalCharge = AIRADDITIONALAMOUNT, ProcessingCharge = Updatestatus.USER_MARKUP });
+                return Json(new { result = data, AdditionalCharge = AIRADDITIONALAMOUNT, ProcessingCharge = Updatestatus.USER_MARKUP, Address = CompAddress, CompName = Companyname, CompEmail = CompanyEmail, CompContact = CompanyMobile, CompGSTNo = COMPANY_GST_NO,FlightDetails= Updatestatus });
+
+            }
+            catch (Exception ex)
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpPost]
+        public JsonResult PrintNetFareInvoice(string refId, string PNR)
+        {
+            try
+            {
+                var db = new DBContext();
+                string StateName = string.Empty;
+                var GetMemberInfo = db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == CurrentMerchant.MEM_ID);
+                var getState = db.TBL_STATES.FirstOrDefault(x => x.STATEID == GetMemberInfo.STATE_ID);
+                if (getState != null)
+                { StateName = getState.STATENAME; }
+                else
+                { StateName = ""; }
+                string CompAddress = GetMemberInfo.ADDRESS + "," + GetMemberInfo.CITY + "," + StateName + "," + GetMemberInfo.PIN;
+                string Companyname = GetMemberInfo.COMPANY;
+                string CompanyEmail = GetMemberInfo.EMAIL_ID;
+                string CompanyMobile = GetMemberInfo.MEMBER_MOBILE;
+                string COMPANY_GST_NO = GetMemberInfo.COMPANY_GST_NO;
+                //string AIRADDITIONALAMOUNT = System.Configuration.ConfigurationManager.AppSettings["AIRADDITIONALAMOUNT"];
+                string AIRADDITIONALAMOUNT = Session["AIRADDITIONALAMOUNT"].ToString();
+                //ViewBag.Additionalcharge = AIRADDITIONALAMOUNT;
+                var Updatestatus = _db.TBL_FLIGHT_BOOKING_DETAILS.FirstOrDefault(x => x.REF_NO == refId);
+                //ViewBag.processingCharge = Updatestatus.USER_MARKUP;
+                dynamic PrintFlghtInvoice = MultiLinkAirAPI.printBookTicket(refId, "", PNR, "", "", "");
+                var TicketStatus = PrintFlghtInvoice.PNRDetailsResponse.TicketDetails[0].Status.Value;
+                if (TicketStatus == "Completed" || TicketStatus == "Fully Cancelled" || TicketStatus == "Partially Cancelled")
+                {
+                    //var Updatestatus = _db.TBL_FLIGHT_BOOKING_DETAILS.FirstOrDefault(x => x.REF_NO == refId);
+                    Updatestatus.BOOKING_STATUS = TicketStatus;
+                    if (TicketStatus == "Fully Cancelled")
+                    {
+                        Updatestatus.IS_CANCELLATION = true;
+                        Updatestatus.CANCELLATION_DATE = DateTime.Now;
+                    }
+                    _db.Entry(Updatestatus).State = System.Data.Entity.EntityState.Modified;
+                    _db.SaveChanges();
+                }
+                var data = JsonConvert.SerializeObject(PrintFlghtInvoice);
+                //return Json(data, JsonRequestBehavior.AllowGet);
+                //return Json(new { result = data, AdditionalCharge = AIRADDITIONALAMOUNT, ProcessingCharge = Updatestatus.USER_MARKUP });
+                return Json(new { result = data, AdditionalCharge = AIRADDITIONALAMOUNT, ProcessingCharge = Updatestatus.USER_MARKUP, Address = CompAddress, CompName = Companyname, CompEmail = CompanyEmail, CompContact = CompanyMobile, CompGSTNo = COMPANY_GST_NO });
+
+            }
+            catch (Exception ex)
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         [HttpPost]
         public JsonResult TicketInformationGet(string refId, string PNR)
         {
@@ -5787,6 +6004,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                 string Companyname = GetMemberInfo.COMPANY;
                 string CompanyEmail = GetMemberInfo.EMAIL_ID;
                 string CompanyMobile = GetMemberInfo.MEMBER_MOBILE;
+                string COMPANY_GST_NO = GetMemberInfo.COMPANY_GST_NO;
                 //string AIRADDITIONALAMOUNT = System.Configuration.ConfigurationManager.AppSettings["AIRADDITIONALAMOUNT"];
                 string AIRADDITIONALAMOUNT = Session["AIRADDITIONALAMOUNT"].ToString();
                 //ViewBag.Additionalcharge = AIRADDITIONALAMOUNT;
@@ -5808,7 +6026,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                 }
                 var data = JsonConvert.SerializeObject(PrintFlghtInvoice);
                
-                return Json(new { result = data, AdditionalCharge = AIRADDITIONALAMOUNT, ProcessingCharge = Updatestatus.USER_MARKUP,Address= CompAddress,CompName= Companyname,CompEmail= CompanyEmail,CompContact= CompanyMobile });
+                return Json(new { result = data, AdditionalCharge = AIRADDITIONALAMOUNT, ProcessingCharge = Updatestatus.USER_MARKUP,Address= CompAddress,CompName= Companyname,CompEmail= CompanyEmail,CompContact= CompanyMobile, CompGSTNo = COMPANY_GST_NO });
                 //return Json(new { result = data,AdditionalCharge= AIRADDITIONALAMOUNT ,ProcessingCharge= Updatestatus.USER_MARKUP });
 
             }

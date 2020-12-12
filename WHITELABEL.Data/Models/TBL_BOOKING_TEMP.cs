@@ -12,7 +12,7 @@
         public string TRN_ID { get; set; }
         public string PNR_NO { get; set; }
         public string CLIENT_TXN_ID { get; set; }
-        public decimal BOOKING_AMT { get; set; }
+        public decimal? BOOKING_AMT { get; set; }
         public string PG_NAME { get; set; }
         public string PNR_CLASS { get; set; }
         public DateTime? TRN_DATE { get; set; }

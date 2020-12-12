@@ -177,129 +177,157 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                     row++;
                 }
 
-                return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-                //return File(fileContents: package.GetAsByteArray(), contentType: "application/unknown");
+                //return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                ////return File(fileContents: package.GetAsByteArray(), contentType: "application/unknown");
+                return File(package.GetAsByteArray(), "application/unknown", "RequisitionExport.xlsx");
             }
         }
 
         private IGrid<TBL_BALANCE_TRANSFER_LOGS> CreateExportableGridINExcel(string DateFrom , string Date_To)
         {
-            var db = new DBContext();
-            if (DateFrom != "" && Date_To != "")
+            if (Session["MerchantUserId"] != null)
             {
-                string FromDATE = string.Empty;
-                string TO_DATE = string.Empty;
-                FromDATE = DateTime.Parse(DateFrom.ToString()).ToString("yyyy-MM-dd");
-                DateTime Date_From_Val = Convert.ToDateTime(FromDATE);
-                string From_TO = string.Empty;
-                TO_DATE = DateTime.Parse(Date_To.ToString()).ToString("yyyy-MM-dd");
-                DateTime Date_To_Val = Convert.ToDateTime(TO_DATE);
-                var transactionlist = (from x in db.TBL_BALANCE_TRANSFER_LOGS
-                                       join y in db.TBL_MASTER_MEMBER on x.FROM_MEMBER equals y.MEM_ID
-                                       where x.STATUS == "Pending" && x.FROM_MEMBER == CurrentMerchant.MEM_ID  && x.REQUEST_DATE>= Date_From_Val && x.REQUEST_DATE<= Date_To_Val
-                                       select new
-                                       {
-                                           Touser = (x.REF_NO == "Admin" ? db.TBL_MASTER_MEMBER.Where(s => s.MEM_ID == y.UNDER_WHITE_LEVEL).Select(d => d.UName).FirstOrDefault() : db.TBL_MASTER_MEMBER.Where(s => s.MEM_ID == y.INTRODUCER).Select(d => d.UName).FirstOrDefault()),
-                                           //Touser = db.TBL_MASTER_MEMBER.Where(s=>s.MEM_ID==y.INTRODUCER).Select(d=>d.UName).FirstOrDefault(),
-                                           transid = x.TransactionID,
-                                           ReferenceNo = x.REFERENCE_NO,
-                                           FromUser = y.UName,
-                                           REQUEST_DATE = x.REQUEST_DATE,
-                                           AMOUNT = x.AMOUNT,
-                                           BANK_ACCOUNT = x.BANK_ACCOUNT,
-                                           TRANSACTION_DETAILS = x.TRANSACTION_DETAILS,
-                                           SLN = x.SLN,
-                                           PAY_MODE = x.PAYMENT_METHOD
-                                       }).AsEnumerable().Select(z => new TBL_BALANCE_TRANSFER_LOGS
-                                       {
-                                           ToUser = z.Touser,
-                                           TransactionID = z.transid,
-                                           REFERENCE_NO = z.ReferenceNo,
-                                           FromUser = z.FromUser,
-                                           AMOUNT = z.AMOUNT,
-                                           REQUEST_DATE = z.REQUEST_DATE,
-                                           BANK_ACCOUNT = z.BANK_ACCOUNT,
-                                           TRANSACTION_DETAILS = z.TRANSACTION_DETAILS,
-                                           SLN = z.SLN,
-                                           PAYMENT_METHOD = z.PAY_MODE
-                                       }).ToList();
+                var db = new DBContext();
+                if (DateFrom != "" && Date_To != "")
+                {
+                    string FromDATE = string.Empty;
+                    string TO_DATE = string.Empty;
+                    FromDATE = DateTime.Parse(DateFrom.ToString()).ToString("yyyy-MM-dd");
+                    DateTime Date_From_Val = Convert.ToDateTime(FromDATE);
+                    string From_TO = string.Empty;
+                    TO_DATE = DateTime.Parse(Date_To.ToString()).ToString("yyyy-MM-dd");
+                    DateTime Date_To_Val = Convert.ToDateTime(TO_DATE);
+                    var transactionlist = (from x in db.TBL_BALANCE_TRANSFER_LOGS
+                                           join y in db.TBL_MASTER_MEMBER on x.FROM_MEMBER equals y.MEM_ID
+                                           where x.STATUS == "Pending" && x.FROM_MEMBER == CurrentMerchant.MEM_ID && x.REQUEST_DATE >= Date_From_Val && x.REQUEST_DATE <= Date_To_Val
+                                           select new
+                                           {
+                                               //Touser = (x.REF_NO == "Admin" ? db.TBL_MASTER_MEMBER.Where(s => s.MEM_ID == y.UNDER_WHITE_LEVEL).Select(d => d.UName).FirstOrDefault() : db.TBL_MASTER_MEMBER.Where(s => s.MEM_ID == y.INTRODUCER).Select(d => d.UName).FirstOrDefault()),
+                                               Touser = x.REF_NO,
+                                               //Touser = db.TBL_MASTER_MEMBER.Where(s=>s.MEM_ID==y.INTRODUCER).Select(d=>d.UName).FirstOrDefault(),
+                                               transid = x.TransactionID,
+                                               ReferenceNo = x.REFERENCE_NO,
+                                               FromUser = y.UName,
+                                               REQUEST_DATE = x.REQUEST_DATE,
+                                               AMOUNT = x.AMOUNT,
+                                               BANK_ACCOUNT = x.BANK_ACCOUNT,
+                                               TRANSACTION_DETAILS = x.TRANSACTION_DETAILS,
+                                               SLN = x.SLN,
+                                               PAY_MODE = x.PAYMENT_METHOD,
+                                               STATUS = x.STATUS
+                                           }).AsEnumerable().Select(z => new TBL_BALANCE_TRANSFER_LOGS
+                                           {
+                                               ToUser = z.Touser,
+                                               TransactionID = z.transid,
+                                               REFERENCE_NO = z.ReferenceNo,
+                                               FromUser = z.FromUser,
+                                               AMOUNT = z.AMOUNT,
+                                               REQUEST_DATE = z.REQUEST_DATE,
+                                               BANK_ACCOUNT = z.BANK_ACCOUNT,
+                                               TRANSACTION_DETAILS = z.TRANSACTION_DETAILS,
+                                               SLN = z.SLN,
+                                               PAYMENT_METHOD = z.PAY_MODE,
+                                               STATUS = z.STATUS
+                                           }).ToList();
 
-                IGrid<TBL_BALANCE_TRANSFER_LOGS> grid = new Grid<TBL_BALANCE_TRANSFER_LOGS>(transactionlist);
-                grid.ViewContext = new ViewContext { HttpContext = HttpContext };
-                grid.Query = Request.QueryString;
-                grid.Columns.Add(model => model.TransactionID).Titled("Trans Id");
-                grid.Columns.Add(model => model.ToUser).Titled("To User").Filterable(true);
-                grid.Columns.Add(model => model.FromUser).Titled("From Member").Filterable(true);
-                grid.Columns.Add(model => model.REFERENCE_NO).Titled("Reference No").Filterable(true);
-                grid.Columns.Add(model => model.REQUEST_DATE).Titled("Req Date").Formatted("{0:yyyy-MM-dd}").MultiFilterable(true);
-                grid.Columns.Add(model => model.AMOUNT).Titled("Amount").Filterable(true);
-                grid.Columns.Add(model => model.PAYMENT_METHOD).Titled("Pay Mode").Filterable(true);
-                grid.Columns.Add(model => model.BANK_ACCOUNT).Titled("Bank Acnt").Filterable(true);
-                grid.Columns.Add(model => model.TRANSACTION_DETAILS).Titled("Description").Filterable(true);
+                    IGrid<TBL_BALANCE_TRANSFER_LOGS> grid = new Grid<TBL_BALANCE_TRANSFER_LOGS>(transactionlist);
+                    grid.ViewContext = new ViewContext { HttpContext = HttpContext };
+                    grid.Query = Request.QueryString;
+                    grid.Columns.Add(model => model.TransactionID).Titled("Trans Id");
+                    grid.Columns.Add(model => model.ToUser).Titled("To User").Filterable(true);
+                    grid.Columns.Add(model => model.FromUser).Titled("From Member").Filterable(true);
+                    grid.Columns.Add(model => model.REFERENCE_NO).Titled("Reference No").Filterable(true);
+                    grid.Columns.Add(model => model.REQUEST_DATE).Titled("Req Date").Formatted("{0:MM/dd/yyyy}").MultiFilterable(true);
+                    grid.Columns.Add(model => model.REQUEST_DATE).Titled("Req Time").Formatted("{0:T}").Filterable(false);
+                    grid.Columns.Add(model => model.AMOUNT).Titled("Amount").Filterable(true);
+                    grid.Columns.Add(model => model.PAYMENT_METHOD).Titled("Pay Mode").Filterable(true);
+                    grid.Columns.Add(model => model.BANK_ACCOUNT).Titled("Bank Acnt").Filterable(true);
+                    grid.Columns.Add(model => model.TRANSACTION_DETAILS).Titled("Description").Filterable(true);
+                    grid.Columns.Add(model => model.STATUS).Titled("Req. Status").Filterable(true);
+                    grid.Columns.Add(model => model.SLN).Titled("Edit").Encoded(false).Filterable(false).Sortable(false)
+                        .RenderedAs(model => model.STATUS == "Pending" ? ("<div style='text-align:center'> <a href='" + @Url.Action("RequisitionDetails", "MerchantRequisition", new { area = "Merchant", transId = Encrypt.EncryptMe(model.SLN.ToString()) }) + "'   title='Edit'><i class='fa fa-edit'></i></a></div>") : "");
 
-                grid.Columns.Add(model => model.SLN).Titled("Edit").Encoded(false).Filterable(false).Sortable(false)
-                    .RenderedAs(model => "<div style='text-align:center'> <a href='" + @Url.Action("RequisitionDetails", "MerchantRequisition", new { area = "Merchant", transId = Encrypt.EncryptMe(model.SLN.ToString()) }) + "'   title='Edit'><i class='fa fa-edit'></i></a></div>");
+
+                    grid.Pager = new GridPager<TBL_BALANCE_TRANSFER_LOGS>(grid);
+                    grid.Processors.Add(grid.Pager);
+                    grid.Pager.RowsPerPage = 10000000;
+                    return grid;
+                }
+                else
+                {
+                    var transactionlist = (from x in db.TBL_BALANCE_TRANSFER_LOGS
+                                           join y in db.TBL_MASTER_MEMBER on x.FROM_MEMBER equals y.MEM_ID
+                                           where x.STATUS == "Pending" && x.FROM_MEMBER == CurrentMerchant.MEM_ID
+                                           select new
+                                           {
+                                               //Touser = (x.REF_NO == "Admin" ? db.TBL_MASTER_MEMBER.Where(s => s.MEM_ID == y.UNDER_WHITE_LEVEL).Select(d => d.UName).FirstOrDefault() : db.TBL_MASTER_MEMBER.Where(s => s.MEM_ID == y.INTRODUCER).Select(d => d.UName).FirstOrDefault()),
+                                               Touser = x.REF_NO,
+                                               //Touser = db.TBL_MASTER_MEMBER.Where(s=>s.MEM_ID==y.INTRODUCER).Select(d=>d.UName).FirstOrDefault(),
+                                               transid = x.TransactionID,
+                                               ReferenceNo = x.REFERENCE_NO,
+                                               FromUser = y.UName,
+                                               REQUEST_DATE = x.REQUEST_DATE,
+                                               AMOUNT = x.AMOUNT,
+                                               BANK_ACCOUNT = x.BANK_ACCOUNT,
+                                               TRANSACTION_DETAILS = x.TRANSACTION_DETAILS,
+                                               SLN = x.SLN,
+                                               PAY_MODE = x.PAYMENT_METHOD,
+                                               STATUS = x.STATUS
+                                           }).AsEnumerable().Select(z => new TBL_BALANCE_TRANSFER_LOGS
+                                           {
+                                               ToUser = z.Touser,
+                                               TransactionID = z.transid,
+                                               REFERENCE_NO = z.ReferenceNo,
+                                               FromUser = z.FromUser,
+                                               AMOUNT = z.AMOUNT,
+                                               REQUEST_DATE = z.REQUEST_DATE,
+                                               BANK_ACCOUNT = z.BANK_ACCOUNT,
+                                               TRANSACTION_DETAILS = z.TRANSACTION_DETAILS,
+                                               SLN = z.SLN,
+                                               PAYMENT_METHOD = z.PAY_MODE,
+                                               STATUS = z.STATUS
+                                           }).ToList();
+
+                    IGrid<TBL_BALANCE_TRANSFER_LOGS> grid = new Grid<TBL_BALANCE_TRANSFER_LOGS>(transactionlist);
+                    grid.ViewContext = new ViewContext { HttpContext = HttpContext };
+                    grid.Query = Request.QueryString;
+                    grid.Columns.Add(model => model.TransactionID).Titled("Trans Id");
+                    grid.Columns.Add(model => model.ToUser).Titled("To User").Filterable(true);
+                    grid.Columns.Add(model => model.FromUser).Titled("From Member").Filterable(true);
+                    grid.Columns.Add(model => model.REFERENCE_NO).Titled("Reference No").Filterable(true);
+                    grid.Columns.Add(model => model.REQUEST_DATE).Titled("Req Date").Formatted("{0:MM/dd/yyyy}").MultiFilterable(true);
+                    grid.Columns.Add(model => model.REQUEST_DATE).Titled("Req Time").Formatted("{0:T}").Filterable(false);
+                    grid.Columns.Add(model => model.AMOUNT).Titled("Amount").Filterable(true);
+                    grid.Columns.Add(model => model.PAYMENT_METHOD).Titled("Pay Mode").Filterable(true);
+                    grid.Columns.Add(model => model.BANK_ACCOUNT).Titled("Bank Acnt").Filterable(true);
+                    grid.Columns.Add(model => model.TRANSACTION_DETAILS).Titled("Description").Filterable(true);
+                    grid.Columns.Add(model => model.STATUS).Titled("Req. Status").Filterable(true);
+                    grid.Columns.Add(model => model.SLN).Titled("Edit").Encoded(false).Filterable(false).Sortable(false)
+                        .RenderedAs(model => model.STATUS == "Pending" ? ("<div style='text-align:center'> <a href='" + @Url.Action("RequisitionDetails", "MerchantRequisition", new { area = "Merchant", transId = Encrypt.EncryptMe(model.SLN.ToString()) }) + "'   title='Edit'><i class='fa fa-edit'></i></a></div>") : "");
+                    //.RenderedAs(model =>model.STATUS== "Pending")?("<div style='text-align:center'> <a href='" + @Url.Action("RequisitionDetails", "MerchantRequisition", new { area = "Merchant", transId = Encrypt.EncryptMe(model.SLN.ToString()) }) + "'   title='Edit'><i class='fa fa-edit'></i></a></div>"):"");
 
 
-                grid.Pager = new GridPager<TBL_BALANCE_TRANSFER_LOGS>(grid);
-                grid.Processors.Add(grid.Pager);
-                grid.Pager.RowsPerPage = 10000000;
-                return grid;
+                    grid.Pager = new GridPager<TBL_BALANCE_TRANSFER_LOGS>(grid);
+                    grid.Processors.Add(grid.Pager);
+                    grid.Pager.RowsPerPage = 10000000;
+                    return grid;
+                }
             }
             else
             {
-                var transactionlist = (from x in db.TBL_BALANCE_TRANSFER_LOGS
-                                       join y in db.TBL_MASTER_MEMBER on x.FROM_MEMBER equals y.MEM_ID
-                                       where x.STATUS == "Pending" && x.FROM_MEMBER == CurrentMerchant.MEM_ID
-                                       select new
-                                       {
-                                           Touser = (x.REF_NO == "Admin" ? db.TBL_MASTER_MEMBER.Where(s => s.MEM_ID == y.UNDER_WHITE_LEVEL).Select(d => d.UName).FirstOrDefault() : db.TBL_MASTER_MEMBER.Where(s => s.MEM_ID == y.INTRODUCER).Select(d => d.UName).FirstOrDefault()),
-                                           //Touser = db.TBL_MASTER_MEMBER.Where(s=>s.MEM_ID==y.INTRODUCER).Select(d=>d.UName).FirstOrDefault(),
-                                           transid = x.TransactionID,
-                                           ReferenceNo = x.REFERENCE_NO,
-                                           FromUser = y.UName,
-                                           REQUEST_DATE = x.REQUEST_DATE,
-                                           AMOUNT = x.AMOUNT,
-                                           BANK_ACCOUNT = x.BANK_ACCOUNT,
-                                           TRANSACTION_DETAILS = x.TRANSACTION_DETAILS,
-                                           SLN = x.SLN,
-                                           PAY_MODE = x.PAYMENT_METHOD
-                                       }).AsEnumerable().Select(z => new TBL_BALANCE_TRANSFER_LOGS
-                                       {
-                                           ToUser = z.Touser,
-                                           TransactionID = z.transid,
-                                           REFERENCE_NO = z.ReferenceNo,
-                                           FromUser = z.FromUser,
-                                           AMOUNT = z.AMOUNT,
-                                           REQUEST_DATE = z.REQUEST_DATE,
-                                           BANK_ACCOUNT = z.BANK_ACCOUNT,
-                                           TRANSACTION_DETAILS = z.TRANSACTION_DETAILS,
-                                           SLN = z.SLN,
-                                           PAYMENT_METHOD = z.PAY_MODE
-                                       }).ToList();
-
-                IGrid<TBL_BALANCE_TRANSFER_LOGS> grid = new Grid<TBL_BALANCE_TRANSFER_LOGS>(transactionlist);
-                grid.ViewContext = new ViewContext { HttpContext = HttpContext };
-                grid.Query = Request.QueryString;
-                grid.Columns.Add(model => model.TransactionID).Titled("Trans Id");
-                grid.Columns.Add(model => model.ToUser).Titled("To User").Filterable(true);
-                grid.Columns.Add(model => model.FromUser).Titled("From Member").Filterable(true);
-                grid.Columns.Add(model => model.REFERENCE_NO).Titled("Reference No").Filterable(true);
-                grid.Columns.Add(model => model.REQUEST_DATE).Titled("Req Date").Formatted("{0:yyyy-MM-dd}").MultiFilterable(true);
-                grid.Columns.Add(model => model.AMOUNT).Titled("Amount").Filterable(true);
-                grid.Columns.Add(model => model.PAYMENT_METHOD).Titled("Pay Mode").Filterable(true);
-                grid.Columns.Add(model => model.BANK_ACCOUNT).Titled("Bank Acnt").Filterable(true);
-                grid.Columns.Add(model => model.TRANSACTION_DETAILS).Titled("Description").Filterable(true);
-
-                grid.Columns.Add(model => model.SLN).Titled("Edit").Encoded(false).Filterable(false).Sortable(false)
-                    .RenderedAs(model => "<div style='text-align:center'> <a href='" + @Url.Action("RequisitionDetails", "MerchantRequisition", new { area = "Merchant", transId = Encrypt.EncryptMe(model.SLN.ToString()) }) + "'   title='Edit'><i class='fa fa-edit'></i></a></div>");
-
-
-                grid.Pager = new GridPager<TBL_BALANCE_TRANSFER_LOGS>(grid);
-                grid.Processors.Add(grid.Pager);
-                grid.Pager.RowsPerPage = 10000000;
+                
+                //IGrid<TBL_BALANCE_TRANSFER_LOGS> grid = new Grid<TBL_BALANCE_TRANSFER_LOGS>(null);
+                Session["MerchantUserId"] = null;
+                Session["MerchantUserName"] = null;
+                Session["UserType"] = null;
+                Session.Remove("MerchantUserId");
+                Session.Remove("MerchantUserName");
+                Session.Remove("UserType");
+                 RedirectToAction("Index", "Login", new { area = "" });
+                IGrid<TBL_BALANCE_TRANSFER_LOGS> grid = new Grid<TBL_BALANCE_TRANSFER_LOGS>(null);
                 return grid;
             }
+            
             
         }
         public ActionResult RequisitionDetails(string transId = "")
@@ -322,6 +350,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                     ViewBag.WhitelabelName = Whitelabeldetails.MEMBER_NAME;
                     ViewBag.WhiteLabelMobile = Whitelabeldetails.MEMBER_MOBILE;
                     ViewBag.WhiteLabelEmail = Whitelabeldetails.EMAIL_ID;
+                    ViewBag.PaymentMode = whiteleveluser.PAYMENT_MODE;
                     if (transId == "")
                     {
                         var memberService = (from x in db.TBL_MASTER_MEMBER
@@ -390,7 +419,30 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                         TransactionInfo.FROM_MEMBER = introducer;
                         TransactionInfo.PAYMENT_METHOD = TransactionInfo.PAYMENT_METHOD;
                         TransactionInfo.REQUEST_DATE = Convert.ToDateTime(TransactionInfo.REQUEST_DATE.ToString("yyyy-MM-dd").Substring(0, 10));
-                        TransactionInfo.BANK_ACCOUNT = TransactionInfo.BANK_ACCOUNT;
+                        if (TransactionInfo.BANK_ACCOUNT == "Cash Deposit-Office")//Cash Deposit AC - Office- IFSC - Office
+                        {
+                            //var bank = db.TBL_SETTINGS_BANK_DETAILS.FirstOrDefault(x => x.SL_NO == 1).BANK;
+                            var bank = (from x in db.TBL_SETTINGS_BANK_DETAILS
+                                                 where x.SL_NO==1
+
+                                                 //where x.INTRODUCER == dis_Id
+                                                 select new
+                                                 {
+                                                     MEM_ID = (x.BANK + "-" + x.ACCOUNT_NO),
+                                                     //UName = (x.BANK + "-" + x.ACCOUNT_NO)
+                                                     //UName = (x.BANK + " AC - " + x.ACCOUNT_NO + "- IFSC - " + x.IFSC)
+                                                     UName = (x.BANK == "CASH - TO - OFFICE" ? "CASH - TO - OFFICE" : (x.BANK + " AC - " + x.ACCOUNT_NO + "- IFSC - " + x.IFSC))
+                                                 }).AsEnumerable().Select(z => new MemberView
+                                                 {
+                                                     IDValue = z.MEM_ID.ToString(),
+                                                     TextValue = z.UName
+                                                 }).FirstOrDefault();
+                            //TransactionInfo.BANK_ACCOUNT = bank.TextValue;//
+                            TransactionInfo.BANK_ACCOUNT = "Cash Deposit-Office";
+                        }
+                        else {
+                            TransactionInfo.BANK_ACCOUNT = TransactionInfo.BANK_ACCOUNT;
+                        }
                         TransactionInfo.TRANSACTION_DETAILS = TransactionInfo.TRANSACTION_DETAILS;
                         TransactionInfo.FromUser = "Test";
                         TransactionInfo.RequisitionSendTO = TransactionInfo.REF_NO;
@@ -476,7 +528,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                             translist.REQUEST_DATE = Convert.ToDateTime(objval.REQUEST_DATE);
 
                             translist.REQUEST_TIME = System.DateTime.Now;
-                            translist.BANK_ACCOUNT = objval.BANK_ACCOUNT;
+                            //translist.BANK_ACCOUNT = objval.BANK_ACCOUNT;
                             translist.AMOUNT = objval.AMOUNT;
                             translist.PAYMENT_METHOD = objval.PAYMENT_METHOD;
                             translist.TRANSFER_METHOD = "Cash";
@@ -513,6 +565,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                             {
                                 fromuser = long.Parse(whiteleveluser.UNDER_WHITE_LEVEL.ToString());
                             }
+                           
                             var getsuperior = db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == fromuser);
                             objval.TransactionID = fromuser + "" + CurrentMerchant.MEM_ID + DateTime.Now.ToString("yyyyMMdd") + "" + DateTime.Now.ToString("HHMMss");
                             objval.TO_MEMBER = fromuser;
@@ -526,7 +579,16 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                             objval.TRANSFER_METHOD = "Cash";
                             objval.BANK_CHARGES = objval.BANK_CHARGES;
                             objval.INSERTED_BY = CurrentMerchant.MEM_ID;
-                            objval.REF_NO = objval.RequisitionSendTO;
+                            if (objval.BANK_ACCOUNT == "Cash Deposit-Office")
+                            {
+                                objval.REFERENCE_NO = "0000000000";
+                                objval.PAYMENT_METHOD = "Cash Deposit";
+                            }
+                            else
+                            {
+                                objval.REF_NO = objval.RequisitionSendTO;
+                                objval.PAYMENT_METHOD = objval.PAYMENT_METHOD;
+                            }
                             db.TBL_BALANCE_TRANSFER_LOGS.Add(objval);
                             await db.SaveChangesAsync();
 
@@ -610,6 +672,74 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
             
         }
 
+        [HttpPost]
+        public async Task<ActionResult> CreditRequisitionRequest(TBL_BALANCE_TRANSFER_LOGS objCredit)
+        {
+            initpage();
+            var db = new DBContext();
+            using (System.Data.Entity.DbContextTransaction ContextTransaction = db.Database.BeginTransaction())
+            {
+                try
+                {
+                    long ToMemberId = 0;
+                    string MemberPaymentStatus = CurrentMerchant.PAYMENT_MODE;
+                    if (MemberPaymentStatus == "Direct")
+                    {
+                        ToMemberId = (long)CurrentMerchant.UNDER_WHITE_LEVEL;
+                    }
+                    else
+                    {
+                        ToMemberId = (long)CurrentMerchant.INTRODUCER;
+                    }
+                    string COrelationID = Settings.GetUniqueKey(CurrentMerchant.MEM_ID.ToString());
+                    decimal CR_Opening = 0;
+                    decimal CR_Closinging = 0;
+                    decimal ADD_CR_Closinging = 0;
+                    decimal creditlimitBalance = 0;
+                    decimal.TryParse(objCredit.AMOUNT.ToString(), out creditlimitBalance);
+                    var CreditLimit_Val = db.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION.Where(x => x.FROM_MEM_ID == CurrentMerchant.MEM_ID).OrderByDescending(c => c.SLN).FirstOrDefault();
+                    if (CreditLimit_Val != null)
+                    {
+                        CR_Opening = (decimal)CreditLimit_Val.CREDIT_OPENING;
+                        CR_Closinging = (decimal)CreditLimit_Val.CREDITCLOSING;
+                        ADD_CR_Closinging = CR_Closinging + creditlimitBalance;
+                    }
+                    else
+                    {
+                        CR_Closinging = 0;
+                        ADD_CR_Closinging = creditlimitBalance;
+                    }
+                    TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION objLimit = new TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION()
+                    {
+                        TO_MEM_ID = ToMemberId,
+                        FROM_MEM_ID = CurrentMerchant.MEM_ID,
+                        CREDIT_DATE = DateTime.Now,
+                        //CREDIT_AMOUNT = objCredit.CREDIT_AMOUNT,
+                        CREDIT_AMOUNT = objCredit.AMOUNT,
+                        GST_VAL = 0,
+                        GST_AMOUNT = 0,
+                        TDS_VAL = 0,
+                        TDS_AMOUNT = 0,
+                        CREDIT_NOTE_DESCRIPTION = objCredit.TRANSACTION_DETAILS,
+                        CREDIT_STATUS = false,
+                        CREDIT_OPENING = CR_Closinging,
+                        CREDITCLOSING = ADD_CR_Closinging,
+                        CREDIT_TRN_TYPE = "CR",
+                        CORELATIONID = COrelationID
+                    };
+                    db.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION.Add(objLimit);
+                    db.SaveChanges();
+                    ContextTransaction.Commit();
+                    return RedirectToAction("CreditRequisitionList");
+                }
+                catch (Exception ex)
+                {
+                    ContextTransaction.Commit();
+                    throw ex;
+                }
+                
+            }
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<JsonResult> CheckReferenceNo(string referenceno)
@@ -1018,6 +1148,122 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
             string strForm = t.initiatePaymentAPI(amount, firstname, email, phone, productinfo, surl, furl, Txnid, UDF1, UDF2, UDF3, UDF4, UDF5, Show_payment_mode);
             return Content(strForm, System.Net.Mime.MediaTypeNames.Text.Html);
             //return View();
+        }
+
+        public ActionResult CreditRequisitionList()
+        {
+            initpage();
+            if (Session["MerchantUserId"] != null)
+            {
+                var db = new DBContext();               
+                return View();
+            }
+            else
+            {
+                Session["MerchantUserId"] = null;
+                Session["MerchantUserName"] = null;
+                Session["UserType"] = null;
+                Session.Remove("MerchantUserId");
+                Session.Remove("MerchantUserName");
+                Session.Remove("UserType");
+                return RedirectToAction("Index", "Login", new { area = "" });
+            }
+        }
+        public PartialViewResult CreditRequisitionIndexGrid(string DateFrom = "", string Date_To = "")
+        {
+            try
+            {
+                var db = new DBContext();
+                if (DateFrom != "" && Date_To != "")
+                {
+                    string FromDATE = string.Empty;
+                    string TO_DATE = string.Empty;
+                    FromDATE = DateTime.Parse(DateFrom.ToString()).ToString("yyyy-MM-dd");
+                    DateTime Date_From_Val = Convert.ToDateTime(FromDATE);
+                    string From_TO = string.Empty;
+                    TO_DATE = DateTime.Parse(Date_To.ToString()).ToString("yyyy-MM-dd");
+                    DateTime Date_To_Val = Convert.ToDateTime(TO_DATE);
+                    DateTime To_Date_Val = Date_To_Val.AddDays(1);
+
+                    var memberinfo = (from tblcre in db.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
+                                      join mem in db.TBL_MASTER_MEMBER on tblcre.FROM_MEM_ID equals mem.MEM_ID
+                                      //where tblcre.TO_MEM_ID == MemberCurrentUser.MEM_ID && tblcre.CREDIT_DATE>= Date_From_Val && tblcre.CREDIT_DATE<= Date_To_Val
+                                      where tblcre.FROM_MEM_ID == CurrentMerchant.MEM_ID && tblcre.CREDIT_DATE >= Date_From_Val && tblcre.CREDIT_DATE <= To_Date_Val
+                                      select new
+                                      {
+                                          sln = tblcre.SLN,
+                                          Mem_Name = mem.UName,
+                                          TO_MEMBER = (db.TBL_MASTER_MEMBER.FirstOrDefault(x=>x.MEM_ID==tblcre.TO_MEM_ID).MEMBER_ROLE==1?"ADMIN":"DISTRIBUTOR"),
+                                          Credit_note = tblcre.CREDIT_NOTE_DESCRIPTION,
+                                          CreditNoteDate = tblcre.CREDIT_DATE,
+                                          CreditAmount = tblcre.CREDIT_AMOUNT,
+                                          creditStatus = tblcre.CREDIT_STATUS,
+                                          OpeningAmt = tblcre.CREDIT_OPENING,
+                                          DR_CR = tblcre.CREDIT_AMOUNT,
+                                          Closingamt = tblcre.CREDITCLOSING,
+                                          creditType = tblcre.CREDIT_TRN_TYPE
+                                      }).AsEnumerable().Select(z => new TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
+                                      {
+                                          SLN = z.sln,
+                                          FromUser = z.Mem_Name,
+                                          TOUser= z.TO_MEMBER,
+                                          CREDIT_DATE = z.CreditNoteDate,
+                                          //CREDIT_AMOUNT = z.CreditAmount,
+                                          CREDIT_AMOUNT = z.DR_CR,
+                                          CREDIT_NOTE_DESCRIPTION = z.Credit_note,
+                                          CREDIT_STATUS = z.creditStatus,
+                                          CREDITCLOSING = z.Closingamt,
+                                          CR_Col = (z.creditType == "CR" ? z.CreditAmount.ToString() : "0"),
+                                          DR_Col = (z.creditType == "DR" ? z.CreditAmount.ToString() : "0"),
+                                          CREDIT_OPENING = z.OpeningAmt,
+                                          CREDIT_TRN_TYPE = z.creditType
+                                      }).ToList().OrderByDescending(a => a.CREDIT_DATE); ;
+                    return PartialView("CreditRequisitionIndexGrid", memberinfo);
+                }
+                else
+                {
+                    var memberinfo = (from tblcre in db.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
+                                      join mem in db.TBL_MASTER_MEMBER on tblcre.FROM_MEM_ID equals mem.MEM_ID
+                                      //where tblcre.TO_MEM_ID == MemberCurrentUser.MEM_ID && tblcre.CREDIT_DATE>= Date_From_Val && tblcre.CREDIT_DATE<= Date_To_Val
+                                      where tblcre.FROM_MEM_ID == CurrentMerchant.MEM_ID 
+                                      select new
+                                      {
+                                          sln = tblcre.SLN,
+                                          Mem_Name = mem.UName,
+                                          TO_MEMBER = (db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == tblcre.TO_MEM_ID).MEMBER_ROLE == 1 ? "ADMIN" : "DISTRIBUTOR"),
+                                          Credit_note = tblcre.CREDIT_NOTE_DESCRIPTION,
+                                          CreditNoteDate = tblcre.CREDIT_DATE,
+                                          CreditAmount = tblcre.CREDIT_AMOUNT,
+                                          creditStatus = tblcre.CREDIT_STATUS,
+                                          OpeningAmt = tblcre.CREDIT_OPENING,
+                                          DR_CR = tblcre.CREDIT_AMOUNT,
+                                          Closingamt = tblcre.CREDITCLOSING,
+                                          creditType = tblcre.CREDIT_TRN_TYPE
+                                      }).AsEnumerable().Select(z => new TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
+                                      {
+                                          SLN = z.sln,
+                                          FromUser = z.Mem_Name,
+                                          TOUser = z.TO_MEMBER,
+                                          CREDIT_DATE = z.CreditNoteDate,
+                                          //CREDIT_AMOUNT = z.CreditAmount,
+                                          CREDIT_AMOUNT = z.DR_CR,
+                                          CREDIT_NOTE_DESCRIPTION = z.Credit_note,
+                                          CREDIT_STATUS = z.creditStatus,
+                                          CREDITCLOSING = z.Closingamt,
+                                          CR_Col = (z.creditType == "CR" ? z.CreditAmount.ToString() : "0"),
+                                          DR_Col = (z.creditType == "DR" ? z.CreditAmount.ToString() : "0"),
+                                          CREDIT_OPENING = z.OpeningAmt,
+                                          CREDIT_TRN_TYPE = z.creditType
+                                      }).ToList().OrderByDescending(a => a.CREDIT_DATE); ;
+                    return PartialView("CreditRequisitionIndexGrid", memberinfo);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
         }
     }
 }

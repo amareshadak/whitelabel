@@ -7,7 +7,7 @@
 <script src="http://code.jquery.com/jquery-2.2.4.js"></script>
 <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 @*<script src="~/Areas/Admin/AdminHelperJS/DebitCreditJs/CreditWalletJS.js"></script>*@
-@using (Ajax.BeginForm("PostCREDITLIMITBALANCE", "MemberCreditManagment", new AjaxOptions { Confirm = "Do you want to give credit limit to distributor", OnSuccess = "OnSuccessCreditLimitDistributor", OnFailure = "OnFailureCreditLimitDistributor", LoadingElementId = "progressCreditLimitDistributor" }, new { area = "Admin", @id = "ADDCreditLimitDISTRIBUTOR" }))
+@using (Ajax.BeginForm("PostCREDITLIMITBALANCE", "MemberCreditManagment", new AjaxOptions { Confirm = "Do you want to give credit limit.", OnSuccess = "OnSuccessCreditLimitDistributor", OnFailure = "OnFailureCreditLimitDistributor", LoadingElementId = "progressCreditLimitDistributor" }, new { area = "Admin", @id = "ADDCreditLimitDISTRIBUTOR" }))
 {
     <div class="form-horizontal">
         @Html.AntiForgeryToken()
@@ -33,11 +33,11 @@
                             <div class="col-md-6 row">
                                 <div class="col-md-12">
                                     <div class="form-group row">
-                                        <label class="control-label col-md-3" style="text-align:left;">Select Distributor</label>
+                                        <label class="control-label col-md-3" style="text-align:left;">Select Member</label>
                                         <div class="col-md-9">
                                             <div class="inputer">
                                                 <div class="input-wrapper">
-                                                    @Html.EditorFor(m => m.FromUser, new { htmlAttributes = new { @id = "txtMemberaName", style = " width:100%; padding:5px;", placeholder = "Distributor User Name", @class = "form-control" } })
+                                                    @Html.EditorFor(m => m.FromUser, new { htmlAttributes = new { @id = "txtMemberaName", style = " width:100%; padding:5px;", placeholder = "Enter User Name", @class = "form-control" } })
                                                     @Html.HiddenFor(model => model.FROM_MEM_ID, new { id = "hfOperator" })
                                                     @*@Html.DropDownListFor(model => model.FROM_MEM_ID, new SelectList((ViewBag.MemberDetails) as SelectList, "Value", "Text"), "--Select Distributor--", new { id = "txtRoleDetails", @class = "form-control" })*@
                                                 </div>
@@ -46,7 +46,7 @@
                                         </div>
                                     </div>
                                 </div>                               
-                                <div class="col-md-12">
+                                <div class="col-md-12" style="display:none;">
                                     <div class="form-group row">
                                         <label class="control-label col-md-3" style="text-align:left;">Reserved Credit Limit (PCL) </label>
                                         <div class="col-md-9">
@@ -78,7 +78,7 @@
                                         <div class="col-md-9">
                                             <div class="inputer">
                                                 <div class="input-wrapper">
-                                                    @Html.TextAreaFor(model => model.CREDIT_NOTE_DESCRIPTION, 5, 54, new { htmlAttributes = new { @class = "form-control", @style = "border-radius:5px", @placeholder = "Description" } })
+                                                    @Html.TextAreaFor(model => model.CREDIT_NOTE_DESCRIPTION, 4, 70, new { htmlAttributes = new { @class = "form-control", @style = "border-radius:5px", @placeholder = "Description" } })
                                                 </div>
                                                 <span class="help-block"><small>@Html.ValidationMessageFor(model => model.CREDIT_NOTE_DESCRIPTION, "", new { @class = "text-danger" })</small></span>
                                             </div>
@@ -173,7 +173,7 @@
             source: function (request, response) {
                 //var MEm_Type = $('#txtRoleDetails').val();
                 $.ajax({
-                    url: '/Admin/MemberCreditManagment/GetDistributorMemberName/',
+                    url: '/Admin/MemberCreditManagment/GetDistributorMemberName',
                     data: "{ 'prefix': '" + request.term + "'}",
                     dataType: "json",
                     type: "POST",

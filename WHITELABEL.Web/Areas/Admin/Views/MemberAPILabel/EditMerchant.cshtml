@@ -26,6 +26,20 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group row">
+                                    <label class="control-label col-md-3" style="text-align:left;">Select Distributor</label>
+                                    <div class="col-md-9">
+                                        <div class="inputer">
+                                            <div class="input-wrapper">
+                                                @Html.DropDownListFor(model => model.DISTRIBUTOR_ID, new SelectList((ViewBag.DistributorList) as SelectList, "Value", "Text"), new { id = "DistributorDis", @class = "form-control" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group row">
                                     <label class="control-label col-md-3">User Name</label>

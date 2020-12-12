@@ -31,11 +31,11 @@
                             <div class="col-md-6 row">
                                 <div class="col-md-12">
                                     <div class="form-group row">
-                                        <label class="control-label col-md-3" style="text-align:left;">Select Distributor</label>
+                                        <label class="control-label col-md-3" style="text-align:left;">Select Member</label>
                                         <div class="col-md-9">
                                             <div class="inputer">
                                                 <div class="input-wrapper">
-                                                    @Html.EditorFor(m => m.From_Member_Name, new { htmlAttributes = new { @id = "txtMemberaName", style = " width:100%; padding:5px;", placeholder = "Distributor User Name", @class = "form-control" } })
+                                                    @Html.EditorFor(m => m.From_Member_Name, new { htmlAttributes = new { @id = "txtMemberaName", style = " width:100%; padding:5px;", placeholder = "Enter User Name", @class = "form-control" } })
                                                     @Html.HiddenFor(model => model.FROM_MEM_ID, new { id = "hfOperator" })
                                                     @*@Html.DropDownListFor(model => model.FROM_MEM_ID, new SelectList((ViewBag.RoleDetails) as SelectList, "Value", "Text"), "Select Distributor", new { id = "txtRoleDetails", @class = "form-control" })*@
                                                 </div>
@@ -109,7 +109,7 @@
             source: function (request, response) {
                 var MEm_Type = $('#txtRoleDetails').val();
                 $.ajax({
-                    url: '/Admin/MemberCreditManagment/GetDistributorMemberName/',
+                    url: '/Admin/MemberCreditManagment/GetDistributorMemberName',
                     data: "{ 'prefix': '" + request.term + "'}",
                     dataType: "json",
                     type: "POST",

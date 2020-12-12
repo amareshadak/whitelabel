@@ -80,7 +80,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 ViewBag.ControllerName = "White Label";
                 if (Session["WhiteLevelUserId"] == null)
                 {
-                    Response.Redirect(Url.Action("Logout", "Login", new { area = "" }));
+                    Response.Redirect(Url.Action("Logout", "AdminLogin", new { area = "Admin" }));
+                    //Response.Redirect(Url.Action("Logout", "Login", new { area = "" }));
                     return;
                 }
                 bool Islogin = false;
@@ -131,7 +132,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 Session.Remove("WhiteLevelUserId");
                 Session.Remove("WhiteLevelUserName");
                 Session.Remove("UserType");
-                return RedirectToAction("Index", "Login", new { area = "" });
+                return RedirectToAction("AdminLogin", "Login", new { area = "" });
             }
         }
 

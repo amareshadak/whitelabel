@@ -1,0 +1,88 @@
+﻿@using NonFactors.Mvc.Grid;
+@using WHITELABEL.Web.Helper;
+@model IEnumerable<WHITELABEL.Data.Models.TBL_ACCOUNTS>
+@{
+    ViewBag.Title = "IndexGrid";
+    Layout = null;
+    //Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@if (Model.Count() > 0)
+{ }
+@(Html
+                            .Grid(Model)
+                            .Build(columns =>
+                            {
+                                //columns.Add(model => model.ACC_NO).Titled("Sln");
+                                columns.Add(model => model.SerialNo).Titled("Id");
+                                columns.Add(model => model.UserName).Titled("User Name");
+                                //columns.Add(model => model.MEMBER_TYPE).Titled("Member Type");
+                                columns.Add(model => model.TRANSACTION_TYPE).Titled("Trans Type");
+                                columns.Add(model => model.TRANSACTION_DATE).Titled("Trans Date").Formatted("{0:MM/dd/yyyy}").MultiFilterable(true).Sortable(true);
+                                columns.Add(model => model.TRANSACTION_DATE).Titled("Trans Time").Formatted("{0:T}").Filterable(false);
+                                //columns.Add(model => model.AMOUNT).Titled("Amount");
+                                //columns.Add(model => model.DR_CR).Titled("Dr/Cr");
+                                columns.Add(model => model.OPENING).Titled("Opening Amt");
+                                columns.Add(model => model.CR_Col).Titled("Cr");
+                                columns.Add(model => model.DR_Col).Titled("Dr");
+                                columns.Add(model => model.CLOSING).Titled("Closing Amt");
+                                columns.Add(model => model.COMM_AMT).Titled("Commission");
+                                columns.Add(model => model.GST).Titled("Gst");
+                                columns.Add(model => model.GST_PERCENTAGE).Titled("Gst Percentage");
+                                columns.Add(model => model.TDS).Titled("Tds");
+                                columns.Add(model => model.TDS_PERCENTAGE).Titled("Tds Percentage");
+                                columns.Add(model => model.CORELATIONID).Titled("Corelation id");
+                                columns.Add(model => model.COMM_VALUE).Titled("Comm Value");
+                                columns.Add(model => model.NET_COMM_AMT).Titled("Comm Net Amount");
+                                columns.Add(model => model.TDS_DR_COMM_AMT).Titled("TDS DR Comm Amt");
+                                columns.Add(model => model.CGST_COMM_AMT_INPUT).Titled("CGST Input Amt");
+                                columns.Add(model => model.CGST_COMM_AMT_OUTPUT).Titled("CGST Output Amt");
+                                columns.Add(model => model.SGST_COMM_AMT_INPUT).Titled("SGST Input Amt");
+                                columns.Add(model => model.SGST_COMM_AMT_OUTPUT).Titled("SGST Output Amt");
+                                columns.Add(model => model.IGST_COMM_AMT_INPUT).Titled("IGST Input Amt");
+                                columns.Add(model => model.IGST_COMM_AMT_OUTPUT).Titled("IGST Output Amt");
+                                columns.Add(model => model.TOTAL_GST_COMM_AMT_INPUT).Titled("Total GST Input Amt");
+                                columns.Add(model => model.TOTAL_GST_COMM_AMT_OUTPUT).Titled("Total GST Output Amt");
+                                columns.Add(model => model.TDS_RATE).Titled("TDS Rate");
+                                columns.Add(model => model.CGST_RATE).Titled("CGST Rate");
+                                columns.Add(model => model.SGST_RATE).Titled("SGST Rate");
+                                columns.Add(model => model.IGST_RATE).Titled("IGST Rate");
+                                columns.Add(model => model.TOTAL_GST_RATE).Titled("TOtal GST Rate");
+
+
+                            })
+                            .Css("css-classes")
+                                        .AppendCss("table table-striped")
+                            //.RowCss(model => model.STATUS == "Decline" ? "danger" : model.STATUS == "Pending" ? "info" : "")
+                            .Empty("No data found")
+                            .Id("my-ajax-grid")
+                            .Pageable(pager =>
+                            {
+                                pager.PagesToDisplay = 30;
+                                pager.RowsPerPage = 30;
+                            })
+                            .Filterable()
+                            .Sortable()
+)
+<table class="divFooterTotalComm" style="width:100%">
+    <tr>
+
+        <td style="width:25%;">Total opening Amt:- <b>@Model.Sum(z => z.OPENING)</b></td>
+        <td style="width:25%;">Total Credit Amt:- <b>@Model.Where(z => z.DR_CR == "CR").Sum(z => z.AMOUNT)</b></td>
+        <td style="width:25%;">Total Debit Amt:- <b>@Model.Where(z => z.DR_CR == "DR").Sum(z => z.AMOUNT)</b></td>
+        <td style="width:25%;">Total closing Amt:- <b>@Model.Sum(z => z.CLOSING)</b></td>
+        <td></td>
+    </tr>
+</table>
+
+@*<div class="divFooterTotalComm">
+        <div class="row">
+            <div class="col-md-10">
+                <b> Total Commission</b>
+            </div>
+            <div class="col-md-2" align="center">
+                <b>@Model.Where(z => z.DR_CR == "CR").Sum(z => z.COMM_AMT)</b>
+            </div>
+        </div>
+    </div>*@
+

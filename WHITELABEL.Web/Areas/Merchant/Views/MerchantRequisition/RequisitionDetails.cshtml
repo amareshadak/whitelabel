@@ -27,20 +27,46 @@
             <div class="col-md-9">
                 <div class="inputer">
                     <div class="input-wrapper">
-                        <div class="row">
+                        @if (ViewBag.PaymentMode == "Indirect")
+                        {<div class="row">
                             <div class="col-md-3">
                                 @Html.RadioButtonFor(m => m.RequisitionSendTO, "Distributor", new { id = "checkRequisitionTypeDist", Checked = "checked", style = " width:18px; height:18px;", onclick = "DisplayButton()" })
                                 <label for="inlineRadio1" style="font-size:18px;">Distributor</label>
+
                             </div>
                             <div class="col-md-3">
                                 @Html.RadioButtonFor(m => m.RequisitionSendTO, "Admin", new { id = "checkRequisitionTypeAdmin", style = " width:18px; height:18px;", onclick = "DisplayButton()" })
+                                <label for="inlineRadio1" style="font-size:18px;">Admin</label>
+                            </div>
+                            <div class="col-md-3">
+                                @Html.RadioButtonFor(m => m.RequisitionSendTO, "Admin", new { id = "RechargewithPaymentGatewway", style = " width:18px; height:18px;", onclick = "PAymentGatewaydiv()" })
+                                <label for="inlineRadio1" style="font-size:18px;">Recharge with Payment Gateway</label>
+                            </div>
+                             <div class="col-md-3">
+                                 @Html.RadioButtonFor(m => m.RequisitionSendTO, "Distributor", new { id = "CreditLimitManagmentID", style = " width:18px; height:18px;", onclick = "CreditManagment()" })
+                                 <label for="inlineRadio1" style="font-size:18px;">Credit Requisition</label>
+                             </div>
+                        </div> }
+                        else
+                        { <div class="row">
+                            <div class="col-md-3" style="display:none">
+                                @Html.RadioButtonFor(m => m.RequisitionSendTO, "Distributor", new { id = "checkRequisitionTypeDist",  style = " width:18px; height:18px;", onclick = "DisplayButton()" })
+                                <label for="inlineRadio1" style="font-size:18px;">Distributor</label>
+                            </div>
+                            <div class="col-md-3">
+                                @Html.RadioButtonFor(m => m.RequisitionSendTO, "Admin", new { id = "checkRequisitionTypeAdmin", style = " width:18px; height:18px;", Checked = "checked", onclick = "DisplayButton()" })
                                 <label for="inlineRadio1" style="font-size:18px;">Admin</label>
                             </div>
                             <div class="col-md-6">
                                 @Html.RadioButtonFor(m => m.RequisitionSendTO, "Admin", new { id = "RechargewithPaymentGatewway", style = " width:18px; height:18px;", onclick = "PAymentGatewaydiv()" })
                                 <label for="inlineRadio1" style="font-size:18px;">Recharge with Payment Gateway</label>
                             </div>
-                        </div>
+                              <div class="col-md-3">
+                                  @Html.RadioButtonFor(m => m.RequisitionSendTO, "Admin", new { id = "CreditLimitManagmentID", style = " width:18px; height:18px;", onclick = "CreditManagment()" })
+                                  <label for="inlineRadio1" style="font-size:18px;">Credit Requisition</label>
+                              </div>                              
+                        </div>}
+                        
                     </div>
                 </div>
             </div>
@@ -67,16 +93,18 @@
                         <div class="card-body">
                             <div class="row">
                                 
-                                <div class="col-md-6">
-                                    <div id="div_DIstributor">
+                                <div class="col-md-6 text-center" style="display:none;">
+                                    @if (ViewBag.PaymentMode == "Indirect")
+                                    {<div id="div_DIstributor">
                                         <div>
-                                            <h3>Distributor [@ViewBag.Introducer] <a href="javascript:void(0);" data-toggle="modal" data-target="#introducerMoreDetails"><i class="fa fa-info"></i></a></h3>
+                                            <h3>@*Distributor*@ @*[@ViewBag.Introducer]*@ <a style="display:none;" href="javascript:void(0);" data-toggle="modal" data-target="#introducerMoreDetails"><i class="fa fa-info"></i></a></h3>
                                         </div>
                                         <span>@Html.ValidationMessageFor(model => model.ToUser, "", new { @class = "text-danger" })</span>
-                                    </div>
+                                    </div> }
+                                    
                                     <div id="div_WhiteLabel">
                                         <div>
-                                            <h3>Admin [@ViewBag.UnderWhiteLabel] <a href="javascript:void(0);" data-toggle="modal" data-target="#WhiteLabelMoreDetails"><i class="fa fa-info"></i></a></h3>
+                                            <h3>@*Admin*@ @*[@ViewBag.UnderWhiteLabel]*@ <a  style="display:none;" href="javascript:void(0);" data-toggle="modal" data-target="#WhiteLabelMoreDetails"><i class="fa fa-info"></i></a></h3>
                                             @Html.HiddenFor(model => model.WhiteLableID, new { @id = "hdnWhitelabelId" })
                                         </div>
                                         <span>@Html.ValidationMessageFor(model => model.WhiteLableID, "", new { @class = "text-danger" })</span>
@@ -130,7 +158,7 @@
                                     </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="control-label col-md-3">Bank Account</label>
+                                        <label class="control-label col-md-3">Payment Type</label>
                                         <div class="col-md-9">
                                             <div class="inputer">
                                                 <div class="input-wrapper">
@@ -151,7 +179,8 @@
                                             <div class="inputer">
                                                 <div class="input-wrapper">
                                                     @Html.DropDownListFor(m => m.PAYMENT_METHOD, new List<SelectListItem>
-                                                                        { new SelectListItem{Text="NEFT", Value="NEFT"},
+                                                                        { new SelectListItem{Text="Cash Deposit", Value="Cash Deposit"},
+                                                                            new SelectListItem{Text="NEFT", Value="NEFT"},
                                                                             new SelectListItem{Text="RTGS", Value="RTGS"},
                                                                             new SelectListItem{Text="IMPS", Value="IMPS"},
                                                                             new SelectListItem{Text="Cash Deposit in bank", Value="Cash Deposit in bank"}},
@@ -168,20 +197,20 @@
                                         <div class="col-md-9">
                                             <div class="inputer">
                                                 <div class="input-wrapper">
-                                                    @Html.EditorFor(model => model.TRANSACTION_DETAILS, new { htmlAttributes = new { @class = "form-control", @placeholder = "Transaction Details" } })
+                                                    @Html.TextAreaFor(model => model.TRANSACTION_DETAILS, 4, 73, new { htmlAttributes = new { @class = "form-control", @placeholder = "Transaction Details" } })
                                                 </div>
                                                 <span><small>@Html.ValidationMessageFor(model => model.TRANSACTION_DETAILS, "", new { @class = "text-danger" })</small></span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6" style="display:none;">
                                     <div class="form-group">
                                         <label class="control-label col-md-3">Bank Charges</label>
                                         <div class="col-md-9">
                                             <div class="inputer">
                                                 <div class="input-wrapper">
-                                                    @Html.EditorFor(model => model.BANK_CHARGES, new { htmlAttributes = new { @class = "form-control", @placeholder = "Bank Charges" } })
+                                                    @Html.EditorFor(model => model.BANK_CHARGES, new { htmlAttributes = new { @class = "form-control", @placeholder = "Bank Charges",@Value="0" } })
                                                 </div>
                                                 <span><small>@Html.ValidationMessageFor(model => model.BANK_CHARGES, "", new { @class = "text-danger" })</small></span>
                                             </div>
@@ -195,7 +224,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group row">
-                                        <div class="col-md-6 text-center">
+                                        <div class="col-md-6 text-left">
                                             @if (ViewBag.checkbank == "0")
                                         {
                                             <input type="submit" value="Send Requisition" class="btn btn-primary" />
@@ -359,6 +388,7 @@
         </div>
 
     }
+    
 </div>
 <div id="Paymentgateway">
 @using (Html.BeginForm("PaymentgatewayRechargewallet", "MerchantRequisition", FormMethod.Post, new { area = "Merchant" }))
@@ -409,6 +439,70 @@
 
 }
 </div>
+<div id="CreditLimitRequisition">
+    @using (Html.BeginForm("CreditRequisitionRequest", "MerchantRequisition", FormMethod.Post, new { area = "Merchant" }))
+    {
+        <div class="form-horizontal padding-top-20">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="col-md-3"></div>
+                                        <div class="col-md-3">Credit Requisition Amount </div>
+                                        <div class="col-md-3">
+                                            <div class="inputer">
+                                                <div class="input-wrapper">
+                                                    @Html.EditorFor(model => model.AMOUNT, new { htmlAttributes = new { @class = "form-control", @placeholder = "XXXXX.XX" } })
+                                                </div>
+                                                <span><small>@Html.ValidationMessageFor(model => model.AMOUNT, "", new { @class = "text-danger" })</small></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="col-md-3"></div>
+                                        <div class="col-md-3">Remarks</div>
+                                        <div class="col-md-3">
+                                            <div class="inputer">
+                                                <div class="input-wrapper">
+                                                    @Html.TextAreaFor(model => model.TRANSACTION_DETAILS, 4,45 ,new { htmlAttributes = new { @class = "form-control"} })
+                                                </div>
+                                                <span><small>@Html.ValidationMessageFor(model => model.TRANSACTION_DETAILS, "", new { @class = "text-danger" })</small></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="col-md-3"></div>
+                                        <div class="col-md-3">
+                                            <div class="inputer">
+                                                <div class="input-wrapper">
+                                                    <input type="submit" value="Credit Requisition" class="btn btn-primary" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3"></div>
+                                        <div class="col-md-3"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+    }
+</div>
 
 
 
@@ -419,17 +513,18 @@
             $('#hdnRequisitionSendto').val(reqType);
         $('#Paymentgateway').hide();
         $('#checkbyRequisition').show();
+        $('#CreditLimitRequisition').hide();
         //$('#div_DIstributor').show();
         //$('#div_WhiteLabel').hide();
         DisplayButton();
         const currentYear = (new Date).getFullYear();
         const currentMonth = (new Date).getMonth();
         const currentDay = (new Date).getDate();
-        $('#txtRequestDate').datepicker({
-            dateFormat: "yy-mm-dd",
-            maxDate: new Date(currentYear, currentMonth, currentDay),
-            uiLibrary: 'bootstrap4'
-        });
+        //$('#txtRequestDate').datepicker({
+        //    dateFormat: "yy-mm-dd",
+        //    maxDate: new Date(currentYear, currentMonth, currentDay),
+        //    uiLibrary: 'bootstrap4'
+        //});
     })
     //$(function () {
     //    $('#txtRequestDate').datepicker({
@@ -453,20 +548,46 @@
     //    else if (WhitelabelchkYes.checked) {
     //        $('#div_DIstributor').hide();
     //        $('#div_WhiteLabel').show();
-          
+
     //    }
     //    else {
 
     //    }
     //}
+   
 
-    $("#BankID").change(function () {        
-        var bankname = $('#BankID').val();
-        $('#BankAccountDetails').val(bankname);
+
+    $("#BankID").change(function () {
+        debugger;
+        const bankname = $('#BankID').val();
+        if (bankname == "Cash Deposit-Office") {
+            const RefNo = "0000000000";
+            $('#txtReferenceNumber').val(RefNo);
+            
+            const trnsmethod = "Cash Deposit";
+            $('#Paymentmethod').val(trnsmethod);
+            $('#BankAccountDetails').val(bankname);
+            $("#Paymentmethod").attr("disabled", true);
+            $("#txtReferenceNumber").attr("disabled", true);
+            
+        }
+        else {
+            $('#BankAccountDetails').val(bankname);
+            $("#Paymentmethod").attr("disabled", false);
+            $("#txtReferenceNumber").attr("disabled", false);
+        }
+        
     });
     $(document).ready(function () {
+        debugger;
         var bankname = $('#BankID').val();
         $('#BankAccountDetails').val(bankname);
+        const PayMethod = $('#Paymentmethod').val();
+        if (PayMethod == "Cash Deposit")
+        {
+            const trnsmethod = "Cash Deposit-Office";
+            $('#BankID').val(trnsmethod);
+        }
     })
 
 </script>

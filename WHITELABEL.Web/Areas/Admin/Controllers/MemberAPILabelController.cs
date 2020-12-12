@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -34,7 +35,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 if (Session["WhiteLevelUserId"] == null)
                 {
                     //Response.Redirect(Url.Action("Index", "Login", new { area = "" }));
-                    Response.Redirect(Url.Action("Logout", "Login", new { area = "" }));
+                    Response.Redirect(Url.Action("Logout", "AdminLogin", new { area = "Admin" }));
                     return;
                 }
                 bool Islogin = false;
@@ -76,7 +77,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 Session.Remove("WhiteLevelUserId");
                 Session.Remove("WhiteLevelUserName");
                 Session.Remove("UserType");
-                return RedirectToAction("Index", "Login", new { area = "" });
+                return RedirectToAction("AdminLogin", "Login", new { area = "" });
             }
         }
         public static string GetFormNumber()
@@ -111,6 +112,18 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
             }
         }
 
+        public static string generate_Password(int length)
+        {
+            const string src = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            var sb = new StringBuilder();
+            Random RNG = new Random();
+            for (var i = 0; i < length; i++)
+            {
+                var c = src[RNG.Next(0, src.Length)];
+                sb.Append(c);
+            }
+            return sb.ToString();
+        }
         //[Route("WhiteLevel/Registration")]
         public async Task<ActionResult> CreateMember(string memid = "")
         {
@@ -141,7 +154,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                         var GSTValueID = dbcontext.TBL_TAX_MASTERS.Where(x => x.TAX_NAME == "GST").ToList();
                         ViewBag.GSTValue = new SelectList(GSTValueID, "SLN", "TAX_NAME");
                         var TDSValueID = dbcontext.TBL_TAX_MASTERS.Where(x => x.TAX_NAME == "TDS").ToList();
-                        ViewBag.TDSValue = new SelectList(TDSValueID, "SLN", "TAX_NAME");
+                        ViewBag.TDSValue = new SelectList(TDSValueID, "SLN", "TAX_NAME");                        
                         return View(model);
                         //return View("CreateMember", "MemberAPILabel", new {area ="Admin" },model);
                     }
@@ -164,7 +177,10 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                         var TDSValueID = dbcontext.TBL_TAX_MASTERS.Where(x => x.TAX_NAME == "TDS").ToList();
                         ViewBag.TDSValue = new SelectList(TDSValueID, "SLN", "TAX_NAME");
                         //ModelState.Clear();
+                        string UserPas = generate_Password(10);
+                        model.User_pwd = UserPas;
                         model.UName = UniqId;
+                        model.BLOCKED_BALANCE = 0;
                         return View(model);
                     }
                 }
@@ -184,7 +200,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 Session.Remove("WhiteLevelUserId");
                 Session.Remove("WhiteLevelUserName");
                 Session.Remove("UserType");
-                return RedirectToAction("Index", "Login", new { area = "" });
+                return RedirectToAction("AdminLogin", "Login", new { area = "" });
             }
 
 
@@ -251,8 +267,9 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                         else
                         {
                             value.BLOCKED_BALANCE = value.BLOCKED_BALANCE;
-                            value.BALANCE = value.BLOCKED_BALANCE;
-                            AmountVal = (decimal)value.BLOCKED_BALANCE;
+                            value.BALANCE = 0;
+                            //AmountVal = (decimal)value.BLOCKED_BALANCE;
+                            AmountVal = 0;
                         }
                         string GetUniqueNo = String.Format("{0:d5}", (DateTime.Now.Ticks / 10) % 10000);
                         string UniqId = "BMT" + GetUniqueNo;
@@ -861,7 +878,60 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
             }
            
         }
+        [HttpPost]
+        public async Task<JsonResult> CheckMobileNoEmailAvailability(string MobileNo,string EmailId)
+        {
+            //initpage();////
+            try
+            {
+                var context = new DBContext();
+                if (MobileNo != "" && EmailId != "")
+                {
+                    var User = await context.TBL_MASTER_MEMBER.Where(model => model.MEMBER_MOBILE == MobileNo || model.EMAIL_ID == EmailId).FirstOrDefaultAsync();
+                    if (User != null)
+                    {
+                        return Json(new { result = "unavailable" });
+                    }
+                    else
+                    {
+                        return Json(new { result = "available" });
+                    }
+                }
+                else if (MobileNo != "" && EmailId == "")
+                {
+                    var User = await context.TBL_MASTER_MEMBER.Where(model => model.MEMBER_MOBILE == MobileNo).FirstOrDefaultAsync();
+                    if (User != null)
+                    {
+                        return Json(new { result = "unavailable" });
+                    }
+                    else
+                    {
+                        return Json(new { result = "available" });
+                    }
+                }
+                else if (MobileNo == "" && EmailId != "")
+                {
+                    var User = await context.TBL_MASTER_MEMBER.Where(model => model.EMAIL_ID == EmailId).FirstOrDefaultAsync();
+                    if (User != null)
+                    {
+                        return Json(new { result = "unavailable" });
+                    }
+                    else
+                    {
+                        return Json(new { result = "available" });
+                    }
+                }
+                else
+                { return Json(new { result = "available" }); }
 
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<JsonResult> GetMemberPassword(string id)
@@ -966,7 +1036,49 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 Session.Remove("WhiteLevelUserId");
                 Session.Remove("WhiteLevelUserName");
                 Session.Remove("UserType");
-                return RedirectToAction("Index", "Login", new { area = "" });
+                return RedirectToAction("AdminLogin", "Login", new { area = "" });
+            }
+        }
+        public ActionResult AllMerchantList()
+        {
+            if (Session["WhiteLevelUserId"] != null)
+            {
+                try
+                {
+                    initpage();
+                    var db = new DBContext();
+                    var memberService = (from x in db.TBL_MASTER_MEMBER
+                                             //where SuperMemId.Contains(x.INTRODUCER.ToString())
+                                         where x.INTRODUCER == MemberCurrentUser.MEM_ID
+                                         select new
+                                         {
+                                             MEM_ID = x.MEM_ID,
+                                             UName = x.UName,
+                                             MobileNo = x.MEMBER_MOBILE
+                                         }).AsEnumerable().Select(z => new MemberView
+                                         {
+                                             IDValue = z.MEM_ID.ToString(),
+                                             TextValue = z.UName + "-" + z.MobileNo
+                                         }).ToList().Distinct();
+                    ViewBag.MemberService = new SelectList(memberService, "IDValue", "TextValue");
+                    return View();
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error("Controller:-  MemverRequisitionReport(Admin), method:- Index (GET) Line No:- 78", ex);
+                    return RedirectToAction("Exception", "ErrorHandler", new { area = "" });
+                    throw ex;
+                }
+            }
+            else
+            {
+                Session["WhiteLevelUserId"] = null;
+                Session["WhiteLevelUserName"] = null;
+                Session["UserType"] = null;
+                Session.Remove("WhiteLevelUserId");
+                Session.Remove("WhiteLevelUserName");
+                Session.Remove("UserType");
+                return RedirectToAction("AdminLogin", "Login", new { area = "" });
             }
         }
 
@@ -1123,6 +1235,19 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 ViewBag.GSTValue = new SelectList(GSTValueID, "SLN", "TAX_NAME");
                 var TDSValueID = dbcontext.TBL_TAX_MASTERS.Where(x => x.TAX_NAME == "TDS").ToList();
                 ViewBag.TDSValue = new SelectList(TDSValueID, "SLN", "TAX_NAME");
+                var DistributorList = (from x in dbcontext.TBL_MASTER_MEMBER
+                                       where x.UNDER_WHITE_LEVEL == MemberCurrentUser.MEM_ID && x.MEMBER_ROLE == 4 && x.ACTIVE_MEMBER == true
+                                       select new
+                                       {
+                                           MEM_ID = x.MEM_ID,
+                                           UName = x.MEMBER_NAME + "-" + x.MEM_UNIQUE_ID + "-" + x.MEMBER_MOBILE
+                                       }).AsEnumerable().Select(z => new ViewDropdownConcatinationDetails
+                                       {
+                                           MEM_ID = z.MEM_ID,
+                                           MEmberNameName = z.UName
+                                       }).ToList().Distinct();
+                ViewBag.DistributorList = new SelectList(DistributorList, "MEM_ID", "MEmberNameName");
+                model.DISTRIBUTOR_ID = (long)model.INTRODUCER;
                 return View(model);
                 
             }
@@ -1134,7 +1259,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 Session.Remove("WhiteLevelUserId");
                 Session.Remove("WhiteLevelUserName");
                 Session.Remove("UserType");
-                return RedirectToAction("Index", "Login", new { area = "" });
+                return RedirectToAction("AdminLogin", "Login", new { area = "" });
             }
         }
         [HttpPost]
@@ -1151,7 +1276,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 CheckUser.WEBSITE_NAME = objdetails.WEBSITE_NAME;
                 CheckUser.NOTES = objdetails.NOTES;
                 CheckUser.UNDER_WHITE_LEVEL = MemberCurrentUser.MEM_ID;
-                CheckUser.INTRODUCER = CheckUser.INTRODUCER;
+                CheckUser.INTRODUCER = objdetails.DISTRIBUTOR_ID;
                 CheckUser.AADHAAR_NO = objdetails.AADHAAR_NO;
                 CheckUser.PAN_NO = objdetails.PAN_NO;
                 

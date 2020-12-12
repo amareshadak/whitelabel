@@ -29,5 +29,9 @@
         public string FROM_DATE { get; set; }
         [NotMapped]
         public string TO_DATE { get; set; }
+        [NotMapped]
+        public string COMPANY_NAME { get; set; }
+        [NotMapped]
+        public string COMPANY_GST { get; set; }
     }
 }

@@ -91,27 +91,43 @@
     </div>
 </div>
 
+
 <script type="text/javascript">
-    $(function () {
+    $(document).ready(function () {
+        const currentYear = (new Date).getFullYear();
+        const currentMonth = (new Date).getMonth();
+        const currentDay = (new Date).getDate();
         $('#txtFromDate').datepicker({
-            format: "yyyy-MM-dd",
-            language: "es",
-            autoclose: true,
-            todayHighlight: true,
-            changeMonth: true,
-            changeYear: true
+            dateFormat: "yy-mm-dd",
+            maxDate: new Date(currentYear, currentMonth, currentDay),
+            uiLibrary: 'bootstrap4'
         });
-    });
-    $(function () {
         $('#txtToDate').datepicker({
-            format: "yyyy-MM-dd",
-            language: "es",
-            autoclose: true,
-            todayHighlight: true,
-            changeMonth: true,
-            changeYear: true
+            dateFormat: "yy-mm-dd",
+            maxDate: new Date(currentYear, currentMonth, currentDay),
+            uiLibrary: 'bootstrap4'
         });
     });
+    //$(function () {
+    //    $('#txtFromDate').datepicker({
+    //        format: "yyyy-MM-dd",
+    //        language: "es",
+    //        autoclose: true,
+    //        todayHighlight: true,
+    //        changeMonth: true,
+    //        changeYear: true
+    //    });
+    //});
+    //$(function () {
+    //    $('#txtToDate').datepicker({
+    //        format: "yyyy-MM-dd",
+    //        language: "es",
+    //        autoclose: true,
+    //        todayHighlight: true,
+    //        changeMonth: true,
+    //        changeYear: true
+    //    });
+    //});
 
     $("#btnSearchDAteWise").on("click", function () {        
         var Date_From = $('#txtFromDate').val();
@@ -120,7 +136,7 @@
             query: 'DateFrom=' + Date_From + '&Date_To=' + Date_TO,            
             reload: true,
             reloadStarted: function () {
-                $(".divFooterTotalComm").remove();
+                $("#divfooter").remove();
             },
         });
     });

@@ -77,10 +77,10 @@
                                                 DateTime max = date.AddYears(10);
                                             }
                                             <div class="input-wrapper">
-                                                @*@Html.EditorFor(model => model.REQUEST_DATE, "{0:yyyy-MM-dd}", new { htmlAttributes = new { @class = "form-control", @min = min.ToString("yyyy-MM-dd"), @max = max.ToString("yyyy-MM-dd"), @onkeydown = "return false;" } })*@
+                                            
                                                 @*@Html.EditorFor(model => model.REQUEST_DATE, "{0:dd/mm/yyyy}", new { htmlAttributes = new { @class = "form-control date", id = "txtMemberRequisition", type = "text" } })*@
                                                 @Html.EditorFor(model => model.REQUEST_DATE, "{0:yyyy-MM-dd}", new { htmlAttributes = new { @class = "form-control date", id = "txtRequestDate", @onkeydown = "return false;" } })
-                                                @*@Html.EditorFor(model => model.REQUEST_DATE, "{0:yyyy-MM-dd}", new { htmlAttributes = new { @class = "form-control", id = "txtRequestDate", @min = min.ToString("yyyy-MM-dd"), @max = max.ToString("yyyy-MM-dd"), @onkeydown = "return false;" } })*@
+                                               
                                             </div>
                                             <span><small> @Html.ValidationMessageFor(model => model.REQUEST_DATE, "", new { @class = "text-danger" })</small></span>
                                         </div>
@@ -194,19 +194,19 @@
 
     </div>
     <script>
-        $(document).ready(function () {
-            const currentYear = (new Date).getFullYear();
-            const currentMonth = (new Date).getMonth();
-            const currentDay = (new Date).getDate();
-            $('#txtRequestDate').datepicker({
-                dateFormat: "yy-mm-dd",
-                maxDate: new Date(currentYear, currentMonth, currentDay),
-                uiLibrary: 'bootstrap4'
-            });
-            window.setTimeout(function () {
-                $("#informationMessage").fadeOut('slow');
-            }, 3000);
-        });
+        //$(document).ready(function () {
+        //    const currentYear = (new Date).getFullYear();
+        //    const currentMonth = (new Date).getMonth();
+        //    const currentDay = (new Date).getDate();
+        //    $('#txtRequestDate').datepicker({
+        //        dateFormat: "yy-mm-dd",
+        //        maxDate: new Date(currentYear, currentMonth, currentDay),
+        //        uiLibrary: 'bootstrap4'
+        //    });
+        //    window.setTimeout(function () {
+        //        $("#informationMessage").fadeOut('slow');
+        //    }, 3000);
+        //});
         
     </script>
                                                 }

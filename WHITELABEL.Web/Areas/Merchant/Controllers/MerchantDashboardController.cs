@@ -106,7 +106,65 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                 else {
                     Session["PaymentGatewayAmount"] = null;
                 }
+                var db = new DBContext();
+                decimal MainBalance = 0;
+                decimal CreditBalance = 0;
+                decimal LeggerBalance = 0;
+                decimal BlockBalance = 0;
+                var getMerchantInfo =db.TBL_MASTER_MEMBER.FirstOrDefault(x=>x.MEM_ID==CurrentMerchant.MEM_ID);
+                if (getMerchantInfo != null)
+                {
+                    MainBalance = (decimal)getMerchantInfo.BALANCE;
+                    if (getMerchantInfo.CREDIT_LIMIT != null)
+                    { CreditBalance = (decimal)getMerchantInfo.CREDIT_LIMIT;
+                        BlockBalance= (decimal)getMerchantInfo.BLOCKED_BALANCE;
+                    }
+                    else
+                    { CreditBalance = 0;
+                        BlockBalance = 0;
+                    }
 
+                    LeggerBalance = MainBalance- CreditBalance- BlockBalance;
+                    ViewBag.CurrentBalance = MainBalance;
+                    ViewBag.CreditBalance = CreditBalance;
+                    ViewBag.LeggerBalance = LeggerBalance;
+                    ViewBag.BlockBalance = BlockBalance;
+                    ViewBag.MemberName = getMerchantInfo.MEMBER_NAME ;
+                    var getState = db.TBL_STATES.FirstOrDefault(x => x.STATEID == getMerchantInfo.STATE_ID).STATENAME;
+                    ViewBag.Address = getMerchantInfo.ADDRESS + "," + getMerchantInfo.CITY;
+                    ViewBag.State= getMerchantInfo.PIN + "," + getState;
+                    if (getMerchantInfo.AADHAAR_NO != null)
+                    {
+                        ViewBag.PersonalDoc = "Pancard:- " + getMerchantInfo.PAN_NO;
+                        ViewBag.Aadhaarcard = "Aadhaar Card:- " + getMerchantInfo.AADHAAR_NO;
+                    }
+                    else
+                    {
+                        ViewBag.PersonalDoc = "Pancard:- " + getMerchantInfo.PAN_NO;
+                        ViewBag.Aadhaarcard = "Aadhaar Card:- null";
+                    }
+                }
+                else
+                {
+                    ViewBag.CurrentBalance = MainBalance;
+                    ViewBag.CreditBalance = CreditBalance;
+                    ViewBag.LeggerBalance = LeggerBalance;
+                    ViewBag.BlockBalance = BlockBalance;
+                    ViewBag.MemberName = getMerchantInfo.MEMBER_NAME;
+                    var getState = db.TBL_STATES.FirstOrDefault(x => x.STATEID == getMerchantInfo.STATE_ID).STATENAME;
+                    ViewBag.Address = getMerchantInfo.ADDRESS + "," + getMerchantInfo.CITY;
+                    ViewBag.State = getMerchantInfo.PIN + "," + getState;
+                    if (getMerchantInfo.AADHAAR_NO != null)
+                    {
+                        ViewBag.PersonalDoc = "Pancard:- " + getMerchantInfo.PAN_NO;
+                        ViewBag.Aadhaarcard = "Aadhaar Card:- " + getMerchantInfo.AADHAAR_NO;
+                    }
+                    else
+                    {
+                        ViewBag.PersonalDoc = "Pancard:- " + getMerchantInfo.PAN_NO;
+                        ViewBag.Aadhaarcard = "Aadhaar Card:- null";
+                    }
+                }
                 //if ((TempData["EaseBuzzResponse"]) != null)
                 //{
                 //    ViewBag.IsShowPrintTicket = TempData["EaseBuzzResponse"];

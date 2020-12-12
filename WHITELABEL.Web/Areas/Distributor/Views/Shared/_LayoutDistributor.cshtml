@@ -110,8 +110,8 @@
             <div style="width:55%; padding-left:45px;text-align:right;" class="d-none d-md-block"  >
                 @*<div class="row" style="display:none;">*@
                 <div class="row">
-                    <div class="col-md-8 row"><div style="text-align:left" class="col-md-6"><b>@Session["DistCompanyName"]</b></div><div class="col-md-5" style="color:red;font-weight:bold; padding-top:3px; text-align:left; border:1px solid #ccc; float:right; padding:5px; background-color:#d4d4d4; border-radius:5px"><span style=" border-right:1px solid #ccc; margin-right:5px;">CRL <i class="fas fa-rupee-sign" style="padding:0 10px;"></i> </span><label id="txtDistCreditLimitAmt"></label> </div></div>
-                    <div class="col-md-4"><div style="color:green; font-weight:bold; padding-top:3px;  text-align:left; border:1px solid #ccc; float:left; padding:5px; background-color:#d4d4d4; border-radius:5px"><span style=" border-right:1px solid #ccc; margin-right:5px;">PCL <i class="fas fa-rupee-sign" style="padding:0 10px;"></i></span><label id="txtDistReservedCreditLimitAmt"></label> </div></div>
+                    <div class="col-md-8 row"><div style="text-align:left" class="col-md-6"><b>@Session["DistCompanyName"]</b></div><div class="col-md-5" style="display:none;color:red;font-weight:bold; padding-top:3px; text-align:left; border:1px solid #ccc; float:right; padding:5px; background-color:#d4d4d4; border-radius:5px"><span style=" border-right:1px solid #ccc; margin-right:5px;">CRL <i class="fas fa-rupee-sign" style="padding:0 10px;"></i> </span><label id="txtDistCreditLimitAmt"></label> </div></div>
+                    <div class="col-md-4"><div style="display:none;color:green; font-weight:bold; padding-top:3px;  text-align:left; border:1px solid #ccc; float:left; padding:5px; background-color:#d4d4d4; border-radius:5px"><span style=" border-right:1px solid #ccc; margin-right:5px;">PCL <i class="fas fa-rupee-sign" style="padding:0 10px;"></i></span><label id="txtDistReservedCreditLimitAmt"></label> </div></div>
                 </div>
 
             </div>
@@ -257,7 +257,7 @@
                         <div class="triangle"></div>
                     </li>
 
-                    <li class="nav-item">
+                    @*<li class="nav-item">
                         <a class="nav-item-hold" href="@Url.Action("Index","DistributorCommissionList", new {area= "Distributor" })">
                             <i class="fa fa-coins nav-icon"></i>
                             <span class="nav-text">Distributor Commission List </span>
@@ -278,7 +278,7 @@
                             <span class="nav-text">KYC Verification</span>
                         </a>
                         <div class="triangle"></div>
-                    </li>
+                    </li>*@
                     <li class="nav-item">
                         <a class="nav-item-hold" href="@Url.Action("Index","DistributorBankDetails", new {area= "Distributor" })">
                             <i class="nav-icon fa fa-university"></i>
@@ -289,7 +289,7 @@
                     <li class="nav-item" data-item="CreditManagment">
                         <a class="nav-item-hold" href="#">
                             <i class="fa fa-wallet nav-icon"></i>
-                            <span class="nav-text">Credit Balance Managment </span>
+                            <span class="nav-text">Credit Debit Managment </span>
                         </a>
                         <div class="triangle"></div>
                     </li>
@@ -354,13 +354,13 @@
                     <li class="nav-item">
                         <a href="@Url.Action("GetCreditNoteList", "DistributorCreditManagment", new {area="Distributor" })">
                             <i class="fa fa-location-arrow nav-icon"></i>
-                            <span class="item-name">Credit Note</span>
+                            <span class="item-name">Manual Debit Credit</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="@Url.Action("CreditLimitList", "DistributorCreditManagment", new {area="Distributor" })">
                             <i class="fa fa-location-arrow nav-icon"></i>
-                            <span class="item-name">Credit Balance</span>
+                            <span class="item-name">Credit Limit</span>
                         </a>
                     </li>
                     @*<li class="nav-item">
@@ -372,13 +372,13 @@
                     <li class="nav-item">
                         <a href="@Url.Action("DistributorCreditLimitReport","DistributorCreditManagment", new {area="Distributor" })">
                             <i class="fa fa-location-arrow nav-icon"></i>
-                            <span class="item-name">Merchant Credit Balance Report</span>
+                            <span class="item-name">Merchant Credit Limit Report</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="@Url.Action("DistributorCreditLimitList","DistributorCreditManagment", new {area="Distributor" })">
                             <i class="fa fa-location-arrow nav-icon"></i>
-                            <span class="item-name">Distributor Credit Balance Report</span>
+                            <span class="item-name">Distributor Credit Limit Report</span>
                         </a>
                     </li>
                 </ul>
@@ -390,11 +390,10 @@
                             <span class="item-name">Retailer Balance Request</span>
                         </a>
                     </li>
-
                     <li class="nav-item">
-                        <a href="@Url.Action("DisplayAccount", "DistributorDebitCreditRequest", new {area="Distributor" })">
+                        <a href="@Url.Action("Index", "DistributorRequestRequisition", new {area="Distributor" })">
                             <i class="fa fa-location-arrow nav-icon"></i>
-                            <span class="item-name">Retailer Manual Transfer</span>
+                            <span class="item-name">Requisition Request</span>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -404,23 +403,40 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="@Url.Action("ListOfWhiteLabelRequisition", "DistributorRequisition", new {area="Distributor" })">
-                            <i class="fa fa-location-arrow nav-icon"></i>
-                            <span class="item-name">Requisition Approved By White Label</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
                         <a href="@Url.Action("DeclinedRequisition", "DistributorRequisition", new {area="Distributor" })">
                             <i class="fa fa-location-arrow nav-icon"></i>
                             <span class="item-name">Decline Requisition</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="@Url.Action("Index", "DistributorRequestRequisition", new {area="Distributor" })">
+                        <a href="@Url.Action("MerchantCreditRequisitionList","DistributorRequisition", new {area="Distributor" })" class="open">
+                            @*<i class="fa fa-arrow-to-right "></i>*@
                             <i class="fa fa-location-arrow nav-icon"></i>
-                            <span class="item-name">Requisition Request</span>
+                            <span class="item-name">Retailer Credit Req. Request</span>
                         </a>
                     </li>
+
+                    @*<li class="nav-item">
+                        <a href="@Url.Action("DisplayAccount", "DistributorDebitCreditRequest", new {area="Distributor" })">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name">Retailer Manual Transfer</span>
+                        </a>
+                    </li>*@
+                    
+                    <li class="nav-item">
+                        <a href="@Url.Action("MerchantCreditRequisitionReport", "DistributorRequisition", new {area="Distributor" })">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name">Credit Requisition Report</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("ListOfWhiteLabelRequisition", "DistributorRequisition", new {area="Distributor" })">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name">Requisition Approved By White Label</span>
+                        </a>
+                    </li>
+                    
+
                     <li class="nav-item">
                         <a href="@Url.Action("DistributorRequisitionReport","DistributorRequisition", new {area="Distributor" })">
                             <i class="fa fa-location-arrow nav-icon"></i>
@@ -437,18 +453,24 @@
                 </ul>
                 <ul class="childNav" data-parent="Accounts">
                     <li class="nav-item">
+                        <a href="@Url.Action("MemberAccountsReport","DistributorTransactionReport", new {area="Distributor" })">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name">Merchant Ledger Report</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" style="display:none;">
                         <a href="@Url.Action("DistributorCommissionReport","DistributorTransactionReport", new {area="Distributor" })">
                             <i class="fa fa-location-arrow nav-icon"></i>
                             <span class="item-name">Distributor Transaction Report</span>
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" style="display:none;">
                         <a href="@Url.Action("Index","DistributorTransactionReport", new {area="Distributor" })">
                             <i class="fa fa-location-arrow nav-icon"></i>
                             <span class="item-name">Retailer Transaction Report</span>
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" style="display:none;">
                         <a href="@Url.Action("GetDatewiseClosingReport","DistributorTransactionReport", new {area="Distributor" })">
                             <i class="fa fa-location-arrow nav-icon"></i>
                             <span class="item-name">Daily opening and closing report</span>

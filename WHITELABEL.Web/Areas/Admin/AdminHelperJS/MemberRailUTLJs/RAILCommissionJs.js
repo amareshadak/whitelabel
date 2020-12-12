@@ -42,6 +42,78 @@
     });
 }
 
+function FetchRailAgentInformation(transid, MemberId) {
+    var idval = transid;
+    var Mem_Id = MemberId;
+    $.ajax({
+        url: '/MemberRailAgentInformation/GetRAILAgentInformation?area=Admin',
+
+        data: {
+            TransId: transid,
+            Mem_ID: Mem_Id
+        },
+        cache: false,
+        type: "POST",
+        dataType: "json",
+        beforeSend: function () {
+        },
+        success: function (data) {
+            debugger;
+            const AgentRailInformation = data.data;
+            const AgentRailStatus = data.Status;
+            if (AgentRailStatus == "0") {
+                const RailUserId = AgentRailInformation.RAIL_USER_ID;
+                const TRAVEL_AGENT_NAME = AgentRailInformation.TRAVEL_AGENT_NAME;
+                const AGENCY_NAME = AgentRailInformation.AGENCY_NAME;
+                const OFFICE_ADDRESS = AgentRailInformation.OFFICE_ADDRESS;
+                const RESIDENCE_ADDRESS = AgentRailInformation.RESIDENCE_ADDRESS;
+                const EMAIL_ID = AgentRailInformation.EMAIL_ID;
+                const MOBILE_NO = AgentRailInformation.MOBILE_NO;
+                const OFFICE_PHONE = AgentRailInformation.OFFICE_PHONE;
+                const PAN_NO = AgentRailInformation.PAN_NO;
+                const DIGITAL_CERTIFICATE_DETAILS = AgentRailInformation.DIGITAL_CERTIFICATE_DETAILS;
+                const CERTIFICATE_BEGIN_DATE = AgentRailInformation.CERTIFICATE_BEGIN_DATE;
+                const CERTIFICATE_END_DATE = AgentRailInformation.CERTIFICATE_END_DATE;
+                const USER_STATE = AgentRailInformation.USER_STATE;
+                const AGENT_VERIFIED_STATUS = AgentRailInformation.AGENT_VERIFIED_STATUS;
+                const DEACTIVATION_REASON = AgentRailInformation.DEACTIVATION_REASON;
+                const AADHAAR_VERIFICATION_STATUS = AgentRailInformation.AADHAAR_VERIFICATION_STATUS;
+                const ENTRY_DATE = AgentRailInformation.ENTRY_DATE;
+                const STATUS = AgentRailInformation.STATUS;
+                const STATE_ID = AgentRailInformation.STATE_ID;
+                const RAIL_COMM_TAG = AgentRailInformation.RAIL_COMM_TAG;
+                $('#lblRailid').text(RailUserId);
+                $('#lblTRAVEL_AGENT_NAME').text(TRAVEL_AGENT_NAME);
+                $('#lblAGENCY_NAME').text(AGENCY_NAME);
+                $('#lblOFFICE_ADDRESS').text(OFFICE_ADDRESS);
+                $('#lblEMAIL_ID').text(EMAIL_ID);
+                $('#lblMOBILE_NO').text(MOBILE_NO);
+                $('#lblOFFICE_PHONE').text(OFFICE_PHONE);
+                $('#lblPAN_NO').text(PAN_NO);
+                $('#lblAadhaarcardverification').text(AADHAAR_VERIFICATION_STATUS);
+                $('#lblAGENT_VERIFIED_STATUS').text(AGENT_VERIFIED_STATUS);
+                $('#lblRESIDENCE_ADDRESS').text(RESIDENCE_ADDRESS);
+                $('#lblRESIDENCE_ADDRESS').text(RESIDENCE_ADDRESS);
+                $('#lblRESIDENCE_ADDRESS').text(RESIDENCE_ADDRESS);
+            }
+            else {
+                bootbox.alert({
+                    size: "small",
+                    message: "Rail agent information is not available.Please enter rail agnet.",
+                    backdrop: true,
+                    callback: function () {
+                    }
+                });
+            }
+           
+
+        },
+        error: function (xhr, status, error) {
+            console.log(status);
+        }
+    });
+}
+
 
 
 //$(document).ready(function () {

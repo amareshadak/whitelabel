@@ -32,21 +32,21 @@
                 <div class="card">
                     <div class="card-body">
                         @*<div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group row">
-                                    <label class="control-label col-md-3" style="text-align:right;">Select Distributor</label>
-                                    <div class="col-md-6">
-                                        <div class="inputer">
-                                            <div class="input-wrapper">
-                                                @Html.EditorFor(m => m.DistributorName, new { htmlAttributes = new { @id = "txtDistributorMemberaName", style = " width:100%; padding:5px;", placeholder = "--Select Distributor--", @class = "form-control" } })
-                                                @Html.HiddenFor(model => model.DISTRIBUTOR_ID, new { id = "hfDistributorId" })
+                                <div class="col-md-12">
+                                    <div class="form-group row">
+                                        <label class="control-label col-md-3" style="text-align:right;">Select Distributor</label>
+                                        <div class="col-md-6">
+                                            <div class="inputer">
+                                                <div class="input-wrapper">
+                                                    @Html.EditorFor(m => m.DistributorName, new { htmlAttributes = new { @id = "txtDistributorMemberaName", style = " width:100%; padding:5px;", placeholder = "--Select Distributor--", @class = "form-control" } })
+                                                    @Html.HiddenFor(model => model.DISTRIBUTOR_ID, new { id = "hfDistributorId" })
+                                                </div>
                                             </div>
                                         </div>
+                                        <div class="col-md-3"></div>
                                     </div>
-                                    <div class="col-md-3"></div>
                                 </div>
-                            </div>
-                        </div>*@
+                            </div>*@
                         <div class="row ">
                             <div class="col-md-6">
                                 <div class="form-group row">
@@ -191,7 +191,7 @@
 
                                             <div class="input-wrapper">
                                                 @*@Html.EditorFor(model => model.EMAIL_ID, "0", new { htmlAttributes = new { @class = "form-control", id = "txtMerchantemailaddress", @placeholder = "Email Address" } })*@
-                                                @Html.EditorFor(model => model.EMAIL_ID, "0", new { htmlAttributes = new { @class = "form-control", id = "txtMerchantemailaddress123", @placeholder = "Email Address" } })
+                                                @Html.EditorFor(model => model.EMAIL_ID, "0", new { htmlAttributes = new { @class = "form-control", id = "txtAddNewMemberemailID", @placeholder = "Email Address" } })
                                             </div>
                                             <span class="help-block"><small>@Html.ValidationMessageFor(model => model.EMAIL_ID, "", new { @class = "text-danger" })</small></span>
                                             @*}*@
@@ -207,7 +207,7 @@
                                     <div class="col-md-9">
                                         <div class="inputer">
                                             <div class="input-wrapper">
-                                                @Html.EditorFor(model => model.MEMBER_MOBILE, new { htmlAttributes = new { @class = "form-control", @placeholder = "Mobile No" } })
+                                                @Html.EditorFor(model => model.MEMBER_MOBILE, new { htmlAttributes = new { @class = "form-control", @placeholder = "Mobile No", id = "txtAddNewMemberMobileNo" } })
                                             </div>
                                             <span class="help-block"><small>@Html.ValidationMessageFor(model => model.MEMBER_MOBILE, "", new { @class = "text-danger" })</small></span>
                                         </div>
@@ -285,7 +285,7 @@
                                     <div class="col-md-9">
                                         <div class="inputer">
                                             <div class="input-wrapper">
-                                                @Html.EditorFor(model => model.User_pwd, new { htmlAttributes = new { @class = "form-control", @placeholder = "Password", id = "Merchantpassword" } })
+                                                @Html.EditorFor(model => model.User_pwd, new { htmlAttributes = new { @class = "form-control", @placeholder = "Password", @readonly = "readonly", id = "Merchantpassword" } })
                                             </div>
                                             <input type="checkbox" onclick="myMerchantFunction()">Show Password
                                             <span class="help-block"><small>@Html.ValidationMessageFor(model => model.User_pwd, "", new { @class = "text-danger" })</small></span>
@@ -321,6 +321,23 @@
                                     </div>
                                 </div>
 
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="control-label col-md-3">Payment Mode</label>
+                                    <div class="col-md-9">
+                                        <div class="inputer">
+                                            <div class="input-wrapper">
+                                                @Html.DropDownListFor(m => m.PAYMENT_MODE, new List<SelectListItem>
+                                                    { new SelectListItem{Text="Direct", Value="Direct"},
+                                                    new SelectListItem{Text="Indirect", Value="Indirect"}},
+         new { id = "Paymentmode", @class = "form-control" })
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="col-md-6" style="display:none;">
@@ -431,15 +448,10 @@
                                 </div>
                             </div>
                         </div>
-                      
-                         
-
-                      
-
                     </div><!--.panel-body-->
                     <div>
                         <div class="text-center">
-                            <input type="submit" value="Create" class="btn btn-primary" id="btnMersubmit" />
+                            <input type="submit" value="Create" class="btn btn-primary" id="btnAddMersubmit" />
 
                         </div>
                         <div class="clearfix"></div>
@@ -462,11 +474,9 @@
         $('#progressMerchant').hide();
     })
     function OnSuccessMerchant(response) {
-        var message = response;
-        debugger;
+        var message = response;        
         if (message == "Merchant Added Successfully") {
-            $("#ADDMERCHANT").trigger("reset");
-           
+            $("#ADDMERCHANT").trigger("reset");           
             bootbox.alert({
                 message: message,
                 size: 'small',
@@ -511,76 +521,4 @@
     $(document).ready(function () {
         $('#Merchantpassword').attr('type', 'password');
     });
-</script>
-
-<script>
-    $('#txtMerchantemailaddress').on('input blur change keyup', function () {
-    if ($(this).val().length != 0) {
-        var token = $(':input[name="__RequestVerificationToken"]').val();
-        $.ajax({
-            url: "/Login/CheckEmailAvailability",
-            //url: "@Url.Action("CheckEmailAvailability", "Login")",
-            data: {
-                __RequestVerificationToken: token,
-                emailid: $(this).val()
-            },
-            cache: false,
-            type: "POST",
-            success: function (data) {
-                // DONE
-                if (data.result == "available") {
-                    $('#txtMerchantemailaddress').css('border', '3px #090 solid');
-                    $('#btnMersubmit').attr('disabled', false);
-                }
-                else {
-                    $('#txtMerchantemailaddress').css('border', '3px #C33 solid');
-                    $('#btnMersubmit').attr('disabled', true);
-                    //alert("This email id is already registered");
-                }
-            },
-            error: function (xhr, status, error) {
-                console.log(xhr.responseText);
-                alert("message : \n" + "An error occurred" + "\n status : \n" + status + " \n error : \n" + error);
-            }
-        });
-    }
-    else {
-        $('#btnMersubmit').attr('disabled', true);
-    }
-    });
-
-    //$(document).ready(function () {
-    //    $("#txtDistributorMemberaName").autocomplete({
-    //        source: function (request, response) {
-    //            $.ajax({
-    //                url: '/Login/GetDistributorMemberName',
-    //                data: "{ 'prefix': '" + request.term + "'}",
-    //                dataType: "json",
-    //                type: "POST",
-    //                contentType: "application/json; charset=utf-8",
-    //                success: function (data) {
-    //                    response($.map(data, function (item) {
-    //                        return item;
-    //                    }))
-    //                },
-    //                error: function (response) {
-    //                    alert(response.responseText);
-    //                },
-    //                failure: function (response) {
-    //                    alert(response.responseText);
-    //                }
-    //            });
-    //        },
-    //        focus: function (event, ui) {
-    //            $('#txtDistributorMemberaName').val(ui.item.label);
-    //            return true;
-    //        },
-    //        select: function (e, i) {
-    //            $("#hfDistributorId").val(i.item.val);
-    //            return true;
-    //        },
-    //        minLength: 1
-    //    });
-    //});
-
 </script>

@@ -30,7 +30,8 @@
                             <div class="card-title ">
                                 <div class="row">
                                     <div class="text-left col-md-6 col-lg-4">
-                                        <a href="@(Url.Action("ExportRDSRefundReport", "MemberRDSReports",new {area="Admin" }) + ViewContext.HttpContext.Request.QueryString)" class="btn btn-info btn-xs"><span class="ion-forward"></span> Export</a>
+                                        @*<a href="@(Url.Action("ExportRDSRefundReport", "MemberRDSReports",new {area="Admin" }) + ViewContext.HttpContext.Request.QueryString)" class="btn btn-info btn-xs"><span class="ion-forward"></span> Export</a>*@
+                                        <a href="#" id="btnRedRefundReportExport" class="btn btn-info btn-xs"><span class="ion-forward"></span> EXPORT</a>
                                     </div>
                                     <div class="text-left col-md-6 col-lg-4">
 
@@ -41,32 +42,22 @@
                                 <div class="clearfix"></div>
                             </div>
                         </div><!--.panel-heading-->
-                        <div class="panel-body">
+                        <div class="panel-body">                            
                             <div class="row example-row" style="margin-bottom:10px;">
-                                <div class="col-md-4">
-                                    <div class="inputer">
-                                        <div class="input-wrapper">
-                                            @Html.DropDownList("MemberService", new SelectList((ViewBag.MemberService) as SelectList, "Value", "Text"), "Select Whitelevel", new { id = "WhitelevelList", @class = "form-control" })
+                                <div class="col-md-3">
+                                    <div class="form-group row">
+                                        <label class="control-label col-md-3">Member Details</label>
+                                        <div class="col-md-9">
+                                            <div class="inputer">
+                                                <div class="input-wrapper">
+                                                    @Html.EditorFor(m => m.FromUser, new { htmlAttributes = new { @id = "txtMemberaNamedetails", style = " width:100%; padding:5px;", placeholder = "Enter Search Details", @class = "form-control" } })
+                                                    @Html.HiddenFor(model => model.SUPER_ID, new { id = "hdfmemberList" })
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="inputer">
-                                        <div class="input-wrapper">
-                                            @Html.DropDownList("Distributor", new SelectList(string.Empty, "Value", "Text"), "--Select Distributor--", new { @class = "form-control", id = "dddlDistributorList" })
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="inputer">
-                                        <div class="input-wrapper">
-                                            @Html.DropDownList("MemberService", new SelectList(string.Empty, "Value", "Text"), "--Select Merchant--", new { @class = "form-control", id = "ddlMemberList" })
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row example-row" style="margin-bottom:10px;">
-                                <div class="col-md-5">
+                                <div class="col-md-3">
                                     <div class="form-group row">
                                         <label class="control-label col-md-3">Date From</label>
                                         <div class="col-md-9">
@@ -78,7 +69,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-5">
+                                <div class="col-md-3">
                                     <div class="form-group row">
                                         <label class="control-label col-md-3">Date From</label>
                                         <div class="col-md-9">
@@ -90,13 +81,12 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                     <div class="form-group row">
-
                                         <div class="col-md-12">
                                             <div class="inputer">
                                                 <div class="input-wrapper">
-                                                    <a href="#" class="btn btn-primary" id="btnSearchDAteWise">Search Date Wise</a>
+                                                    <a href="#" class="btn btn-primary" id="btnSearchDAteWise">Search</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -116,117 +106,49 @@
 }
 
 <script>
-    $(function () {
+    //$(function () {
+    //    $('#txtFromDate').datepicker({
+    //        format: "yyyy-MM-dd",
+    //        language: "es",
+    //        autoclose: true,
+    //        todayHighlight: true,
+    //        changeMonth: true,
+    //        changeYear: true
+    //    });
+    //});
+    //$(function () {
+    //    $('#txtToDate').datepicker({
+    //        format: "yyyy-MM-dd",
+    //        language: "es",
+    //        autoclose: true,
+    //        todayHighlight: true,
+    //        changeMonth: true,
+    //        changeYear: true
+    //    });
+    //});
+    const currentYear = (new Date).getFullYear();
+    const currentMonth = (new Date).getMonth();
+    const currentDay = (new Date).getDate();
+    $(document).ready(function () {
         $('#txtFromDate').datepicker({
-            format: "yyyy-MM-dd",
-            language: "es",
-            autoclose: true,
-            todayHighlight: true,
-            changeMonth: true,
-            changeYear: true
+            dateFormat: "yy-mm-dd",
+            maxDate: new Date(currentYear, currentMonth, currentDay),
+            uiLibrary: 'bootstrap4'
         });
-    });
-    $(function () {
         $('#txtToDate').datepicker({
-            format: "yyyy-MM-dd",
-            language: "es",
-            autoclose: true,
-            todayHighlight: true,
-            changeMonth: true,
-            changeYear: true
+            dateFormat: "yy-mm-dd",
+            maxDate: new Date(currentYear, currentMonth, currentDay),
+            uiLibrary: 'bootstrap4'
         });
     });
-
-
-     $("#WhitelevelList").change(function () {
-         $("#dddlDistributorList").empty();
-         $("#dddlDistributorList").val("--Select--");
-            $.ajax({
-                type: 'POST',
-                url: '@Url.Action("GetDistributorList")',
-                    dataType: 'json',
-                    data: { Disid: $("#WhitelevelList").val() },
-                    success: function (states) {
-                        $("#dddlDistributorList").append('<option selected value="">--Select Distributor--</option>');
-                        $.each(states, function (i, state) {
-                            $("#dddlDistributorList").append('<option value="' + state.IDValue + '">' +
-                                state.TextValue + '</option>');
-                        });
-                        var Whitelevelval = $('#WhitelevelList').val();
-                        var SuperIDval = $('#dddlDistributorList').val();
-                        var disval ="";
-                        var dropdownval = $('#ddlMemberList').val();
-                        var Date_From = $('#txtFromDate').val();
-                        var Date_TO = $('#txtToDate').val();
-                        $('.mvc-grid').mvcgrid({
-                            query: 'Whitelevel=' + Whitelevelval + '&Distributor=' + SuperIDval + '&Merchant=' + dropdownval + '&DateFrom=' + Date_From + '&Date_To=' + Date_TO,
-                            reload: true,
-                            reloadStarted: function () {
-                                $(".divFooterTotalComm").remove();
-                            },
-                        });
-                    },
-                    error: function (ex) {
-                    console.log(ex);
-                    }
-            });
-     })
-
-        $("#dddlDistributorList").change(function () {
-            $("#ddlMemberList").empty();
-            $("#ddlMemberList").val("--Select--");
-                $.ajax({
-                    type: 'POST',
-                    url: '@Url.Action("GetMerchantList")',
-                    dataType: 'json',
-                    data: { Disid: $("#dddlDistributorList").val() },
-                    success: function (states) {
-                        $("#ddlMemberList").append('<option selected value="">--Select Merchant--</option>');
-                        $.each(states, function (i, state) {
-                            $("#ddlMemberList").append('<option value="' + state.IDValue + '">' +
-                                state.TextValue + '</option>');
-                        });
-                        var Whitelevelval = $('#WhitelevelList').val();
-                        var SuperIDval = $('#dddlDistributorList').val();
-                        var dropdownval = $('#ddlMemberList').val();
-                        var Date_From = $('#txtFromDate').val();
-                        var Date_TO = $('#txtToDate').val();
-                        $('.mvc-grid').mvcgrid({
-                            query: 'Whitelevel=' + Whitelevelval + '&Distributor=' + SuperIDval + '&Merchant=' + dropdownval + '&DateFrom=' + Date_From + '&Date_To=' + Date_TO,
-                            reload: true,
-                            reloadStarted: function () {
-                                $(".divFooterTotalComm").remove();
-                            },
-                        });
-                    },
-                    error: function (ex) {
-                        $("#ddlMemberList").append('<option selected value="">--Select Merchant--</option>');
-                    }
-            });
-        })
-        $("#ddlMemberList").change(function () {
-            var Whitelevelval = $('#WhitelevelList').val();
-            var SuperIDval = $('#dddlDistributorList').val();
-            var Date_From = $('#txtFromDate').val();
-            var Date_TO = $('#txtToDate').val();
-            $('.mvc-grid').mvcgrid({
-                query: 'Whitelevel=' + Whitelevelval + '&Distributor=' + SuperIDval + '&Merchant=' + this.value + '&DateFrom=' + Date_From + '&Date_To=' + Date_TO,
-                reload: true,
-                reloadStarted: function () {
-                    $(".divFooterTotalComm").remove();
-                },
-            });
-        });
 
     $("#btnSearchDAteWise").on("click", function () {
-
-        var Whitelevelval = $('#WhitelevelList').val();
-        var SuperIDval = $('#dddlDistributorList').val();
-        var MerchantId = $('#ddlMemberList').val();
-        var Date_From = $('#txtFromDate').val();
-        var Date_TO = $('#txtToDate').val();
+        const MerchantId = $('#txtMemberaNamedetails').val();
+        const Date_From = $('#txtFromDate').val();
+        const Date_TO = $('#txtToDate').val();
         $('.mvc-grid').mvcgrid({
-            query: 'Whitelevel=' + Whitelevelval + '&Distributor=' + SuperIDval + '&Merchant=' + MerchantId + '&DateFrom=' + Date_From + '&Date_To=' + Date_TO,
+            //query: 'Whitelevel=' + Whitelevelval + '&Distributor=' + SuperIDval + '&Merchant=' + MerchantId + '&DateFrom=' + Date_From + '&Date_To=' + Date_TO,
+            query: 'MerchantUser=' + MerchantId + '&DateFrom=' + Date_From + '&Date_To=' + Date_TO,
             reload: true,
             reloadStarted: function () {
                 $(".divFooterTotalComm").remove();
@@ -235,4 +157,12 @@
     });
 
 </script>
-
+<script type="text/javascript">
+    $("#btnRedRefundReportExport").click(function () {
+        const MerchantId = $('#txtMemberaNamedetails').val();
+        const Date_From = $('#txtFromDate').val();
+        const Date_TO = $('#txtToDate').val();
+        var url = '@(Url.Action("ExportRDSRefundReport", "MemberRDSReports", new { area = "Admin" }) + ViewContext.HttpContext.Request.QueryString)?MerchantUser=' + MerchantId + '&DateFrom=' + Date_From + '&Date_To=' + Date_TO;
+        window.location.href = url;
+    })
+</script>

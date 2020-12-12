@@ -814,7 +814,10 @@
                                                     </div>
                                                 </div>
                                             </div>
-
+                                            @*<tr ng-show="IsFlightType=='International'">
+                                                <td>Pancard</td>
+                                                <td><input type="text" class="form-control form-control-sm" style="text-align:right; width:70px" min="0" name="IsFlightType" ng-model="INTPanCard" /></td>
+                                            </tr>*@
                                             <div class="col-12 p-1 m-1" style="border-top: 1px solid #dbc9bb;width: 99%"></div>
                                             <div class="form-row">
                                                 <div class="col-md-4 col-sm-4 col-xs-12 p-1">
@@ -867,7 +870,7 @@
                                             <div class="col-12 p-1 m-1" style="border-top: 1px solid #dbc9bb;width: 99%"></div>
 
 
-                                            <div class="form-row">
+                                            <div class="form-row" ng-show="IsFlightType!='International'">
                                                 <div class="col-md-4 col-sm-6 col-xs-12 p-1">
                                                     <input type="email" ng-model="emailAddress"
                                                            class="form-control inputMedium" placeholder="Enter Email Id." required>
@@ -892,7 +895,38 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="form-row" ng-show="IsFlightType=='International'">                                                
+                                                <div class="col-md-3 col-sm-6 col-xs-12 p-1">
+                                                    <input type="email" ng-model="emailAddress"
+                                                           class="form-control inputMedium" placeholder="Enter Email Id." required>
+                                                    <div class="invalid-feedback">
+                                                        Please enter email address.
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3 col-sm-3 col-xs-12 p-1">
+                                                    <input type="text" ng-model="mobileNumber" class="form-control inputMedium"
+                                                           pattern="(.){10,10}"
+                                                           maxlength="10" placeholder="Mobile No." required>
+                                                    <div class="invalid-feedback">
+                                                        Please enter mobile number.
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3 col-sm-3 col-xs-12 p-1">
+                                                    <input type="text" ng-model="altMobileNo" class="form-control inputMedium"
+                                                           pattern="(.){10,10}"
+                                                           maxlength="10" placeholder="Alternative Mobile No.">
+                                                    <div class="invalid-feedback">
+                                                        Please enter alternative mobile number.
+                                                    </div>
+                                                </div>
 
+                                                <div class="col-md-3 col-sm-3 col-xs-12 p-1">
+                                                    <input type="text" class="form-control inputMedium" maxlength="10" name="IsFlightType" ng-model="INTPanCard" pattern="[a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}" placeholder="Pancard number" />
+                                                    <div class="invalid-feedback">
+                                                        Please enter a valid pancard number.
+                                                    </div>
+                                                </div>
+                                            </div>
 
 
 
@@ -1091,11 +1125,20 @@
                                                     </div>
                                                     <div class="col-md-2 col-sm-2 col-xs-12">
                                                         @*<button ng-click="holdingFlightRequest(travellerForm.$invalid)"  type="submit" ng-show="flightDetails[0].HoldAllowed == 'Y'" class="button orange btn-block"><div>Hold Ticket</div></button>*@
-                                                        <button ng-click="holdingFlightRequest(travellerForm.$invalid)" type="submit" ng-show="flightDetails == 'Y'" class="button orange btn-block"><div>Hold Ticket</div></button>
+
+                                                        @*<button ng-click="holdingFlightRequest(travellerForm.$invalid)" type="submit" ng-show="flightDetails == '1Y'" class="button orange btn-block"><div>Hold Ticket</div></button>*@
+                                                        <button ng-show="flightDetails == '1Y'" ng-disabled="travellerForm.$invalid" data-toggle="modal" data-target="#PrintRoundTripTicketInformation" id='PrintRoundTripTransactionvalueid' data-id="0"
+                                                           class="button orange btn-block"><div>Hold Ticket</div></button>
                                                     </div>
                                                     <div class="col-md-3 col-sm-3 col-xs-12">
-                                                        {{flightDetails[0].HoldAllowed}}
-                                                        <button ng-click="bookFlightRequest(travellerForm.$invalid)" type="submit" class="button orange btn-block">Issue Ticket</button>
+                                                        @*{{flightDetails[0].HoldAllowed}}*@
+                                                        <button ng-click="openPopupDetails(travellerForm.$invalid)" type="submit" class="button orange btn-block">Issue Ticket</button>
+
+                                                        @*<button ng-disabled="travellerForm.$invalid" data-toggle="modal" data-target="#PrintRoundTripTicketInformation" id='PrintRoundTripTransactionvalueid' data-id="0"
+                                                           class="button orange btn-block">
+                                                            Issue Ticket
+                                                        </button>*@
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -1139,11 +1182,12 @@
                                                 <td>Processing Charges</td>
                                                 <td class="text-right pull-right"><input type="text" class="form-control form-control-sm" style="text-align:right; width:70px" min="0" ng-change="totalAmountCalculation(totalAmount)" name="usermarkup" ng-model="userMarkup" onkeypress="return isNumber(event)" /></td>
                                             </tr>
+                                            
                                             <tr>
                                                 <td><b>Total</b></td>
                                                 <td class="text-right">
                                                     <b>{{totalAmountCalculation(totalAmount)}}/- @*{{TotalAmount}}*@</b>
-                                                    <span>{{DeptNETAmount}}{{ReturnNETAmount}}</span>
+                                                    @*<span>{{DeptNETAmount}}{{ReturnNETAmount}}</span>*@
                                                 </td>
                                                 
                                             </tr>
@@ -1175,8 +1219,430 @@
             </div>
         </div>
     </div>
+
+    <!--Modal Ticket Information-->
+    <div class="modal fade" id="PrintRoundTripTicketInformation" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Flight Information</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="tab-pane fade show active" id="invoice" role="tabpanel" aria-labelledby="invoice-tab">
+                        <div class="d-sm-flex mb-5" data-view="print">
+                            <span class="m-auto"></span>
+
+                        </div>
+                        <!---===== Round Oneway Print Area =======-->
+                        <div id="TicketRoundOnewayInfoprint-area">                            
+                            <div>
+                                <div class="row">
+                                    <div class="col-md-12" style="width:100%;">
+                                        <img ng-src="~/Content/static-airlines-master/logos/{{deptureFlight[0].AirlineCode}}.png" />
+                                        <h4 class="font-weight-bold" style="font-weight: 700!important; color: #fe6601; font-size: 1.2195rem;">{{deptureFlight[0].AirlineName}}</h4>
+                                    </div>
+                                </div>
+                                <div class="row col-md-12" style="margin-top:20px; width:100%;">
+                                    <div class="col-md-3" style="width:25%;">
+                                        <h5 style="font-size: 1.01625rem;color: #fe6601;">
+                                            PNR/Booking Reference
+                                        </h5>
+                                        <p style="margin-top: 0; margin-bottom: 1rem;">
+                                            Pending
+                                        </p>
+                                    </div>
+                                    <div class="col-md-3" style="width:25%;">
+                                        <h5 style="font-size: 1.01625rem;color: #fe6601;">
+                                            Status
+                                        </h5>
+                                        <p style="margin-top: 0; margin-bottom: 1rem;">                                            
+                                            Pending
+                                        </p>
+                                    </div>
+                                    <div class="col-md-3" style="width:25%;">
+                                        <h5 style="font-size: 1.01625rem;color: #fe6601;">
+                                            Date of Booking*
+
+                                        </h5>
+                                        <p style="margin-top: 0; margin-bottom: 1rem;">
+                                            {{getAirDate(deptureFlight[0].ArrDate) | date : 'EEEE, dd MMM yyyy'}}                                            
+                                        </p>
+                                    </div>
+                                    <div class="col-md-3" style="width:25%;">
+                                        <h5 style="font-size: 1.01625rem;color: #fe6601;">
+                                            Payment Status
+                                        </h5>
+                                        <p style="margin-top: 0; margin-bottom: 1rem;">                                            
+                                            Pending
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="row col-md-12" style="margin-top:20px; width:100%;">
+                                    <h1 style="color: #fe6601; font-size: 2.0325rem;">
+                                     {{adult}} {{adult > 1 ? 'Adults' : 'Adult'}} Passengers
+                                    </h1>
+                                </div>
+
+
+                                <div class="row col-md-12" style="margin-top:20px; width:100%;" ng-repeat="psssenger in passengers">
+                                    <p class="col-md-12" style="margin-top: 0; margin-bottom: 1rem; width:100%;">Passenger {{$index +1}}</p>
+                                    <h5 class="col-md-12" style="font-size: 1.01625rem;color: #fe6601; width:100%;">{{$index +1}})  {{psssenger.Title}} {{psssenger.FirstName}} {{psssenger.LastName}}</h5>
+                                </div>
+                                <div ng-repeat="item in deptureFlight" ng-cloak>
+                                    <div class="row col-md-12" style="margin-top:20px; width:100%;">
+
+                                        <h1 class="col-md-12" style="width:100%;">
+                                            {{deptureFlight[0].FromAirportName}}
+                                            <i class="fa fa-long-arrow-alt-right"></i>{{deptureFlight[deptureFlight.length - 1].ToAirportName}}
+                                        </h1>
+                                        <p class="col-md-12" style="width:100%;">{{getAirDate(item.ArrDate) | date : 'EEEE, dd MMM yyyy'}} . {{item.AirlineCode}} {{item.FlightNo}}</p>
+                                    </div>
+
+                                    <div class="row col-md-12" style="margin-top:20px; width:100%;">
+                                        <div class="row col-md-6" style="width:50%;">
+                                            <div class="col-md-12"><p style="margin-top: 0; margin-bottom: 1rem;">From (Terminal)</p></div>
+                                            <div class="col-md-12"><h5 style="font-size: 1.01625rem;color: #fe6601;">{{item.FromAirportCode}}-{{item.DepTime}}</h5></div>
+                                        </div>
+                                        <div class="row col-md-6" style="width:50%;">
+                                            <div class="col-md-12"><p style="margin-top: 0; margin-bottom: 1rem;">To (Terminal)</p></div>
+                                            <div class="col-md-12"><h5 style="font-size: 1.01625rem;color: #fe6601;">{{item.ToAirportCode}} - {{item.ArrTime}} ({{item.ToTerminal}})</h5></div>
+                                        </div>
+                                        <div class="row col-md-6" style="width:50%;">
+                                            <div class="col-md-12"><p style="margin-top: 0; margin-bottom: 1rem;">Flight</p></div>
+                                            <div class="col-md-12"><h5 style="font-size: 1.01625rem;color: #fe6601;">{{item.AirlineCode}} {{item.FlightNo}}</h5></div>
+                                        </div>
+                                        <div class="row col-md-6" style="width:50%;">
+                                            <div class="col-md-12"><p style="margin-top: 0; margin-bottom: 1rem;">Dep Time</p></div>
+                                            <div class="col-md-12"><h5 style="font-size: 1.01625rem;color: #fe6601;">{{item.DepTime}}</h5></div>
+                                        </div>
+                                        <div class="row col-md-6" style="width:50%;">
+                                            <div class="col-md-12"><p style="margin-top: 0; margin-bottom: 1rem;">Check in/ Bag Drop closes</p></div>
+                                            <div class="col-md-12"><h5 style="font-size: 1.01625rem;color: #fe6601;">{{item.AdultCheckedIn}}</h5></div>
+                                        </div>
+                                        <div class="row col-md-6" style="width:50%;">
+                                            <div class="col-md-12"><p style="margin-top: 0; margin-bottom: 1rem;">ARR Time</p></div>
+                                            <div class="col-md-12"><h5 style="font-size: 1.01625rem;color: #fe6601;">{{item.ArrDate}}-{{item.ArrTime}}</h5></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12" style=" height:3px; background-color:#ccc; margin:10px 0; width:100%;"></div>
+                                <div class="row col-md-12" style="width:100%;">
+                                    <p class="col-md-12" style="width:100%; margin-top: 0; margin-bottom: 1rem;">* Booking Date reects in UTC ( Coordinated Universal Time), all other timings mentioned are as per local TIME</p>
+
+                                    <h1 class="col-md-12" style="width:100%;">
+                                        GST Information
+                                    </h1>
+                                    <p class="col-md-12" style="width:100%; margin-top: 0; margin-bottom: 1rem;">GST Company Name : <strong>ENCOREDIGITECHPVTLTD</strong></p>
+                                    <p class="col-md-12" style="width:100%; margin-top: 0; margin-bottom: 1rem;">GST Number :<strong>19AACCT7467P1ZE</strong></p>
+                                </div>
+                                <div class="row col-md-12" style="width:100%;">
+                                    <div class="col-md-6" style="width:50%;">
+                                        <div class="col-md-12"><h1>Price Summary</h1></div>
+                                        <div class="row col-md-12">
+                                            <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem;">Base Fare </div>
+                                            <div class="col-md-4" style="text-align:right; width:25%; margin-top: 0; margin-bottom: 1rem;">{{deptureFareDetails.AdultBaseFare}}/- INR</div>
+                                        </div>
+                                        <div class="row col-md-12">
+                                            <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem;">Tax and Charges </div>
+                                            <div class="col-md-4" style="text-align:right; width:25%; margin-top: 0; margin-bottom: 1rem;">{{deptureFareDetails.AdultTax}}/- INR</div>
+                                        </div>
+                                        <div class="row col-md-12">
+                                            <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem;">Convenience Fee </div>
+                                            <div class="col-md-4" style="text-align:right; width:25%; margin-top: 0; margin-bottom: 1rem;">{{(additionalAddedAmount == 0 ? 0 : (additionalAddedAmount * 1))}}/- INR</div>
+                                        </div>
+                                        <div class="row col-md-12">
+                                            <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem;">Processing Charges </div>
+                                            <div class="col-md-4" style="text-align:right; width:20%; margin-top: 0; margin-bottom: 1rem;"><input type="text" readonly class="form-control form-control-sm" style="text-align:right; width:70px" min="0" ng-init="0" ng-change="totalAmountCalculation(deptureFareDetails.TotalAmount)" name="usermarkup" ng-model="userMarkup" onkeypress="return isNumber(event)" />/- INR</div>
+                                        </div>
+
+                                        @*<div class="row col-md-12" ng-show="IsFlightType=='International'">
+                                            <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem;">Pancard </div>
+                                            <div class="col-md-4" style="text-align:right; width:25%; margin-top: 0; margin-bottom: 1rem;"><input type="text" class="form-control form-control-sm" style="text-align:right; width:70px" min="0" name="IsFlightType" readonly ng-model="INTPanCard" /></div>
+                                        </div>*@
+
+                                        <div class="row col-md-12">
+                                            <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem;">Total Amount </div>
+                                            <div class="col-md-4" style="text-align:right; width:25%; margin-top: 0; margin-bottom: 1rem;">@*{{totalAmountCalculation(totalAmount)}}*@{{totalAmountCalculationForPopUp(deptureFareDetails.TotalAmount)}}/- INR</div>
+                                        </div>                                        
+                                    </div>
+                                    <div class="col-md-6" style="width:50%;">
+                                        <div class="col-md-12">
+                                            <h1>
+                                                @*Contact Details*@
+                                            </h1>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <p class="col-md-12" style="margin-top: 0; margin-bottom: 1rem;">
+                                                @*Address*@
+                                            </p>
+                                            <h5 class="col-md-12" style="font-size: 1.01625rem;color: #fe6601; width:100%;">
+                                                @*{{CompanyAddress}}*@
+
+                                            </h5>
+                                            <p class="col-md-12" style="margin-top: 0; margin-bottom: 1rem; width:100%;">
+                                                @*Company Name*@
+                                            </p>
+                                            <h5 class="col-md-12" style="font-size: 1.01625rem;color: #fe6601;">
+                                                @*{{CompanyName}}*@
+                                            </h5>
+                                            <p class="col-md-12" style="margin-top: 0; margin-bottom: 1rem; width:100%;">
+                                                @*Landline number*@
+                                            </p>
+                                            <h5 class="col-md-12" style="font-size: 1.01625rem;color: #fe6601;">
+                                                @*{{CompanyContact}}*@
+                                            </h5>
+                                            <p class="col-md-12" style="margin-top: 0; margin-bottom: 1rem; width:100%;">
+                                                @*Email id*@
+                                            </p>
+                                            <h5 class="col-md-12" style="font-size: 1.01625rem;color: #fe6601; width:100%;">
+                                                @*{{CompanyEmail}}*@
+                                            </h5>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row col-md-12" style="width:100%;">
+                                    <h1 class="col-md-12" style="padding:20px 0; border-bottom:1px solid #ccc; width:100%;">Note</h1>
+                                    <p class="col-md-12" style="width:100%; margin-top: 0; margin-bottom: 1rem;">
+                                        Goods and Services Tax (GST) shall be levied at applicable rates on all air transportation services provided by IndiGo, except in
+                                        cases specically exempted under law.
+                                    </p>
+                                    <p class="col-md-12" style="width:100%; margin-top: 0; margin-bottom: 1rem;">
+                                        This is not a GST invoice. The GST invoice shall be sent to the email address in the name of the rst passenger, mentioned in this
+                                        itinerary. In case of a booking made by a GSTIN holder, the GST invoice shall be sent in the name of the GSTIN holder to the
+                                        email address mentioned while providing the GSTIN information at the time of reservation.
+                                    </p>
+
+                                    <p class="col-md-12" style="width:100%; margin-top: 0; margin-bottom: 1rem;">
+                                        Additionally, passengers may download the GST invoice using their PNR number on the IndiGo website www.goindigo.in.
+                                    </p>
+                                    <p class="col-md-12" style="width:100%; margin-top: 0; margin-bottom: 1rem;">
+                                        GST shall also be applicable on any special services requested by the passenger at applicable rates.
+                                </div>
+                            </div>
+                        </div>
+                        <!--==== /Round Oneway Print Area =====-->
+                        --------------------------------------------------------------------------------------------------------------------------------------
+                        <!---===== Round Return Print Area =======-->
+                        <div id="TicketRoundReturnInfoprint-area" style="margin-top:30px;">
+                            <div>
+                                <div class="row">
+                                    <div class="col-md-12" style="width:100%;">
+                                        <img ng-src="~/Content/static-airlines-master/logos/{{returnFlight[0].AirlineCode}}.png" />
+                                        <h4 class="font-weight-bold" style="font-weight: 700!important; color: #fe6601; font-size: 1.2195rem;">{{returnFlight[0].AirlineName}}</h4>
+                                    </div>
+                                </div>
+                                <div class="row col-md-12" style="margin-top:20px; width:100%;">
+                                    <div class="col-md-3" style="width:25%;">
+                                        <h5 style="font-size: 1.01625rem;color: #fe6601;">
+                                            PNR/Booking Reference
+                                        </h5>
+                                        <p style="margin-top: 0; margin-bottom: 1rem;">
+                                            Pending
+                                        </p>
+                                    </div>
+                                    <div class="col-md-3" style="width:25%;">
+                                        <h5 style="font-size: 1.01625rem;color: #fe6601;">
+                                            Status
+                                        </h5>
+                                        <p style="margin-top: 0; margin-bottom: 1rem;">
+                                            Pending
+                                        </p>
+                                    </div>
+                                    <div class="col-md-3" style="width:25%;">
+                                        <h5 style="font-size: 1.01625rem;color: #fe6601;">
+                                            Date of Booking*
+
+                                        </h5>
+                                        <p style="margin-top: 0; margin-bottom: 1rem;">
+                                            {{getAirDate(returnFlight[0].ArrDate) | date : 'EEEE, dd MMM yyyy'}}
+                                        </p>
+                                    </div>
+                                    <div class="col-md-3" style="width:25%;">
+                                        <h5 style="font-size: 1.01625rem;color: #fe6601;">
+                                            Payment Status
+                                        </h5>
+                                        <p style="margin-top: 0; margin-bottom: 1rem;">
+                                            Pending
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="row col-md-12" style="margin-top:20px; width:100%;">
+                                    <h1 style="color: #fe6601; font-size: 2.0325rem;">
+                                        {{adult}} {{adult > 1 ? 'Adults' : 'Adult'}} Passengers
+                                    </h1>
+                                </div>
+
+
+                                <div class="row col-md-12" style="margin-top:20px; width:100%;" ng-repeat="psssenger in passengers">
+                                    <p class="col-md-12" style="margin-top: 0; margin-bottom: 1rem; width:100%;">Passenger {{$index +1}}</p>
+                                    <h5 class="col-md-12" style="font-size: 1.01625rem;color: #fe6601; width:100%;">{{$index +1}})  {{psssenger.Title}} {{psssenger.FirstName}} {{psssenger.LastName}}</h5>
+                                </div>
+                                <div ng-repeat="item in returnFlight" ng-cloak>
+                                    <div class="row col-md-12" style="margin-top:20px; width:100%;">
+
+                                        <h1 class="col-md-12" style="width:100%;">
+                                            {{returnFlight[0].FromAirportName}}
+                                            <i class="fa fa-long-arrow-alt-right"></i>{{returnFlight[returnFlight.length - 1].ToAirportName}}
+                                        </h1>
+                                        <p class="col-md-12" style="width:100%;">{{getAirDate(item.ArrDate) | date : 'EEEE, dd MMM yyyy'}} . {{item.AirlineCode}} {{item.FlightNo}}</p>
+                                    </div>
+
+                                    <div class="row col-md-12" style="margin-top:20px; width:100%;">
+                                        <div class="row col-md-6" style="width:50%;">
+                                            <div class="col-md-12"><p style="margin-top: 0; margin-bottom: 1rem;">From (Terminal)</p></div>
+                                            <div class="col-md-12"><h5 style="font-size: 1.01625rem;color: #fe6601;">{{item.FromAirportCode}}-{{item.DepTime}}</h5></div>
+                                        </div>
+                                        <div class="row col-md-6" style="width:50%;">
+                                            <div class="col-md-12"><p style="margin-top: 0; margin-bottom: 1rem;">To (Terminal)</p></div>
+                                            <div class="col-md-12"><h5 style="font-size: 1.01625rem;color: #fe6601;">{{item.ToAirportCode}} - {{item.ArrTime}} ({{item.ToTerminal}})</h5></div>
+                                        </div>
+                                        <div class="row col-md-6" style="width:50%;">
+                                            <div class="col-md-12"><p style="margin-top: 0; margin-bottom: 1rem;">Flight</p></div>
+                                            <div class="col-md-12"><h5 style="font-size: 1.01625rem;color: #fe6601;">{{item.AirlineCode}} {{item.FlightNo}}</h5></div>
+                                        </div>
+                                        <div class="row col-md-6" style="width:50%;">
+                                            <div class="col-md-12"><p style="margin-top: 0; margin-bottom: 1rem;">Dep Time</p></div>
+                                            <div class="col-md-12"><h5 style="font-size: 1.01625rem;color: #fe6601;">{{item.DepTime}}</h5></div>
+                                        </div>
+                                        <div class="row col-md-6" style="width:50%;">
+                                            <div class="col-md-12"><p style="margin-top: 0; margin-bottom: 1rem;">Check in/ Bag Drop closes</p></div>
+                                            <div class="col-md-12"><h5 style="font-size: 1.01625rem;color: #fe6601;">{{item.AdultCheckedIn}}</h5></div>
+                                        </div>
+                                        <div class="row col-md-6" style="width:50%;">
+                                            <div class="col-md-12"><p style="margin-top: 0; margin-bottom: 1rem;">ARR Time</p></div>
+                                            <div class="col-md-12"><h5 style="font-size: 1.01625rem;color: #fe6601;">{{item.ArrDate}}-{{item.ArrTime}}</h5></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12" style=" height:3px; background-color:#ccc; margin:10px 0; width:100%;"></div>
+                                <div class="row col-md-12" style="width:100%;">
+                                    <p class="col-md-12" style="width:100%; margin-top: 0; margin-bottom: 1rem;">* Booking Date reects in UTC ( Coordinated Universal Time), all other timings mentioned are as per local TIME</p>
+
+                                    <h1 class="col-md-12" style="width:100%;">
+                                        GST Information
+                                    </h1>
+                                    <p class="col-md-12" style="width:100%; margin-top: 0; margin-bottom: 1rem;">GST Company Name : <strong>ENCOREDIGITECHPVTLTD</strong></p>
+                                    <p class="col-md-12" style="width:100%; margin-top: 0; margin-bottom: 1rem;">GST Number :<strong>19AACCT7467P1ZE</strong></p>
+                                </div>
+                                <div class="row col-md-12" style="width:100%;">
+                                    <div class="col-md-6" style="width:50%;">
+                                        <div class="col-md-12"><h1>Price Summary</h1></div>
+                                        <div class="row col-md-12">
+                                            <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem;">Base Fare </div>
+                                            <div class="col-md-4" style="text-align:right; width:25%; margin-top: 0; margin-bottom: 1rem;">{{returnFareDetails.AdultBaseFare}}/- INR</div>
+                                        </div>
+                                        <div class="row col-md-12">
+                                            <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem;">Tax and Charges </div>
+                                            <div class="col-md-4" style="text-align:right; width:25%; margin-top: 0; margin-bottom: 1rem;">{{returnFareDetails.AdultTax}}/- INR</div>
+                                        </div>
+                                        <div class="row col-md-12">
+                                            <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem;">Convenience Fee </div>
+                                            <div class="col-md-4" style="text-align:right; width:25%; margin-top: 0; margin-bottom: 1rem;">{{(additionalAddedAmount == 0 ? 0 : (additionalAddedAmount * 1))}}/- INR</div>
+                                        </div>
+                                        <div class="row col-md-12">
+                                            <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem;">Processing Charges </div>
+                                            <div class="col-md-4" style="text-align:right; width:20%; margin-top: 0; margin-bottom: 1rem;"><input type="text" readonly class="form-control form-control-sm" style="text-align:right; width:70px" min="0" ng-init="0" ng-change="totalAmountCalculation(returnFareDetails.TotalAmount)" name="usermarkup" ng-model="userMarkup" onkeypress="return isNumber(event)" />/- INR</div>
+                                        </div>
+
+                                        <div class="row col-md-12" ng-show="IsFlightType=='International'">
+                                            <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem;">Pancard </div>
+                                            <div class="col-md-4" style="text-align:right; width:25%; margin-top: 0; margin-bottom: 1rem;"><input type="text" class="form-control form-control-sm" style="text-align:right; width:70px" min="0" name="IsFlightType" readonly ng-model="INTPanCard" /></div>
+                                        </div>
+
+                                        <div class="row col-md-12">
+                                            <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem;">Total Amount </div>
+                                            <div class="col-md-4" style="text-align:right; width:25%; margin-top: 0; margin-bottom: 1rem;">{{totalAmountCalculationForPopUp(returnFareDetails.TotalAmount)}}/- INR</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6" style="width:50%;">
+                                        <div class="col-md-12">
+                                            <h1>
+                                                @*Contact Details*@
+                                            </h1>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <p class="col-md-12" style="margin-top: 0; margin-bottom: 1rem;">
+                                                @*Address*@
+                                            </p>
+                                            <h5 class="col-md-12" style="font-size: 1.01625rem;color: #fe6601; width:100%;">
+                                                @*{{CompanyAddress}}*@
+
+                                            </h5>
+                                            <p class="col-md-12" style="margin-top: 0; margin-bottom: 1rem; width:100%;">
+                                                @*Company Name*@
+                                            </p>
+                                            <h5 class="col-md-12" style="font-size: 1.01625rem;color: #fe6601;">
+                                                @*{{CompanyName}}*@
+                                            </h5>
+                                            <p class="col-md-12" style="margin-top: 0; margin-bottom: 1rem; width:100%;">
+                                                @*Landline number*@
+                                            </p>
+                                            <h5 class="col-md-12" style="font-size: 1.01625rem;color: #fe6601;">
+                                                @*{{CompanyContact}}*@
+                                            </h5>
+                                            <p class="col-md-12" style="margin-top: 0; margin-bottom: 1rem; width:100%;">
+                                                @*Email id*@
+                                            </p>
+                                            <h5 class="col-md-12" style="font-size: 1.01625rem;color: #fe6601; width:100%;">
+                                                @*{{CompanyEmail}}*@
+                                            </h5>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row col-md-12" style="width:100%;">
+                                    <h1 class="col-md-12" style="padding:20px 0; border-bottom:1px solid #ccc; width:100%;">Note</h1>
+                                    <p class="col-md-12" style="width:100%; margin-top: 0; margin-bottom: 1rem;">
+                                        Goods and Services Tax (GST) shall be levied at applicable rates on all air transportation services provided by IndiGo, except in
+                                        cases specically exempted under law.
+                                    </p>
+                                    <p class="col-md-12" style="width:100%; margin-top: 0; margin-bottom: 1rem;">
+                                        This is not a GST invoice. The GST invoice shall be sent to the email address in the name of the rst passenger, mentioned in this
+                                        itinerary. In case of a booking made by a GSTIN holder, the GST invoice shall be sent in the name of the GSTIN holder to the
+                                        email address mentioned while providing the GSTIN information at the time of reservation.
+                                    </p>
+
+                                    <p class="col-md-12" style="width:100%; margin-top: 0; margin-bottom: 1rem;">
+                                        Additionally, passengers may download the GST invoice using their PNR number on the IndiGo website www.goindigo.in.
+                                    </p>
+                                    <p class="col-md-12" style="width:100%; margin-top: 0; margin-bottom: 1rem;">
+                                        GST shall also be applicable on any special services requested by the passenger at applicable rates.
+                                </div>
+                            </div>
+                        </div>
+                        <!--==== /Round Return Print Area =====-->
+
+                    </div>
+
+                </div>
+                <div class="modal-footer" style="text-align:center;">
+                    @*<button ng-click="holdingFlightRequest(travellerForm.$invalid)" type="submit"
+                            ng-show="flightDetails[0].HoldAllowed == 'Y'" class="button orange btn-block">
+                        <div>Hold Ticket</div>
+                    </button>*@
+                    <button ng-click="holdingFlightRequest(travellerForm.$invalid)" type="submit" ng-show="flightDetails == '1Y'" class="button orange btn-block"><div>Hold Ticket</div></button>
+
+                    <button ng-click="bookFlightRequest(travellerForm.$invalid)"
+                            type="submit"
+                            class="button orange btn-block">
+                        Issue Ticket
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 </div>
 
+<div class="preloader hidden" id="progressBookingreturn" style="display:none;">
+    <div id="loading"></div>
+</div>
 
 <div class="modal fade" id="modelTicketConfirmed" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">

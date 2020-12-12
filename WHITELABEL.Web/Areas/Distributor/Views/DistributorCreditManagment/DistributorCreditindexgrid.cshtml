@@ -18,8 +18,9 @@
                                                             columns.Add(model => model.CREDIT_OPENING).Titled("Credit Opening").Filterable(true).Sortable(true);
                                                             columns.Add(model => model.CR_Col).Titled("CR");
                                                             columns.Add(model => model.DR_Col).Titled("DR");
-                                                            columns.Add(model => model.CREDITCLOSING).Titled("Credit Closing").Filterable(true).Sortable(true);
-                                                            columns.Add(model => model.CREDIT_DATE).Formatted("{0:yyyy-MM-dd}").Titled("Credit Date").Filterable(true).Sortable(true);
+                                                            columns.Add(model => model.CREDITCLOSING).Titled("Credit Closing").Filterable(true).Sortable(true);                                             
+                                                            columns.Add(model => model.CREDIT_DATE).Formatted("{0:MM/dd/yyyy}").Titled("Credit Date").Filterable(true).Sortable(true);
+                                                            columns.Add(model => model.CREDIT_DATE).Formatted("{0:T}").Titled("Credit Time").Filterable(true).Sortable(true);
                                                             columns.Add(model => model.CREDIT_NOTE_DESCRIPTION).Titled("Credit Note").Filterable(true).Sortable(true);
 
                                                         })

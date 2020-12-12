@@ -31,6 +31,8 @@
         [NotMapped]
         public string FromUser { get; set; }
         [NotMapped]
+        public string TOUser { get; set; }
+        [NotMapped]
         public decimal Reserved_credit_limit { get; set; }
         [NotMapped]
         public string FROM_DATE { get; set; }
@@ -40,5 +42,9 @@
         public string DR_Col { get; set; }
         [NotMapped]
         public string CR_Col { get; set; }
+        [NotMapped]
+        public string COMPANY_NAME { get; set; }
+        [NotMapped]
+        public string COMPANY_GST { get; set; }
     }
 }

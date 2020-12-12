@@ -47,10 +47,11 @@
                                 <span for="psw" style="color:red;"><b>@Html.ValidationMessageFor(model => model.Email)</b></span>
                                 @Html.PasswordFor(m => m.Password, new { @placeholder = "Enter Password", @type = "password", id = "txtloginPassword", @class = "input_login" })
                                 <span for="psw" style="color:red;"><b>@Html.ValidationMessageFor(model => model.Password)</b></span>*@
-                                <input type="email" name="emaillogin" placeholder="Email Id" id="txtloginUsername" class="input_login">
+                                <input type="email" name="emaillogin" placeholder="Enter your user id" id="txtloginUsername" class="input_login">
                                 <input type="password" name="passlogin" placeholder="Password" id="txtloginPassword" class="input_login">
                                 @*<input type="checkbox" id="login_check" name="checkbox" class="checkbox_login">
                                     <label for="login_check" class="remember_me">Remember me</label>*@
+
                                 <a href="@Url.Action("ForgotPassword","Login")" class="forgot_link">Forget password?</a>
 
                                 <div style="text-align:center; top: 20px; font-size:12px; color:#FF0000;" id="informationMessage">@*@ViewBag.Message*@<span id="errormsg"></span></div>
@@ -665,7 +666,7 @@
                     }
                     else if (messageRole == "5") {
                         $('#btnLogin').prop('disabled', false);
-                        var url = "/Merchant/MerchantFlightDetails/Index";
+                        var url = "/Merchant/MerchantDashboard/Index";
                         window.location.href = url;
                     }
                     else if (messageRole == "x") {

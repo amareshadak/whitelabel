@@ -175,13 +175,13 @@
                                 <div class="form-group row">
                                     <label class="control-label col-md-3" style="text-align:left;">Email Address</label>
                                     <div class="col-md-9">
-                                        <div class="inputer">                           
+                                        <div class="inputer">
                                             <div class="input-wrapper">
                                                 @*@Html.EditorFor(model => model.EMAIL_ID, "0", new { htmlAttributes = new { @class = "form-control", id = "emailaddressMerchant", @placeholder = "Email Address" } })*@
-                                                @Html.EditorFor(model => model.EMAIL_ID, "0", new { htmlAttributes = new { @class = "form-control", id = "emailaddressMerchanttest", @placeholder = "Email Address" } })
+                                                @Html.EditorFor(model => model.EMAIL_ID, "0", new { htmlAttributes = new { @class = "form-control", id = "txtemailaddressMerchant", @placeholder = "Email Address" } })
                                             </div>
                                             <span class="help-block"><small>@Html.ValidationMessageFor(model => model.EMAIL_ID, "", new { @class = "text-danger" })</small></span>
-                                            
+
                                         </div>
                                     </div>
                                 </div>
@@ -194,7 +194,7 @@
                                     <div class="col-md-9">
                                         <div class="inputer">
                                             <div class="input-wrapper">
-                                                @Html.EditorFor(model => model.MEMBER_MOBILE, new { htmlAttributes = new { @class = "form-control", @placeholder = "Mobile No" } })
+                                                @Html.EditorFor(model => model.MEMBER_MOBILE, new { htmlAttributes = new { @class = "form-control", @placeholder = "Mobile No",id="txtMobileNoMerchant" } })
                                             </div>
                                             <span class="help-block"><small>@Html.ValidationMessageFor(model => model.MEMBER_MOBILE, "", new { @class = "text-danger" })</small></span>
                                         </div>
@@ -203,66 +203,66 @@
                             </div>
 
 
-                         
-                                <div class="col-md-6">
-                                    <div class="form-group row">
-                                        <label class="control-label col-md-3">Optl Email Id 1</label>
-                                        <div class="col-md-9">
-                                            <div class="inputer">
 
-                                                <div class="input-wrapper">
-                                                    @Html.EditorFor(model => model.OPTIONAL_EMAIL_ID, "0", new { htmlAttributes = new { @class = "form-control", id = "emailaddressOptional", @placeholder = "Optional Email address" } })
-                                                </div>
-                                                <span class="help-block"><small>@Html.ValidationMessageFor(model => model.OPTIONAL_EMAIL_ID, "", new { @class = "text-danger" })</small></span>
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="control-label col-md-3">Optl Email Id 1</label>
+                                    <div class="col-md-9">
+                                        <div class="inputer">
 
+                                            <div class="input-wrapper">
+                                                @Html.EditorFor(model => model.OPTIONAL_EMAIL_ID, "0", new { htmlAttributes = new { @class = "form-control", id = "emailaddressOptional", @placeholder = "Optional Email address" } })
                                             </div>
+                                            <span class="help-block"><small>@Html.ValidationMessageFor(model => model.OPTIONAL_EMAIL_ID, "", new { @class = "text-danger" })</small></span>
+
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group row">
-                                        <label class="control-label col-md-3">Optl Mobile No 1</label>
-                                        <div class="col-md-9">
-                                            <div class="inputer">
-                                                <div class="input-wrapper">
-                                                    @Html.EditorFor(model => model.OPTIONAL_MOBILE_NO, new { htmlAttributes = new { @class = "form-control", @placeholder = "Optional Mobile No" } })
-                                                </div>
-                                                <span class="help-block"><small>@Html.ValidationMessageFor(model => model.OPTIONAL_MOBILE_NO, "", new { @class = "text-danger" })</small></span>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="control-label col-md-3">Optl Mobile No 1</label>
+                                    <div class="col-md-9">
+                                        <div class="inputer">
+                                            <div class="input-wrapper">
+                                                @Html.EditorFor(model => model.OPTIONAL_MOBILE_NO, new { htmlAttributes = new { @class = "form-control", @placeholder = "Optional Mobile No" } })
                                             </div>
+                                            <span class="help-block"><small>@Html.ValidationMessageFor(model => model.OPTIONAL_MOBILE_NO, "", new { @class = "text-danger" })</small></span>
                                         </div>
                                     </div>
                                 </div>
-                         
-                        
-                                <div class="col-md-6">
-                                    <div class="form-group row">
-                                        <label class="control-label col-md-3">Optnl Email Id 2</label>
-                                        <div class="col-md-9">
-                                            <div class="inputer">
+                            </div>
 
-                                                <div class="input-wrapper">
-                                                    @Html.EditorFor(model => model.SEC_OPTIONAL_EMAIL_ID, "0", new { htmlAttributes = new { @class = "form-control", id = "emailaddressOptional 2", @placeholder = "Optional Email address" } })
-                                                </div>
-                                                <span class="help-block"><small>@Html.ValidationMessageFor(model => model.SEC_OPTIONAL_EMAIL_ID, "", new { @class = "text-danger" })</small></span>
 
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="control-label col-md-3">Optnl Email Id 2</label>
+                                    <div class="col-md-9">
+                                        <div class="inputer">
+
+                                            <div class="input-wrapper">
+                                                @Html.EditorFor(model => model.SEC_OPTIONAL_EMAIL_ID, "0", new { htmlAttributes = new { @class = "form-control", id = "emailaddressOptional 2", @placeholder = "Optional Email address" } })
                                             </div>
+                                            <span class="help-block"><small>@Html.ValidationMessageFor(model => model.SEC_OPTIONAL_EMAIL_ID, "", new { @class = "text-danger" })</small></span>
+
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group row">
-                                        <label class="control-label col-md-3">Optl Mobile No 2</label>
-                                        <div class="col-md-9">
-                                            <div class="inputer">
-                                                <div class="input-wrapper">
-                                                    @Html.EditorFor(model => model.SEC_OPTIONAL_MOBILE_NO, new { htmlAttributes = new { @class = "form-control", @placeholder = "Optional Mobile No 2" } })
-                                                </div>
-                                                <span class="help-block"><small>@Html.ValidationMessageFor(model => model.SEC_OPTIONAL_MOBILE_NO, "", new { @class = "text-danger" })</small></span>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="control-label col-md-3">Optl Mobile No 2</label>
+                                    <div class="col-md-9">
+                                        <div class="inputer">
+                                            <div class="input-wrapper">
+                                                @Html.EditorFor(model => model.SEC_OPTIONAL_MOBILE_NO, new { htmlAttributes = new { @class = "form-control", @placeholder = "Optional Mobile No 2" } })
                                             </div>
+                                            <span class="help-block"><small>@Html.ValidationMessageFor(model => model.SEC_OPTIONAL_MOBILE_NO, "", new { @class = "text-danger" })</small></span>
                                         </div>
                                     </div>
                                 </div>
-                          
+                            </div>
+
 
 
 
@@ -272,7 +272,7 @@
                                     <div class="col-md-9">
                                         <div class="inputer">
                                             <div class="input-wrapper">
-                                                @Html.EditorFor(model => model.User_pwd, new { htmlAttributes = new { @class = "form-control", @placeholder = "Password", id = "Merchantpassword" } })
+                                                @Html.EditorFor(model => model.User_pwd, new { htmlAttributes = new { @class = "form-control", @placeholder = "Password",@readonly="readonly", id = "Merchantpassword" } })
                                             </div>
                                             <input type="checkbox" onclick="myMerchantFunction()">Show Password
                                             <span class="help-block"><small>@Html.ValidationMessageFor(model => model.User_pwd, "", new { @class = "text-danger" })</small></span>
@@ -309,7 +309,47 @@
                                 </div>
 
                             </div>
-
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="control-label col-md-3">Payment Mode</label>
+                                    <div class="col-md-9">
+                                        <div class="inputer">
+                                            <div class="input-wrapper">
+                                              @Html.DropDownListFor(m => m.PAYMENT_MODE, new List<SelectListItem>
+                                                    { new SelectListItem{Text="Direct", Value="Direct"},
+                                                    new SelectListItem{Text="Indirect", Value="Indirect"}},
+         new { id = "Paymentmode", @class = "form-control" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="control-label col-md-3">Pan Card No</label>
+                                    <div class="col-md-9">
+                                        <div class="inputer">
+                                            <div class="input-wrapper">
+                                                @Html.EditorFor(model => model.PAN_NO, new { htmlAttributes = new { @class = "form-control", @placeholder = "Pan Card No" } })
+                                            </div>
+                                            <span class="help-block"><small>@Html.ValidationMessageFor(model => model.PAN_NO, "", new { @class = "text-danger" })</small></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="control-label col-md-3">Aadhaar Card No</label>
+                                    <div class="col-md-9">
+                                        <div class="inputer">
+                                            <div class="input-wrapper">
+                                                @Html.EditorFor(model => model.AADHAAR_NO, new { htmlAttributes = new { @class = "form-control", @placeholder = "Aadhaar Card No" } })
+                                            </div>
+                                            <span class="help-block"><small>@Html.ValidationMessageFor(model => model.AADHAAR_NO, "", new { @class = "text-danger" })</small></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="col-md-6">
                                 <div class="form-group row">
                                     <label class="control-label col-md-3" style="text-align:left;">GST</label>
@@ -365,32 +405,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group row">
-                                    <label class="control-label col-md-3">Pan Card No</label>
-                                    <div class="col-md-9">
-                                        <div class="inputer">
-                                            <div class="input-wrapper">
-                                                @Html.EditorFor(model => model.PAN_NO, new { htmlAttributes = new { @class = "form-control", @placeholder = "Pan Card No" } })
-                                            </div>
-                                            <span class="help-block"><small>@Html.ValidationMessageFor(model => model.PAN_NO, "", new { @class = "text-danger" })</small></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group row">
-                                    <label class="control-label col-md-3">Aadhaar Card No</label>
-                                    <div class="col-md-9">
-                                        <div class="inputer">
-                                            <div class="input-wrapper">
-                                                @Html.EditorFor(model => model.AADHAAR_NO, new { htmlAttributes = new { @class = "form-control", @placeholder = "Aadhaar Card No" } })
-                                            </div>
-                                            <span class="help-block"><small>@Html.ValidationMessageFor(model => model.AADHAAR_NO, "", new { @class = "text-danger" })</small></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            
                         </div>
                         <div class="row">
                             <div class="col-md-6">
@@ -419,55 +434,55 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                         </div>
                         @*<div class=" ">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label class="control-label col-md-3" style="text-align:left;">Aadhaar Card No</label>
-                    <div class="col-md-9">
-                        <div class="inputer">
-                            <div class="input-wrapper">
-                                @Html.EditorFor(model => model.AADHAAR_NO, new { htmlAttributes = new { @class = "form-control", @placeholder = "Aadhaar Card No" } })
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3" style="text-align:left;">Aadhaar Card No</label>
+                                        <div class="col-md-9">
+                                            <div class="inputer">
+                                                <div class="input-wrapper">
+                                                    @Html.EditorFor(model => model.AADHAAR_NO, new { htmlAttributes = new { @class = "form-control", @placeholder = "Aadhaar Card No" } })
+                                                </div>
+                                                <span class="help-block"><small>@Html.ValidationMessageFor(model => model.AADHAAR_NO, "", new { @class = "text-danger" })</small></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-6">
+
+                                    <div class="form-group" style="padding-left:30px;">
+                                        <label for="exampleInputFile">Upload Aadhaar Card</label>
+                                        <input type="file" name="AadhaarFile" id="exampleInputFile">
+                                    </div>
+                                </div>
+
+                                <div class="clearfix"></div>
                             </div>
-                            <span class="help-block"><small>@Html.ValidationMessageFor(model => model.AADHAAR_NO, "", new { @class = "text-danger" })</small></span>
-                        </div>
-                    </div>
-                </div>
+                            <div class=" ">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3" style="text-align:left;">Pan Card No</label>
+                                        <div class="col-md-9">
+                                            <div class="inputer">
+                                                <div class="input-wrapper">
+                                                    @Html.EditorFor(model => model.PAN_NO, new { htmlAttributes = new { @class = "form-control", @placeholder = "Pan Card No" } })
+                                                </div>
+                                                <span class="help-block"><small>@Html.ValidationMessageFor(model => model.PAN_NO, "", new { @class = "text-danger" })</small></span>
+                                            </div>
+                                        </div>
+                                    </div>
 
-            </div>
-            <div class="col-md-6">
-
-                <div class="form-group" style="padding-left:30px;">
-                    <label for="exampleInputFile">Upload Aadhaar Card</label>
-                    <input type="file" name="AadhaarFile" id="exampleInputFile">
-                </div>
-            </div>
-
-            <div class="clearfix"></div>
-        </div>
-        <div class=" ">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label class="control-label col-md-3" style="text-align:left;">Pan Card No</label>
-                    <div class="col-md-9">
-                        <div class="inputer">
-                            <div class="input-wrapper">
-                                @Html.EditorFor(model => model.PAN_NO, new { htmlAttributes = new { @class = "form-control", @placeholder = "Pan Card No" } })
-                            </div>
-                            <span class="help-block"><small>@Html.ValidationMessageFor(model => model.PAN_NO, "", new { @class = "text-danger" })</small></span>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-            <div class="col-md-2">
-                <div class="form-group" style="padding-left:30px;">
-                    <label for="exampleInputF0ile">Upload Pan Card</label>
-                    <input type="file" name="PanFile" id="exampleInputF0ile">
-                </div>
-            </div>
-        </div>*@
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group" style="padding-left:30px;">
+                                        <label for="exampleInputF0ile">Upload Pan Card</label>
+                                        <input type="file" name="PanFile" id="exampleInputF0ile">
+                                    </div>
+                                </div>
+                            </div>*@
                     </div><!--.panel-body-->
                     <div>
                         <div class="text-center">

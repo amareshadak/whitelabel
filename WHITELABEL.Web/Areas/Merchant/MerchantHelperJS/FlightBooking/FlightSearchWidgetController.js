@@ -21,7 +21,12 @@
             //return response.data;
         });
     };
-
+    $scope.InterchangeLocation = function (Dept, Return) {     
+        const DeptureVal = Dept;
+        const ReturnVal = Return;
+        $scope.fromAirportDetails = Return;
+        $scope.toAirportDetails = Dept;
+    }
     $scope.newDt = new Date();
 
     $scope.dynamicPopover = {
@@ -71,10 +76,15 @@
 
     $scope.passengerCount = 1;
     $scope.updatePassenger = function (adultsCount, childsCount, infantsCount) {
+
         $scope.adultsCount = adultsCount;
         $scope.childsCount = childsCount;
         $scope.infantsCount = infantsCount;
+        debugger;
+        if ($scope.infantsCount > $scope.adultsCount) {
 
+            $scope.infantsCount = $scope.adultsCount;
+        }
         $scope.passengerCount = $scope.adultsCount + $scope.childsCount + $scope.infantsCount;
 
     }

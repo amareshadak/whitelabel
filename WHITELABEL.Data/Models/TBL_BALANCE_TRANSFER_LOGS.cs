@@ -14,8 +14,8 @@
         public long FROM_MEMBER { get; set; }
 
         [Required]
-        //[Display(Name = "REQUEST DATE")]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        //[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
         [DataType(DataType.Date)]        
         public DateTime REQUEST_DATE { get; set; }
         public DateTime REQUEST_TIME { get; set; }
@@ -82,5 +82,7 @@
         public bool checkboxBilldesk { get; set; }
         [NotMapped]
         public string rechargeWalletAmount { get; set; }
+        [NotMapped]
+        public string Company_GST { get; set; }
     }
 }

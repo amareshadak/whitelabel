@@ -14,22 +14,32 @@
                                 //columns.Add(model => model.ACC_NO).Titled("Sln");
                                 columns.Add(model => model.REF_NO).Titled("Ref No");
                                 columns.Add(model => model.PNR).Titled("PNR");
-                                //columns.Add(model => model.MEMBER_TYPE).Titled("Member Type");
-
-                                columns.Add(model => model.BOOKING_DATE).Titled("Trans Date").MultiFilterable(true);
-                                //columns.Add(model => model.AMOUNT).Titled("Amount");
-                                //columns.Add(model => model.DR_CR).Titled("Dr/Cr");
-                                columns.Add(model => model.AIRLINE_CODE).Titled("Airline Code");
-                                columns.Add(model => model.FLIGHT_NO).Titled("Flight No");
-                                columns.Add(model => model.FROM_AIRPORT).Titled("Source");
-                                columns.Add(model => model.TO_AIRPORT).Titled("Destination");
+                                columns.Add(model => model.BOOKING_DATE).Titled("Trans Date").MultiFilterable(true).Sortable(true).Formatted("{0:MM/dd/yyyy}");
+                                columns.Add(model => model.BOOKING_DATE).Titled("Trans Time").Filterable(false).Formatted("{0:T}"); ;
+                                columns.Add(model => model.FLIGHT_NO + "-"+ model.AIRLINE_CODE).Titled("Airline Code");
+                                columns.Add(model => model.FROM_AIRPORT+"-"+ model.TO_AIRPORT).Titled("Trip");
                                 columns.Add(model => (model.MAIN_CLASS == "Y" ? "Economy" : model.MAIN_CLASS == "C"? "Business": model.MAIN_CLASS == "F" ? "First Class" : "Premium Economy")).Titled("Flight Class");
-                                columns.Add(model => model.NO_OF_ADULT).Titled("Adult");
-                                columns.Add(model => model.NO_OF_CHILD).Titled("Child");
-                                columns.Add(model => model.NO_OF_INFANT).Titled("Infant");
-                                columns.Add(model => model.BOOKING_DATE).Titled("Trans Date").MultiFilterable(true);
+                                columns.Add(model =>"A:"+ model.NO_OF_ADULT +",Ch:"+ model.NO_OF_CHILD+"In:"+ model.NO_OF_INFANT).Titled("Passanger");
+                                columns.Add(model => model.BOOKING_DATE).Titled("Trans Date").Formatted("{0:MM/dd/yyyy}").MultiFilterable(true).Sortable(true);
+                                columns.Add(model => model.BOOKING_DATE).Titled("Trans Time").Filterable(false).Formatted("{0:T}"); ;
                                 columns.Add(model => model.BOOKING_STATUS).Titled("Booking Status");
-
+                                columns.Add(model => model.TOTAL_FLIGHT_BASE_FARE).Titled("Bare Fare");
+                                columns.Add(model => model.TOTAL_FLIGHT_TAX).Titled("Flight Tax");
+                                columns.Add(model => model.TOTAL_FLIGHT_ADDITIONAL_CHARGE).Titled("Flight Adn Charge");
+                                columns.Add(model => model.TOTAL_FLIGHT_CUTE_FEE).Titled("Cute Fee");
+                                columns.Add(model => model.TOTAL_FLIGHT_AMT).Titled("Total Amount");
+                                columns.Add(model => model.USER_MARKUP).Titled("User Markup");
+                                columns.Add(model => model.ADMIN_MARKUP).Titled("Admin Markup");
+                                columns.Add(model => model.ADMIN_GST).Titled("Admin GST");
+                                columns.Add(model => model.USER_MARKUP_GST).Titled("User Markup GST");
+                                columns.Add(model => model.PUBLISH_FARE).Titled("Publish Fare");
+                                columns.Add(model => model.NET_FARE).Titled("Net Fare");
+                                columns.Add(model => model.NET_TOTAL_FARE).Titled("Net Total Fare");
+                                columns.Add(model => model.NET_COMM_FARE).Titled("Net Comm Fare");
+                                columns.Add(model => model.FARE_COMMISSION).Titled("Fare Comm");
+                                columns.Add(model => model.FARE_COMMISSION_TDS).Titled("Fare Comm. TDS");
+                                columns.Add(model => model.TCS_AMOUNTON_INT_FLIGHT).Titled("TCS Amount");
+                                columns.Add(model => model.INT_FLIGHT_PANCARD).Titled("Pancard");
                             })
                             .Css("css-classes")
                                         .AppendCss("table table-striped")
@@ -45,3 +55,96 @@
                             .Sortable()
 )
 
+
+<div class="col-md-12 row" style="margin-top:20px;" id="divfooter">
+    <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
+            <div class="card-body text-center">
+                <i class="fas fa-rupee-sign fa-2x"></i>
+                <div class="content" style="max-width:100%;">
+                    <p class="text-muted mt-2 mb-0">Total Publish Booking Amount</p>
+                    <p class="text-primary text-24 line-height-1 mb-2">@ViewBag.TotalBookingAmoumnt</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
+            <div class="card-body text-center">
+                <i class="fas fa-rupee-sign fa-2x"></i>
+                <div class="content" style="max-width:100%;">
+                    <p class="text-muted mt-2 mb-0">Total Net Booking Amount</p>
+                    <p class="text-primary text-24 line-height-1 mb-2">@ViewBag.TotalNetBookingAmoumnt</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
+            <div class="card-body text-center">
+                <i class="fa fa-rupee fa-2x"></i>
+                <div class="content" style="max-width:100%;">
+                    <p class="text-muted mt-2 mb-0">Total User Markup</p>
+                    <p class="text-primary text-24 line-height-1 mb-2">@ViewBag.TotalUserMarkupAmoumnt</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
+            <div class="card-body text-center">
+                <i class="fa fa-rupee fa-2x"></i>
+                <div class="content" style="max-width:100%;">
+                    <p class="text-muted mt-2 mb-0">Total Admin Markup</p>
+                    <p class="text-primary text-24 line-height-1 mb-2">@ViewBag.TotalAdminMarkupAmoumnt</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
+            <div class="card-body text-center">
+                <i class="fa fa-rupee fa-2x"></i>
+                <div class="content" style="max-width:100%;">
+                    <p class="text-muted mt-2 mb-0">Total Fare Commission</p>
+                    <p class="text-primary text-24 line-height-1 mb-2">@ViewBag.TotalFARE_COMMISSION</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
+            <div class="card-body text-center">
+                <i class="fa fa-rupee fa-2x"></i>
+                <div class="content" style="max-width:100%;">
+                    <p class="text-muted mt-2 mb-0">Total fare Comm TDS</p>
+                    <p class="text-primary text-24 line-height-1 mb-2">@ViewBag.TotalFARE_COMMISSION_TDS</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
+            <div class="card-body text-center">
+                <i class="fa fa-rupee fa-2x"></i>
+                <div class="content" style="max-width:100%;">
+                    <p class="text-muted mt-2 mb-0">Total TCS Amount</p>
+                    <p class="text-primary text-24 line-height-1 mb-2">@ViewBag.TotalTCS_AMOUNTON_INT_FLIGHT</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-6" style="display:none;">
+        <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
+            <div class="card-body text-center">
+                @*<i class="fa fa-rupee fa-2x"></i>*@
+                <div class="content" style="max-width:100%;">
+                    <p class="text-muted mt-2 mb-0"></p>
+                    <p class="text-primary text-24 line-height-1 mb-2"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>

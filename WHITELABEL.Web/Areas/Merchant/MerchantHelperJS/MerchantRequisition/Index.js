@@ -54,6 +54,7 @@ function DisplayButton() {
 
     var DistributorchkYes = document.getElementById("checkRequisitionTypeDist");
     var WhitelabelchkYes = document.getElementById("checkRequisitionTypeAdmin");
+    const CreditLimitSet = document.getElementById("CreditLimitManagmentID");
     var Paymentgatewaycheckdiv = document.getElementById("RechargewithPaymentGatewway");
     var MemberType = "";
     if (document.getElementById("checkRequisitionTypeDist").checked) {
@@ -86,6 +87,14 @@ function DisplayButton() {
         $('#checkbyRequisition').hide();
         $('#Paymentgateway').show();
     }
+    else if (CreditLimitSet.checked) {
+        $('#div_DIstributor').hide();
+        $('#div_WhiteLabel').hide();
+        $('#Paymentgateway').hide();
+        $('#checkbyRequisition').hide();
+        $('#CreditLimitRequisition').show();
+        //GetBankListAccordnigtoSelect(MemberType);
+    }
     else {
 
     }
@@ -96,6 +105,7 @@ function PAymentGatewaydiv() {
     debugger;
     var DistributorchkYes = document.getElementById("checkRequisitionTypeDist");
     var WhitelabelchkYes = document.getElementById("checkRequisitionTypeAdmin");
+    const CreditLimitSet = document.getElementById("CreditLimitManagmentID");
     var Paymentgatewaycheckdiv = document.getElementById("RechargewithPaymentGatewway");
     var MemberType = "";
     if (document.getElementById("checkRequisitionTypeDist").checked) {
@@ -112,6 +122,7 @@ const reqType = "Distributor";
     if (Paymentgatewaycheckdiv.checked) {
         $('#checkbyRequisition').hide();
         $('#Paymentgateway').show();
+        $('#CreditLimitRequisition').hide();
 		const reqType = "PaymentGateway";
         $('#hdnRequisitionSendto').val(reqType);
     }
@@ -119,6 +130,7 @@ const reqType = "Distributor";
         $('#div_DIstributor').show();
         $('#div_WhiteLabel').hide();
         $('#Paymentgateway').hide();
+        $('#CreditLimitRequisition').hide();
         $('#checkbyRequisition').show();
         GetBankListAccordnigtoSelect(MemberType);
     }
@@ -127,9 +139,72 @@ const reqType = "Distributor";
         $('#div_WhiteLabel').show();
         $('#Paymentgateway').hide();
         $('#checkbyRequisition').show();
+        $('#CreditLimitRequisition').hide();
         GetBankListAccordnigtoSelect(MemberType);
     }
+    else if (CreditLimitSet.checked) {
+        $('#div_DIstributor').hide();
+        $('#div_WhiteLabel').hide();
+        $('#Paymentgateway').hide();
+        $('#checkbyRequisition').hide();
+        $('#CreditLimitRequisition').show();
+        //GetBankListAccordnigtoSelect(MemberType);
+    }
+    else {
+        $('#Paymentgateway').hide();
+        $('#checkbyRequisition').show();
+    }
+}
 
+function CreditManagment() {
+    debugger;
+    var DistributorchkYes = document.getElementById("checkRequisitionTypeDist");
+    var WhitelabelchkYes = document.getElementById("checkRequisitionTypeAdmin");
+    const CreditLimitSet = document.getElementById("CreditLimitManagmentID");
+    var Paymentgatewaycheckdiv = document.getElementById("RechargewithPaymentGatewway");
+    var MemberType = "";
+    if (document.getElementById("checkRequisitionTypeDist").checked) {
+        MemberType = "Distributor";
+        const reqType = "Distributor";
+        $('#hdnRequisitionSendto').val(reqType);
+    }
+    if (document.getElementById("checkRequisitionTypeAdmin").checked) {
+        MemberType = "Admin";
+        const reqType = "Admin";
+        $('#hdnRequisitionSendto').val(reqType);
+        //GetBankListAccordnigtoSelect(MemberType);
+    }
+    if (Paymentgatewaycheckdiv.checked) {
+        $('#checkbyRequisition').hide();
+        $('#Paymentgateway').show();
+        $('#CreditLimitRequisition').hide();
+        const reqType = "PaymentGateway";
+        $('#hdnRequisitionSendto').val(reqType);
+    }
+    else if (DistributorchkYes.checked) {
+        $('#div_DIstributor').show();
+        $('#div_WhiteLabel').hide();
+        $('#Paymentgateway').hide();
+        $('#CreditLimitRequisition').hide();
+        $('#checkbyRequisition').show();
+        GetBankListAccordnigtoSelect(MemberType);
+    }
+    else if (WhitelabelchkYes.checked) {
+        $('#div_DIstributor').hide();
+        $('#div_WhiteLabel').show();
+        $('#Paymentgateway').hide();
+        $('#checkbyRequisition').show();
+        $('#CreditLimitRequisition').hide();
+        GetBankListAccordnigtoSelect(MemberType);
+    }
+    else if (CreditLimitSet.checked) {
+        $('#div_DIstributor').hide();
+        $('#div_WhiteLabel').hide();
+        $('#Paymentgateway').hide();
+        $('#checkbyRequisition').hide();
+        $('#CreditLimitRequisition').show();
+        //GetBankListAccordnigtoSelect(MemberType);
+    }
     else {
         $('#Paymentgateway').hide();
         $('#checkbyRequisition').show();
@@ -214,4 +289,23 @@ function GetBankListAccordnigtoSelect(GetIntroducer) {
 //        },
 //    });
 //    return false;
+//})
+
+
+//$(function () {
+//$("#BankID").change(function () {
+//    debugger;
+//    const bankname = $('#BankID').val();
+//    if (bankname == "Cash Deposit-Office") {
+//        const trnsmethod = "Cash Deposit";
+//        $('#Paymentmethod').val(trnsmethod);
+//        $('#BankAccountDetails').val(bankname);
+//    }
+//    else { $('#BankAccountDetails').val(bankname); }
+
+//});
+//});
+//$(document).ready(function () {
+//    var bankname = $('#BankID').val();
+//    $('#BankAccountDetails').val(bankname);
 //})

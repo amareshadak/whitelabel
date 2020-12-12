@@ -1,36 +1,75 @@
-﻿$('#txtMerchantemailaddress').on('input blur change keyup', function () {
-    if ($(this).val().length != 0) {
-        var token = $(':input[name="__RequestVerificationToken"]').val();
-        $.ajax({
-            url: "/Login/CheckEmailAvailability",
-            //url: "@Url.Action("CheckEmailAvailability", "Login")",
-            data: {
-                __RequestVerificationToken: token,
-                emailid: $(this).val()
-            },
-            cache: false,
-            type: "POST",
-            success: function (data) {
-                // DONE
-                if (data.result == "available") {
-                    $('#txtMerchantemailaddress').css('border', '3px #090 solid');
-                    $('#btnMersubmit').attr('disabled', false);
+﻿$(document).ready(function () {
+    $('#txtAddNewMemberemailID').on('input blur change keyup', function () {
+        if ($(this).val().length != 0) {
+            const MobileNo = $('#txtDistributorMobileNocheck').val();
+            var token = $(':input[name="__RequestVerificationToken"]').val();
+            $.ajax({
+                url: "/Login/CheckMobileNoEmailAvailability",
+                //url: "@Url.Action("CheckEmailAvailability", "Login")",
+                data: {
+                    __RequestVerificationToken: token,
+                    MobileNo: MobileNo,
+                    EmailId: $(this).val()
+                },
+                cache: false,
+                type: "POST",
+                success: function (data) {
+                    // DONE
+                    if (data.result == "available") {
+                        $('#txtAddNewMemberemailID').css('border', '3px #090 solid');
+                        $('#btnAddMersubmit').attr('disabled', false);
+                    }
+                    else {
+                        $('#txtAddNewMemberemailID').css('border', '3px #C33 solid');
+                        $('#btnAddMersubmit').attr('disabled', true);
+                        //alert("This email id is already registered");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log(xhr.responseText);
+                    alert("message : \n" + "An error occurred" + "\n status : \n" + status + " \n error : \n" + error);
                 }
-                else {
-                    $('#txtMerchantemailaddress').css('border', '3px #C33 solid');
-                    $('#btnMersubmit').attr('disabled', true);
-                    //alert("This email id is already registered");
+            });
+        }
+        else {
+            $('#btnAddMersubmit').attr('disabled', true);
+        }
+    });
+    $('#txtAddNewMemberMobileNo').on('input blur change keyup', function () {
+        if ($(this).val().length != 0) {
+            const Email = $('#txtDistributorEmailIdChecking').val();
+            var token = $(':input[name="__RequestVerificationToken"]').val();
+            $.ajax({
+                url: "/Login/CheckMobileNoEmailAvailability",
+                data: {
+                    __RequestVerificationToken: token,
+                    MobileNo: $(this).val(),
+                    EmailId: Email
+                },
+                cache: false,
+                type: "POST",
+                success: function (data) {
+                    // DONE
+                    if (data.result == "available") {
+                        $('#txtAddNewMemberMobileNo').css('border', '3px #090 solid');
+                        $('#btnAddMersubmit').attr('disabled', false);
+                    }
+                    else {
+                        $('#txtAddNewMemberMobileNo').css('border', '3px #C33 solid');
+                        $('#btnAddMersubmit').attr('disabled', true);
+                        //alert("This email id is already registered");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log(xhr.responseText);
+                    alert("message : \n" + "An error occurred" + "\n status : \n" + status + " \n error : \n" + error);
                 }
-            },
-            error: function (xhr, status, error) {
-                console.log(xhr.responseText);
-                alert("message : \n" + "An error occurred" + "\n status : \n" + status + " \n error : \n" + error);
-            }
-        });
-    }
-    else {
-        $('#btnMersubmit').attr('disabled', true);
-    }
+            });
+        }
+        else {
+            $('#btnAddMersubmit').attr('disabled', true);
+        }
+    });
 });
 
 $('#txtDistemailaddress').on('input blur change keyup', function () {

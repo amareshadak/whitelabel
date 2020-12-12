@@ -34,8 +34,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 ViewBag.ControllerName = "White Label";
                 if (Session["WhiteLevelUserId"] == null)
                 {
-                    //Response.Redirect(Url.Action("Index", "Login", new { area = "" }));
-                    Response.Redirect(Url.Action("Logout", "Login", new { area = "" }));
+                    Response.Redirect(Url.Action("Logout", "AdminLogin", new { area = "Admin" }));
+                    //Response.Redirect(Url.Action("Logout", "Login", new { area = "" }));
                     return;
                 }
                 bool Islogin = false;
@@ -71,7 +71,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 Session.Remove("WhiteLevelUserId");
                 Session.Remove("WhiteLevelUserName");
                 Session.Remove("UserType");
-                return RedirectToAction("Index", "Login", new { area = "" });
+                return RedirectToAction("AdminLogin", "Login", new { area = "" });
             }
         }
         public PartialViewResult IndexGrid(string SearchVal = "")
@@ -146,7 +146,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 Session.Remove("WhiteLevelUserId");
                 Session.Remove("WhiteLevelUserName");
                 Session.Remove("UserType");
-                return RedirectToAction("Index", "Login", new { area = "" });
+                return RedirectToAction("AdminLogin", "Login", new { area = "" });
             }
 
         }
@@ -359,6 +359,31 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 }
 
 
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public JsonResult GetRAILAgentInformation(string TransId, string Mem_ID)
+        {
+            try
+            {
+                long valueid = long.Parse(TransId);
+                long MemId = long.Parse(Mem_ID);
+                var db = new DBContext();
+                var GetRailAgent = db.TBL_RAIL_AGENT_INFORMATION.FirstOrDefault(x=>x.SLN== valueid && x.MEM_ID== MemId);
+                if (GetRailAgent != null)
+                {
+                    return Json(new { data = GetRailAgent, Status = "0" }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { data = "", Status = "1" }, JsonRequestBehavior.AllowGet);
+                }
             }
             catch (Exception ex)
             {

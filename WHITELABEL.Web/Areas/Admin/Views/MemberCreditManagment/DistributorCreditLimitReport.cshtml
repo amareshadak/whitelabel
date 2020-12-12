@@ -26,7 +26,7 @@
                 <div class="card-body">
                     <div class="panel-body">
                         <div class="row example-row" style="margin-bottom:10px;">
-                            <div class="col-md-5">
+                            <div class="col-md-3">
                                 <div class="form-group row">
                                     <label class="control-label col-md-3">Date From</label>
                                     <div class="col-md-9">
@@ -38,7 +38,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-5">
+                            <div class="col-md-3">
                                 <div class="form-group row">
                                     <label class="control-label col-md-3">Date From</label>
                                     <div class="col-md-9">
@@ -50,7 +50,19 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-3">
+                                <div class="form-group row">
+                                    <label class="control-label col-md-3">Member Details</label>
+                                    <div class="col-md-9">
+                                        <div class="inputer">
+                                            <div class="input-wrapper">
+                                                @Html.EditorFor(model => model.FromUser, new { htmlAttributes = new { @class = "form-control", id = "txtmemberName", @placeholder = "" } })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
                                 <div class="inputer">
                                     <div class="input-wrapper">
                                         <a href="#" class="btn btn-primary" id="btnSearchDAteWise">Search Date Wise</a>
@@ -102,11 +114,13 @@
     //    });
     //});
 
-    $("#btnSearchDAteWise").on("click", function () {
-        var Date_From = $('#txtFromDate').val();
-        var Date_TO = $('#txtToDate').val();
+        $("#btnSearchDAteWise").on("click", function () {
+            const MerchantVal = $('#txtmemberName').val();
+            const Date_From = $('#txtFromDate').val();
+            const Date_TO = $('#txtToDate').val();
         $('.mvc-grid').mvcgrid({
-            query: 'DateFrom=' + Date_From + '&Date_To=' + Date_TO,
+            //query: 'DateFrom=' + Date_From + '&Date_To=' + Date_TO,
+            query: 'MemberInfo=' + MerchantVal + '&DateFrom=' + Date_From + '&Date_To=' + Date_TO,
             reload: true,
             reloadStarted: function () {
                 $(".divFooterTotalComm").remove();

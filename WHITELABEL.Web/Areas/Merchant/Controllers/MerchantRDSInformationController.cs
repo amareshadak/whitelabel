@@ -293,9 +293,9 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
 
                     row++;
                 }
-
-                return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-                //return File(fileContents: package.GetAsByteArray(), contentType: "application/unknown");
+                return File(package.GetAsByteArray(), "application/unknown", "RDSCancellationReport.xlsx");
+                //return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                ////return File(fileContents: package.GetAsByteArray(), contentType: "application/unknown");
             }
         }
         private IGrid<TBL_FINAL_RDS_BOOKING> CreateExportableGrid(string DateFrom = "", string Date_To = "")
@@ -1088,9 +1088,9 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
 
                     row++;
                 }
-
-                return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-                //return File(fileContents: package.GetAsByteArray(), contentType: "application/unknown");
+                return File(package.GetAsByteArray(), "application/unknown", "RDSCancellationReport.xlsx");
+                //return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                ////return File(fileContents: package.GetAsByteArray(), contentType: "application/unknown");
             }
         }
         #endregion

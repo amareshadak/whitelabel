@@ -583,3 +583,159 @@ function DistributeCommission(CorrelationId) {
 }
 
 
+function getCreditRequisitionvalue(transid) {
+    var idval = transid;
+    $.ajax({
+        url: "/MemberRequisition/getCreditRequistionTransdata?area=Admin",
+        // url: "@Url.Action("getTransdata", "MemberRequisition", new {area="Admin"})",
+        data: {
+            TransId: transid
+        },
+        cache: false,
+        type: "POST",
+        dataType: "json",
+        beforeSend: function () {
+        },
+        success: function (data) {
+            if (data.Result === "true") {
+                debugger;
+                const traninfo = data;                
+                $('#txtusername').val(traninfo.data.FromUser);
+                $('#txtReqTransactionDate').val(formatDate(traninfo.data.CREDIT_DATE));
+                $('#sln').val(traninfo.data.SLN);                
+                $("#txtCreditAmount").val(traninfo.data.CREDIT_AMOUNT);
+            }
+            else {
+                $(".overlaydiv").fadeOut("slow");
+
+            }
+        },
+        error: function (xhr, status, error) {
+            console.log(status);
+        }
+    });
+}
+function CreditReqDecline(transid) {
+    bootbox.confirm({
+        //title: "Message",
+        message: "Do you want to deactivate Transaction information",
+        buttons: {
+            confirm: {
+                label: 'Confirm',
+                className: 'btn-success btn-sm'
+            },
+            cancel: {
+                label: 'Cancel',
+                className: 'btn-danger btn-sm'
+            }
+        },
+        callback: function (result) {
+            if (result) {
+                const TransationStatus = "0";                
+                const slnval = transid;
+                var token = $(':input[name="__RequestVerificationToken"]').val();
+                $.ajax({
+                    url: "/MemberRequisition/CreditRequisitionDecline?area=Admin",
+                    //url:"@Url.Action("TransactionDecline", "MemberRequisition", new {area = "Admin"})",
+                    data: {
+                        __RequestVerificationToken: token,
+                        slnval: slnval
+                    },
+                    cache: false,
+                    type: "POST",
+                    dataType: "json",
+                    beforeSend: function () {
+                    },
+                    success: function (data) {
+                        if (data.Result === "true") {
+                            $('.mvc-grid').mvcgrid('reload');
+                            $(".overlaydiv").fadeOut("slow");
+                            bootbox.alert({
+                                size: "small",
+                                message: "Transaction declined",
+                                backdrop: true
+                            });
+                            $('#CreditRequisitionid').modal('hide');
+                            $('.CreditRequisitiontransd').modal('hide');
+                        }
+                        else {
+                            $(".overlaydiv").fadeOut("slow");
+                            bootbox.alert({
+                                message: "there is some thing error",
+                                backdrop: true
+                            });
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(status);
+                    }
+                });
+            }
+        }
+    });
+}
+
+function CreditReqApprove(transid) {
+    bootbox.confirm({
+        //title: "Message",
+        message: "Do you want to Approve Transaction",
+        buttons: {
+            confirm: {
+                label: 'Confirm',
+                className: 'btn-success btn-sm'
+            },
+            cancel: {
+                label: 'Cancel',
+                className: 'btn-danger btn-sm'
+            }
+        },
+        callback: function (result) {
+            if (result) {
+                $('#progressRequisition').show();
+                const TransationStatus = "1";
+                const slnval = transid;
+                var SettlementType = "";
+               
+
+                var token = $(':input[name="__RequestVerificationToken"]').val();
+                $.ajax({
+                    url: "/MemberRequisition/CreditRequisitionApprove?area=Admin",
+                    //url:"@Url.Action("ChangeTransactionStatus", "MemberRequisition", new {area = "Admin"})",
+                    data: {
+                        __RequestVerificationToken: token,
+                        slnval: slnval
+                    },
+                    cache: false,
+                    type: "POST",
+                    dataType: "json",
+                    beforeSend: function () {
+                    },
+                    success: function (data) {
+                        $('#progressRequisition').hide();
+                        var messageval = data;
+                        $('.mvc-grid').mvcgrid('reload');
+                        $(".overlaydiv").fadeOut("slow");
+                        bootbox.alert({
+                            size: "small",
+                            message: messageval,
+                            backdrop: true,
+                            callback: function () {
+                                $('#CreditRequisitionid').modal('hide');
+                                $('.CreditRequisitiontransd').modal('hide');
+                                window.location.reload();
+                            }
+                        });
+                        $(".overlaydiv").fadeOut("slow");
+                       
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(status);
+                    }
+                });
+            }
+        }
+    });
+
+
+  
+}

@@ -202,40 +202,56 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
 
                     row++;
                 }
-
-                return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-                //return File(fileContents: package.GetAsByteArray(), contentType: "application/unknown");
+                return File(package.GetAsByteArray(), "application/unknown", "RequisitionReport.xlsx");
+                //return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                ////return File(fileContents: package.GetAsByteArray(), contentType: "application/unknown");
             }
         }
         private IGrid<TBL_BALANCE_TRANSFER_LOGS> CreateExportMerchantReqGrid(string statusval, string DateFrom, string Date_To )
         {
-            var db = new DBContext();
-            var transactionlistvalue = MerchantRequisitionReportViewModel.GetMerchantAllRequisitionReport(CurrentMerchant.MEM_ID.ToString(), statusval, DateFrom, Date_To);
-            IGrid<TBL_BALANCE_TRANSFER_LOGS> grid = new Grid<TBL_BALANCE_TRANSFER_LOGS>(transactionlistvalue);
-            grid.ViewContext = new ViewContext { HttpContext = HttpContext };
-            grid.Query = Request.QueryString;
-            grid.Columns.Add(model => model.Serial_No).Titled("Se Id");
-            //grid.Columns.Add(model => model.ToUser).Titled("To User");
-            grid.Columns.Add(model => model.FromUser).Titled("User Name");
-            grid.Columns.Add(model => model.REQUEST_DATE).Titled("Req Date").Formatted("{0:yyyy-MM-dd}").MultiFilterable(true);
-            grid.Columns.Add(model => model.REQUEST_TIME).Titled("Req Date").Formatted("{0:T}").MultiFilterable(true);
-            grid.Columns.Add(model => model.AMOUNT).Titled("Amount");
-            grid.Columns.Add(model => model.BANK_ACCOUNT).Titled("Bank Acnt");
-            grid.Columns.Add(model => model.TRANSACTION_DETAILS).Titled("Pay Method");
-            grid.Columns.Add(model => model.STATUS).Titled("STATUS");
-            grid.Columns.Add(model => model.APPROVAL_DATE).Titled("Apprv/Decline Date").Formatted("{0:yyyy-MM-dd}").MultiFilterable(true);
-            grid.Columns.Add(model => model.APPROVED_BY).Titled("Apprv By");
-            grid.Pager = new GridPager<TBL_BALANCE_TRANSFER_LOGS>(grid);
-            grid.Processors.Add(grid.Pager);
-            grid.Pager.RowsPerPage = 1000000;
-
-            foreach (IGridColumn column in grid.Columns)
+            if (Session["MerchantUserId"] != null)
             {
-                column.Filter.IsEnabled = true;
-                column.Sort.IsEnabled = true;
-            }
+                var db = new DBContext();
+                var transactionlistvalue = MerchantRequisitionReportViewModel.GetMerchantAllRequisitionReport(CurrentMerchant.MEM_ID.ToString(), statusval, DateFrom, Date_To);
+                IGrid<TBL_BALANCE_TRANSFER_LOGS> grid = new Grid<TBL_BALANCE_TRANSFER_LOGS>(transactionlistvalue);
+                grid.ViewContext = new ViewContext { HttpContext = HttpContext };
+                grid.Query = Request.QueryString;
+                grid.Columns.Add(model => model.Serial_No).Titled("Se Id");
+                //grid.Columns.Add(model => model.ToUser).Titled("To User");
+                grid.Columns.Add(model => model.FromUser).Titled("User Name");
+                grid.Columns.Add(model => model.REQUEST_DATE).Titled("Req Date").Formatted("{0:yyyy-MM-dd}").MultiFilterable(true);
+                grid.Columns.Add(model => model.REQUEST_TIME).Titled("Req Date").Formatted("{0:T}").MultiFilterable(true);
+                grid.Columns.Add(model => model.AMOUNT).Titled("Amount");
+                grid.Columns.Add(model => model.BANK_ACCOUNT).Titled("Bank Acnt");
+                grid.Columns.Add(model => model.TRANSACTION_DETAILS).Titled("Pay Method");
+                grid.Columns.Add(model => model.STATUS).Titled("STATUS");
+                grid.Columns.Add(model => model.APPROVAL_DATE).Titled("Apprv/Decline Date").Formatted("{0:yyyy-MM-dd}").MultiFilterable(true);
+                grid.Columns.Add(model => model.APPROVED_BY).Titled("Apprv By");
+                grid.Pager = new GridPager<TBL_BALANCE_TRANSFER_LOGS>(grid);
+                grid.Processors.Add(grid.Pager);
+                grid.Pager.RowsPerPage = 1000000;
 
-            return grid;
+                foreach (IGridColumn column in grid.Columns)
+                {
+                    column.Filter.IsEnabled = true;
+                    column.Sort.IsEnabled = true;
+                }
+
+                return grid;
+            }
+            else
+            {
+                Session["MerchantUserId"] = null;
+                Session["MerchantUserName"] = null;
+                Session["UserType"] = null;
+                Session.Remove("MerchantUserId");
+                Session.Remove("MerchantUserName");
+                Session.Remove("UserType");
+                RedirectToAction("Index", "Login", new { area = "" });
+                IGrid<TBL_BALANCE_TRANSFER_LOGS> grid = new Grid<TBL_BALANCE_TRANSFER_LOGS>(null);
+                return grid;
+            }
+            
         }
 
     }

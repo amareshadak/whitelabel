@@ -92,8 +92,11 @@
         [RegularExpression("^[0-9]*$", ErrorMessage = "Aadhaar Card must be number")]
         public string AADHAAR_NO { get; set; }
 
-        [StringLength(10, ErrorMessage = "Pan card no must be 10 digit")]
-        [RegularExpression("^[0-9a-zA-Z ]+$", ErrorMessage = "Enter valid Pan no")]
+        //[StringLength(10, ErrorMessage = "Pan card no must be 10 digit")]
+        //[RegularExpression("^[0-9a-zA-Z ]+$", ErrorMessage = "Enter valid Pan no")]
+        [Display(Name = "PAN Card:")]
+        [Required(ErrorMessage = "PAN Number is required")]
+        [RegularExpression("^([A-Za-z]){5}([0-9]){4}([A-Za-z]){1}$", ErrorMessage = "Invalid PAN Number")]
         public string PAN_NO { get; set; }        
 
         public string AADHAAR_FILE_NAME { get; set; }
@@ -152,6 +155,7 @@
         public string MEM_UNIQUE_ID { get; set; }
         public int? RAIL_ID_QUANTITY { get; set; }
         public DateTime? RENEWAL_DATE { get; set; }
+        public string PAYMENT_MODE { get; set; }
         [NotMapped]
         public string FromUser { get; set; }
         [NotMapped]
@@ -228,6 +232,10 @@
         public string FLAG2 { get; set; }
         [NotMapped]
         public bool STATUS { get; set; }
+        [NotMapped]
+        public bool RailIdTagged { get; set; }
+        [NotMapped]
+        public long RailSLN { get; set; }
         [NotMapped]
         [Required]
         [Display(Name = "Please Select State")]

@@ -1,7 +1,9 @@
 ﻿app.controller('FlightBookingInvoicePrintController', ['FlightServices', '$scope', '$http', '$window', '$timeout', function (FlightServices, $scope, $http, $window, $timeout) {
     $scope.fromDate = null;
     $scope.toDate = null;
-    $scope.BookedStatus = "Acknowledged";
+    //$scope.BookedStatus = "Acknowledged";
+    $scope.BookedStatus = "--Select--";
+    $scope.PNRDetails = '';
     $scope.CurrentDate = new Date();
     $scope.viewby = 10;
     $scope.totalItems = null;
@@ -10,10 +12,28 @@
     $scope.maxSize = 5; //Number of pager buttons to show
     $scope.GetTicketList = null;
     $scope.GetBookedFlightInvoice = function () {        
-        let  data = {};
-        if ($scope.fromDate && $scope.toDate && $scope.BookedStatus) {
-            data = { fromDate: $scope.fromDate, toDate: $scope.toDate, BookedStatus: $scope.BookedStatus };
-        }        
+        let data = {};
+        debugger;
+        if ($scope.fromDate && $scope.toDate && $scope.BookedStatus && $scope.PNRDetails != '--Select--') {
+            data = { fromDate: $scope.fromDate, toDate: $scope.toDate, BookedStatus: $scope.BookedStatus, PNRNo: $scope.PNRDetails };
+        }
+        else if ($scope.fromDate && $scope.toDate && $scope.BookedStatus != '--Select--' && $scope.PNRDetails == '') {
+            data = { fromDate: $scope.fromDate, toDate: $scope.toDate, BookedStatus: $scope.BookedStatus, PNRNo: '' };
+        }
+        else if ($scope.fromDate && $scope.toDate && $scope.BookedStatus == '--Select--' && $scope.PNRDetails == '') {
+            data = { fromDate: $scope.fromDate, toDate: $scope.toDate, BookedStatus: $scope.BookedStatus, PNRNo: '' };
+        }
+        else if ($scope.fromDate == null && $scope.toDate == null && $scope.BookedStatus == '--Select--' && $scope.PNRDetails)
+        {
+            data = { fromDate: null, toDate: null, BookedStatus: $scope.BookedStatus, PNRNo: $scope.PNRDetails };
+        }
+        else if ($scope.fromDate == null && $scope.toDate == null && $scope.BookedStatus != '--Select--' && $scope.PNRDetails== '') {
+            data = { fromDate: null, toDate: null, BookedStatus: $scope.BookedStatus, PNRNo: '' };
+        }
+        else if ($scope.fromDate == null && $scope.toDate == null && $scope.BookedStatus != '--Select--' && $scope.PNRDetails) {
+            data = { fromDate: null, toDate: null, BookedStatus: $scope.BookedStatus, PNRNo: '' };
+        }
+        else { data = { fromDate: null, toDate: null, BookedStatus: $scope.BookedStatus, PNRNo: '' }; }
         const service = FlightServices.getFlightBookingInvoice(data);
         service.then(function (response) {            
             const data = response.data;
@@ -39,6 +59,7 @@
             const CompName = response.data.CompName;
             const CompEmail = response.data.CompEmail;
             const CompContact = response.data.CompContact;
+            const CompGSTNo = response.data.CompGSTNo;
             const FlightResponse = JSON.parse(data);
             $scope.FlightInvoicePrint = FlightResponse;
             $scope.AdditionalCharge = AddnlCharge;
@@ -47,9 +68,88 @@
             $scope.CompanyName = CompName;
             $scope.CompanyEmail = CompEmail;
             $scope.CompanyContact = CompContact;
+            $scope.CompanyGSTNo = CompGSTNo;
             console.log($scope.FlightInvoicePrint);
         });
     };
+    $scope.WithoutFareInvoice = function (refid, Pnr) {
+        const data = { refId: refid, PNR: Pnr };
+        const service = FlightServices.getFlightBookingWithoutFareInvoice(data);
+        service.then(function (response) {
+            debugger;
+            const data = response.data.result;
+            const AddnlCharge = response.data.AdditionalCharge;
+            const Processingam = response.data.ProcessingCharge;
+            const CompAddress = response.data.Address;
+            const CompName = response.data.CompName;
+            const CompEmail = response.data.CompEmail;
+            const CompContact = response.data.CompContact;
+            const CompGSTNo = response.data.CompGSTNo;
+            const FlightResponse = JSON.parse(data);
+            $scope.FlightInvoicePrint = FlightResponse;
+            $scope.AdditionalCharge = AddnlCharge;
+            $scope.ProcessingCharge = Processingam;
+            $scope.CompanyAddress = CompAddress;
+            $scope.CompanyName = CompName;
+            $scope.CompanyEmail = CompEmail;
+            $scope.CompanyContact = CompContact;
+            $scope.CompanyGSTNo = CompGSTNo;
+            console.log($scope.FlightInvoicePrint);
+        });
+    };
+    $scope.PublishFareInvoice = function (refid, Pnr) {
+        const data = { refId: refid, PNR: Pnr };
+        const service = FlightServices.getFlightBookingPublishFareInvoice(data);
+        service.then(function (response) {
+            debugger;
+            const data = response.data.result;
+            const AddnlCharge = response.data.AdditionalCharge;
+            const Processingam = response.data.ProcessingCharge;
+            const CompAddress = response.data.Address;
+            const CompName = response.data.CompName;
+            const CompEmail = response.data.CompEmail;
+            const CompContact = response.data.CompContact;
+            const CompGSTNo = response.data.CompGSTNo;
+            const FlightResponse = JSON.parse(data);
+            const FlightDetails = response.data.FlightDetails;
+            $scope.FlightInvoicePrint = FlightResponse;
+            $scope.AdditionalCharge = AddnlCharge;
+            $scope.ProcessingCharge = Processingam;
+            $scope.CompanyAddress = CompAddress;
+            $scope.CompanyName = CompName;
+            $scope.CompanyEmail = CompEmail;
+            $scope.CompanyContact = CompContact;
+            $scope.CompanyGSTNo = CompGSTNo;
+            $scope.FlightInformation = FlightDetails;
+            console.log($scope.FlightInvoicePrint);
+        });
+    };
+    $scope.NetFareInvoice = function (refid, Pnr) {
+        const data = { refId: refid, PNR: Pnr };
+        const service = FlightServices.getFlightBookingPrintNetFareInvoice(data);
+        service.then(function (response) {
+            debugger;
+            const data = response.data.result;
+            const AddnlCharge = response.data.AdditionalCharge;
+            const Processingam = response.data.ProcessingCharge;
+            const CompAddress = response.data.Address;
+            const CompName = response.data.CompName;
+            const CompEmail = response.data.CompEmail;
+            const CompContact = response.data.CompContact;
+            const CompGSTNo = response.data.CompGSTNo;
+            const FlightResponse = JSON.parse(data);
+            $scope.FlightInvoicePrint = FlightResponse;
+            $scope.AdditionalCharge = AddnlCharge;
+            $scope.ProcessingCharge = Processingam;
+            $scope.CompanyAddress = CompAddress;
+            $scope.CompanyName = CompName;
+            $scope.CompanyEmail = CompEmail;
+            $scope.CompanyContact = CompContact;
+            $scope.CompanyGSTNo = CompGSTNo;
+            console.log($scope.FlightInvoicePrint);
+        });
+    };
+
     $scope.BookedTicketInformationFetch = function (refid, Pnr) {        
         const data = { refId: refid, PNR: Pnr };
         const service = FlightServices.getFlightBookingInformation(data);
@@ -62,6 +162,7 @@
             const CompName = response.data.CompName;
             const CompEmail = response.data.CompEmail;
             const CompContact = response.data.CompContact;
+            const CompGSTNo = response.data.CompGSTNo;
             const FlightResponse = JSON.parse(data);
             $scope.FlightInvoicePrint = FlightResponse;
             $scope.AdditionalCharge = AddnlCharge;
@@ -70,6 +171,7 @@
             $scope.CompanyName = CompName;
             $scope.CompanyEmail = CompEmail;
             $scope.CompanyContact = CompContact;
+            $scope.CompanyGSTNo = CompGSTNo;
             console.log($scope.FlightInvoicePrint);
         });
     };

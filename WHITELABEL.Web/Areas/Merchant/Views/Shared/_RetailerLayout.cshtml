@@ -279,8 +279,8 @@
             <div style="width:55%; padding-left:45px;text-align:right;" class="d-none d-md-block">
                 @*style="text-align:right;display:none;"*@
                 <div class="col-md-12 row">
-                    <div class="col-md-8 row"><div style="text-align:left" class="col-md-6"><b>@Session["MerchantCompanyName"]</b></div> <div class="col-md-5" style="color:red;font-weight:bold; padding-top:3px; text-align:left; border:1px solid #ccc; float:right; padding:5px; background-color:#d4d4d4; border-radius:5px"><span style=" border-right:1px solid #ccc; margin-right:5px;">CRL <i class="fas fa-rupee-sign" style="padding:0 10px;"></i> </span><label id="txtDistCreditLimitAmt"></label> </div></div>
-                    <div class="col-md-4"><div style="color:green; font-weight:bold; padding-top:3px;  text-align:left; border:1px solid #ccc; float:left; padding:5px; background-color:#d4d4d4; border-radius:5px"><span style=" border-right:1px solid #ccc; margin-right:5px;">PCL <i class="fas fa-rupee-sign" style="padding:0 10px;"></i></span><label id="txtDistReservedCreditLimitAmt"></label></div></div>
+                    <div class="col-md-8 row"><div style="text-align:left" class="col-md-6"><b>@Session["MerchantCompanyName"]</b></div> <div class="col-md-5" style="color:red;font-weight:bold; padding-top:3px; text-align:left; border:1px solid #ccc; float:right; padding:5px; background-color:#d4d4d4; border-radius:5px; display:none;"><span style="border-right:1px solid #ccc; margin-right:5px;">CRL <i class="fas fa-rupee-sign" style="padding:0 10px;"></i> </span><label id="txtDistCreditLimitAmt"></label> </div></div>
+                    <div class="col-md-4"><div style="color:green; font-weight:bold; padding-top:3px;  text-align:left; border:1px solid #ccc; float:left; padding:5px; background-color:#d4d4d4; border-radius:5px; display:none;"><span style=" border-right:1px solid #ccc; margin-right:5px;">PCL <i class="fas fa-rupee-sign" style="padding:0 10px;"></i></span><label id="txtDistReservedCreditLimitAmt"></label></div></div>
                 </div>
                 <div class="col-md-12 row">
                     @*<span style="font-size:14px;padding-left: 500px;"> <b>@Session["MerchantCompanyName"]</b></span>*@                  
@@ -354,6 +354,13 @@
                         <div class="triangle"></div>
                     </li>
 
+                    <li class="nav-item">
+                        <a class="nav-item-hold" href="@Url.Action("Index","MerchantDashboard", new {area= "Merchant" })">
+                            <i class="fa fa-home nav-icon"></i>
+                            <span class="nav-text">Dashboard</span>
+                        </a>
+                        <div class="triangle"></div>
+                    </li>
                     <li class="nav-item" data-item="Flight">
                         <a class="nav-item-hold" href="#">
 
@@ -384,13 +391,13 @@
                         </a>
                         <div class="triangle"></div>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-item-hold" href="@Url.Action("Index","MerchantRequisition", new {area= "Merchant" })">
-                            <i class="fa fa-user-edit nav-icon"></i>
+                    <li class="nav-item" data-item="Requisition">
+                        <a class="nav-item-hold" href="#">
+                            <i class="fa fa-clipboard-list nav-icon"></i>
                             <span class="nav-text">Requisition</span>
                         </a>
                         <div class="triangle"></div>
-                    </li>
+                    </li>                    
                     @*<li class="nav-item">
                             <a class="nav-item-hold" href="@Url.Action("FlightSearchDetails","MerchantFlightBooking", new {area= "Merchant" })">
                                 <i class="fa fa-user-edit nav-icon"></i>
@@ -487,17 +494,31 @@
                     
                 </ul>
 
-
-
-                <ul class="childNav" data-parent="Report">
+                <ul class="childNav" data-parent="Requisition">
                     <li class="nav-item">
-                        <a href="@Url.Action("Index","MerchantRequisitionReport", new {area= "Merchant" })" class="open">
+                        <a href="@Url.Action("Index","MerchantRequisition", new {area= "Merchant" })"  class="open">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name">Send Requisition</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("Index","MerchantRequisitionReport", new {area= "Merchant" })">
                             <i class="fa fa-location-arrow nav-icon"></i>
                             <span class="item-name">Requisition Report</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="@Url.Action("MerchantCreditLimitList","MerchantTransactionReport", new {area= "Merchant" })">
+                        <a href="@Url.Action("CreditRequisitionList","MerchantRequisition", new {area= "Merchant" })">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name">Credit Requisition Report</span>
+                        </a>
+                    </li>
+                </ul>
+
+                <ul class="childNav" data-parent="Report">
+                    
+                    <li class="nav-item">
+                        <a href="@Url.Action("MerchantCreditLimitList","MerchantTransactionReport", new {area= "Merchant" })" class="open">
                             <i class="fa fa-location-arrow nav-icon"></i>
                             <span class="item-name">Merchant Credit Limit Report</span>
                         </a>
@@ -508,7 +529,7 @@
                             <span class="item-name">Transaction Report</span>
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" style="display:none;">
                         <a href="@Url.Action("RechargeTransactionList","MerchantRechargeService", new {area= "Merchant" })">
                             <i class="fa fa-location-arrow nav-icon"></i>
                             <span class="item-name">Mobile Recharge Report</span>

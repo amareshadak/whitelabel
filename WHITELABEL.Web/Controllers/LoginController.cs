@@ -22,8 +22,6 @@ namespace WHITELABEL.Web.Controllers
         {
             var db = new DBContext();
             //var GetUser = db.TBL_AUTH_ADMIN_USERS.FirstOrDefault(x => x.USER_EMAIL == "neeraj.g@traveliq.in");
-
-
             string idval = TimeToHexString();
             string valueid = UniqueID;
             string iidd = TicksToString();
@@ -1209,7 +1207,8 @@ namespace WHITELABEL.Web.Controllers
                         else
                         {
                             objsupermem.BLOCKED_BALANCE = objsupermem.BLOCKED_BALANCE;
-                            objsupermem.BALANCE = objsupermem.BLOCKED_BALANCE;
+                            //objsupermem.BALANCE = objsupermem.BLOCKED_BALANCE;
+                            objsupermem.BALANCE =0;
                         }
                         objsupermem.EMAIL_ID = objsupermem.EMAIL_ID.ToLower();
                         objsupermem.UNDER_WHITE_LEVEL = logochecking.mem_id;
@@ -1286,6 +1285,9 @@ namespace WHITELABEL.Web.Controllers
                 ViewBag.GSTValue = new SelectList(GSTValueID, "SLN", "TAX_NAME");
                 var TDSValueID = db.TBL_TAX_MASTERS.Where(x => x.TAX_NAME == "TDS").ToList();
                 ViewBag.TDSValue = new SelectList(TDSValueID, "SLN", "TAX_NAME");
+                string UserPwd = generate_Password(10);
+                model.User_pwd = UserPwd;
+                model.BLOCKED_BALANCE = 0;
                 model.UName = UniqId;
                 return View(model);
             }
@@ -1294,6 +1296,18 @@ namespace WHITELABEL.Web.Controllers
 
                 throw;
             }
+        }
+        public static string generate_Password(int length)
+        {
+            const string src = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";            
+            var sb = new StringBuilder();
+            Random RNG = new Random();
+            for (var i = 0; i < length; i++)
+            {
+                var c = src[RNG.Next(0, src.Length)];
+                sb.Append(c);
+            }            
+            return sb.ToString();
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -1334,8 +1348,10 @@ namespace WHITELABEL.Web.Controllers
                         else
                         {
                             objsupermem.BLOCKED_BALANCE = objsupermem.BLOCKED_BALANCE;
-                            objsupermem.BALANCE = objsupermem.BLOCKED_BALANCE;
-                            AmountVal = (decimal)objsupermem.BLOCKED_BALANCE;
+                            //objsupermem.BALANCE = objsupermem.BLOCKED_BALANCE;
+                            //AmountVal = (decimal)objsupermem.BLOCKED_BALANCE;
+                            objsupermem.BALANCE = 0;
+                            AmountVal = 0;
                         }
                         objsupermem.EMAIL_ID = objsupermem.EMAIL_ID.ToLower();
                         objsupermem.UNDER_WHITE_LEVEL = logochecking.mem_id;
@@ -1475,6 +1491,60 @@ namespace WHITELABEL.Web.Controllers
                 {
                     return Json(new { result = "available" });
                 }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+        }
+        [HttpPost]
+        public async Task<JsonResult> CheckMobileNoEmailAvailability(string MobileNo, string EmailId)
+        {
+            //initpage();////
+            try
+            {
+                var context = new DBContext();
+                if (MobileNo != "" && EmailId != "")
+                {
+                    var User = await context.TBL_MASTER_MEMBER.Where(model => model.MEMBER_MOBILE == MobileNo || model.EMAIL_ID == EmailId).FirstOrDefaultAsync();
+                    if (User != null)
+                    {
+                        return Json(new { result = "unavailable" });
+                    }
+                    else
+                    {
+                        return Json(new { result = "available" });
+                    }
+                }
+                else if (MobileNo != "" && EmailId == "")
+                {
+                    var User = await context.TBL_MASTER_MEMBER.Where(model => model.MEMBER_MOBILE == MobileNo).FirstOrDefaultAsync();
+                    if (User != null)
+                    {
+                        return Json(new { result = "unavailable" });
+                    }
+                    else
+                    {
+                        return Json(new { result = "available" });
+                    }
+                }
+                else if (MobileNo == "" && EmailId != "")
+                {
+                    var User = await context.TBL_MASTER_MEMBER.Where(model => model.EMAIL_ID == EmailId).FirstOrDefaultAsync();
+                    if (User != null)
+                    {
+                        return Json(new { result = "unavailable" });
+                    }
+                    else
+                    {
+                        return Json(new { result = "available" });
+                    }
+                }
+                else
+                { return Json(new { result = "available" }); }
+
             }
             catch (Exception ex)
             {
@@ -2341,6 +2411,194 @@ namespace WHITELABEL.Web.Controllers
         {
             return View();
         }
+        [HttpPost]
+        public JsonResult SendOTP(string Emailid = "", string MobileNo = "")
+        {
+            try
+            {
+                var db = new DBContext();
+                EmailClassHelper objemail = new EmailClassHelper();
+                if (Emailid != "")
+                {
+                    string emailidval = Emailid.Trim();
 
+                    var dbmeminfo = db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.EMAIL_ID == emailidval);
+                    if (dbmeminfo != null)
+                    {
+                        string OTPValue = ToBase62();
+                        Session["checkOTP"] = OTPValue;
+                        
+                        string smsmsg = "Dear " + dbmeminfo.UName + ", use OTP: " + OTPValue + " to change the account password.";
+                        
+                        //string send_sms = objsms.SendSMS("8240148377", smsmsg);
+                        string name = dbmeminfo.UName;
+                        string sub = "OTP FOR PASSWORD CHANGE.";
+                        //string usermsgdesc = "Dear <b>" + dbmeminfo.MEMBER_NAME + "</b> you have successfully joined in Devcon.<br /><p>Your User Id:- " + value.EMAIL_ID + " <br/>Password:- " + value.User_pwd + " </p> ";
+                        EmailHelper emailhelper = new EmailHelper();
+                        string usermsgbody = emailhelper.GetEmailTemplate(name, smsmsg, "UserEmailTemplate.html");
+                        objemail.SendUserEmail(dbmeminfo.EMAIL_ID, sub, usermsgbody);
+                        return Json("OTP SEND IN YOUR EMAIL ID.", JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        return Json("Your credentials is not match in our database. Please contact your Administrator.", JsonRequestBehavior.AllowGet);
+                    }
+
+                }
+                else if (MobileNo != "")
+                {
+                    string mobileval = MobileNo.Trim();
+                    var dbmeminfo = db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEMBER_MOBILE == mobileval);
+                    if (dbmeminfo != null)
+                    {
+                        string OTPValue = ToBase62();
+                        Session["checkOTP"] = OTPValue;
+                        
+                        string smsmsg = "Dear " + dbmeminfo.UName + ", use OTP: " + OTPValue + " to change the account password.";
+                        
+                        //string send_sms = objsms.SendSMS("8240148377", smsmsg);
+                        string name = dbmeminfo.UName;
+                        string sub = "OTP FOR PASSWORD CHANGE.";
+                        //string usermsgdesc = "Dear <b>" + dbmeminfo.MEMBER_NAME + "</b> you have successfully joined in Devcon.<br /><p>Your User Id:- " + value.EMAIL_ID + " <br/>Password:- " + value.User_pwd + " </p> ";
+                        EmailHelper emailhelper = new EmailHelper();
+                        string usermsgbody = emailhelper.GetEmailTemplate(name, smsmsg, "UserEmailTemplate.html");
+                        objemail.SendUserEmail(dbmeminfo.EMAIL_ID, sub, usermsgbody);
+                        
+
+                        return Json("OTP SEND IN YOUR MOBILE.", JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        return Json("Your credentials is not match in our database. Please contact your Administrator.", JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else
+                {
+                    string msgval = "Please enter your email id and mobile no.";
+                    return Json(msgval, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json("try again later", JsonRequestBehavior.AllowGet);
+                throw;
+            }
+        }
+        public static string ToBase62()
+        {
+            var chars1 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
+            var stringChars1 = new char[6];
+            var random1 = new Random();
+
+            for (int i = 0; i < stringChars1.Length; i++)
+            {
+                stringChars1[i] = chars1[random1.Next(chars1.Length)];
+            }
+
+            var str = new String(stringChars1);
+            return str;
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ValidateInput(true)]
+        public async Task<JsonResult> POSTForgotPassword(ForgettenPassword value)
+        {
+
+            var db = new DBContext();
+            using (System.Data.Entity.DbContextTransaction ContextTransaction = db.Database.BeginTransaction())
+            {
+                try
+                {
+                    string emailidval = "";
+                    string mobileval = "";
+                    if (Session["checkOTP"].ToString() == value.OTPVerification)
+                    {
+                        //long mem_id = 1000000;
+                        if (value.Email != null)
+                        {
+                            emailidval = value.Email;
+                        }
+                        else
+                        {
+                            emailidval = "";
+                        }
+                        if (value.MobileNo != null)
+                        {
+                            mobileval = value.MobileNo;
+                        }
+                        else
+                        {
+                            mobileval = "";
+                        }
+                        if (emailidval != "")
+                        {
+                            var changepass = db.TBL_MASTER_MEMBER.Where(x => x.EMAIL_ID == emailidval).FirstOrDefault();
+                            if (changepass != null)
+                            {
+                                changepass.User_pwd = value.User_pwd;
+                                db.Entry(changepass).State = System.Data.Entity.EntityState.Modified;
+                                await db.SaveChangesAsync();
+                            }
+                            var token = TokenGenerator.GenerateToken();
+                            var PasswordResetObj = new TBL_PASSWORD_RESET
+                            {
+                                ID = token,
+                                EmailID = changepass.EMAIL_ID,
+                                Time = DateTime.Now
+                            };
+                            db.TBL_PASSWORD_RESET.Add(PasswordResetObj);
+                            db.SaveChanges();
+                            //throw new Exception();
+                            ContextTransaction.Commit();
+                            return Json("Password changed Successfully", JsonRequestBehavior.AllowGet);
+                        }
+                        else if (mobileval != "")
+                        {
+                            var changepass = db.TBL_MASTER_MEMBER.Where(x => x.MEMBER_MOBILE == mobileval).FirstOrDefault();
+                            if (changepass != null)
+                            {
+                                changepass.User_pwd = value.User_pwd;
+                                db.Entry(changepass).State = System.Data.Entity.EntityState.Modified;
+                                await db.SaveChangesAsync();
+                            }
+                            var token = TokenGenerator.GenerateToken();
+                            var PasswordResetObj = new TBL_PASSWORD_RESET
+                            {
+                                ID = token,
+                                EmailID = changepass.EMAIL_ID,
+                                Time = DateTime.Now
+                            };
+                            db.TBL_PASSWORD_RESET.Add(PasswordResetObj);
+                            db.SaveChanges();
+                            //throw new Exception();
+                            ContextTransaction.Commit();
+                            return Json("Password changed Successfully", JsonRequestBehavior.AllowGet);
+                        }
+                        else
+                        {
+                            return Json("Try Again After Sometime", JsonRequestBehavior.AllowGet);
+                        }
+
+                        //return RedirectToAction("Message", "MerchantLogin", new { area = "Merchant" });
+                    }
+                    else
+                    {
+                        return Json("Please Enter Valid OTP", JsonRequestBehavior.AllowGet);
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    ContextTransaction.Rollback();
+                    //Logger.Error("Controller:-  DistributorPasswordChange(Super), method:- ChangePassword (POST) Line No:- 124", ex);
+                    //return RedirectToAction("Exception", "ErrorHandler", new { area = "" });
+                    return Json("Try Again After Sometime", JsonRequestBehavior.AllowGet);
+                    throw ex;
+                    //return View("Error", new HandleErrorInfo(ex, "APILabel", "CreateMember"));               
+                }
+            }
+
+        }
     }
 }

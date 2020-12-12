@@ -420,9 +420,9 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
 
                     row++;
                 }
-
-                //return File(package.GetAsByteArray(), "application/unknown");
-                return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                return File(package.GetAsByteArray(), "application/unknown", "DistributorSectionTransactionReport.xlsx");
+                ////return File(package.GetAsByteArray(), "application/unknown");
+                //return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
             }
         }
         private IGrid<TBL_ACCOUNTS> CreateExportDisDistributorTableGrid(string Disid, string statusval,string DateFrom,string Date_To)
@@ -545,9 +545,9 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
 
                     row++;
                 }
-
-                //return File(package.GetAsByteArray(), "application/unknown");
-                return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                return File(package.GetAsByteArray(), "application/unknown", "Distr8ibutorTransactionReport.xlsx");
+                ////return File(package.GetAsByteArray(), "application/unknown");
+                //return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
             }
         }
         private IGrid<TBL_ACCOUNTS> CreateExportOnlyDistributorTableGrid(string statusval, string DateFrom = "", string Date_To = "")
@@ -892,6 +892,694 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
             }
             string val = string.Empty;
             return PartialView("IndexGridGetDatewiseClosingReport", AcoountsDetailsList);
+        }
+
+
+        public ActionResult MemberAccountsReport()
+        {
+            if (Session["DistributorUserId"] != null)
+            {
+                initpage();
+                var db = new DBContext();
+                return View();
+            }
+            else
+            {
+                Session["DistributorUserId"] = null;
+                Session["DistributorUserName"] = null;
+                Session["UserType"] = null;
+                Session.Remove("DistributorUserId");
+                Session.Remove("DistributorUserName");
+                Session.Remove("UserType");
+                return RedirectToAction("Index", "Login", new { area = "" });
+            }
+        }
+        public PartialViewResult MemberAccountsReportGrid(string MemberInfo = "", string DateFrom = "", string Date_To = "")
+        {
+            var db = new DBContext();
+            if (MemberInfo != "" && DateFrom != "" && Date_To != "")
+            {
+                string FromDATE = string.Empty;
+                string TO_DATE = string.Empty;
+                FromDATE = DateTime.Parse(DateFrom.ToString()).ToString("yyyy-MM-dd");
+                DateTime Date_From_Val = Convert.ToDateTime(FromDATE);
+                string From_TO = string.Empty;
+                TO_DATE = DateTime.Parse(Date_To.ToString()).ToString("yyyy-MM-dd");
+                DateTime Date_To_Val = Convert.ToDateTime(TO_DATE);
+                DateTime TO_DATE_Range = Date_To_Val.AddDays(1);
+                var transactionlistvalue = (from x in db.TBL_ACCOUNTS
+                                            join y in db.TBL_MASTER_MEMBER on x.MEM_ID equals y.MEM_ID
+                                            where x.TRANSACTION_DATE >= Date_From_Val && x.TRANSACTION_DATE <= TO_DATE_Range && y.INTRODUCER==MemberCurrentUser.MEM_ID && (y.COMPANY.Contains(MemberInfo) || y.UName.Contains(MemberInfo) || y.MEMBER_MOBILE.Contains(MemberInfo) || y.MEMBER_MOBILE.Contains(MemberInfo) || y.EMAIL_ID.Contains(MemberInfo) || x.AMOUNT.ToString().Contains(MemberInfo) || x.CLOSING.ToString().Contains(MemberInfo) || x.OPENING.ToString().Contains(MemberInfo)) && (x.TRANSACTION_TYPE != "ADD DISTRIBUTOR" && x.TRANSACTION_TYPE != "ADD MERCHANT")
+                                            select new
+                                            {
+                                                SLN = x.ACC_NO,
+                                                MerchantName = y.UName,
+                                                MemberType = x.MEMBER_TYPE,
+                                                Trans_Type = x.TRANSACTION_TYPE,
+                                                Trans_Date = x.TRANSACTION_DATE,
+                                                Trans_time = x.TRANSACTION_TIME,
+                                                DR_CR = x.DR_CR,
+                                                Amount = x.AMOUNT,
+                                                Narration = x.NARRATION,
+                                                OpeningAmt = x.OPENING,
+                                                Closing = x.CLOSING,
+                                                CommissionAmt = x.COMM_AMT,
+                                                GST = x.GST,
+                                                TDS = x.TDS,
+                                                GST_PERCENTAGE = x.GST_PERCENTAGE,
+                                                TDS_PERCENTAGE = x.TDS_PERCENTAGE,
+                                                CORELATIONID = x.CORELATIONID,
+                                                REC_COMM_TYPE = x.REC_COMM_TYPE,
+                                                COMM_VALUE = x.COMM_VALUE,
+                                                NET_COMM_AMT = x.NET_COMM_AMT,
+                                                TDS_DR_COMM_AMT = x.TDS_DR_COMM_AMT,
+                                                CGST_COMM_AMT_INPUT = x.CGST_COMM_AMT_INPUT,
+                                                CGST_COMM_AMT_OUTPUT = x.CGST_COMM_AMT_OUTPUT,
+                                                SGST_COMM_AMT_INPUT = x.SGST_COMM_AMT_INPUT,
+                                                SGST_COMM_AMT_OUTPUT = x.SGST_COMM_AMT_OUTPUT,
+                                                IGST_COMM_AMT_INPUT = x.IGST_COMM_AMT_INPUT,
+                                                IGST_COMM_AMT_OUTPUT = x.IGST_COMM_AMT_OUTPUT,
+                                                TOTAL_GST_COMM_AMT_INPUT = x.TOTAL_GST_COMM_AMT_INPUT,
+                                                TOTAL_GST_COMM_AMT_OUTPUT = x.TOTAL_GST_COMM_AMT_OUTPUT,
+                                                TDS_RATE = x.TDS_RATE,
+                                                CGST_RATE = x.CGST_RATE,
+                                                SGST_RATE = x.SGST_RATE,
+                                                IGST_RATE = x.IGST_RATE,
+                                                TOTAL_GST_RATE = x.TOTAL_GST_RATE
+                                            }).AsEnumerable().Select((z, index) => new TBL_ACCOUNTS
+                                            {
+                                                SerialNo = index + 1,
+                                                ACC_NO = z.SLN,
+                                                UserName = z.MerchantName,
+                                                MEMBER_TYPE = z.MemberType,
+                                                TRANSACTION_TYPE = z.Trans_Type,
+                                                TRANSACTION_DATE = z.Trans_Date,
+                                                TRANSACTION_TIME = z.Trans_time,
+                                                DR_CR = z.DR_CR,
+                                                AMOUNT = z.Amount,
+                                                NARRATION = z.Narration,
+                                                OPENING = z.OpeningAmt,
+                                                CR_Col = (z.DR_CR == "CR" ? z.Amount.ToString() : "0"),
+                                                DR_Col = (z.DR_CR == "DR" ? z.Amount.ToString() : "0"),
+                                                CLOSING = z.Closing,
+                                                COMM_AMT = z.CommissionAmt,
+                                                GST = z.GST,
+                                                TDS = z.TDS,
+                                                GST_PERCENTAGE = z.GST_PERCENTAGE,
+                                                TDS_PERCENTAGE = z.TDS_PERCENTAGE,
+                                                CORELATIONID = z.CORELATIONID,
+                                                REC_COMM_TYPE = z.REC_COMM_TYPE,
+                                                COMM_VALUE = z.COMM_VALUE,
+                                                NET_COMM_AMT = z.NET_COMM_AMT,
+                                                TDS_DR_COMM_AMT = z.TDS_DR_COMM_AMT,
+                                                CGST_COMM_AMT_INPUT = z.CGST_COMM_AMT_INPUT,
+                                                CGST_COMM_AMT_OUTPUT = z.CGST_COMM_AMT_OUTPUT,
+                                                SGST_COMM_AMT_INPUT = z.SGST_COMM_AMT_INPUT,
+                                                SGST_COMM_AMT_OUTPUT = z.SGST_COMM_AMT_OUTPUT,
+                                                IGST_COMM_AMT_INPUT = z.IGST_COMM_AMT_INPUT,
+                                                IGST_COMM_AMT_OUTPUT = z.IGST_COMM_AMT_OUTPUT,
+                                                TOTAL_GST_COMM_AMT_INPUT = z.TOTAL_GST_COMM_AMT_INPUT,
+                                                TOTAL_GST_COMM_AMT_OUTPUT = z.TOTAL_GST_COMM_AMT_OUTPUT,
+                                                TDS_RATE = z.TDS_RATE,
+                                                CGST_RATE = z.CGST_RATE,
+                                                SGST_RATE = z.SGST_RATE,
+                                                IGST_RATE = z.IGST_RATE,
+                                                TOTAL_GST_RATE = z.TOTAL_GST_RATE
+                                            }).OrderBy(m => m.SerialNo).ThenByDescending(a => a.TRANSACTION_DATE).ToList();
+                return PartialView("MemberAccountsReportGrid", transactionlistvalue);
+            }
+            else if (MemberInfo == "" && DateFrom != "" && Date_To != "")
+            {
+                string FromDATE = string.Empty;
+                string TO_DATE = string.Empty;
+                FromDATE = DateTime.Parse(DateFrom.ToString()).ToString("yyyy-MM-dd");
+                DateTime Date_From_Val = Convert.ToDateTime(FromDATE);
+                string From_TO = string.Empty;
+                TO_DATE = DateTime.Parse(Date_To.ToString()).ToString("yyyy-MM-dd");
+                DateTime Date_To_Val = Convert.ToDateTime(TO_DATE);
+                DateTime TO_DATE_Range = Date_To_Val.AddDays(1);
+                var transactionlistvalue = (from x in db.TBL_ACCOUNTS
+                                            join y in db.TBL_MASTER_MEMBER on x.MEM_ID equals y.MEM_ID
+                                            where x.TRANSACTION_DATE >= Date_From_Val && x.TRANSACTION_DATE <= TO_DATE_Range && y.INTRODUCER == MemberCurrentUser.MEM_ID && (x.TRANSACTION_TYPE != "ADD DISTRIBUTOR" && x.TRANSACTION_TYPE != "ADD MERCHANT")
+                                            select new
+                                            {
+                                                SLN = x.ACC_NO,
+                                                MerchantName = y.UName,
+                                                MemberType = x.MEMBER_TYPE,
+                                                Trans_Type = x.TRANSACTION_TYPE,
+                                                Trans_Date = x.TRANSACTION_DATE,
+                                                Trans_time = x.TRANSACTION_TIME,
+                                                DR_CR = x.DR_CR,
+                                                Amount = x.AMOUNT,
+                                                Narration = x.NARRATION,
+                                                OpeningAmt = x.OPENING,
+                                                Closing = x.CLOSING,
+                                                CommissionAmt = x.COMM_AMT,
+                                                GST = x.GST,
+                                                TDS = x.TDS,
+                                                GST_PERCENTAGE = x.GST_PERCENTAGE,
+                                                TDS_PERCENTAGE = x.TDS_PERCENTAGE,
+                                                CORELATIONID = x.CORELATIONID,
+                                                REC_COMM_TYPE = x.REC_COMM_TYPE,
+                                                COMM_VALUE = x.COMM_VALUE,
+                                                NET_COMM_AMT = x.NET_COMM_AMT,
+                                                TDS_DR_COMM_AMT = x.TDS_DR_COMM_AMT,
+                                                CGST_COMM_AMT_INPUT = x.CGST_COMM_AMT_INPUT,
+                                                CGST_COMM_AMT_OUTPUT = x.CGST_COMM_AMT_OUTPUT,
+                                                SGST_COMM_AMT_INPUT = x.SGST_COMM_AMT_INPUT,
+                                                SGST_COMM_AMT_OUTPUT = x.SGST_COMM_AMT_OUTPUT,
+                                                IGST_COMM_AMT_INPUT = x.IGST_COMM_AMT_INPUT,
+                                                IGST_COMM_AMT_OUTPUT = x.IGST_COMM_AMT_OUTPUT,
+                                                TOTAL_GST_COMM_AMT_INPUT = x.TOTAL_GST_COMM_AMT_INPUT,
+                                                TOTAL_GST_COMM_AMT_OUTPUT = x.TOTAL_GST_COMM_AMT_OUTPUT,
+                                                TDS_RATE = x.TDS_RATE,
+                                                CGST_RATE = x.CGST_RATE,
+                                                SGST_RATE = x.SGST_RATE,
+                                                IGST_RATE = x.IGST_RATE,
+                                                TOTAL_GST_RATE = x.TOTAL_GST_RATE
+                                            }).AsEnumerable().Select((z, index) => new TBL_ACCOUNTS
+                                            {
+                                                SerialNo = index + 1,
+                                                ACC_NO = z.SLN,
+                                                UserName = z.MerchantName,
+                                                MEMBER_TYPE = z.MemberType,
+                                                TRANSACTION_TYPE = z.Trans_Type,
+                                                TRANSACTION_DATE = z.Trans_Date,
+                                                TRANSACTION_TIME = z.Trans_time,
+                                                DR_CR = z.DR_CR,
+                                                AMOUNT = z.Amount,
+                                                NARRATION = z.Narration,
+                                                OPENING = z.OpeningAmt,
+                                                CR_Col = (z.DR_CR == "CR" ? z.Amount.ToString() : "0"),
+                                                DR_Col = (z.DR_CR == "DR" ? z.Amount.ToString() : "0"),
+                                                CLOSING = z.Closing,
+                                                COMM_AMT = z.CommissionAmt,
+                                                GST = z.GST,
+                                                TDS = z.TDS,
+                                                GST_PERCENTAGE = z.GST_PERCENTAGE,
+                                                TDS_PERCENTAGE = z.TDS_PERCENTAGE,
+                                                CORELATIONID = z.CORELATIONID,
+                                                REC_COMM_TYPE = z.REC_COMM_TYPE,
+                                                COMM_VALUE = z.COMM_VALUE,
+                                                NET_COMM_AMT = z.NET_COMM_AMT,
+                                                TDS_DR_COMM_AMT = z.TDS_DR_COMM_AMT,
+                                                CGST_COMM_AMT_INPUT = z.CGST_COMM_AMT_INPUT,
+                                                CGST_COMM_AMT_OUTPUT = z.CGST_COMM_AMT_OUTPUT,
+                                                SGST_COMM_AMT_INPUT = z.SGST_COMM_AMT_INPUT,
+                                                SGST_COMM_AMT_OUTPUT = z.SGST_COMM_AMT_OUTPUT,
+                                                IGST_COMM_AMT_INPUT = z.IGST_COMM_AMT_INPUT,
+                                                IGST_COMM_AMT_OUTPUT = z.IGST_COMM_AMT_OUTPUT,
+                                                TOTAL_GST_COMM_AMT_INPUT = z.TOTAL_GST_COMM_AMT_INPUT,
+                                                TOTAL_GST_COMM_AMT_OUTPUT = z.TOTAL_GST_COMM_AMT_OUTPUT,
+                                                TDS_RATE = z.TDS_RATE,
+                                                CGST_RATE = z.CGST_RATE,
+                                                SGST_RATE = z.SGST_RATE,
+                                                IGST_RATE = z.IGST_RATE,
+                                                TOTAL_GST_RATE = z.TOTAL_GST_RATE
+                                            }).OrderBy(m => m.SerialNo).ThenByDescending(a => a.TRANSACTION_DATE).ToList();
+
+                return PartialView("MemberAccountsReportGrid", transactionlistvalue);
+            }
+            else if (MemberInfo != "" && DateFrom == "" && Date_To == "")
+            {
+                string FromDATE = string.Empty;
+                string TO_DATE = string.Empty;
+                var transactionlistvalue = (from x in db.TBL_ACCOUNTS
+                                            join y in db.TBL_MASTER_MEMBER on x.MEM_ID equals y.MEM_ID
+                                            where  y.INTRODUCER == MemberCurrentUser.MEM_ID && (y.COMPANY.Contains(MemberInfo) || y.UName.Contains(MemberInfo) || y.MEMBER_MOBILE.Contains(MemberInfo) || y.MEMBER_MOBILE.Contains(MemberInfo) || y.EMAIL_ID.Contains(MemberInfo) || x.AMOUNT.ToString().Contains(MemberInfo) || x.CLOSING.ToString().Contains(MemberInfo) || x.OPENING.ToString().Contains(MemberInfo)) && (x.TRANSACTION_TYPE != "ADD DISTRIBUTOR" && x.TRANSACTION_TYPE != "ADD MERCHANT")
+                                            select new
+                                            {
+                                                SLN = x.ACC_NO,
+                                                MerchantName = y.UName,
+                                                MemberType = x.MEMBER_TYPE,
+                                                Trans_Type = x.TRANSACTION_TYPE,
+                                                Trans_Date = x.TRANSACTION_DATE,
+                                                Trans_time = x.TRANSACTION_TIME,
+                                                DR_CR = x.DR_CR,
+                                                Amount = x.AMOUNT,
+                                                Narration = x.NARRATION,
+                                                OpeningAmt = x.OPENING,
+                                                Closing = x.CLOSING,
+                                                CommissionAmt = x.COMM_AMT,
+                                                GST = x.GST,
+                                                TDS = x.TDS,
+                                                GST_PERCENTAGE = x.GST_PERCENTAGE,
+                                                TDS_PERCENTAGE = x.TDS_PERCENTAGE,
+                                                CORELATIONID = x.CORELATIONID,
+                                                REC_COMM_TYPE = x.REC_COMM_TYPE,
+                                                COMM_VALUE = x.COMM_VALUE,
+                                                NET_COMM_AMT = x.NET_COMM_AMT,
+                                                TDS_DR_COMM_AMT = x.TDS_DR_COMM_AMT,
+                                                CGST_COMM_AMT_INPUT = x.CGST_COMM_AMT_INPUT,
+                                                CGST_COMM_AMT_OUTPUT = x.CGST_COMM_AMT_OUTPUT,
+                                                SGST_COMM_AMT_INPUT = x.SGST_COMM_AMT_INPUT,
+                                                SGST_COMM_AMT_OUTPUT = x.SGST_COMM_AMT_OUTPUT,
+                                                IGST_COMM_AMT_INPUT = x.IGST_COMM_AMT_INPUT,
+                                                IGST_COMM_AMT_OUTPUT = x.IGST_COMM_AMT_OUTPUT,
+                                                TOTAL_GST_COMM_AMT_INPUT = x.TOTAL_GST_COMM_AMT_INPUT,
+                                                TOTAL_GST_COMM_AMT_OUTPUT = x.TOTAL_GST_COMM_AMT_OUTPUT,
+                                                TDS_RATE = x.TDS_RATE,
+                                                CGST_RATE = x.CGST_RATE,
+                                                SGST_RATE = x.SGST_RATE,
+                                                IGST_RATE = x.IGST_RATE,
+                                                TOTAL_GST_RATE = x.TOTAL_GST_RATE
+                                            }).AsEnumerable().Select((z, index) => new TBL_ACCOUNTS
+                                            {
+                                                SerialNo = index + 1,
+                                                ACC_NO = z.SLN,
+                                                UserName = z.MerchantName,
+                                                MEMBER_TYPE = z.MemberType,
+                                                TRANSACTION_TYPE = z.Trans_Type,
+                                                TRANSACTION_DATE = z.Trans_Date,
+                                                TRANSACTION_TIME = z.Trans_time,
+                                                DR_CR = z.DR_CR,
+                                                AMOUNT = z.Amount,
+                                                NARRATION = z.Narration,
+                                                OPENING = z.OpeningAmt,
+                                                CR_Col = (z.DR_CR == "CR" ? z.Amount.ToString() : "0"),
+                                                DR_Col = (z.DR_CR == "DR" ? z.Amount.ToString() : "0"),
+                                                CLOSING = z.Closing,
+                                                COMM_AMT = z.CommissionAmt,
+                                                GST = z.GST,
+                                                TDS = z.TDS,
+                                                GST_PERCENTAGE = z.GST_PERCENTAGE,
+                                                TDS_PERCENTAGE = z.TDS_PERCENTAGE,
+                                                CORELATIONID = z.CORELATIONID,
+                                                REC_COMM_TYPE = z.REC_COMM_TYPE,
+                                                COMM_VALUE = z.COMM_VALUE,
+                                                NET_COMM_AMT = z.NET_COMM_AMT,
+                                                TDS_DR_COMM_AMT = z.TDS_DR_COMM_AMT,
+                                                CGST_COMM_AMT_INPUT = z.CGST_COMM_AMT_INPUT,
+                                                CGST_COMM_AMT_OUTPUT = z.CGST_COMM_AMT_OUTPUT,
+                                                SGST_COMM_AMT_INPUT = z.SGST_COMM_AMT_INPUT,
+                                                SGST_COMM_AMT_OUTPUT = z.SGST_COMM_AMT_OUTPUT,
+                                                IGST_COMM_AMT_INPUT = z.IGST_COMM_AMT_INPUT,
+                                                IGST_COMM_AMT_OUTPUT = z.IGST_COMM_AMT_OUTPUT,
+                                                TOTAL_GST_COMM_AMT_INPUT = z.TOTAL_GST_COMM_AMT_INPUT,
+                                                TOTAL_GST_COMM_AMT_OUTPUT = z.TOTAL_GST_COMM_AMT_OUTPUT,
+                                                TDS_RATE = z.TDS_RATE,
+                                                CGST_RATE = z.CGST_RATE,
+                                                SGST_RATE = z.SGST_RATE,
+                                                IGST_RATE = z.IGST_RATE,
+                                                TOTAL_GST_RATE = z.TOTAL_GST_RATE
+                                            }).OrderBy(m => m.SerialNo).ThenByDescending(a => a.TRANSACTION_DATE).ToList();
+                return PartialView("MemberAccountsReportGrid", transactionlistvalue);
+            }
+            else {
+                var transactionlistvalue = (from x in db.TBL_ACCOUNTS
+                                            join y in db.TBL_MASTER_MEMBER on x.MEM_ID equals y.MEM_ID
+                                            where  y.INTRODUCER == MemberCurrentUser.MEM_ID && (x.TRANSACTION_TYPE != "ADD DISTRIBUTOR" && x.TRANSACTION_TYPE != "ADD MERCHANT")
+                                            select new
+                                            {
+                                                SLN = x.ACC_NO,
+                                                MerchantName = y.UName,
+                                                MemberType = x.MEMBER_TYPE,
+                                                Trans_Type = x.TRANSACTION_TYPE,
+                                                Trans_Date = x.TRANSACTION_DATE,
+                                                Trans_time = x.TRANSACTION_TIME,
+                                                DR_CR = x.DR_CR,
+                                                Amount = x.AMOUNT,
+                                                Narration = x.NARRATION,
+                                                OpeningAmt = x.OPENING,
+                                                Closing = x.CLOSING,
+                                                CommissionAmt = x.COMM_AMT,
+                                                GST = x.GST,
+                                                TDS = x.TDS,
+                                                GST_PERCENTAGE = x.GST_PERCENTAGE,
+                                                TDS_PERCENTAGE = x.TDS_PERCENTAGE,
+                                                CORELATIONID = x.CORELATIONID,
+                                                REC_COMM_TYPE = x.REC_COMM_TYPE,
+                                                COMM_VALUE = x.COMM_VALUE,
+                                                NET_COMM_AMT = x.NET_COMM_AMT,
+                                                TDS_DR_COMM_AMT = x.TDS_DR_COMM_AMT,
+                                                CGST_COMM_AMT_INPUT = x.CGST_COMM_AMT_INPUT,
+                                                CGST_COMM_AMT_OUTPUT = x.CGST_COMM_AMT_OUTPUT,
+                                                SGST_COMM_AMT_INPUT = x.SGST_COMM_AMT_INPUT,
+                                                SGST_COMM_AMT_OUTPUT = x.SGST_COMM_AMT_OUTPUT,
+                                                IGST_COMM_AMT_INPUT = x.IGST_COMM_AMT_INPUT,
+                                                IGST_COMM_AMT_OUTPUT = x.IGST_COMM_AMT_OUTPUT,
+                                                TOTAL_GST_COMM_AMT_INPUT = x.TOTAL_GST_COMM_AMT_INPUT,
+                                                TOTAL_GST_COMM_AMT_OUTPUT = x.TOTAL_GST_COMM_AMT_OUTPUT,
+                                                TDS_RATE = x.TDS_RATE,
+                                                CGST_RATE = x.CGST_RATE,
+                                                SGST_RATE = x.SGST_RATE,
+                                                IGST_RATE = x.IGST_RATE,
+                                                TOTAL_GST_RATE = x.TOTAL_GST_RATE
+                                            }).AsEnumerable().Select((z, index) => new TBL_ACCOUNTS
+                                            {
+                                                SerialNo = index + 1,
+                                                ACC_NO = z.SLN,
+                                                UserName = z.MerchantName,
+                                                MEMBER_TYPE = z.MemberType,
+                                                TRANSACTION_TYPE = z.Trans_Type,
+                                                TRANSACTION_DATE = z.Trans_Date,
+                                                TRANSACTION_TIME = z.Trans_time,
+                                                DR_CR = z.DR_CR,
+                                                AMOUNT = z.Amount,
+                                                NARRATION = z.Narration,
+                                                OPENING = z.OpeningAmt,
+                                                CR_Col = (z.DR_CR == "CR" ? z.Amount.ToString() : "0"),
+                                                DR_Col = (z.DR_CR == "DR" ? z.Amount.ToString() : "0"),
+                                                CLOSING = z.Closing,
+                                                COMM_AMT = z.CommissionAmt,
+                                                GST = z.GST,
+                                                TDS = z.TDS,
+                                                GST_PERCENTAGE = z.GST_PERCENTAGE,
+                                                TDS_PERCENTAGE = z.TDS_PERCENTAGE,
+                                                CORELATIONID = z.CORELATIONID,
+                                                REC_COMM_TYPE = z.REC_COMM_TYPE,
+                                                COMM_VALUE = z.COMM_VALUE,
+                                                NET_COMM_AMT = z.NET_COMM_AMT,
+                                                TDS_DR_COMM_AMT = z.TDS_DR_COMM_AMT,
+                                                CGST_COMM_AMT_INPUT = z.CGST_COMM_AMT_INPUT,
+                                                CGST_COMM_AMT_OUTPUT = z.CGST_COMM_AMT_OUTPUT,
+                                                SGST_COMM_AMT_INPUT = z.SGST_COMM_AMT_INPUT,
+                                                SGST_COMM_AMT_OUTPUT = z.SGST_COMM_AMT_OUTPUT,
+                                                IGST_COMM_AMT_INPUT = z.IGST_COMM_AMT_INPUT,
+                                                IGST_COMM_AMT_OUTPUT = z.IGST_COMM_AMT_OUTPUT,
+                                                TOTAL_GST_COMM_AMT_INPUT = z.TOTAL_GST_COMM_AMT_INPUT,
+                                                TOTAL_GST_COMM_AMT_OUTPUT = z.TOTAL_GST_COMM_AMT_OUTPUT,
+                                                TDS_RATE = z.TDS_RATE,
+                                                CGST_RATE = z.CGST_RATE,
+                                                SGST_RATE = z.SGST_RATE,
+                                                IGST_RATE = z.IGST_RATE,
+                                                TOTAL_GST_RATE = z.TOTAL_GST_RATE
+                                            }).OrderBy(m => m.SerialNo).ThenByDescending(a => a.TRANSACTION_DATE).ToList();
+
+                return PartialView("MemberAccountsReportGrid", transactionlistvalue);
+            }
+        }
+
+        public FileResult ExportMemberAccountsReport(string MemberInfo = "", string DateFrom = "", string Date_To = "")
+        {
+            // Using EPPlus from nuget
+            using (ExcelPackage package = new ExcelPackage())
+            {
+                Int32 row = 2;
+                Int32 col = 1;
+                var db = new DBContext();
+
+
+                package.Workbook.Worksheets.Add("Data");
+                IGrid<TBL_ACCOUNTS> grid = CreateExportMemberAccountsReport(MemberInfo, DateFrom, Date_To);
+                ExcelWorksheet sheet = package.Workbook.Worksheets["Data"];
+
+                foreach (IGridColumn column in grid.Columns)
+                {
+                    sheet.Cells[1, col].Value = column.Title;
+                    sheet.Column(col++).Width = 18;
+                }
+
+                foreach (IGridRow<TBL_ACCOUNTS> gridRow in grid.Rows)
+                {
+                    col = 1;
+                    foreach (IGridColumn column in grid.Columns)
+                        sheet.Cells[row, col++].Value = column.ValueFor(gridRow);
+
+                    row++;
+                }
+                return File(package.GetAsByteArray(), "application/unknown", "AdminSectionTransactionReport.xlsx");
+                ////return File(package.GetAsByteArray(), "application/unknown");
+                //return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            }
+        }
+
+        private IGrid<TBL_ACCOUNTS> CreateExportMemberAccountsReport(string MemberInfo, string DateFrom = "", string Date_To = "")
+        {
+            var db = new DBContext();
+            if (MemberInfo != "" && DateFrom != "" && Date_To != "")
+            {
+                string FromDATE = string.Empty;
+                string TO_DATE = string.Empty;
+                FromDATE = DateTime.Parse(DateFrom.ToString()).ToString("yyyy-MM-dd");
+                DateTime Date_From_Val = Convert.ToDateTime(FromDATE);
+                string From_TO = string.Empty;
+                TO_DATE = DateTime.Parse(Date_To.ToString()).ToString("yyyy-MM-dd");
+                DateTime Date_To_Val = Convert.ToDateTime(TO_DATE);
+                DateTime TO_DATE_Range = Date_To_Val.AddDays(1);
+                var transactionlistvalue = (from x in db.TBL_ACCOUNTS
+                                            join y in db.TBL_MASTER_MEMBER on x.MEM_ID equals y.MEM_ID
+                                            where x.TRANSACTION_DATE >= Date_From_Val && x.TRANSACTION_DATE <= TO_DATE_Range && y.INTRODUCER == MemberCurrentUser.MEM_ID && (y.COMPANY.Contains(MemberInfo) || y.UName.Contains(MemberInfo) || y.MEMBER_MOBILE.Contains(MemberInfo) || y.MEMBER_MOBILE.Contains(MemberInfo) || y.EMAIL_ID.Contains(MemberInfo) || x.AMOUNT.ToString().Contains(MemberInfo) || x.CLOSING.ToString().Contains(MemberInfo) || x.OPENING.ToString().Contains(MemberInfo))
+                                            select new
+                                            {
+                                                SLN = x.ACC_NO,
+                                                MerchantName = y.UName,
+                                                MemberType = x.MEMBER_TYPE,
+                                                Trans_Type = x.TRANSACTION_TYPE,
+                                                Trans_Date = x.TRANSACTION_DATE,
+                                                Trans_time = x.TRANSACTION_TIME,
+                                                DR_CR = x.DR_CR,
+                                                Amount = x.AMOUNT,
+                                                Narration = x.NARRATION,
+                                                OpeningAmt = x.OPENING,
+                                                Closing = x.CLOSING,
+                                                CommissionAmt = x.COMM_AMT
+                                            }).AsEnumerable().Select((z, index) => new TBL_ACCOUNTS
+                                            {
+                                                SerialNo = index + 1,
+                                                ACC_NO = z.SLN,
+                                                UserName = z.MerchantName,
+                                                MEMBER_TYPE = z.MemberType,
+                                                TRANSACTION_TYPE = z.Trans_Type,
+                                                TRANSACTION_DATE = z.Trans_Date,
+                                                TRANSACTION_TIME = z.Trans_time,
+                                                DR_CR = z.DR_CR,
+                                                AMOUNT = z.Amount,
+                                                NARRATION = z.Narration,
+                                                OPENING = z.OpeningAmt,
+                                                CR_Col = (z.DR_CR == "CR" ? z.Amount.ToString() : "0"),
+                                                DR_Col = (z.DR_CR == "DR" ? z.Amount.ToString() : "0"),
+                                                CLOSING = z.Closing,
+                                                COMM_AMT = z.CommissionAmt
+                                            }).OrderBy(m => m.SerialNo).ThenByDescending(a => a.TRANSACTION_DATE).ToList();
+                IGrid<TBL_ACCOUNTS> grid = new Grid<TBL_ACCOUNTS>(transactionlistvalue);
+                grid.ViewContext = new ViewContext { HttpContext = HttpContext };
+                grid.Query = Request.QueryString;
+
+                grid.Columns.Add(model => model.SerialNo).Titled("Sln No.");
+                grid.Columns.Add(model => model.UserName).Titled("User Name");
+                //grid.Columns.Add(model => model.MEMBER_TYPE).Titled("Merchant Type");
+                grid.Columns.Add(model => model.TRANSACTION_TYPE).Titled("Transaction Type");
+                grid.Columns.Add(model => model.TRANSACTION_DATE).Titled("Transaction Date");
+                grid.Columns.Add(model => model.OPENING).Titled("Opening");
+                grid.Columns.Add(model => model.CR_Col).Titled("Cr");
+                grid.Columns.Add(model => model.DR_Col).Titled("Dr");
+                //grid.Columns.Add(model => model.NARRATION).Titled("Narration");
+                grid.Columns.Add(model => model.CLOSING).Titled("Closing");
+                grid.Columns.Add(model => model.COMM_AMT).Titled("Commission Amt.");
+                grid.Pager = new GridPager<TBL_ACCOUNTS>(grid);
+                grid.Processors.Add(grid.Pager);
+                grid.Pager.RowsPerPage = 1000000;
+
+                foreach (IGridColumn column in grid.Columns)
+                {
+                    column.Filter.IsEnabled = true;
+                    column.Sort.IsEnabled = true;
+                }
+
+                return grid;
+            }
+            else if (MemberInfo == "" && DateFrom != "" && Date_To != "")
+            {
+                string FromDATE = string.Empty;
+                string TO_DATE = string.Empty;
+                FromDATE = DateTime.Parse(DateFrom.ToString()).ToString("yyyy-MM-dd");
+                DateTime Date_From_Val = Convert.ToDateTime(FromDATE);
+                string From_TO = string.Empty;
+                TO_DATE = DateTime.Parse(Date_To.ToString()).ToString("yyyy-MM-dd");
+                DateTime Date_To_Val = Convert.ToDateTime(TO_DATE);
+                DateTime TO_DATE_Range = Date_To_Val.AddDays(1);
+                var transactionlistvalue = (from x in db.TBL_ACCOUNTS
+                                            join y in db.TBL_MASTER_MEMBER on x.MEM_ID equals y.MEM_ID
+                                            where x.TRANSACTION_DATE >= Date_From_Val && x.TRANSACTION_DATE <= TO_DATE_Range && y.INTRODUCER == MemberCurrentUser.MEM_ID
+                                            select new
+                                            {
+                                                SLN = x.ACC_NO,
+                                                MerchantName = y.UName,
+                                                MemberType = x.MEMBER_TYPE,
+                                                Trans_Type = x.TRANSACTION_TYPE,
+                                                Trans_Date = x.TRANSACTION_DATE,
+                                                Trans_time = x.TRANSACTION_TIME,
+                                                DR_CR = x.DR_CR,
+                                                Amount = x.AMOUNT,
+                                                Narration = x.NARRATION,
+                                                OpeningAmt = x.OPENING,
+                                                Closing = x.CLOSING,
+                                                CommissionAmt = x.COMM_AMT
+                                            }).AsEnumerable().Select((z, index) => new TBL_ACCOUNTS
+                                            {
+                                                SerialNo = index + 1,
+                                                ACC_NO = z.SLN,
+                                                UserName = z.MerchantName,
+                                                MEMBER_TYPE = z.MemberType,
+                                                TRANSACTION_TYPE = z.Trans_Type,
+                                                TRANSACTION_DATE = z.Trans_Date,
+                                                TRANSACTION_TIME = z.Trans_time,
+                                                DR_CR = z.DR_CR,
+                                                AMOUNT = z.Amount,
+                                                NARRATION = z.Narration,
+                                                OPENING = z.OpeningAmt,
+                                                CR_Col = (z.DR_CR == "CR" ? z.Amount.ToString() : "0"),
+                                                DR_Col = (z.DR_CR == "DR" ? z.Amount.ToString() : "0"),
+                                                CLOSING = z.Closing,
+                                                COMM_AMT = z.CommissionAmt
+                                            }).OrderBy(m => m.SerialNo).ThenByDescending(a => a.TRANSACTION_DATE).ToList();
+
+                IGrid<TBL_ACCOUNTS> grid = new Grid<TBL_ACCOUNTS>(transactionlistvalue);
+                grid.ViewContext = new ViewContext { HttpContext = HttpContext };
+                grid.Query = Request.QueryString;
+
+                grid.Columns.Add(model => model.SerialNo).Titled("Sln No.");
+                grid.Columns.Add(model => model.UserName).Titled("User Name");
+                //grid.Columns.Add(model => model.MEMBER_TYPE).Titled("Merchant Type");
+                grid.Columns.Add(model => model.TRANSACTION_TYPE).Titled("Transaction Type");
+                grid.Columns.Add(model => model.TRANSACTION_DATE).Titled("Transaction Date");
+                grid.Columns.Add(model => model.OPENING).Titled("Opening");
+                grid.Columns.Add(model => model.CR_Col).Titled("Cr");
+                grid.Columns.Add(model => model.DR_Col).Titled("Dr");
+                //grid.Columns.Add(model => model.NARRATION).Titled("Narration");
+                grid.Columns.Add(model => model.CLOSING).Titled("Closing");
+                grid.Columns.Add(model => model.COMM_AMT).Titled("Commission Amt.");
+                grid.Pager = new GridPager<TBL_ACCOUNTS>(grid);
+                grid.Processors.Add(grid.Pager);
+                grid.Pager.RowsPerPage = 1000000;
+
+                foreach (IGridColumn column in grid.Columns)
+                {
+                    column.Filter.IsEnabled = true;
+                    column.Sort.IsEnabled = true;
+                }
+
+                return grid;
+            }
+            else if (MemberInfo != "" && DateFrom == "" && Date_To == "")
+            {
+                var transactionlistvalue = (from x in db.TBL_ACCOUNTS
+                                            join y in db.TBL_MASTER_MEMBER on x.MEM_ID equals y.MEM_ID
+                                            where  y.INTRODUCER == MemberCurrentUser.MEM_ID &&  (y.COMPANY.Contains(MemberInfo) || y.UName.Contains(MemberInfo) || y.MEMBER_MOBILE.Contains(MemberInfo) || y.MEMBER_MOBILE.Contains(MemberInfo) || y.EMAIL_ID.Contains(MemberInfo) || x.AMOUNT.ToString().Contains(MemberInfo) || x.CLOSING.ToString().Contains(MemberInfo) || x.OPENING.ToString().Contains(MemberInfo))
+                                            select new
+                                            {
+                                                SLN = x.ACC_NO,
+                                                MerchantName = y.UName,
+                                                MemberType = x.MEMBER_TYPE,
+                                                Trans_Type = x.TRANSACTION_TYPE,
+                                                Trans_Date = x.TRANSACTION_DATE,
+                                                Trans_time = x.TRANSACTION_TIME,
+                                                DR_CR = x.DR_CR,
+                                                Amount = x.AMOUNT,
+                                                Narration = x.NARRATION,
+                                                OpeningAmt = x.OPENING,
+                                                Closing = x.CLOSING,
+                                                CommissionAmt = x.COMM_AMT
+                                            }).AsEnumerable().Select((z, index) => new TBL_ACCOUNTS
+                                            {
+                                                SerialNo = index + 1,
+                                                ACC_NO = z.SLN,
+                                                UserName = z.MerchantName,
+                                                MEMBER_TYPE = z.MemberType,
+                                                TRANSACTION_TYPE = z.Trans_Type,
+                                                TRANSACTION_DATE = z.Trans_Date,
+                                                TRANSACTION_TIME = z.Trans_time,
+                                                DR_CR = z.DR_CR,
+                                                AMOUNT = z.Amount,
+                                                NARRATION = z.Narration,
+                                                OPENING = z.OpeningAmt,
+                                                CR_Col = (z.DR_CR == "CR" ? z.Amount.ToString() : "0"),
+                                                DR_Col = (z.DR_CR == "DR" ? z.Amount.ToString() : "0"),
+                                                CLOSING = z.Closing,
+                                                COMM_AMT = z.CommissionAmt
+                                            }).OrderBy(m => m.SerialNo).ThenByDescending(a => a.TRANSACTION_DATE).ToList();
+                IGrid<TBL_ACCOUNTS> grid = new Grid<TBL_ACCOUNTS>(transactionlistvalue);
+                grid.ViewContext = new ViewContext { HttpContext = HttpContext };
+                grid.Query = Request.QueryString;
+
+                grid.Columns.Add(model => model.SerialNo).Titled("Sln No.");
+                grid.Columns.Add(model => model.UserName).Titled("User Name");
+                //grid.Columns.Add(model => model.MEMBER_TYPE).Titled("Merchant Type");
+                grid.Columns.Add(model => model.TRANSACTION_TYPE).Titled("Transaction Type");
+                grid.Columns.Add(model => model.TRANSACTION_DATE).Titled("Transaction Date");
+                grid.Columns.Add(model => model.OPENING).Titled("Opening");
+                grid.Columns.Add(model => model.CR_Col).Titled("Cr");
+                grid.Columns.Add(model => model.DR_Col).Titled("Dr");
+                //grid.Columns.Add(model => model.NARRATION).Titled("Narration");
+                grid.Columns.Add(model => model.CLOSING).Titled("Closing");
+                grid.Columns.Add(model => model.COMM_AMT).Titled("Commission Amt.");
+                grid.Pager = new GridPager<TBL_ACCOUNTS>(grid);
+                grid.Processors.Add(grid.Pager);
+                grid.Pager.RowsPerPage = 1000000;
+
+                foreach (IGridColumn column in grid.Columns)
+                {
+                    column.Filter.IsEnabled = true;
+                    column.Sort.IsEnabled = true;
+                }
+
+                return grid;
+            }
+            else {
+                var transactionlistvalue = (from x in db.TBL_ACCOUNTS
+                                            join y in db.TBL_MASTER_MEMBER on x.MEM_ID equals y.MEM_ID
+                                            where  y.INTRODUCER == MemberCurrentUser.MEM_ID
+                                            select new
+                                            {
+                                                SLN = x.ACC_NO,
+                                                MerchantName = y.UName,
+                                                MemberType = x.MEMBER_TYPE,
+                                                Trans_Type = x.TRANSACTION_TYPE,
+                                                Trans_Date = x.TRANSACTION_DATE,
+                                                Trans_time = x.TRANSACTION_TIME,
+                                                DR_CR = x.DR_CR,
+                                                Amount = x.AMOUNT,
+                                                Narration = x.NARRATION,
+                                                OpeningAmt = x.OPENING,
+                                                Closing = x.CLOSING,
+                                                CommissionAmt = x.COMM_AMT
+                                            }).AsEnumerable().Select((z, index) => new TBL_ACCOUNTS
+                                            {
+                                                SerialNo = index + 1,
+                                                ACC_NO = z.SLN,
+                                                UserName = z.MerchantName,
+                                                MEMBER_TYPE = z.MemberType,
+                                                TRANSACTION_TYPE = z.Trans_Type,
+                                                TRANSACTION_DATE = z.Trans_Date,
+                                                TRANSACTION_TIME = z.Trans_time,
+                                                DR_CR = z.DR_CR,
+                                                AMOUNT = z.Amount,
+                                                NARRATION = z.Narration,
+                                                OPENING = z.OpeningAmt,
+                                                CR_Col = (z.DR_CR == "CR" ? z.Amount.ToString() : "0"),
+                                                DR_Col = (z.DR_CR == "DR" ? z.Amount.ToString() : "0"),
+                                                CLOSING = z.Closing,
+                                                COMM_AMT = z.CommissionAmt
+                                            }).OrderBy(m => m.SerialNo).ThenByDescending(a => a.TRANSACTION_DATE).ToList();
+
+                IGrid<TBL_ACCOUNTS> grid = new Grid<TBL_ACCOUNTS>(transactionlistvalue);
+                grid.ViewContext = new ViewContext { HttpContext = HttpContext };
+                grid.Query = Request.QueryString;
+
+                grid.Columns.Add(model => model.SerialNo).Titled("Sln No.");
+                grid.Columns.Add(model => model.UserName).Titled("User Name");
+                //grid.Columns.Add(model => model.MEMBER_TYPE).Titled("Merchant Type");
+                grid.Columns.Add(model => model.TRANSACTION_TYPE).Titled("Transaction Type");
+                grid.Columns.Add(model => model.TRANSACTION_DATE).Titled("Transaction Date");
+                grid.Columns.Add(model => model.OPENING).Titled("Opening");
+                grid.Columns.Add(model => model.CR_Col).Titled("Cr");
+                grid.Columns.Add(model => model.DR_Col).Titled("Dr");
+                //grid.Columns.Add(model => model.NARRATION).Titled("Narration");
+                grid.Columns.Add(model => model.CLOSING).Titled("Closing");
+                grid.Columns.Add(model => model.COMM_AMT).Titled("Commission Amt.");
+                grid.Pager = new GridPager<TBL_ACCOUNTS>(grid);
+                grid.Processors.Add(grid.Pager);
+                grid.Pager.RowsPerPage = 1000000;
+
+                foreach (IGridColumn column in grid.Columns)
+                {
+                    column.Filter.IsEnabled = true;
+                    column.Sort.IsEnabled = true;
+                }
+
+                return grid;
+            }
         }
 
     }

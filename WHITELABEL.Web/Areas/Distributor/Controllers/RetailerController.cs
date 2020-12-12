@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -144,7 +145,18 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                 throw ex;
             }
         }
-
+        public static string generate_Password(int length)
+        {
+            const string src = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            var sb = new StringBuilder();
+            Random RNG = new Random();
+            for (var i = 0; i < length; i++)
+            {
+                var c = src[RNG.Next(0, src.Length)];
+                sb.Append(c);
+            }
+            return sb.ToString();
+        }
         public async Task<ActionResult> CreateMember(string memid = "")
         {
             initpage();
@@ -195,6 +207,9 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                         ViewBag.GSTValue = new SelectList(GSTValueID, "SLN", "TAX_NAME");
                         var TDSValueID = dbcontext.TBL_TAX_MASTERS.Where(x => x.TAX_NAME == "TDS").ToList();
                         ViewBag.TDSValue = new SelectList(TDSValueID, "SLN", "TAX_NAME");
+                        string UserPas = generate_Password(10);
+                        model.User_pwd = UserPas;
+                        model.BLOCKED_BALANCE = 0;
                         return View(model);
                     }
                 }
@@ -274,8 +289,10 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                         else
                         {
                             value.BLOCKED_BALANCE = value.BLOCKED_BALANCE;
-                            value.BALANCE = value.BLOCKED_BALANCE;
-                            AmountVal = (decimal)value.BLOCKED_BALANCE;
+                            //value.BALANCE = value.BLOCKED_BALANCE;
+                            //AmountVal = (decimal)value.BLOCKED_BALANCE;
+                            value.BALANCE = 0;
+                            AmountVal = 0;
                         }
                         //string GetUniqueNo = String.Format("{0:d5}", (DateTime.Now.Ticks / 10) % 10000);
                         //string UniqId = "TIQ" + GetUniqueNo;
@@ -526,7 +543,60 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
         {
             return View();
         }
+        [HttpPost]
+        public async Task<JsonResult> CheckMobileNoEmailAvailability(string MobileNo, string EmailId)
+        {
+            //initpage();////
+            try
+            {
+                var context = new DBContext();
+                if (MobileNo != "" && EmailId != "")
+                {
+                    var User = await context.TBL_MASTER_MEMBER.Where(model => model.MEMBER_MOBILE == MobileNo || model.EMAIL_ID == EmailId).FirstOrDefaultAsync();
+                    if (User != null)
+                    {
+                        return Json(new { result = "unavailable" });
+                    }
+                    else
+                    {
+                        return Json(new { result = "available" });
+                    }
+                }
+                else if (MobileNo != "" && EmailId == "")
+                {
+                    var User = await context.TBL_MASTER_MEMBER.Where(model => model.MEMBER_MOBILE == MobileNo).FirstOrDefaultAsync();
+                    if (User != null)
+                    {
+                        return Json(new { result = "unavailable" });
+                    }
+                    else
+                    {
+                        return Json(new { result = "available" });
+                    }
+                }
+                else if (MobileNo == "" && EmailId != "")
+                {
+                    var User = await context.TBL_MASTER_MEMBER.Where(model => model.EMAIL_ID == EmailId).FirstOrDefaultAsync();
+                    if (User != null)
+                    {
+                        return Json(new { result = "unavailable" });
+                    }
+                    else
+                    {
+                        return Json(new { result = "available" });
+                    }
+                }
+                else
+                { return Json(new { result = "available" }); }
 
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+        }
         // POST: APILabel/Create
         [HttpPost]
         public ActionResult Create(FormCollection collection)

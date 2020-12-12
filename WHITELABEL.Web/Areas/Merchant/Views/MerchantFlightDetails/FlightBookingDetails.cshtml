@@ -801,32 +801,64 @@
                                                 </div>
                                                 <div class="col-12 p-1 m-1" style="border-top: 1px solid #dbc9bb;width: 99%"></div>
 
-
-                                                <div class="form-row">
-                                                    <div class="col-md-4 col-sm-6 col-xs-12 p-1">
-                                                        <input type="email" ng-model="emailAddress"
-                                                               class="form-control inputMedium" placeholder="Enter Email Id." required>
-                                                        <div class="invalid-feedback">
-                                                            Please enter email address.
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-4 col-sm-3 col-xs-12 p-1">
-                                                        <input type="text" ng-model="mobileNumber" class="form-control inputMedium"
-                                                               pattern="(.){10,10}"
-                                                               maxlength="10" placeholder="Mobile No." required>
-                                                        <div class="invalid-feedback">
-                                                            Please enter mobile number.
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-4 col-sm-3 col-xs-12 p-1">
-                                                        <input type="text" ng-model="altMobileNo" class="form-control inputMedium"
-                                                               pattern="(.){10,10}"
-                                                               maxlength="10" placeholder="Alternative Mobile No.">
-                                                        <div class="invalid-feedback">
-                                                            Please enter alternative mobile number.
-                                                        </div>
+                                            <div class="form-row" ng-show="IsFlightType!='International'">
+                                                <div class="col-md-4 col-sm-6 col-xs-12 p-1">
+                                                    <input type="email" ng-model="emailAddress"
+                                                           class="form-control inputMedium" placeholder="Enter Email Id." required>
+                                                    <div class="invalid-feedback">
+                                                        Please enter email address.
                                                     </div>
                                                 </div>
+                                                <div class="col-md-4 col-sm-3 col-xs-12 p-1">
+                                                    <input type="text" ng-model="mobileNumber" class="form-control inputMedium"
+                                                           pattern="(.){10,10}"
+                                                           maxlength="10" placeholder="Mobile No." required>
+                                                    <div class="invalid-feedback">
+                                                        Please enter mobile number.
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 col-sm-3 col-xs-12 p-1">
+                                                    <input type="text" ng-model="altMobileNo" class="form-control inputMedium"
+                                                           pattern="(.){10,10}"
+                                                           maxlength="10" placeholder="Alternative Mobile No.">
+                                                    <div class="invalid-feedback">
+                                                        Please enter alternative mobile number.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-row" ng-show="IsFlightType=='International'">
+                                                <div class="col-md-3 col-sm-6 col-xs-12 p-1">
+                                                    <input type="email" ng-model="emailAddress"
+                                                           class="form-control inputMedium" placeholder="Enter Email Id." required>
+                                                    <div class="invalid-feedback">
+                                                        Please enter email address.
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3 col-sm-3 col-xs-12 p-1">
+                                                    <input type="text" ng-model="mobileNumber" class="form-control inputMedium"
+                                                           pattern="(.){10,10}"
+                                                           maxlength="10" placeholder="Mobile No." required>
+                                                    <div class="invalid-feedback">
+                                                        Please enter mobile number.
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3 col-sm-3 col-xs-12 p-1">
+                                                    <input type="text" ng-model="altMobileNo" class="form-control inputMedium"
+                                                           pattern="(.){10,10}"
+                                                           maxlength="10" placeholder="Alternative Mobile No.">
+                                                    <div class="invalid-feedback">
+                                                        Please enter alternative mobile number.
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-3 col-sm-3 col-xs-12 p-1">
+                                                    <input type="text" class="form-control inputMedium" maxlength="10" name="IsFlightType" ng-model="INTPanCard" pattern="[a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}" placeholder="Pancard number" />
+                                                    <div class="invalid-feedback">
+                                                        Please enter a valid pancard number.
+                                                    </div>
+                                                </div>
+                                            </div>
+
 
 
 
@@ -996,10 +1028,7 @@
                                                         </button>*@
 
                                                         @*<a class='btn btn-primary btn-xs btn-block' style="color:white;" data-toggle="modal" data-target="#GetTicketInformation" id='Fetchtransactionvalueid' data-id="{{m.REF_NO}}" ng-click="BookedTicketInformationFetch(m.REF_NO,m.CORELATION_ID)">Check Details</a>*@
-                                                        <button ng-disabled="travellerForm.$invalid" data-toggle="modal" data-target="#PrintTicketInformation" id='PrintTransactionvalueid' data-id="0"
-                                                                class="button orange btn-block">
-                                                            Issue Ticket
-                                                        </button>
+                                                        <button ng-click="openPopupDetails(travellerForm.$invalid)" type="submit" class="button orange btn-block">Issue Ticket</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1042,10 +1071,7 @@
                                                 <td>Processing Charges</td>
                                                 <td class="text-right pull-right"><input type="text" class="form-control form-control-sm" style="text-align:right; width:70px" min="0" ng-init="0" ng-change="totalAmountCalculation(fareDetails[0].TotalAmount)" name="usermarkup" ng-model="userMarkup" onkeypress="return isNumber(event)"  /></td>
                                             </tr>
-                                            <tr ng-show="IsFlightType=='International'">
-                                                <td>Pancard</td>
-                                                <td><input type="text" class="form-control form-control-sm" style="text-align:right; width:70px" min="0"  name="IsFlightType" ng-model="INTPanCard"/></td>
-                                            </tr>
+                                            
                                             <tr>
                                                 <td><b> Total Amount</b></td>
                                                 <td class="text-right">{{totalAmountCalculation(fareDetails[0].TotalAmount)}}/-
@@ -1104,6 +1130,7 @@
                         <div id="TicketInfoprint-area">
                             @*<div ng-repeat="objprint in FlightInvoicePrint">*@
                             <div>
+                                {{mobileNumber}}{{emailAddress}}
                                 <div class="row">
                                     <div class="col-md-12" style="width:100%;">
                                         <img ng-src="~/Content/static-airlines-master/logos/{{flightDetails[0].AirlineCode}}.png" />
@@ -1226,10 +1253,10 @@
                                             <div class="col-md-4" style="text-align:right; width:20%; margin-top: 0; margin-bottom: 1rem;"><input type="text" readonly class="form-control form-control-sm" style="text-align:right; width:70px" min="0" ng-init="0" ng-change="totalAmountCalculation(fareDetails[0].TotalAmount)" name="usermarkup" ng-model="userMarkup" onkeypress="return isNumber(event)" />/- INR</div>
                                         </div>
 
-                                        <div class="row col-md-12" ng-show="IsFlightType=='International'">
+                                        @*<div class="row col-md-12" ng-show="IsFlightType=='International'">
                                             <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem;">Pancard </div>
                                             <div class="col-md-4" style="text-align:right; width:25%; margin-top: 0; margin-bottom: 1rem;"><input type="text" class="form-control form-control-sm" style="text-align:right; width:70px" min="0" name="IsFlightType" readonly ng-model="INTPanCard" /></div>
-                                        </div>
+                                        </div>*@
 
                                         <div class="row col-md-12">
                                             <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem;">Total Amount </div>
@@ -1358,7 +1385,9 @@
     </div>
 
 </div>
-
+<div class="preloader hidden" id="progressBookingOneway" style="display:none;">
+    <div id="loading"></div>
+</div>
 
 <div class="modal fade" id="modelTicketConfirmed" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">

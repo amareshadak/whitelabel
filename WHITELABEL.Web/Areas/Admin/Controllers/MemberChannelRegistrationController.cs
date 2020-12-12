@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -76,7 +77,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 ViewBag.ControllerName = "White Label";
                 if (Session["WhiteLevelUserId"] == null)
                 {
-                    Response.Redirect(Url.Action("Logout", "Login", new { area = "" }));
+                    //Response.Redirect(Url.Action("Logout", "Login", new { area = "" }));
+                    Response.Redirect(Url.Action("Logout", "AdminLogin", new { area = "Admin" }));
                     return;
                 }
                 bool Islogin = false;
@@ -109,15 +111,27 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 Session.Remove("WhiteLevelUserId");
                 Session.Remove("WhiteLevelUserName");
                 Session.Remove("UserType");
-                return RedirectToAction("Index", "Login", new { area = "" });
+                return RedirectToAction("AdminLogin", "Login", new { area = "" });
             }
         }
-
+        public static string generate_Password(int length)
+        {
+            const string src = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            var sb = new StringBuilder();
+            Random RNG = new Random();
+            for (var i = 0; i < length; i++)
+            {
+                var c = src[RNG.Next(0, src.Length)];
+                sb.Append(c);
+            }
+            return sb.ToString();
+        }
         public ActionResult ADDSUPERDISTRIBUTOR()
         {
             if (Session["WhiteLevelUserId"] != null)
             {
                 var db = new DBContext();
+                var model = new TBL_MASTER_MEMBER();
                 initpage();
                 var StateName = db.TBL_STATES.ToList();
                 ViewBag.StateNameList = new SelectList(StateName, "STATEID", "STATENAME");
@@ -127,6 +141,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 ViewBag.GSTValue = new SelectList(GSTValueID, "SLN", "TAX_NAME");
                 var TDSValueID = db.TBL_TAX_MASTERS.Where(x => x.TAX_NAME == "TDS").ToList();
                 ViewBag.TDSValue = new SelectList(TDSValueID, "SLN", "TAX_NAME");
+                string UserPas = generate_Password(10);
+                model.User_pwd = UserPas;
                 return View();
             }
             else
@@ -137,7 +153,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 Session.Remove("WhiteLevelUserId");
                 Session.Remove("WhiteLevelUserName");
                 Session.Remove("UserType");
-                return RedirectToAction("Index", "Login", new { area = "" });
+                return RedirectToAction("AdminLogin", "Login", new { area = "" });
             }
         }
         [HttpPost]
@@ -194,8 +210,10 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                     else
                     {
                         objsupermem.BLOCKED_BALANCE = objsupermem.BLOCKED_BALANCE;
-                        objsupermem.BALANCE = objsupermem.BLOCKED_BALANCE;
-                        AmountVal = (decimal)objsupermem.BLOCKED_BALANCE;
+                        //objsupermem.BALANCE = objsupermem.BLOCKED_BALANCE;
+                        //AmountVal = (decimal)objsupermem.BLOCKED_BALANCE;
+                        objsupermem.BALANCE = 0;
+                        AmountVal = 0;
                     }
                     objsupermem.EMAIL_ID = objsupermem.EMAIL_ID.ToLower();
                     objsupermem.UNDER_WHITE_LEVEL = MemberCurrentUser.MEM_ID;
@@ -340,6 +358,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 ViewBag.GSTValue = new SelectList(GSTValueID, "SLN", "TAX_NAME");
                 var TDSValueID = db.TBL_TAX_MASTERS.Where(x => x.TAX_NAME == "TDS").ToList();
                 ViewBag.TDSValue = new SelectList(TDSValueID, "SLN", "TAX_NAME");
+                string UserPas = generate_Password(10);
+                model.User_pwd = UserPas;
                 return View(model);
             }
             else
@@ -350,7 +370,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 Session.Remove("WhiteLevelUserId");
                 Session.Remove("WhiteLevelUserName");
                 Session.Remove("UserType");
-                return RedirectToAction("Index", "Login", new { area = "" });
+                return RedirectToAction("AdminLogin", "Login", new { area = "" });
             }
         }
         [HttpPost]
@@ -408,8 +428,10 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                     else
                     {
                         objsupermem.BLOCKED_BALANCE = objsupermem.BLOCKED_BALANCE;
-                        objsupermem.BALANCE = objsupermem.BLOCKED_BALANCE;
-                        AmountVal = (decimal)objsupermem.BLOCKED_BALANCE;
+                        //objsupermem.BALANCE = objsupermem.BLOCKED_BALANCE;
+                        //AmountVal = (decimal)objsupermem.BLOCKED_BALANCE;
+                        objsupermem.BALANCE = 0;
+                        AmountVal = 0;
                     }
                     string GetUniqueNo = String.Format("{0:d5}", (DateTime.Now.Ticks / 10) % 10000);
                     string UniqId = "BMT" + GetUniqueNo;
@@ -577,7 +599,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 ViewBag.StateNameList = new SelectList(StateName, "STATEID", "STATENAME");
                 //var DistributorList = db.TBL_MASTER_MEMBER.Where(x => x.UNDER_WHITE_LEVEL == MemberCurrentUser.MEM_ID && x.MEMBER_ROLE == 4).ToList();
                 var DistributorList = (from x in db.TBL_MASTER_MEMBER
-                                       where x.UNDER_WHITE_LEVEL == MemberCurrentUser.MEM_ID && x.MEMBER_ROLE == 4
+                                       where x.UNDER_WHITE_LEVEL == MemberCurrentUser.MEM_ID && x.MEMBER_ROLE == 4 && x.ACTIVE_MEMBER==true
                                        select new
                                        {
                                            MEM_ID = x.MEM_ID,
@@ -594,6 +616,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 ViewBag.GSTValue = new SelectList(GSTValueID, "SLN", "TAX_NAME");
                 var TDSValueID = db.TBL_TAX_MASTERS.Where(x => x.TAX_NAME == "TDS").ToList();
                 ViewBag.TDSValue = new SelectList(TDSValueID, "SLN", "TAX_NAME");
+                string UserPas = generate_Password(10);
+                model.User_pwd = UserPas;
                 return View(model);
             }
             else
@@ -604,7 +628,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 Session.Remove("WhiteLevelUserId");
                 Session.Remove("WhiteLevelUserName");
                 Session.Remove("UserType");
-                return RedirectToAction("Index", "Login", new { area = "" });
+                return RedirectToAction("AdminLogin", "Login", new { area = "" });
             }
         }
 
@@ -663,8 +687,10 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                     else
                     {
                         objsupermem.BLOCKED_BALANCE = objsupermem.BLOCKED_BALANCE;
-                        objsupermem.BALANCE = objsupermem.BLOCKED_BALANCE;
-                        AmountVal = (decimal)objsupermem.BLOCKED_BALANCE;
+                        //objsupermem.BALANCE = objsupermem.BLOCKED_BALANCE;
+                        //AmountVal = (decimal)objsupermem.BLOCKED_BALANCE;
+                        objsupermem.BALANCE = 0;
+                        AmountVal =0;
                     }
                     string GetUniqueNo = String.Format("{0:d5}", (DateTime.Now.Ticks / 10) % 10000);
                     string UniqId = "BMT" + GetUniqueNo;
@@ -833,6 +859,61 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
             {
                 return Json(new { result = "available" });
             }
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> CheckMobileNoEmailAvailability(string MobileNo, string EmailId)
+        {
+            //initpage();////
+            try
+            {
+                var context = new DBContext();
+                if (MobileNo != "" && EmailId != "")
+                {
+                    var User = await context.TBL_MASTER_MEMBER.Where(model => model.MEMBER_MOBILE == MobileNo || model.EMAIL_ID == EmailId).FirstOrDefaultAsync();
+                    if (User != null)
+                    {
+                        return Json(new { result = "unavailable" });
+                    }
+                    else
+                    {
+                        return Json(new { result = "available" });
+                    }
+                }
+                else if (MobileNo != "" && EmailId == "")
+                {
+                    var User = await context.TBL_MASTER_MEMBER.Where(model => model.MEMBER_MOBILE == MobileNo).FirstOrDefaultAsync();
+                    if (User != null)
+                    {
+                        return Json(new { result = "unavailable" });
+                    }
+                    else
+                    {
+                        return Json(new { result = "available" });
+                    }
+                }
+                else if (MobileNo == "" && EmailId != "")
+                {
+                    var User = await context.TBL_MASTER_MEMBER.Where(model => model.EMAIL_ID == EmailId).FirstOrDefaultAsync();
+                    if (User != null)
+                    {
+                        return Json(new { result = "unavailable" });
+                    }
+                    else
+                    {
+                        return Json(new { result = "available" });
+                    }
+                }
+                else
+                { return Json(new { result = "available" }); }
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
         }
 
     }

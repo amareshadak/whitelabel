@@ -40,7 +40,7 @@ $('#emailaddressDistributor').on('input blur change keyup', function () {
     if ($(this).val().length != 0) {
         var token = $(':input[name="__RequestVerificationToken"]').val();
         $.ajax({
-            url: "/MemberAPILabel/CheckEmailAvailability?area=Admin",
+            url: "/MemberAPILabel/CheckMobileNoEmailAvailability?area=Admin",
             //url: "@Url.Action("CheckEmailAvailability", "MemberAPILabel", new {area="Admin"})",
             data: {
                 __RequestVerificationToken: token,
@@ -71,28 +71,30 @@ $('#emailaddressDistributor').on('input blur change keyup', function () {
     }
 });
 
-
-$('#emailaddressMerchant').on('input blur change keyup', function () {
+$(function () {
+$('#txtemailaddressMerchant').on('input blur change keyup', function () {
 
     if ($(this).val().length != 0) {
+        const MobileNoValue = $('#txtMobileNoMerchant').val();
         var token = $(':input[name="__RequestVerificationToken"]').val();
         $.ajax({
-            url: "/MemberAPILabel/CheckEmailAvailability?area=Admin",
+            url: "/MemberChannelRegistration/CheckMobileNoEmailAvailability?area=Admin",
             //url: "@Url.Action("CheckEmailAvailability", "MemberAPILabel", new {area="Admin"})",
             data: {
                 __RequestVerificationToken: token,
-                emailid: $(this).val()
+                MobileNo:MobileNoValue,
+                EmailId: $(this).val()
             },
             cache: false,
             type: "POST",
             success: function (data) {
                 // DONE                        
                 if (data.result == "available") {
-                    $('#emailaddressMerchant').css('border', '3px #090 solid');
+                    $('#txtemailaddressMerchant').css('border', '3px #090 solid');
                     $('#btnsubmitMer').attr('disabled', false);
                 }
                 else {
-                    $('#emailaddressMerchant').css('border', '3px #C33 solid');
+                    $('#txtemailaddressMerchant').css('border', '3px #C33 solid');
                     $('#btnsubmitMer').attr('disabled', true);
                     //alert("This email id is already registered");
                 }
@@ -106,4 +108,43 @@ $('#emailaddressMerchant').on('input blur change keyup', function () {
     else {
         $('#btnsubmitMer').attr('disabled', true);
     }
+});
+
+$('#txtMobileNoMerchant').on('input blur change keyup', function () {
+
+    if ($(this).val().length != 0) {
+        const EmailIdVal = $('#txtemailaddressMerchant').val();
+        var token = $(':input[name="__RequestVerificationToken"]').val();
+        $.ajax({
+            url: "/MemberChannelRegistration/CheckMobileNoEmailAvailability?area=Admin",
+            //url: "@Url.Action("CheckEmailAvailability", "MemberAPILabel", new {area="Admin"})",
+            data: {
+                __RequestVerificationToken: token,
+                MobileNo: $(this).val(),
+                EmailId: EmailIdVal
+            },
+            cache: false,
+            type: "POST",
+            success: function (data) {
+                // DONE                        
+                if (data.result == "available") {
+                    $('#txtMobileNoMerchant').css('border', '3px #090 solid');
+                    $('#btnsubmitMer').attr('disabled', false);
+                }
+                else {
+                    $('#txtMobileNoMerchant').css('border', '3px #C33 solid');
+                    $('#btnsubmitMer').attr('disabled', true);
+                    //alert("This email id is already registered");
+                }
+            },
+            error: function (xhr, status, error) {
+                console.log(xhr.responseText);
+                alert("message : \n" + "An error occurred" + "\n status : \n" + status + " \n error : \n" + error);
+            }
+        });
+    }
+    else {
+        $('#btnsubmitMer').attr('disabled', true);
+    }
+});
 });

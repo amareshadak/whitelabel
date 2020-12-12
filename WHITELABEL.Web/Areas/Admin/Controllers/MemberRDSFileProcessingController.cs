@@ -36,8 +36,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 ViewBag.ControllerName = "White Label";
                 if (Session["WhiteLevelUserId"] == null)
                 {
-                    //Response.Redirect(Url.Action("Index", "Login", new { area = "" }));
-                    Response.Redirect(Url.Action("Logout", "Login", new { area = "" }));
+                    Response.Redirect(Url.Action("Logout", "AdminLogin", new { area = "Admin" }));
+                    //Response.Redirect(Url.Action("Logout", "Login", new { area = "" }));
                     return;
                 }
                 bool Islogin = false;
@@ -72,7 +72,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 Session.Remove("WhiteLevelUserId");
                 Session.Remove("WhiteLevelUserName");
                 Session.Remove("UserType");
-                return RedirectToAction("Index", "Login", new { area = "" });
+                return RedirectToAction("AdminLogin", "Login", new { area = "" });
             }
         }
         [HttpPost]
@@ -139,7 +139,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                 bk_class = string.Empty;
                             }
 
-                            if (dtCSV.Rows[i][5].ToString() == "RDS" || dtCSV.Rows[i][5].ToString() == "VAPRON")
+                            if (dtCSV.Rows[i][5].ToString() == "RDS" || dtCSV.Rows[i][5].ToString() == "BOOM")
                             {
                                 TBL_BOOKING_TEMP obkBookingTmp = new TBL_BOOKING_TEMP()
                                 {
@@ -204,7 +204,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 Session.Remove("WhiteLevelUserId");
                 Session.Remove("WhiteLevelUserName");
                 Session.Remove("UserType");
-                return RedirectToAction("Index", "Login", new { area = "" });
+                return RedirectToAction("AdminLogin", "Login", new { area = "" });
             }
         }
 
@@ -226,7 +226,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 Session.Remove("WhiteLevelUserId");
                 Session.Remove("WhiteLevelUserName");
                 Session.Remove("UserType");
-                return RedirectToAction("Index", "Login", new { area = "" });
+                return RedirectToAction("AdminLogin", "Login", new { area = "" });
             }
         }
         [HttpPost]
@@ -297,7 +297,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                 bk_class = string.Empty;
                             }
 
-                            if (dtCSV.Rows[i][4].ToString() == "RDS" || dtCSV.Rows[i][4].ToString() == "VAPRON")
+                            if (dtCSV.Rows[i][4].ToString() == "RDS" || dtCSV.Rows[i][4].ToString() == "BOOM")
                             {
                                 TBL_CANCELLATION_TEMP obkCANCELTmp = new TBL_CANCELLATION_TEMP()
                                 {
@@ -361,7 +361,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 Session.Remove("WhiteLevelUserId");
                 Session.Remove("WhiteLevelUserName");
                 Session.Remove("UserType");
-                return RedirectToAction("Index", "Login", new { area = "" });
+                return RedirectToAction("AdminLogin", "Login", new { area = "" });
 
             }
 
@@ -384,7 +384,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 Session.Remove("WhiteLevelUserId");
                 Session.Remove("WhiteLevelUserName");
                 Session.Remove("UserType");
-                return RedirectToAction("Index", "Login", new { area = "" });
+                return RedirectToAction("AdminLogin", "Login", new { area = "" });
             }
         }
         [HttpPost]
@@ -446,7 +446,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 Session.Remove("WhiteLevelUserId");
                 Session.Remove("WhiteLevelUserName");
                 Session.Remove("UserType");
-                return RedirectToAction("Index", "Login", new { area = "" });
+                return RedirectToAction("AdminLogin", "Login", new { area = "" });
             }
         }
         public PartialViewResult RdsBookingLilst()
@@ -684,7 +684,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 Session.Remove("WhiteLevelUserId");
                 Session.Remove("WhiteLevelUserName");
                 Session.Remove("UserType");
-                //return RedirectToAction("Index", "Login", new { area = "" });
+                //return RedirectToAction("AdminLogin", "Login", new { area = "" });
                 Response.Redirect(Url.Action("Index", "Login"));
                 return Json("", JsonRequestBehavior.AllowGet);
             }
@@ -727,7 +727,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 Session.Remove("WhiteLevelUserId");
                 Session.Remove("WhiteLevelUserName");
                 Session.Remove("UserType");
-                return RedirectToAction("Index", "Login", new { area = "" });
+                return RedirectToAction("AdminLogin", "Login", new { area = "" });
             }
         }
         public PartialViewResult RdsCancellationLilst()
@@ -1146,7 +1146,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 Session.Remove("WhiteLevelUserId");
                 Session.Remove("WhiteLevelUserName");
                 Session.Remove("UserType");
-                return RedirectToAction("Index", "Login", new { area = "" });
+                return RedirectToAction("AdminLogin", "Login", new { area = "" });
             }
         }
 
@@ -1177,7 +1177,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 Session.Remove("WhiteLevelUserId");
                 Session.Remove("WhiteLevelUserName");
                 Session.Remove("UserType");
-                return RedirectToAction("Index", "Login", new { area = "" });
+                return RedirectToAction("AdminLogin", "Login", new { area = "" });
 
             }
         }
@@ -1263,7 +1263,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 Session.Remove("WhiteLevelUserId");
                 Session.Remove("WhiteLevelUserName");
                 Session.Remove("UserType");
-                return RedirectToAction("Index", "Login", new { area = "" });
+                return RedirectToAction("AdminLogin", "Login", new { area = "" });
 
             }
 
@@ -1336,7 +1336,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                             string CancellationId = dtCSV.Rows[i][6].ToString();
 
 
-                            if (dtCSV.Rows[i][7].ToString() == "RDS" || dtCSV.Rows[i][7].ToString() == "VAPRON")
+                            if (dtCSV.Rows[i][7].ToString() == "RDS" || dtCSV.Rows[i][7].ToString() == "BOOM")
                             {
                                 TBL_CANCELLATION_TEMP obkCANCELTmp = new TBL_CANCELLATION_TEMP()
                                 {
@@ -1393,7 +1393,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 Session.Remove("WhiteLevelUserId");
                 Session.Remove("WhiteLevelUserName");
                 Session.Remove("UserType");
-                return RedirectToAction("Index", "Login", new { area = "" });
+                return RedirectToAction("AdminLogin", "Login", new { area = "" });
             }
         }
     }

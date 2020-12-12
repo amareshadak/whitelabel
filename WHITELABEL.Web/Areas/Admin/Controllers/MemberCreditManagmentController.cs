@@ -33,7 +33,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 ViewBag.ControllerName = "White Label";
                 if (Session["WhiteLevelUserId"] == null)
                 {
-                    Response.Redirect(Url.Action("Logout", "Login", new { area = "" }));
+                    Response.Redirect(Url.Action("Logout", "AdminLogin", new { area = "Admin" }));
+                    //Response.Redirect(Url.Action("Logout", "Login", new { area = "" }));
                     return;
                 }
                 bool Islogin = false;
@@ -77,7 +78,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 Session.Remove("WhiteLevelUserId");
                 Session.Remove("WhiteLevelUserName");
                 Session.Remove("UserType");
-                return RedirectToAction("Index", "Login", new { area = "" });
+                return RedirectToAction("AdminLogin", "Login", new { area = "" });
             }
             
         }
@@ -103,6 +104,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                     decimal CreditAmtWhithTDS = 0;
                     decimal AddMainBalance = 0;
                     decimal UpdateMainBalance = 0;
+                    string TransactionType = "";
                     decimal.TryParse(TDSVal.ToString(), out TdsVal);
                     if (objCredit.CREDIT_TYPE == "DR")
                     {
@@ -141,10 +143,12 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                     if (objCredit.CREDIT_TYPE == "DR")
                     {
                         UpdateMainBalance = AddMainBalance - TotalCreditAmt;
+                        TransactionType = "DEBIT NOTE";
                     }
                     else
                     {
                         UpdateMainBalance = AddMainBalance + TotalCreditAmt;
+                        TransactionType = "CREDIT NOTE";
                     }                    
                     TBL_CREDIT_BALANCE_DISTRIBUTION objcr = new TBL_CREDIT_BALANCE_DISTRIBUTION()
                     {
@@ -194,7 +198,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                         API_ID = 0,
                         MEM_ID = objCredit.FROM_MEM_ID,
                         MEMBER_TYPE = member_Role,
-                        TRANSACTION_TYPE = "CREDIT NOTES",
+                        TRANSACTION_TYPE = TransactionType,
                         TRANSACTION_DATE = DateTime.Now,
                         TRANSACTION_TIME = DateTime.Now,
                         DR_CR = objCredit.CREDIT_TYPE,
@@ -234,7 +238,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 long MEm_RoleId = 0;
                 long.TryParse(MemberType, out MEm_RoleId);
                     var OperatorValue = await (from oper in db.TBL_MASTER_MEMBER
-                                               where oper.UName.StartsWith(prefix) && oper.MEMBER_ROLE== MEm_RoleId
+                                               where oper.MEMBER_ROLE== MEm_RoleId && oper.ACTIVE_MEMBER == true &&(oper.UName.StartsWith(prefix) || oper.MEMBER_NAME.StartsWith(prefix) || oper.MEMBER_MOBILE.StartsWith(prefix) || oper.EMAIL_ID.StartsWith(prefix) || oper.COMPANY.StartsWith(prefix) || oper.ADDRESS.StartsWith(prefix) || oper.COMPANY_GST_NO.StartsWith(prefix))
                                                select new
                                                {
                                                    //label = oper.SERVICE_NAME + "-" + oper.RECHTYPE,
@@ -242,6 +246,30 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                                    val = oper.MEM_ID
                                                }).ToListAsync();
                     return Json(OperatorValue);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("Controller:-  MerchantRechargeService(Merchant), method:- AutoComplete(POST) Line No:- 252", ex);
+                throw ex;
+            }
+        }
+        [HttpPost]
+        public async Task<JsonResult> GetCreditSettleMemberName(string prefix)
+        {
+            try
+            {
+                var db = new DBContext();
+                long MEm_RoleId = 0;
+                
+                var OperatorValue = await (from oper in db.TBL_MASTER_MEMBER
+                                           where oper.ACTIVE_MEMBER == true && (oper.UName.StartsWith(prefix) || oper.MEMBER_NAME.StartsWith(prefix) || oper.MEMBER_MOBILE.StartsWith(prefix) || oper.EMAIL_ID.StartsWith(prefix) || oper.COMPANY.StartsWith(prefix) || oper.ADDRESS.StartsWith(prefix) || oper.COMPANY_GST_NO.StartsWith(prefix))
+                                           select new
+                                           {
+                                               //label = oper.SERVICE_NAME + "-" + oper.RECHTYPE,
+                                               label = oper.UName + " - " + oper.MEMBER_MOBILE + " - " + oper.COMPANY,
+                                               val = oper.MEM_ID
+                                           }).ToListAsync();
+                return Json(OperatorValue);
             }
             catch (Exception ex)
             {
@@ -272,15 +300,15 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 Session.Remove("WhiteLevelUserId");
                 Session.Remove("WhiteLevelUserName");
                 Session.Remove("UserType");
-                return RedirectToAction("Index", "Login", new { area = "" });
+                return RedirectToAction("AdminLogin", "Login", new { area = "" });
             }
         }
-        public PartialViewResult IndexGrid(string DateFrom = "", string Date_To = "")
+        public PartialViewResult IndexGrid(string MemberInfo = "", string DateFrom = "", string Date_To = "")
         {
             try
             {
                 var dbcontext = new DBContext();
-                if (DateFrom != "" && Date_To != "")
+                if (MemberInfo!="" && DateFrom != "" && Date_To != "")
                 {
                     string FromDATE = string.Empty;
                     string TO_DATE = string.Empty;
@@ -293,12 +321,14 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                     var memberinfo = (from tblcre in dbcontext.TBL_CREDIT_BALANCE_DISTRIBUTION
                                       join mem in dbcontext.TBL_MASTER_MEMBER on tblcre.FROM_MEM_ID equals mem.MEM_ID
                                       join MemRol in dbcontext.TBL_MASTER_MEMBER_ROLE on mem.MEMBER_ROLE equals MemRol.ROLE_ID
-                                      where tblcre.TO_MEM_ID == MemberCurrentUser.MEM_ID && tblcre.CREDIT_DATE>= Date_From_Val && tblcre.CREDIT_DATE<= To_Date_Val
+                                      where tblcre.TO_MEM_ID == MemberCurrentUser.MEM_ID && tblcre.CREDIT_DATE>= Date_From_Val && tblcre.CREDIT_DATE<= To_Date_Val && (mem.COMPANY.Contains(MemberInfo) || mem.COMPANY_GST_NO.Contains(MemberInfo) || mem.UName.Contains(MemberInfo) || mem.MEMBER_MOBILE.Contains(MemberInfo) || mem.MEMBER_MOBILE.Contains(MemberInfo) || mem.EMAIL_ID.Contains(MemberInfo) || tblcre.CREDIT_TYPE.Contains(MemberInfo) || tblcre.CREDIT_AMOUNT.ToString().Contains(MemberInfo))
                                       select new
                                       {
                                           sln = tblcre.SLN,
                                           MemberRole = MemRol.ROLE_NAME,
                                           Mem_Name = mem.UName,
+                                          CompanyName=mem.COMPANY,
+                                          CompnanyGST=mem.COMPANY_GST_NO,
                                           CrediType = tblcre.CREDIT_TYPE,
                                           Credit_note = tblcre.CREDIT_NOTE_DESCRIPTION,
                                           CreditNoteDate = tblcre.CREDIT_DATE,
@@ -313,7 +343,84 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                           CREDIT_TYPE = z.CrediType,
                                           CREDIT_AMOUNT = z.CreditAmount,
                                           CREDIT_NOTE_DESCRIPTION = z.Credit_note,
-                                          CREDIT_STATUS = z.creditStatus
+                                          CREDIT_STATUS = z.creditStatus,
+                                          COMPANY_NAME=z.CompanyName,
+                                          COMPANY_GST=z.CompnanyGST
+                                      }).ToList();
+                    return PartialView("IndexGrid", memberinfo);
+                }
+                else if (MemberInfo == "" && DateFrom != "" && Date_To != "")
+                {
+                    string FromDATE = string.Empty;
+                    string TO_DATE = string.Empty;
+                    FromDATE = DateTime.Parse(DateFrom.ToString()).ToString("yyyy-MM-dd");
+                    DateTime Date_From_Val = Convert.ToDateTime(FromDATE);
+                    string From_TO = string.Empty;
+                    TO_DATE = DateTime.Parse(Date_To.ToString()).ToString("yyyy-MM-dd");
+                    DateTime Date_To_Val = Convert.ToDateTime(TO_DATE);
+                    DateTime To_Date_Val = Date_To_Val.AddDays(1);
+                    var memberinfo = (from tblcre in dbcontext.TBL_CREDIT_BALANCE_DISTRIBUTION
+                                      join mem in dbcontext.TBL_MASTER_MEMBER on tblcre.FROM_MEM_ID equals mem.MEM_ID
+                                      join MemRol in dbcontext.TBL_MASTER_MEMBER_ROLE on mem.MEMBER_ROLE equals MemRol.ROLE_ID
+                                      where tblcre.TO_MEM_ID == MemberCurrentUser.MEM_ID && tblcre.CREDIT_DATE >= Date_From_Val && tblcre.CREDIT_DATE <= To_Date_Val 
+                                      select new
+                                      {
+                                          sln = tblcre.SLN,
+                                          MemberRole = MemRol.ROLE_NAME,
+                                          Mem_Name = mem.UName,
+                                          CompanyName = mem.COMPANY,
+                                          CompnanyGST = mem.COMPANY_GST_NO,
+                                          CrediType = tblcre.CREDIT_TYPE,
+                                          Credit_note = tblcre.CREDIT_NOTE_DESCRIPTION,
+                                          CreditNoteDate = tblcre.CREDIT_DATE,
+                                          CreditAmount = tblcre.CREDIT_AMOUNT,
+                                          creditStatus = tblcre.CREDIT_STATUS
+                                      }).AsEnumerable().Select(z => new TBL_CREDIT_BALANCE_DISTRIBUTION
+                                      {
+                                          SLN = z.sln,
+                                          FromUser = z.Mem_Name,
+                                          Member_RoleName = z.MemberRole,
+                                          CREDIT_DATE = z.CreditNoteDate,
+                                          CREDIT_TYPE = z.CrediType,
+                                          CREDIT_AMOUNT = z.CreditAmount,
+                                          CREDIT_NOTE_DESCRIPTION = z.Credit_note,
+                                          CREDIT_STATUS = z.creditStatus,
+                                          COMPANY_NAME = z.CompanyName,
+                                          COMPANY_GST = z.CompnanyGST
+                                      }).ToList();
+                    return PartialView("IndexGrid", memberinfo);
+                }
+                if (MemberInfo != "" && DateFrom == "" && Date_To == "")
+                {
+                  
+                    var memberinfo = (from tblcre in dbcontext.TBL_CREDIT_BALANCE_DISTRIBUTION
+                                      join mem in dbcontext.TBL_MASTER_MEMBER on tblcre.FROM_MEM_ID equals mem.MEM_ID
+                                      join MemRol in dbcontext.TBL_MASTER_MEMBER_ROLE on mem.MEMBER_ROLE equals MemRol.ROLE_ID
+                                      where tblcre.TO_MEM_ID == MemberCurrentUser.MEM_ID  && (mem.COMPANY.Contains(MemberInfo) || mem.COMPANY_GST_NO.Contains(MemberInfo) || mem.UName.Contains(MemberInfo) || mem.MEMBER_MOBILE.Contains(MemberInfo) || mem.MEMBER_MOBILE.Contains(MemberInfo) || mem.EMAIL_ID.Contains(MemberInfo) || tblcre.CREDIT_TYPE.Contains(MemberInfo) || tblcre.CREDIT_AMOUNT.ToString().Contains(MemberInfo))
+                                      select new
+                                      {
+                                          sln = tblcre.SLN,
+                                          MemberRole = MemRol.ROLE_NAME,
+                                          Mem_Name = mem.UName,
+                                          CompanyName = mem.COMPANY,
+                                          CompnanyGST = mem.COMPANY_GST_NO,
+                                          CrediType = tblcre.CREDIT_TYPE,
+                                          Credit_note = tblcre.CREDIT_NOTE_DESCRIPTION,
+                                          CreditNoteDate = tblcre.CREDIT_DATE,
+                                          CreditAmount = tblcre.CREDIT_AMOUNT,
+                                          creditStatus = tblcre.CREDIT_STATUS
+                                      }).AsEnumerable().Select(z => new TBL_CREDIT_BALANCE_DISTRIBUTION
+                                      {
+                                          SLN = z.sln,
+                                          FromUser = z.Mem_Name,
+                                          Member_RoleName = z.MemberRole,
+                                          CREDIT_DATE = z.CreditNoteDate,
+                                          CREDIT_TYPE = z.CrediType,
+                                          CREDIT_AMOUNT = z.CreditAmount,
+                                          CREDIT_NOTE_DESCRIPTION = z.Credit_note,
+                                          CREDIT_STATUS = z.creditStatus,
+                                          COMPANY_NAME = z.CompanyName,
+                                          COMPANY_GST = z.CompnanyGST
                                       }).ToList();
                     return PartialView("IndexGrid", memberinfo);
                 }
@@ -325,12 +432,14 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                     var memberinfo = (from tblcre in dbcontext.TBL_CREDIT_BALANCE_DISTRIBUTION
                                       join mem in dbcontext.TBL_MASTER_MEMBER on tblcre.FROM_MEM_ID equals mem.MEM_ID
                                       join MemRol in dbcontext.TBL_MASTER_MEMBER_ROLE on mem.MEMBER_ROLE equals MemRol.ROLE_ID
-                                      where tblcre.TO_MEM_ID==MemberCurrentUser.MEM_ID && tblcre.CREDIT_DATE >= NowDate && tblcre.CREDIT_DATE <= Today_date
+                                      //where tblcre.TO_MEM_ID==MemberCurrentUser.MEM_ID && tblcre.CREDIT_DATE >= NowDate && tblcre.CREDIT_DATE <= Today_date
                                       select new
                                       {
                                           sln = tblcre.SLN,
                                           MemberRole = MemRol.ROLE_NAME,
                                           Mem_Name = mem.UName,
+                                          CompanyName = mem.COMPANY,
+                                          CompnanyGST = mem.COMPANY_GST_NO,
                                           CrediType = tblcre.CREDIT_TYPE,
                                           Credit_note = tblcre.CREDIT_NOTE_DESCRIPTION,
                                           CreditNoteDate = tblcre.CREDIT_DATE,
@@ -345,7 +454,9 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                           CREDIT_TYPE = z.CrediType,
                                           CREDIT_AMOUNT = z.CreditAmount,
                                           CREDIT_NOTE_DESCRIPTION = z.Credit_note,
-                                          CREDIT_STATUS = z.creditStatus
+                                          CREDIT_STATUS = z.creditStatus,
+                                          COMPANY_NAME = z.CompanyName,
+                                          COMPANY_GST = z.CompnanyGST
                                       }).ToList();
                     return PartialView("IndexGrid", memberinfo);
                 }
@@ -385,7 +496,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 Session.Remove("WhiteLevelUserId");
                 Session.Remove("WhiteLevelUserName");
                 Session.Remove("UserType");
-                return RedirectToAction("Index", "Login", new { area = "" });
+                return RedirectToAction("AdminLogin", "Login", new { area = "" });
             }
         }
         [HttpPost]
@@ -464,11 +575,20 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                         AddCloingAMt = creditlimitBalance;
                         //decimal.TryParse(FromMemberamtobj.CLOSING.ToString(), out closingAmt);
                     }
+                    string MEM_ROLE = string.Empty;
+                    if (memberinfo.MEMBER_ROLE == 5)
+                    {
+                        MEM_ROLE = "RETAILER";
+                    }
+                    else
+                    {
+                        MEM_ROLE = "DISTRIBUTOR";
+                    }
                     TBL_ACCOUNTS objacnt = new TBL_ACCOUNTS()
                     {
                         API_ID = 0,
                         MEM_ID = objCredit.FROM_MEM_ID,
-                        MEMBER_TYPE = "DISTRIBUTOR",
+                        MEMBER_TYPE = MEM_ROLE,
                         TRANSACTION_TYPE = "CREDIT LIMIT",
                         TRANSACTION_DATE = DateTime.Now,
                         TRANSACTION_TIME = DateTime.Now,
@@ -488,7 +608,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                     db.TBL_ACCOUNTS.Add(objacnt);
                     db.SaveChanges();
                     ContextTransaction.Commit();
-                    return Json("Credit Limit is given to distributor");
+                    string msgVal = "Credit Limit is given to member :-"+ memberinfo.MEMBER_NAME+"-"+ memberinfo.MEM_UNIQUE_ID;
+                    return Json(msgVal,JsonRequestBehavior.AllowGet);
                 }
                 catch (Exception ex)
                 {
@@ -522,15 +643,64 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 Session.Remove("WhiteLevelUserId");
                 Session.Remove("WhiteLevelUserName");
                 Session.Remove("UserType");
-                return RedirectToAction("Index", "Login", new { area = "" });
+                return RedirectToAction("AdminLogin", "Login", new { area = "" });
             }
         }
-        public PartialViewResult CREEEDITLimitGrid(string DateFrom="",string Date_To="")
+        public PartialViewResult CREEEDITLimitGrid(string MemberInfo = "", string DateFrom ="",string Date_To="")
         {
             try
             {
                 var dbcontext = new DBContext();
-                if (DateFrom != "" && Date_To != "")
+                if (MemberInfo!="" && DateFrom != "" && Date_To != "")
+                {
+                    string FromDATE = string.Empty;
+                    string TO_DATE = string.Empty;
+                    FromDATE = DateTime.Parse(DateFrom.ToString()).ToString("yyyy-MM-dd");
+                    DateTime Date_From_Val = Convert.ToDateTime(FromDATE);
+                    string From_TO = string.Empty;
+                    TO_DATE = DateTime.Parse(Date_To.ToString()).ToString("yyyy-MM-dd");
+                    DateTime Date_To_Val = Convert.ToDateTime(TO_DATE);
+                    DateTime To_Date_Val = Date_To_Val.AddDays(1);
+
+
+                    var memberinfo = (from tblcre in dbcontext.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
+                                      join mem in dbcontext.TBL_MASTER_MEMBER on tblcre.FROM_MEM_ID equals mem.MEM_ID
+                                      //where tblcre.TO_MEM_ID == MemberCurrentUser.MEM_ID && tblcre.CREDIT_DATE>= Date_From_Val && tblcre.CREDIT_DATE<= Date_To_Val
+                                      where tblcre.TO_MEM_ID == MemberCurrentUser.MEM_ID && tblcre.CREDIT_DATE >= Date_From_Val && tblcre.CREDIT_DATE <= To_Date_Val && (mem.COMPANY.Contains(MemberInfo)|| mem.COMPANY_GST_NO.Contains(MemberInfo) || mem.UName.Contains(MemberInfo) || mem.MEMBER_MOBILE.Contains(MemberInfo) || mem.MEMBER_MOBILE.Contains(MemberInfo) || mem.EMAIL_ID.Contains(MemberInfo) || tblcre.CREDIT_TRN_TYPE.Contains(MemberInfo) || tblcre.CREDIT_OPENING.ToString().Contains(MemberInfo) || tblcre.CREDITCLOSING.ToString().Contains(MemberInfo))
+                                      select new
+                                      {
+                                          sln = tblcre.SLN,
+                                          Mem_Name = mem.UName,
+                                          COMPANY_NAME=mem.COMPANY,
+                                          COMPANY_GST = mem.COMPANY_GST_NO,
+                                          Credit_note = tblcre.CREDIT_NOTE_DESCRIPTION,
+                                          CreditNoteDate = tblcre.CREDIT_DATE,
+                                          CreditAmount = tblcre.CREDIT_AMOUNT,
+                                          creditStatus = tblcre.CREDIT_STATUS,
+                                          OpeningAmt = tblcre.CREDIT_OPENING,
+                                          DR_CR = tblcre.CREDIT_AMOUNT,
+                                          Closingamt = tblcre.CREDITCLOSING,
+                                          creditType = tblcre.CREDIT_TRN_TYPE
+                                      }).AsEnumerable().Select(z => new TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
+                                      {
+                                          SLN = z.sln,
+                                          FromUser = z.Mem_Name,
+                                          CREDIT_DATE = z.CreditNoteDate,
+                                          //CREDIT_AMOUNT = z.CreditAmount,
+                                          CREDIT_AMOUNT = z.DR_CR,
+                                          CREDIT_NOTE_DESCRIPTION = z.Credit_note,
+                                          CREDIT_STATUS = z.creditStatus,
+                                          CREDITCLOSING = z.Closingamt,
+                                          CR_Col = (z.creditType == "CR" ? z.CreditAmount.ToString() : "0"),
+                                          DR_Col = (z.creditType == "DR" ? z.CreditAmount.ToString() : "0"),
+                                          CREDIT_OPENING = z.OpeningAmt,
+                                          CREDIT_TRN_TYPE = z.creditType,
+                                          COMPANY_NAME = z.COMPANY_NAME,
+                                          COMPANY_GST = z.COMPANY_GST,
+                                      }).ToList().OrderByDescending(a => a.CREDIT_DATE); ;
+                    return PartialView("CREEEDITLimitGrid", memberinfo);
+                } 
+                else if (MemberInfo == "" && DateFrom != "" && Date_To != "")
                 {
                     string FromDATE = string.Empty;
                     string TO_DATE = string.Empty;
@@ -550,6 +720,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                       {
                                           sln = tblcre.SLN,
                                           Mem_Name = mem.UName,
+                                          COMPANY_NAME = mem.COMPANY,
+                                          COMPANY_GST = mem.COMPANY_GST_NO,
                                           Credit_note = tblcre.CREDIT_NOTE_DESCRIPTION,
                                           CreditNoteDate = tblcre.CREDIT_DATE,
                                           CreditAmount = tblcre.CREDIT_AMOUNT,
@@ -571,7 +743,48 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                           CR_Col = (z.creditType == "CR" ? z.CreditAmount.ToString() : "0"),
                                           DR_Col = (z.creditType == "DR" ? z.CreditAmount.ToString() : "0"),
                                           CREDIT_OPENING = z.OpeningAmt,
-                                          CREDIT_TRN_TYPE = z.creditType
+                                          CREDIT_TRN_TYPE = z.creditType,
+                                          COMPANY_NAME = z.COMPANY_NAME,
+                                          COMPANY_GST = z.COMPANY_GST,
+                                      }).ToList().OrderByDescending(a => a.CREDIT_DATE); ;
+                    return PartialView("CREEEDITLimitGrid", memberinfo);
+                }
+                else if (MemberInfo != "" && DateFrom == "" && Date_To == "")
+                {
+                    var memberinfo = (from tblcre in dbcontext.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
+                                      join mem in dbcontext.TBL_MASTER_MEMBER on tblcre.FROM_MEM_ID equals mem.MEM_ID
+                                      //where tblcre.TO_MEM_ID == MemberCurrentUser.MEM_ID && tblcre.CREDIT_DATE>= Date_From_Val && tblcre.CREDIT_DATE<= Date_To_Val
+                                      where (mem.COMPANY.Contains(MemberInfo) || mem.COMPANY_GST_NO.Contains(MemberInfo) || mem.UName.Contains(MemberInfo) || mem.MEMBER_MOBILE.Contains(MemberInfo) || mem.MEMBER_MOBILE.Contains(MemberInfo) || mem.EMAIL_ID.Contains(MemberInfo) || tblcre.CREDIT_TRN_TYPE.Contains(MemberInfo) || tblcre.CREDIT_OPENING.ToString().Contains(MemberInfo) || tblcre.CREDITCLOSING.ToString().Contains(MemberInfo))
+                                      select new
+                                      {
+                                          sln = tblcre.SLN,
+                                          Mem_Name = mem.UName,
+                                          COMPANY_NAME = mem.COMPANY,
+                                          COMPANY_GST = mem.COMPANY_GST_NO,
+                                          Credit_note = tblcre.CREDIT_NOTE_DESCRIPTION,
+                                          CreditNoteDate = tblcre.CREDIT_DATE,
+                                          CreditAmount = tblcre.CREDIT_AMOUNT,
+                                          creditStatus = tblcre.CREDIT_STATUS,
+                                          OpeningAmt = tblcre.CREDIT_OPENING,
+                                          DR_CR = tblcre.CREDIT_AMOUNT,
+                                          Closingamt = tblcre.CREDITCLOSING,
+                                          creditType = tblcre.CREDIT_TRN_TYPE
+                                      }).AsEnumerable().Select(z => new TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
+                                      {
+                                          SLN = z.sln,
+                                          FromUser = z.Mem_Name,
+                                          CREDIT_DATE = z.CreditNoteDate,
+                                          //CREDIT_AMOUNT = z.CreditAmount,
+                                          CREDIT_AMOUNT = z.DR_CR,
+                                          CREDIT_NOTE_DESCRIPTION = z.Credit_note,
+                                          CREDIT_STATUS = z.creditStatus,
+                                          CREDITCLOSING = z.Closingamt,
+                                          CR_Col = (z.creditType == "CR" ? z.CreditAmount.ToString() : "0"),
+                                          DR_Col = (z.creditType == "DR" ? z.CreditAmount.ToString() : "0"),
+                                          CREDIT_OPENING = z.OpeningAmt,
+                                          CREDIT_TRN_TYPE = z.creditType,
+                                          COMPANY_NAME = z.COMPANY_NAME,
+                                          COMPANY_GST = z.COMPANY_GST,
                                       }).ToList().OrderByDescending(a => a.CREDIT_DATE); ;
                     return PartialView("CREEEDITLimitGrid", memberinfo);
                 }
@@ -582,11 +795,13 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                     DateTime Today_date = Convert.ToDateTime(Todaydate.ToString("yyyy-MM-dd"));
                     var memberinfo = (from tblcre in dbcontext.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
                                       join mem in dbcontext.TBL_MASTER_MEMBER on tblcre.FROM_MEM_ID equals mem.MEM_ID
-                                      where tblcre.TO_MEM_ID == MemberCurrentUser.MEM_ID && tblcre.CREDIT_DATE >= NowDate && tblcre.CREDIT_DATE <= Today_date
+                                      //where tblcre.TO_MEM_ID == MemberCurrentUser.MEM_ID && tblcre.CREDIT_DATE >= NowDate && tblcre.CREDIT_DATE <= Today_date
                                       select new
                                       {
                                           sln = tblcre.SLN,
                                           Mem_Name = mem.UName,
+                                          COMPANY_NAME = mem.COMPANY,
+                                          COMPANY_GST = mem.COMPANY_GST_NO,
                                           Credit_note = tblcre.CREDIT_NOTE_DESCRIPTION,
                                           CreditNoteDate = tblcre.CREDIT_DATE,
                                           CreditAmount = tblcre.CREDIT_AMOUNT,
@@ -608,7 +823,9 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                           CR_Col = (z.creditType == "CR" ? z.CreditAmount.ToString() : "0"),
                                           DR_Col = (z.creditType == "DR" ? z.CreditAmount.ToString() : "0"),
                                           CREDIT_OPENING = z.OpeningAmt,
-                                          CREDIT_TRN_TYPE = z.creditType
+                                          CREDIT_TRN_TYPE = z.creditType,
+                                          COMPANY_NAME = z.COMPANY_NAME,
+                                          COMPANY_GST = z.COMPANY_GST,
                                       }).ToList().OrderByDescending(a => a.CREDIT_DATE); ;
                     return PartialView("CREEEDITLimitGrid", memberinfo);
                 }
@@ -645,7 +862,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 Session.Remove("WhiteLevelUserId");
                 Session.Remove("WhiteLevelUserName");
                 Session.Remove("UserType");
-                return RedirectToAction("Index", "Login", new { area = "" });
+                return RedirectToAction("AdminLogin", "Login", new { area = "" });
             }
         }
         [HttpPost]
@@ -662,7 +879,9 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                     db.Entry(SetReservedcreditLimit).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
                     ContextTransaction.Commit();
-                    return Json("Reserved limit is saved to distributor.");
+                    string msgval = "Reserved limit is saved for member :-"+SetReservedcreditLimit.MEMBER_NAME+"-"+ SetReservedcreditLimit.MEM_UNIQUE_ID;
+                    //return Json("Reserved limit is saved to distributor.");
+                    return Json(msgval, JsonRequestBehavior.AllowGet);
                 }
                 catch (Exception ex)
                 {
@@ -682,13 +901,16 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
             {
                 var db = new DBContext();
                 long MEm_RoleId = 0;
-                
+
+                //var OperatorValue = await (from oper in db.TBL_MASTER_MEMBER
                 var OperatorValue = await (from oper in db.TBL_MASTER_MEMBER
-                                           where oper.UName.StartsWith(prefix) && oper.INTRODUCER == MemberCurrentUser.MEM_ID
+                                           join role in db.TBL_MASTER_MEMBER_ROLE on oper.MEMBER_ROLE equals role.ROLE_ID
+                                           //where oper.UName.StartsWith(prefix) && oper.INTRODUCER == MemberCurrentUser.MEM_ID
+                                           where oper.UNDER_WHITE_LEVEL == MemberCurrentUser.MEM_ID && oper.PAYMENT_MODE=="Direct" && oper.ACTIVE_MEMBER==true && (oper.UName.StartsWith(prefix) || oper.MEMBER_NAME.StartsWith(prefix) || oper.MEMBER_MOBILE.StartsWith(prefix) || oper.EMAIL_ID.StartsWith(prefix) || oper.COMPANY.StartsWith(prefix) || oper.ADDRESS.StartsWith(prefix) || oper.COMPANY_GST_NO.StartsWith(prefix))
                                            select new
                                            {
                                                //label = oper.SERVICE_NAME + "-" + oper.RECHTYPE,
-                                               label = oper.UName + " - " + oper.MEMBER_MOBILE + " - " + oper.COMPANY,
+                                               label = oper.UName + "-" + oper.MEMBER_NAME + " - " + oper.MEMBER_MOBILE + " - " + oper.COMPANY+"-("+role.ROLE_NAME+")",
                                                val = oper.MEM_ID
                                            }).ToListAsync();
                 return Json(OperatorValue);
@@ -721,15 +943,55 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 Session.Remove("WhiteLevelUserId");
                 Session.Remove("WhiteLevelUserName");
                 Session.Remove("UserType");
-                return RedirectToAction("Index", "Login", new { area = "" });
+                return RedirectToAction("AdminLogin", "Login", new { area = "" });
             }
         }
-        public PartialViewResult DistributorCreditindexgrid(string DateFrom = "", string Date_To = "")
+        public PartialViewResult DistributorCreditindexgrid(string MemberInfo = "", string DateFrom = "", string Date_To = "")
         {
             try
             {
                 var dbcontext = new DBContext();
-                if (DateFrom != "" && Date_To != "")
+                if (MemberInfo != "" && DateFrom != "" && Date_To != "")
+                {
+                    string FromDATE = string.Empty;
+                    string TO_DATE = string.Empty;
+                    FromDATE = DateTime.Parse(DateFrom.ToString()).ToString("yyyy-MM-dd");
+                    DateTime Date_From_Val = Convert.ToDateTime(FromDATE);
+                    string From_TO = string.Empty;
+                    TO_DATE = DateTime.Parse(Date_To.ToString()).ToString("yyyy-MM-dd");
+                    DateTime Date_To_Val = Convert.ToDateTime(TO_DATE);
+                    DateTime To_Date_Val = Date_To_Val.AddDays(1);
+
+                    var memberinfo = (from tblcre in dbcontext.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
+                                      join mem in dbcontext.TBL_MASTER_MEMBER on tblcre.FROM_MEM_ID equals mem.MEM_ID
+                                      //where tblcre.TO_MEM_ID == MemberCurrentUser.MEM_ID && tblcre.CREDIT_DATE >= Date_From_Val && tblcre.CREDIT_DATE <= Date_To_Val
+                                      where tblcre.TO_MEM_ID == MemberCurrentUser.MEM_ID && tblcre.CREDIT_DATE >= Date_From_Val && tblcre.CREDIT_DATE <= To_Date_Val && (mem.COMPANY.Contains(MemberInfo)|| mem.COMPANY_GST_NO.Contains(MemberInfo) || mem.UName.Contains(MemberInfo) || mem.MEMBER_MOBILE.Contains(MemberInfo) || mem.MEMBER_MOBILE.Contains(MemberInfo) || mem.EMAIL_ID.Contains(MemberInfo) || tblcre.CREDIT_TRN_TYPE.Contains(MemberInfo) || tblcre.CREDIT_AMOUNT.ToString().Contains(MemberInfo))
+                                      select new
+                                      {
+                                          sln = tblcre.SLN,
+                                          ToMember = tblcre.TO_MEM_ID,
+                                          COMPANY_NAME = mem.COMPANY,
+                                          COMPANY_GST = mem.COMPANY_GST_NO,
+                                          From_Member = tblcre.FROM_MEM_ID,
+                                          Mem_Name = mem.UName,
+                                          Credit_note = tblcre.CREDIT_NOTE_DESCRIPTION,
+                                          CreditNoteDate = tblcre.CREDIT_DATE,
+                                          CreditAmount = tblcre.CREDIT_AMOUNT,
+                                          creditStatus = tblcre.CREDIT_STATUS
+                                      }).AsEnumerable().Select(z => new TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
+                                      {
+                                          SLN = z.sln,
+                                          FromUser = z.Mem_Name,
+                                          CREDIT_DATE = z.CreditNoteDate,
+                                          CREDIT_AMOUNT = z.CreditAmount,
+                                          CREDIT_NOTE_DESCRIPTION = z.Credit_note,
+                                          CREDIT_STATUS = z.creditStatus,
+                                          COMPANY_NAME = z.COMPANY_NAME,
+                                          COMPANY_GST = z.COMPANY_GST,
+                                      }).ToList();
+                    return PartialView("DistributorCreditindexgrid", memberinfo);
+                }
+                else if (MemberInfo == "" && DateFrom != "" && Date_To != "")
                 {
                     string FromDATE = string.Empty;
                     string TO_DATE = string.Empty;
@@ -748,6 +1010,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                       {
                                           sln = tblcre.SLN,
                                           ToMember = tblcre.TO_MEM_ID,
+                                          COMPANY_NAME = mem.COMPANY,
+                                          COMPANY_GST = mem.COMPANY_GST_NO,
                                           From_Member = tblcre.FROM_MEM_ID,
                                           Mem_Name = mem.UName,
                                           Credit_note = tblcre.CREDIT_NOTE_DESCRIPTION,
@@ -761,7 +1025,44 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                           CREDIT_DATE = z.CreditNoteDate,
                                           CREDIT_AMOUNT = z.CreditAmount,
                                           CREDIT_NOTE_DESCRIPTION = z.Credit_note,
-                                          CREDIT_STATUS = z.creditStatus
+                                          CREDIT_STATUS = z.creditStatus,
+
+                                          COMPANY_NAME = z.COMPANY_NAME,
+                                          COMPANY_GST = z.COMPANY_GST,
+                                      }).ToList();
+                    return PartialView("DistributorCreditindexgrid", memberinfo);
+                }
+                else if (MemberInfo != "" && DateFrom == "" && Date_To == "")
+                {
+
+
+                    var memberinfo = (from tblcre in dbcontext.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
+                                      join mem in dbcontext.TBL_MASTER_MEMBER on tblcre.FROM_MEM_ID equals mem.MEM_ID
+                                      //where tblcre.TO_MEM_ID == MemberCurrentUser.MEM_ID && tblcre.CREDIT_DATE >= Date_From_Val && tblcre.CREDIT_DATE <= Date_To_Val
+                                      where (mem.COMPANY.Contains(MemberInfo)|| mem.COMPANY_GST_NO.Contains(MemberInfo) || mem.UName.Contains(MemberInfo) || mem.MEMBER_MOBILE.Contains(MemberInfo) || mem.MEMBER_MOBILE.Contains(MemberInfo) || mem.EMAIL_ID.Contains(MemberInfo) || tblcre.CREDIT_TRN_TYPE.Contains(MemberInfo) || tblcre.CREDIT_AMOUNT.ToString().Contains(MemberInfo))
+                                      select new
+                                      {
+                                          sln = tblcre.SLN,
+                                          ToMember = tblcre.TO_MEM_ID,
+                                          COMPANY_NAME = mem.COMPANY,
+                                          COMPANY_GST = mem.COMPANY_GST_NO,
+                                          From_Member = tblcre.FROM_MEM_ID,
+                                          Mem_Name = mem.UName,
+                                          Credit_note = tblcre.CREDIT_NOTE_DESCRIPTION,
+                                          CreditNoteDate = tblcre.CREDIT_DATE,
+                                          CreditAmount = tblcre.CREDIT_AMOUNT,
+                                          creditStatus = tblcre.CREDIT_STATUS
+                                      }).AsEnumerable().Select(z => new TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
+                                      {
+                                          SLN = z.sln,
+                                          FromUser = z.Mem_Name,
+                                          CREDIT_DATE = z.CreditNoteDate,
+                                          CREDIT_AMOUNT = z.CreditAmount,
+                                          CREDIT_NOTE_DESCRIPTION = z.Credit_note,
+                                          CREDIT_STATUS = z.creditStatus,
+                                          COMPANY_NAME = z.COMPANY_NAME,
+                                          COMPANY_GST = z.COMPANY_GST,
+
                                       }).ToList();
                     return PartialView("DistributorCreditindexgrid", memberinfo);
                 }
@@ -772,11 +1073,14 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                     DateTime Today_date = Convert.ToDateTime(Todaydate.ToString("yyyy-MM-dd"));
                     var memberinfo = (from tblcre in dbcontext.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
                                       join mem in dbcontext.TBL_MASTER_MEMBER on tblcre.FROM_MEM_ID equals mem.MEM_ID
-                                      where tblcre.TO_MEM_ID == MemberCurrentUser.MEM_ID && tblcre.CREDIT_DATE >= NowDate && tblcre.CREDIT_DATE <= Today_date
+                                      //where tblcre.TO_MEM_ID == MemberCurrentUser.MEM_ID && tblcre.CREDIT_DATE >= NowDate && tblcre.CREDIT_DATE <= Today_date
+
                                       select new
                                       {
                                           sln = tblcre.SLN,
                                           ToMember = tblcre.TO_MEM_ID,
+                                          COMPANY_NAME = mem.COMPANY,
+                                          COMPANY_GST = mem.COMPANY_GST_NO,
                                           From_Member = tblcre.FROM_MEM_ID,
                                           Mem_Name = mem.UName,
                                           Credit_note = tblcre.CREDIT_NOTE_DESCRIPTION,
@@ -790,7 +1094,9 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                           CREDIT_DATE = z.CreditNoteDate,
                                           CREDIT_AMOUNT = z.CreditAmount,
                                           CREDIT_NOTE_DESCRIPTION = z.Credit_note,
-                                          CREDIT_STATUS = z.creditStatus
+                                          CREDIT_STATUS = z.creditStatus,
+                                          COMPANY_NAME = z.COMPANY_NAME,
+                                          COMPANY_GST = z.COMPANY_GST,
                                       }).ToList();
                     return PartialView("DistributorCreditindexgrid", memberinfo);
                 }
@@ -829,6 +1135,202 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
             {
                 return Json("");
                 throw ex;
+            }
+        }
+        public ActionResult CreditBalanceSettlement()
+        {
+            if (Session["WhiteLevelUserId"] != null)
+            {
+                try
+                {
+                    initpage();
+                    var db = new DBContext();
+                    return View();
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
+            }
+            else
+            {
+                Session["WhiteLevelUserId"] = null;
+                Session["WhiteLevelUserName"] = null;
+                Session["UserType"] = null;
+                Session.Remove("WhiteLevelUserId");
+                Session.Remove("WhiteLevelUserName");
+                Session.Remove("UserType");
+                return RedirectToAction("AdminLogin", "Login", new { area = "" });
+            }
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> PostCREDITBALANCESettlement(MemberCreditBalanceModel objCredit)
+        {
+            var DBcon = new DBContext();
+            using (System.Data.Entity.DbContextTransaction ContextTransaction = DBcon.Database.BeginTransaction())
+            {
+                try
+                {
+                    var MerberName = DBcon.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == objCredit.FROM_MEM_ID);
+                    var TDSVal = DBcon.TBL_TAX_MASTERS.FirstOrDefault(x => x.SLN == 2).TAX_VALUE;
+                    string COrelationID = Settings.GetUniqueKey(MemberCurrentUser.MEM_ID.ToString());
+                    var member_Role = DBcon.TBL_MASTER_MEMBER_ROLE.FirstOrDefault(x => x.ROLE_ID == MerberName.MEMBER_ROLE).ROLE_NAME;
+                    decimal TdsVal = 0;
+                    decimal GstVal = 0;
+                    decimal TotalGST = 0;
+                    decimal TDS_Amount = 0;
+                    decimal GST_Amount = 0;
+                    decimal TotalCreditAmt = 0;
+                    decimal CreditAmtWhithTDS = 0;
+                    decimal AddMainBalance = 0;
+                    decimal UpdateMainBalance = 0;
+                    string TransactionType = "Credit Balance Settlement";
+                    decimal.TryParse(TDSVal.ToString(), out TdsVal);
+                    decimal CreditBalance = 0;
+                    decimal.TryParse(MerberName.CREDIT_LIMIT.ToString(), out CreditBalance);
+                    decimal MainBalance = 0;
+                    decimal.TryParse(MerberName.BALANCE.ToString(), out MainBalance);
+                    TotalCreditAmt = objCredit.CREDIT_AMOUNT;
+                    decimal UpdateClosingBal = 0;
+                    TBL_CREDIT_BALANCE_DISTRIBUTION objcr = new TBL_CREDIT_BALANCE_DISTRIBUTION()
+                    {
+                        TO_MEM_ID = MemberCurrentUser.MEM_ID,
+                        FROM_MEM_ID = objCredit.FROM_MEM_ID,
+                        MEMBER_ROLE = (long)MerberName.MEMBER_ROLE,
+                        CREDIT_DATE = DateTime.Now,
+                        CREDIT_TYPE = "CR",
+                        //CREDIT_AMOUNT = objCredit.CREDIT_AMOUNT,
+                        CREDIT_AMOUNT = TotalCreditAmt,
+                        GST_VAL = TotalGST,
+                        GST_AMOUNT = GST_Amount,
+                        TDS_VAL = TdsVal,
+                        TDS_AMOUNT = TDS_Amount,
+                        CREDIT_NOTE_DESCRIPTION = objCredit.CREDIT_NOTE_DESCRIPTION,
+                        CREDIT_STATUS = true
+                    };
+                    DBcon.TBL_CREDIT_BALANCE_DISTRIBUTION.Add(objcr);
+                   // DBcon.SaveChanges();
+                    UpdateMainBalance = MainBalance + TotalCreditAmt;
+                    MerberName.BALANCE = UpdateMainBalance;
+                    DBcon.Entry(MerberName).State = System.Data.Entity.EntityState.Modified;
+                   // DBcon.SaveChanges();
+                    decimal Frm_OpeningAmt = 0;
+                    decimal Frm_ClosingAmt = 0;
+                    decimal Frm_AddOpeningAmt = 0;
+                    decimal Frm_AddClosingAmt = 0;
+                    var FromMemberamtobj = DBcon.TBL_ACCOUNTS.Where(x => x.MEM_ID == objCredit.FROM_MEM_ID).OrderByDescending(z => z.ACC_NO).FirstOrDefault();
+                    if (FromMemberamtobj != null)
+                    {
+                        Frm_ClosingAmt = FromMemberamtobj.CLOSING;
+                        Frm_AddClosingAmt = Frm_ClosingAmt + TotalCreditAmt;
+                    }
+                    else
+                    {
+                        Frm_AddClosingAmt = TotalCreditAmt;
+                    }
+                    TBL_ACCOUNTS objacnt = new TBL_ACCOUNTS()
+                    {
+                        API_ID = 0,
+                        MEM_ID = objCredit.FROM_MEM_ID,
+                        MEMBER_TYPE = member_Role,
+                        TRANSACTION_TYPE = TransactionType,
+                        TRANSACTION_DATE = DateTime.Now,
+                        TRANSACTION_TIME = DateTime.Now,
+                        DR_CR = "CR",
+                        AMOUNT = (decimal)TotalCreditAmt,
+                        NARRATION = objCredit.CREDIT_NOTE_DESCRIPTION,
+                        OPENING = Frm_ClosingAmt,
+                        CLOSING = Frm_AddClosingAmt,
+                        REC_NO = 0,
+                        COMM_AMT = 0,
+                        GST = (double)GST_Amount,
+                        TDS = (double)TDS_Amount,
+                        IPAddress = "",
+                        SERVICE_ID = 0,
+                        CORELATIONID = COrelationID
+                    };
+                    DBcon.TBL_ACCOUNTS.Add(objacnt);
+                   // DBcon.SaveChanges();
+                    if (CreditBalance <= TotalCreditAmt)
+                    {
+                        UpdateMainBalance = MainBalance + TotalCreditAmt- CreditBalance;
+                        MerberName.BALANCE = UpdateMainBalance;
+                        MerberName.CREDIT_LIMIT = 0;
+                        DBcon.Entry(MerberName).State = System.Data.Entity.EntityState.Modified;
+                       // DBcon.SaveChanges();
+
+                        Frm_ClosingAmt = FromMemberamtobj.CLOSING;
+                        UpdateClosingBal= Frm_AddClosingAmt- CreditBalance;
+                        TBL_ACCOUNTS objUpdateacnt = new TBL_ACCOUNTS()
+                        {
+                            API_ID = 0,
+                            MEM_ID = objCredit.FROM_MEM_ID,
+                            MEMBER_TYPE = member_Role,
+                            TRANSACTION_TYPE = "CREDIT Amount Settlement",
+                            TRANSACTION_DATE = DateTime.Now,
+                            TRANSACTION_TIME = DateTime.Now,
+                            DR_CR = "DR",
+                            AMOUNT = (decimal)CreditBalance,
+                            NARRATION = objCredit.CREDIT_NOTE_DESCRIPTION,
+                            OPENING = Frm_AddClosingAmt,
+                            CLOSING = UpdateClosingBal,
+                            REC_NO = 0,
+                            COMM_AMT = 0,
+                            GST = (double)GST_Amount,
+                            TDS = (double)TDS_Amount,
+                            IPAddress = "",
+                            SERVICE_ID = 0,
+                            CORELATIONID = COrelationID
+                        };
+                        DBcon.TBL_ACCOUNTS.Add(objUpdateacnt);
+                        //DBcon.SaveChanges();
+                    }
+                    else
+                    {
+                        UpdateMainBalance = MainBalance + TotalCreditAmt - CreditBalance;
+                        //MerberName.BALANCE = UpdateMainBalance;
+                        MerberName.CREDIT_LIMIT = CreditBalance- TotalCreditAmt;
+                        DBcon.Entry(MerberName).State = System.Data.Entity.EntityState.Modified;
+                        //DBcon.SaveChanges();
+
+                        //Frm_ClosingAmt = FromMemberamtobj.CLOSING;
+                        //UpdateClosingBal = Frm_AddClosingAmt - CreditBalance;
+                        //TBL_ACCOUNTS objUpdateacnt = new TBL_ACCOUNTS()
+                        //{
+                        //    API_ID = 0,
+                        //    MEM_ID = objCredit.FROM_MEM_ID,
+                        //    MEMBER_TYPE = member_Role,
+                        //    TRANSACTION_TYPE = "CREDIT Amount Settlement",
+                        //    TRANSACTION_DATE = DateTime.Now,
+                        //    TRANSACTION_TIME = DateTime.Now,
+                        //    DR_CR = "DR",
+                        //    AMOUNT = (decimal)CreditBalance,
+                        //    NARRATION = objCredit.CREDIT_NOTE_DESCRIPTION,
+                        //    OPENING = Frm_AddClosingAmt,
+                        //    CLOSING = UpdateClosingBal,
+                        //    REC_NO = 0,
+                        //    COMM_AMT = 0,
+                        //    GST = (double)GST_Amount,
+                        //    TDS = (double)TDS_Amount,
+                        //    IPAddress = "",
+                        //    SERVICE_ID = 0,
+                        //    CORELATIONID = COrelationID
+                        //};
+                        //DBcon.TBL_ACCOUNTS.Add(objUpdateacnt);
+                        //DBcon.SaveChanges();
+                    }
+                    DBcon.SaveChanges();
+                    ContextTransaction.Commit();
+                    //var member_Role = DBcon.TBL_MASTER_MEMBER_ROLE.FirstOrDefault(x => x.ROLE_ID == objCredit.MEMBER_ROLE).ROLE_NAME;
+                    return Json("Credit balance is settle of " + MerberName.UName + ". ");
+                }
+                catch (Exception ex)
+                {
+                    ContextTransaction.Rollback();
+                    return Json("Try again after some time");
+                    throw;
+                }
             }
         }
     }

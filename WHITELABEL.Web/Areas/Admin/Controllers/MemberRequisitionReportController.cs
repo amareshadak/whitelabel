@@ -75,7 +75,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 ViewBag.ControllerName = "White Label";
                 if (Session["WhiteLevelUserId"] == null)
                 {
-                    Response.Redirect(Url.Action("Logout", "Login", new { area = "" }));
+                    Response.Redirect(Url.Action("Logout", "AdminLogin", new { area = "Admin" }));
+                    //Response.Redirect(Url.Action("Logout", "Login", new { area = "" }));
                     return;
                 }
                 bool Islogin = false;
@@ -118,7 +119,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 Session.Remove("WhiteLevelUserId");
                 Session.Remove("WhiteLevelUserName");
                 Session.Remove("UserType");
-                return RedirectToAction("Index", "Login", new { area = "" });
+                return RedirectToAction("AdminLogin", "Login", new { area = "" });
             }
             //return View();
         }
@@ -165,7 +166,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 Session.Remove("WhiteLevelUserId");
                 Session.Remove("WhiteLevelUserName");
                 Session.Remove("UserType");
-                return RedirectToAction("Index", "Login", new { area = "" });
+                return RedirectToAction("AdminLogin", "Login", new { area = "" });
             }
         }
         public PartialViewResult SuperRequisitonGrid(string search = "",string Status = "")
@@ -235,7 +236,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 Session.Remove("WhiteLevelUserId");
                 Session.Remove("WhiteLevelUserName");
                 Session.Remove("UserType");
-                return RedirectToAction("Index", "Login", new { area = "" });
+                return RedirectToAction("AdminLogin", "Login", new { area = "" });
             }
         }
 
@@ -314,7 +315,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 Session.Remove("WhiteLevelUserId");
                 Session.Remove("WhiteLevelUserName");
                 Session.Remove("UserType");
-                return RedirectToAction("Index", "Login", new { area = "" });
+                return RedirectToAction("AdminLogin", "Login", new { area = "" });
             }
         }
 
@@ -409,9 +410,9 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
 
                     row++;
                 }
-
-                return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-                //return File(fileContents: package.GetAsByteArray(), contentType: "application/unknown");
+                return File(package.GetAsByteArray(), "application/unknown", "AdminRequisitionReport.xlsx");
+                //return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                ////return File(fileContents: package.GetAsByteArray(), contentType: "application/unknown");
             }
         }
         private IGrid<TBL_BALANCE_TRANSFER_LOGS> CreateExporWhiteLevelGrid(string statusval, string DateFrom = "", string Date_To = "")
@@ -471,9 +472,9 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
 
                     row++;
                 }
-
-                return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-                //return File(fileContents: package.GetAsByteArray(), contentType: "application/unknown");
+                return File(package.GetAsByteArray(), "application/unknown", "AdminRequisitionReport.xlsx");
+                //return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                ////return File(fileContents: package.GetAsByteArray(), contentType: "application/unknown");
             }
         }
         private IGrid<TBL_BALANCE_TRANSFER_LOGS> CreateExporSuperGrid(string Disid, string statusval)
@@ -553,9 +554,9 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
 
                     row++;
                 }
-
-                return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-                //return File(fileContents: package.GetAsByteArray(), contentType: "application/unknown");
+                return File(package.GetAsByteArray(), "application/unknown", "AdminRequisitionReport.xlsx");
+                //return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                ////return File(fileContents: package.GetAsByteArray(), contentType: "application/unknown");
             }
         }
         private IGrid<TBL_BALANCE_TRANSFER_LOGS> CreateExporDistributorGrid(string Super, string Disid, string statusval, string DateFrom = "", string Date_To = "")
@@ -705,8 +706,9 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
 
                     row++;
                 }
-                return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-                //return File(fileContents: package.GetAsByteArray(), contentType: "application/unknown");
+                return File(package.GetAsByteArray(), "application/unknown", "AdminRequisitionReport.xlsx");
+                //return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                ////return File(fileContents: package.GetAsByteArray(), contentType: "application/unknown");
             }
         }
         private IGrid<TBL_BALANCE_TRANSFER_LOGS> CreateExportMerchantGrid(string Super, string Distributor, string Disid, string statusval, string DateFrom = "", string Date_To = "")        
@@ -804,7 +806,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 Session.Remove("WhiteLevelUserId");
                 Session.Remove("WhiteLevelUserName");
                 Session.Remove("UserType");
-                return RedirectToAction("Index", "Login", new { area = "" });
+                return RedirectToAction("AdminLogin", "Login", new { area = "" });
             }
         }
         public PartialViewResult PaymentGatewayWalletRechargeReportIndexGrid()

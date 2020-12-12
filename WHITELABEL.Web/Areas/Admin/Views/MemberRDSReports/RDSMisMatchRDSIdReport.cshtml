@@ -46,7 +46,20 @@
                         <div class="panel-body">
 
                             <div class="row example-row" style="margin-bottom:10px;">
-                                <div class="col-md-5">
+                                <div class="col-md-3">
+                                    <div class="form-group row">
+                                        <label class="control-label col-md-3">Member Details</label>
+                                        <div class="col-md-9">
+                                            <div class="inputer">
+                                                <div class="input-wrapper">
+                                                    @Html.EditorFor(m => m.FromUser, new { htmlAttributes = new { @id = "txtMemberaNamedetails", style = " width:100%; padding:5px;", placeholder = "Enter Search Details", @class = "form-control" } })
+                                                    @Html.HiddenFor(model => model.SUPER_ID, new { id = "hdfmemberList" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
                                     <div class="form-group row">
                                         <label class="control-label col-md-3">Date From</label>
                                         <div class="col-md-9">
@@ -58,7 +71,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-5">
+                                <div class="col-md-3">
                                     <div class="form-group row">
                                         <label class="control-label col-md-3">Date From</label>
                                         <div class="col-md-9">
@@ -70,13 +83,13 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                     <div class="form-group row">
 
                                         <div class="col-md-12">
                                             <div class="inputer">
                                                 <div class="input-wrapper">
-                                                    <a href="#" class="btn btn-primary" id="btnSearchDAteWise">Search Date Wise</a>
+                                                    <a href="#" class="btn btn-primary" id="btnSearchDAteWise">Search </a>
                                                 </div>
                                             </div>
                                         </div>
@@ -96,31 +109,48 @@
 }
 
 <script>
-       $(function () {
+    //   $(function () {
+    //    $('#txtFromDate').datepicker({
+    //        format: "yyyy-MM-dd",
+    //        language: "es",
+    //        autoclose: true,
+    //        todayHighlight: true,
+    //        changeMonth: true,
+    //        changeYear: true
+    //    });
+    //});
+    //$(function () {
+    //    $('#txtToDate').datepicker({
+    //        format: "yyyy-MM-dd",
+    //        language: "es",
+    //        autoclose: true,
+    //        todayHighlight: true,
+    //        changeMonth: true,
+    //        changeYear: true
+    //    });
+    //});
+    const currentYear = (new Date).getFullYear();
+    const currentMonth = (new Date).getMonth();
+    const currentDay = (new Date).getDate();
+    $(document).ready(function () {
         $('#txtFromDate').datepicker({
-            format: "yyyy-MM-dd",
-            language: "es",
-            autoclose: true,
-            todayHighlight: true,
-            changeMonth: true,
-            changeYear: true
+            dateFormat: "yy-mm-dd",
+            maxDate: new Date(currentYear, currentMonth, currentDay),
+            uiLibrary: 'bootstrap4'
         });
-    });
-    $(function () {
         $('#txtToDate').datepicker({
-            format: "yyyy-MM-dd",
-            language: "es",
-            autoclose: true,
-            todayHighlight: true,
-            changeMonth: true,
-            changeYear: true
+            dateFormat: "yy-mm-dd",
+            maxDate: new Date(currentYear, currentMonth, currentDay),
+            uiLibrary: 'bootstrap4'
         });
     });
     $("#btnSearchDAteWise").on("click", function () {
-        var Date_From = $('#txtFromDate').val();
-        var Date_TO = $('#txtToDate').val();
+        const MerchantId = $('#txtMemberaNamedetails').val();
+        const Date_From = $('#txtFromDate').val();
+        const Date_TO = $('#txtToDate').val();
         $('.mvc-grid').mvcgrid({
-            query: 'DateFrom=' + Date_From + '&Date_To=' + Date_TO,
+            query: 'MerchantUser=' + MerchantId + '&DateFrom=' + Date_From + '&Date_To=' + Date_TO,
+            //query: 'DateFrom=' + Date_From + '&Date_To=' + Date_TO,
             reload: true,
             reloadStarted: function () {
                 $(".divFooterTotalComm").remove();
@@ -136,9 +166,10 @@
     </script>*@
 <script type="text/javascript">
     $("#btnExport").click(function () {
-            var Date_From = $('#txtFromDate').val();
-            var Date_TO = $('#txtToDate').val();
-            var url = '@(Url.Action("ExportRDSMisMatchRDSIdReport", "MemberRDSReports", new { area = "Admin" }) + ViewContext.HttpContext.Request.QueryString)?DateFrom=' + Date_From + '&Date_To=' + Date_TO;
+        const MerchantId = $('#txtMemberaNamedetails').val();
+        const Date_From = $('#txtFromDate').val();
+        const Date_TO = $('#txtToDate').val();
+        var url = '@(Url.Action("ExportRDSMisMatchRDSIdReport", "MemberRDSReports", new { area = "Admin" }) + ViewContext.HttpContext.Request.QueryString)?MerchantUser=' + MerchantId + '&DateFrom=' + Date_From + '&Date_To=' + Date_TO;
         window.location.href = url;
     })
 </script>

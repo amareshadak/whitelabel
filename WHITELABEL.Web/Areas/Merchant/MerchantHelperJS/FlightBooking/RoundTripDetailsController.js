@@ -388,11 +388,20 @@
         return hours + " hr " + minutes + " m";
     }
 
-    $scope.bookFlightRequest = function (isFormInvalid) {
-        debugger;
+    $scope.openPopupDetails = function (isFormInvalid) {
         if (isFormInvalid) {
             return false;
         }
+        else {
+            $('#PrintRoundTripTicketInformation').modal('show');
+        }
+    }
+
+    $scope.bookFlightRequest = function (isFormInvalid) {
+        if (isFormInvalid) {
+            return false;
+        }
+        $('#progressBookingreturn').show();
         const DeptNetAmt = $scope.DeptNETAmount;
         const ReturnNetAmt = $scope.ReturnNETAmount;
         const IsFlightType = $scope.IsFlightType;
@@ -405,9 +414,11 @@
         let outBoundObj = angular.copy($scope.bookingRequestObj);
         outBoundObj.RequestXml.BookTicketRequest.TrackNo = DeptDeatil[0].TrackNo;
         outBoundObj.RequestXml.BookTicketRequest.MobileNo = $scope.mobileNumber;
+        //outBoundObj.RequestXml.BookTicketRequest.MobileNo = '9903116214';
         outBoundObj.RequestXml.BookTicketRequest.AltMobileNo = $scope.altMobileNo;
         outBoundObj.RequestXml.BookTicketRequest.Email = $scope.emailAddress;
         outBoundObj.RequestXml.BookTicketRequest.Email = $scope.emailAddress;
+        //outBoundObj.RequestXml.BookTicketRequest.Email = 'rahuls1017@gmail.com';
         outBoundObj.RequestXml.BookTicketRequest.Passengers.Passenger = $scope.passengers;
         outBoundObj.RequestXml.BookTicketRequest.Segments.Segment = OutSegmentValue;
         outBoundObj.RequestXml.BookTicketRequest.AdditionalServices.AdditionalService = $scope.additionaServices.filter(function (x) { return x.IsSelected; });
@@ -418,9 +429,11 @@
         let InBoundObj = angular.copy($scope.bookingRequestObj);
         InBoundObj.RequestXml.BookTicketRequest.TrackNo = InboundFlightDeatil[0].TrackNo;
         InBoundObj.RequestXml.BookTicketRequest.MobileNo = $scope.mobileNumber;
+        //InBoundObj.RequestXml.BookTicketRequest.MobileNo = '9903116214';
         InBoundObj.RequestXml.BookTicketRequest.AltMobileNo = $scope.altMobileNo;
         InBoundObj.RequestXml.BookTicketRequest.Email = $scope.emailAddress;
         InBoundObj.RequestXml.BookTicketRequest.Email = $scope.emailAddress;
+        //InBoundObj.RequestXml.BookTicketRequest.Email = 'rahuls1017@gmail.com';
         InBoundObj.RequestXml.BookTicketRequest.Passengers.Passenger = $scope.passengers;
         InBoundObj.RequestXml.BookTicketRequest.Segments.Segment = inSegmentValue;
         InBoundObj.RequestXml.BookTicketRequest.AdditionalServices.AdditionalService = $scope.additionaServices.filter(function (x) { return x.IsSelected; });
@@ -441,7 +454,8 @@
         const service = FlightServices.getFlightReturnBookeServices(req);
 
         service.then(function (response) {
-            try {                
+            try {
+                $('#progressBookingreturn').hide();
                 let data =response.data;
                 const DeptRes = data.result;
                 const RetRes = data.ReturnRes;
@@ -510,6 +524,7 @@
         if (isFormInvalid) {
             return false;
         }
+        $('#progressBookingreturn').show();
         const DeptNetAmt = $scope.DeptNETAmount;
         const ReturnNetAmt = $scope.ReturnNETAmount;
         const IsFlightType = $scope.IsFlightType;
@@ -570,6 +585,7 @@
 
         service.then(function (response) {
             try {
+                $('#progressBookingreturn').hide();
                 let data = response.data;
                 const DeptRes = data.result;
                 const RetRes = data.ReturnRes;
@@ -695,8 +711,15 @@
 
     $scope.totalAmountCalculation = function (amount) {
         if (amount) {
+            if ($scope.userMarkup != '') {
+                return parseFloat(amount) + ($scope.additionalAddedAmount == 0 ? 0 : ($scope.additionalAddedAmount * 2)) + parseFloat($scope.userMarkup);
+            }
+            else {
+                $scope.userMarkup = 0;
+                return parseFloat(amount) + ($scope.additionalAddedAmount == 0 ? 0 : ($scope.additionalAddedAmount * 2)) + parseFloat($scope.userMarkup);
+            }
+
             
-            return parseFloat(amount) + ($scope.additionalAddedAmount == 0 ? 0 : ($scope.additionalAddedAmount * 2)) + parseFloat($scope.userMarkup);
         }
         return 0;
     }

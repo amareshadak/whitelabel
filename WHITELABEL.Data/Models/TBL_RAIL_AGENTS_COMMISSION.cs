@@ -59,5 +59,9 @@
         public string PG_Charges_Apply_Val { get; set; }
         [NotMapped]
         public string Additional_Charges_Apply_Val { get; set; }
+        [NotMapped]
+        public string FromUser { get; set; }
+        [NotMapped]
+        public long SUPER_ID { get; set; }
     }
 }

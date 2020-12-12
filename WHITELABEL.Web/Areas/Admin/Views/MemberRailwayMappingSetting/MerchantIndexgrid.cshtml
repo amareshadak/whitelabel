@@ -21,15 +21,32 @@
                                     columns.Add(model => model.RAIL_ID).Titled("Rail User Id").Filterable(true).Sortable(true);
                                     columns.Add(model => model.SECURITY_PIN_MD5).Titled("M Pin").Filterable(true).Sortable(true);
                                     columns.Add(model => (model.ACTIVE_MEMBER == true ? "Active" : "Deactive")).Titled("Status").Css("<style>.table - hover tbody tr: hover {background - color:red;}</style> ").Filterable(true).Sortable(true);
+                                    //   columns.Add(model => model.MEM_ID).Encoded(false).Filterable(false).Sortable(false).Titled("Edit Password")
+                                    //.RenderedAs(model => "<div style='text-align:center'><a href='" + @Url.Action("ChangeMemberPassword", "MemberRailwayMappingSetting", new { area = "Admin", memid = Encrypt.EncryptMe(model.MEM_ID.ToString()) }) + "' style='margin-right:10px' title='Edit'><i class='fa fa-eye'></i></a></div>");
                                     columns.Add(model => model.MEM_ID).Encoded(false).Filterable(false).Sortable(false).Titled("Edit Password")
-                                 .RenderedAs(model => "<div style='text-align:center'><a href='" + @Url.Action("ChangeMemberPassword", "MemberRailwayMappingSetting", new { area = "Admin", memid = Encrypt.EncryptMe(model.MEM_ID.ToString()) }) + "' style='margin-right:10px' title='Edit'><i class='fa fa-eye'></i></a></div>");
+                                 .RenderedAs(model => (model.ACTIVE_MEMBER == true ? "<div style='text-align:center'><a href='" + @Url.Action("ChangeMemberPassword", "MemberRailwayMappingSetting", new { area = "Admin", memid = Encrypt.EncryptMe(model.MEM_ID.ToString()) }) + "' style='margin-right:10px' title='Edit'><i class='fa fa-eye'></i></a></div>" : ""));
 
-                                    columns.Add(model => model.MEM_ID).Encoded(false).Filterable(false).Sortable(false).Titled("Action")
-                                        .RenderedAs(model => "<div style='text-align:center'><a href='" + @Url.Action("GetMerchantDetails", "MemberRailwayMappingSetting", new { area = "Admin", memid = Encrypt.EncryptMe(model.MEM_ID.ToString()) }) + "' style='margin-right:10px' title='Edit'><i class='fa fa-edit'></i></a></div>");
+                                    columns.Add(model => model.MEM_ID).Encoded(false).Filterable(false).Sortable(false).Titled("Tag Rail Id")
+                                        .RenderedAs(model => (model.ACTIVE_MEMBER == true ? "<div style = 'text-align:center'><a href = '" + @Url.Action("GetMerchantDetails", "MemberRailwayMappingSetting", new { area = "Admin", memid = Encrypt.EncryptMe(model.MEM_ID.ToString()) }) + "' style = 'margin-right:10px' title = 'Edit' ><i class='fa fa-edit'></i></a></div>" : ""));
 
                                     columns.Add(model => model.MEM_ID).Titled("RDS Tagging").Encoded(false).Filterable(false).Sortable(false)
-                                                    .RenderedAs(model => "<div style='text-align:center'><a href='" + @Url.Action("ServiceDetails", "MemberRailServiceTagging", new { area = "Admin", memid = Encrypt.EncryptMe(model.MEM_ID.ToString()) }) + "' title='Services'><i class='fa fa-cogs'></i></a></a></div>");
+                .RenderedAs(model => (model.ACTIVE_MEMBER == true ? "<div style='text-align:center'><a href='" + @Url.Action("ServiceDetails", "MemberRailServiceTagging", new { area = "Admin", memid = Encrypt.EncryptMe(model.MEM_ID.ToString()) }) + "' title='Services'><i class='fa fa-cogs'></i></a></a></div>" : ""));
 
+                                    //columns.Add(model => model.MEM_ID).Encoded(false).Filterable(false).Sortable(false).Titled("Action")
+                                    //    .RenderedAs(model => "<div style='text-align:center'><a href='" + @Url.Action("GetMerchantDetails", "MemberRailwayMappingSetting", new { area = "Admin", memid = Encrypt.EncryptMe(model.MEM_ID.ToString()) }) + "' style='margin-right:10px' title='Edit'><i class='fa fa-edit'></i></a></div>");
+
+                                    //columns.Add(model => model.MEM_ID).Titled("RDS Tagging").Encoded(false).Filterable(false).Sortable(false)
+                                    //                .RenderedAs(model => "<div style='text-align:center'><a href='" + @Url.Action("ServiceDetails", "MemberRailServiceTagging", new { area = "Admin", memid = Encrypt.EncryptMe(model.MEM_ID.ToString()) }) + "' title='Services'><i class='fa fa-cogs'></i></a></a></div>");
+
+
+                                    columns.Add(model => model.RailSLN).Encoded(false).Filterable(false).Sortable(false).Titled("Edit Rail Data")
+                                        .RenderedAs(model => (model.RailSLN == 0 ? "" : "<div style='text-align:center'><a href='" + @Url.Action("GetRailwayAgentInfo", "MemberRailAgentInformation", new { area = "Admin", memid = Encrypt.EncryptMe(model.RailSLN.ToString()) }) + "' style='margin-right:10px' title='Edit'><i class='fa fa-edit'></i></a></div>"));
+                                    columns.Add(model => model.RailSLN).Encoded(false).Filterable(false).Sortable(false).Titled("Rail Commission")
+                                               .RenderedAs(model => (model.RailSLN == 0 ? "" : "<div style='text-align:center'><a href='javascript:void(0);' data-toggle='modal' data-target='.transdAgentRail' id='transactionvalueRailCommAdminid' data-id=" + model.RailSLN.ToString() + " onclick='GetRAILAGENTInfo(" + model.RailSLN.ToString() + "," + model.MEM_ID.ToString() + ");' style='margin-right:10px' title='Rail Commission Setting'><i class='fa fa-edit'></i></a></div>"));
+                                    columns.Add(model => model.RailSLN).Encoded(false).Filterable(false).Sortable(false).Titled("Rail Commission Status")
+                                               .RenderedAs(model => (model.RailSLN==0?"": "<div style='text-align:center'><a href='javascript:void(0)'  title='" + (model.RailIdTagged == true ? "Commission Set" : "Commission Not Set") + "'>" + (model.RailIdTagged == true ? "<span style='color:green;'><b>Commission Set</b></span>" : "<span style='color:red;'><b>Commission Not Set</b></span>") + "</a></div>"));
+                                    columns.Add(model => model.RailSLN).Encoded(false).Filterable(false).Sortable(false).Titled("Rail Agent detail")
+                                               .RenderedAs(model => (model.RailSLN == 0 ? "" : "<div style='text-align:center'><a href='javascript:void(0);' data-toggle='modal' data-target='.transdAgentRailInformation' id='transactionvalueRailAgentid' data-id=" + model.RailSLN.ToString() + " onclick='FetchRailAgentInformation(" + model.RailSLN.ToString() + "," + model.MEM_ID.ToString() + ");' style='margin-right:10px' title='Rail Commission Setting'><i class='fa fa-eye'></i></a></div>"));
                                 })
                                  .Css("css-classes")
                .AppendCss("table table-striped")

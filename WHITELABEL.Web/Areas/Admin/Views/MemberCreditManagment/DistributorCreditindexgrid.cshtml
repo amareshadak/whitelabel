@@ -13,9 +13,12 @@
                                                 .Build(columns =>
                                                 {
                                                     columns.Add(model => model.SLN).Titled("Sln").Filterable(true).Sortable(true);
+                                                    columns.Add(model => model.COMPANY_NAME).Titled("Company").Filterable(true).Sortable(true);
                                                     columns.Add(model => model.FromUser).Titled("Member Name ").Filterable(true).Sortable(true);
                                                     columns.Add(model => model.CREDIT_AMOUNT).Titled("Credit Amount").Filterable(true).Sortable(true);
-                                                    columns.Add(model => model.CREDIT_DATE).Titled("Credit Date").Filterable(true).Sortable(true).Formatted("{0:yyyy-MM-dd}");
+                                                    columns.Add(model => model.CREDIT_DATE).Titled("Credit Date").MultiFilterable(true).Sortable(true).Formatted("{0:MM/dd/yyyy}");
+                                                    columns.Add(model => model.CREDIT_DATE).Titled("Credit Time").Formatted("{0:T}").Sortable(false).Filterable(false);
+
                                                     columns.Add(model => model.CREDIT_NOTE_DESCRIPTION).Titled("Credit Note").Filterable(true).Sortable(true);
 
                                                 })
@@ -31,12 +34,12 @@
                                                 .Filterable()
                                                 .Sortable()
 )
-<table class="divFooterTotalComm" style="width:100%">
+@*<table class="divFooterTotalComm" style="width:100%">
     <tr>
         <td style="width:25%;">Total Credit Amount:- <b>@Model.Sum(z => z.CREDIT_AMOUNT)</b></td>
         <td></td>
     </tr>
-</table>
+</table>*@
 
 
 

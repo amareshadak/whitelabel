@@ -1284,8 +1284,8 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
 
                     row++;
                 }
-
-                return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                return File(package.GetAsByteArray(), "application/unknown", "DistributorSectionRDSReport.xlsx");
+                //return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
                 //return File(fileContents: package.GetAsByteArray(), contentType: "application/unknown");
             }
         }
@@ -2440,9 +2440,9 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
 
                     row++;
                 }
-
-                return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-                //return File(fileContents: package.GetAsByteArray(), contentType: "application/unknown");
+                return File(package.GetAsByteArray(), "application/unknown", "DistributorSectionRDSReport.xlsx");
+                //return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                ////return File(fileContents: package.GetAsByteArray(), contentType: "application/unknown");
             }
         }
 
@@ -3526,9 +3526,9 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
 
                     row++;
                 }
-
-                return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-                //return File(fileContents: package.GetAsByteArray(), contentType: "application/unknown");
+                return File(package.GetAsByteArray(), "application/unknown", "DistributorSectionRDSReport.xlsx");
+                //return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                ////return File(fileContents: package.GetAsByteArray(), contentType: "application/unknown");
             }
         }
         [HttpPost]
@@ -4713,9 +4713,9 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
 
                     row++;
                 }
-
-                return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-                //return File(fileContents: package.GetAsByteArray(), contentType: "application/unknown");
+                return File(package.GetAsByteArray(), "application/unknown", "DistributorSectionRDSReport.xlsx");
+                //return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                ////return File(fileContents: package.GetAsByteArray(), contentType: "application/unknown");
             }
         }
         #endregion
@@ -5395,9 +5395,9 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
 
                     row++;
                 }
-
-                return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-                //return File(fileContents: package.GetAsByteArray(), contentType: "application/unknown");
+                return File(package.GetAsByteArray(), "application/unknown", "DistributorSectionRDSReport.xlsx");
+                //return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                ////return File(fileContents: package.GetAsByteArray(), contentType: "application/unknown");
             }
         }
         #endregion

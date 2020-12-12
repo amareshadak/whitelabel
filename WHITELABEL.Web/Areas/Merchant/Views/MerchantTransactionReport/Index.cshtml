@@ -17,7 +17,7 @@
 
                 <div class="col-md-8" style="text-align:right; padding-top:10px;">
                     <h3>
-                        Merchant Commission Report
+                        Merchant Transaction Report
                     </h3>
                 </div>
             </div>
@@ -55,7 +55,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-9">
+        <div class="col-md-9" style="display:none;">
             <div class="row example-row">
                 <div class="col-md-3">Select Service </div>
                 <div class="col-md-9">
@@ -78,7 +78,8 @@
                     </div>
                 </div>
                 <div class="card-footer text-right">
-                    <button id="btnExportrecoardMerchant" class="btn btn-info btn-xs">EXPORT</button>
+                    
+                    <button id="btnExportrecoardMerchant" class="btn btn-info btn-xs"><span class="ion-forward"></span> EXPORT</button>
                     @*<a href="#" id="btnExportrecoardMerchant" class="btn btn-info btn-xs"><span class="ion-forward"></span>Export</a>*@
                     @*<a href="@(Url.Action("ExportIndex","DistributorTransactionReport",new {area="Distributor" }) + ViewContext.HttpContext.Request.QueryString)" class="btn btn-info btn-xs"><span class="ion-forward"></span>Export</a>*@
                 </div>
@@ -90,13 +91,12 @@
 
 <script>
     $(document).on('change', '#TransactionStatus', function () {
-        var dropdownval = $('#MemberList').val();
+        //var dropdownval = $('#MemberList').val();
         var Date_From = $('#txtFromDate').val();
         var Date_TO = $('#txtToDate').val();
         $('.mvc-grid').mvcgrid({
-            query: 'search=' + this.value + '&DateFrom=' + Date_From + '&Date_To=' + Date_TO,
-            //query: 'search=' + dropdownval + '&Status=' + this.value,
-            //query: 'search=' + this.value+'&Satus'+this.value,
+            query: 'DateFrom=' + Date_From + '&Date_To=' + Date_TO,
+            //query: 'search=' + this.value + '&DateFrom=' + Date_From + '&Date_To=' + Date_TO,
             reload: true,
             reloadStarted: function () {
                 $(".divFooterTotalComm").remove();
@@ -126,13 +126,13 @@
     });
 
     $("#btnSearchDAteWise").on("click", function () {
-        var MerId = $('#TransactionStatus').val();
-        //var MerchantVal = $('#ddlMemberRDSBookingList').val();
+        //var MerId = $('#TransactionStatus').val();
+        
         var Date_From = $('#txtFromDate').val();
         var Date_TO = $('#txtToDate').val();
         $('.mvc-grid').mvcgrid({
-            query: 'search=' + MerId + '&DateFrom=' + Date_From + '&Date_To=' + Date_TO,
-            //query: 'DateFrom=' + Date_From + '&Date_To=' + Date_TO,
+            //query: 'search=' + MerId + '&DateFrom=' + Date_From + '&Date_To=' + Date_TO,
+            query: 'DateFrom=' + Date_From + '&Date_To=' + Date_TO,
             reload: true,
             reloadStarted: function () {
                 $(".divFooterTotalComm").remove();
@@ -145,11 +145,15 @@
 
 <script type="text/javascript">
     $("#btnExportrecoardMerchant").click(function () {
+        debugger;
         var Date_From = $('#txtFromDate').val();
         var Date_TO = $('#txtToDate').val();
-        var url = '@(Url.Action("ExportIndexMerchantTransReport", "MerchantTransactionReport", new {area= "Merchant" }) + ViewContext.HttpContext.Request.QueryString)?statusval=' + $("#TransactionStatus").val() + '&DateFrom=' + Date_From + '&Date_To=' + Date_TO;
+        var url = '@(Url.Action("ExportIndexMerchantTransReport", "MerchantTransactionReport", new {area= "Merchant" }) + ViewContext.HttpContext.Request.QueryString)?DateFrom=' + Date_From + '&Date_To=' + Date_TO;
         window.location.href = url;
+        @*var url = '@(Url.Action("ExportIndexMerchantTransReport", "MerchantTransactionReport", new {area= "Merchant" }) + ViewContext.HttpContext.Request.QueryString)?statusval=' + $("#TransactionStatus").val() + '&DateFrom=' + Date_From + '&Date_To=' + Date_TO;*@
+      
     })
+    
 </script>
 @*<script type="text/javascript">
         $("[id$=btnExport]").click(function (e) {

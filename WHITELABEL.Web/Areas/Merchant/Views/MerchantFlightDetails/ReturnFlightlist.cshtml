@@ -5,6 +5,15 @@
 }
 
 <style>
+    .square {
+         cursor: pointer;
+        padding-left: 3px;
+        height: 33px;
+        width: 40px;
+        margin-top: 15px;
+        padding-top: 8px;
+        /*border: 1px solid black;*/
+    }
        .fb {
            font-weight: bold;
            font-style: normal;
@@ -836,7 +845,7 @@
                                         </div>
                                         <div class="col-md-12 col-sm-12 col-xs-12 padLR0 hpySrpWdgt padT5">
 
-                                            <div class="width20 padR20 fl autoSuggestBox" id="source_st_srp">
+                                            <div class="width18 padR20 fl autoSuggestBox" id="source_st_srp">
                                                 <div class="white ico12 op6 padB5 txtTransUpper">From</div>
                                                 <div class="width100 fl autoSuggestBox autoSgstOuterWrap">
                                                     <div class="width100 fl autoSuggestBox autoSgstOuterWrap">
@@ -848,8 +857,13 @@
                                                     </div>
                                                 </div>
                                             </div>
-
-                                            <div class="width20 fl padR20 autoSuggestBox" id="destination_st_srp">
+                                            <div class="width4 padR20 fl autoSuggestBox" id="source_st_srp">
+                                                <div class="square">
+                                                    <a style="cursor: pointer;" href="#" ng-click="InterchangeLocation(fromAirportDetails,toAirportDetails)"><span class="input-group-addon" style="margin-top:2px;"><i class="fa fa-plane-departure"></i></span><span class="input-group-addon"><i class="fa fa-plane-arrival"></i></span></a>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="width18 fl padR20 autoSuggestBox" id="destination_st_srp">
                                                 <div class="white ico12 op6 padB5 txtTransUpper">To</div>
                                                 <div class="width100 fl autoSuggestBox autoSgstOuterWrap">
                                                     <div class="width100 fl autoSuggestBox autoSgstOuterWrap">
@@ -914,9 +928,9 @@
                                                                 <div class="widgetUserBlock fl padR10">
                                                                     <label class="ico14 db padB5"><span>Adults</span><small class="font13Lt db padT3"> (12+ yrs)</small></label>
                                                                     <div class="number-spinner">
-                                                                        <button class="fl minSpin" ng-disabled="adultsCount == 1" ng-click="adultsCount = adultsCount - 1;updatePassenger(adultsCount,childsCount,infantsCount);" data-dir="dwn">−</button>
+                                                                        <button class="fl minSpin" ng-disabled="adultsCount == 1" ng-click="adultsCount = adultsCount - 1;(infantsCount > adultsCount) ?infantsCount = adultsCount : infantsCount=infantsCount ;updatePassenger(adultsCount,childsCount,infantsCount);" data-dir="dwn">−</button>
                                                                         <input readonly type="text" ng-model="adultsCount" class="fl numbSpin">
-                                                                        <button class="fl plusSpin" ng-disabled="adultsCount == 8" ng-click="adultsCount = adultsCount + 1;updatePassenger(adultsCount,childsCount,infantsCount);" data-dir="up">+</button>
+                                                                        <button class="fl plusSpin" ng-disabled="(adultsCount + childsCount) == 9" ng-click="adultsCount = adultsCount + 1;updatePassenger(adultsCount,childsCount,infantsCount);" data-dir="up">+</button>
                                                                     </div>
                                                                 </div>
                                                                 <div>
@@ -925,7 +939,7 @@
                                                                         <div class="number-spinner">
                                                                             <button class="fl minSpin" ng-disabled="childsCount == 0" ng-click="childsCount = childsCount - 1;updatePassenger(adultsCount,childsCount,infantsCount);" data-dir="dwn">−</button>
                                                                             <input readonly type="text" ng-model="childsCount" class="fl numbSpin">
-                                                                            <button class="fl plusSpin" ng-disabled="childsCount == 8" ng-click="childsCount = childsCount + 1;updatePassenger(adultsCount,childsCount,infantsCount);" data-dir="up">+</button>
+                                                                            <button class="fl plusSpin" ng-disabled="(adultsCount + childsCount) == 9" ng-click="childsCount = childsCount + 1;updatePassenger(adultsCount,childsCount,infantsCount);" data-dir="up">+</button>
                                                                         </div>
                                                                     </div>
                                                                     <div class="widgetUserBlock fl padR10">
@@ -933,7 +947,7 @@
                                                                         <div class="number-spinner">
                                                                             <button class="fl minSpin" ng-disabled="infantsCount == 0" ng-click="infantsCount = infantsCount - 1;updatePassenger(adultsCount,childsCount,infantsCount);" data-dir="dwn">−</button>
                                                                             <input readonly type="text" ng-model="infantsCount" class="fl numbSpin">
-                                                                            <button class="fl plusSpin" ng-disabled="infantsCount == 8" ng-click="infantsCount = infantsCount + 1;updatePassenger(adultsCount,childsCount,infantsCount);" data-dir="up">+</button>
+                                                                            <button class="fl plusSpin" ng-disabled="infantsCount == adultsCount" ng-click="infantsCount = infantsCount + 1;updatePassenger(adultsCount,childsCount,infantsCount);" data-dir="up">+</button>
                                                                         </div>
                                                                     </div>
                                                                 </div>

@@ -150,21 +150,35 @@
                                     <div class="col-2">
                                         <div class="form-group">
                                             <label>Adults</label>
-                                            <select id="ddlTravalAdultType" style="width:100%" class="form-control" ng-model="adultTypeTrv">
+
+                                            <div class="input-group mb-3">
+                                                <div class="input-group-prepend">
+                                                    <button type="button"  class="btn btn-primary btn-default" ng-disabled="adultTypeTrv == 1" ng-click="adultTypeTrv = adultTypeTrv - 1;(InfantTypeTrv > adultTypeTrv) ?InfantTypeTrv = adultTypeTrv : InfantTypeTrv=InfantTypeTrv ;" data-dir="dwn">−</button>
+                                                </div>
+                                                <input readonly type="text" ng-model="adultTypeTrv" class="form-control">
+                                                <div class="input-group-append">
+                                                        <button type="button"  class="btn btn-primary btn-default" ng-disabled="(adultTypeTrv + ChildTypeTrv) == 9" ng-click="adultTypeTrv = adultTypeTrv + 1;" data-dir="up">+</button>
+                                                </div>
+                                            </div>
+
+                                           
+                                          
+                                            
+                                            @*<select id="ddlTravalAdultType" ng-change="((InfantTypeTrv > adultTypeTrv) ? (InfantTypeTrv =adultTypeTrv) : (InfantTypeTrv =InfantTypeTrv)); (adultTypeTrv+ChildTypeTrv) >= 9" style="width:100%" class="form-control" ng-model="adultTypeTrv">
                                                 <option selected value="1">1</option>
                                                 <option value="2">2</option>
                                                 <option value="3">3</option>
                                                 <option value="4">4</option>
                                                 <option value="5">5</option>
                                                 <option value="6">6</option>
-                                            </select>
+                                            </select>*@
                                         </div>
                                     </div>
 
                                     <div class="col-2">
                                         <div class="form-group">
                                             <label>Children</label>
-                                            <select id="ddlTravalChildType" style="width:100%" class="form-control" ng-model="ChildTypeTrv">
+                                            @*<select id="ddlTravalChildType" style="width:100%" class="form-control" ng-model="ChildTypeTrv">
                                                 <option value="">Number of Child</option>
                                                 <option value="1">1</option>
                                                 <option value="2">2</option>
@@ -172,13 +186,26 @@
                                                 <option value="4">4</option>
                                                 <option value="5">5</option>
                                                 <option value="6">6</option>
-                                            </select>
+                                            </select>*@
+
+
+                                            <div class="input-group mb-3">
+                                                <div class="input-group-prepend">
+                                                    <button type="button"  class="btn btn-primary btn-default" ng-disabled="ChildTypeTrv == 0" ng-click="ChildTypeTrv = ChildTypeTrv - 1;"  data-dir="dwn">−</button>
+
+                                                </div>
+                                                <input readonly type="text" ng-model="ChildTypeTrv" class="form-control">
+                                                <div class="input-group-append">
+                                                    <button type="button"  class="btn btn-primary btn-default" ng-disabled="(adultTypeTrv + ChildTypeTrv) == 9" ng-click="ChildTypeTrv = ChildTypeTrv + 1;" data-dir="up">+</button>
+                                                </div>
+                                            </div>
+
                                         </div>
                                     </div>
                                     <div class="col-2">
                                         <div class="form-group">
                                             <label>Infants</label>
-                                            <select id="ddlTravalInfantType" style="width:100%" class="form-control" ng-model="InfantTypeTrv">
+                                            @*<select id="ddlTravalInfantType" style="width:100%" class="form-control" ng-model="InfantTypeTrv"  ng-change="(InfantTypeTrv > adultTypeTrv) ? (InfantTypeTrv =adultTypeTrv) : (InfantTypeTrv =InfantTypeTrv)">
                                                 <option value="">Number of Infant</option>
                                                 <option value="1">1</option>
                                                 <option value="2">2</option>
@@ -186,7 +213,22 @@
                                                 <option value="4">4</option>
                                                 <option value="5">5</option>
                                                 <option value="6">6</option>
-                                            </select>
+                                            </select>*@
+
+                                         
+
+
+                                            <div class="input-group mb-3">
+                                                <div class="input-group-prepend">
+                                                    <button type="button" class="btn btn-primary btn-default"ng-disabled="InfantTypeTrv == 0" ng-click="InfantTypeTrv = InfantTypeTrv - 1;updatePassenger(adultTypeTrv,ChildTypeTrv,InfantTypeTrv);" data-dir="dwn">−</button>
+
+                                                </div>
+                                                <input readonly type="text" ng-model="InfantTypeTrv" class="form-control">
+                                                <div class="input-group-append">
+                                                    <button type="button"  class="btn btn-primary btn-default" ng-disabled="InfantTypeTrv == adultTypeTrv" ng-click="InfantTypeTrv = InfantTypeTrv + 1;" data-dir="up">+</button>
+                                                </div>
+                                            </div>
+
                                         </div>
                                     </div>
 
@@ -202,6 +244,10 @@
                                         </div>
                                     </div>
                                 </div>
+
+
+                                
+
                                 <div class="row justify-content-md-center">
                                     <div class="col-8">
                                         <hr />

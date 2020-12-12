@@ -182,9 +182,9 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
 
                     row++;
                 }
-
-                return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-                //return File(fileContents: package.GetAsByteArray(), contentType: "application/unknown");
+                return File(package.GetAsByteArray(), "application/unknown", "DistributorRequisitionReport.xlsx");
+                //return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                ////return File(fileContents: package.GetAsByteArray(), contentType: "application/unknown");
             }
         }
 
@@ -219,7 +219,8 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                            INSERTED_BY = x.INSERTED_BY,
                                            InsertedByUserName = (db.TBL_MASTER_MEMBER.Where(s => s.MEM_ID == x.INSERTED_BY).Select(a => a.UName).FirstOrDefault()),
                                            CompanyName = y.COMPANY,
-                                           PaymentTrnDetails = x.PAYMENT_TXN_DETAILS
+                                           PaymentTrnDetails = x.PAYMENT_TXN_DETAILS,
+                                           STATUS=x.STATUS
                                        }).AsEnumerable().Select(z => new TBL_BALANCE_TRANSFER_LOGS
                                        {
                                            ToUser = z.Touser,
@@ -235,7 +236,8 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                            PAYMENT_METHOD = z.PAY_MODE,
                                            INSERTED_USERNAME = z.InsertedByUserName,
                                            CompanyName = z.CompanyName,
-                                           PAYMENT_TXN_DETAILS = z.PaymentTrnDetails
+                                           PAYMENT_TXN_DETAILS = z.PaymentTrnDetails,
+                                           STATUS=z.STATUS
                                        }).ToList().OrderByDescending(x => x.SLN);
 
                 IGrid<TBL_BALANCE_TRANSFER_LOGS> grid = new Grid<TBL_BALANCE_TRANSFER_LOGS>(transactionlist);
@@ -246,16 +248,18 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                 grid.Columns.Add(model => model.FromUser).Titled("From Member");
                 grid.Columns.Add(model => model.CompanyName).Titled("Company Name");
                 grid.Columns.Add(model => model.REFERENCE_NO).Titled("Reference No");
-                grid.Columns.Add(model => model.REQUEST_DATE).Titled("Req Date").Formatted("{0:yyyy-MM-dd}").MultiFilterable(true);
-                grid.Columns.Add(model => model.REQUEST_TIME).Titled("Req Date").Formatted("{0:T}");
+                grid.Columns.Add(model => model.REQUEST_DATE).Titled("Req Date").Formatted("{0:MM/dd/yyyy}").MultiFilterable(true);
+                grid.Columns.Add(model => model.REQUEST_TIME).Titled("Req Date").Formatted("{0:T}").Filterable(false);
                 grid.Columns.Add(model => model.AMOUNT).Titled("Amount");
                 grid.Columns.Add(model => model.PAYMENT_METHOD).Titled("Pay Mode");
                 grid.Columns.Add(model => model.BANK_ACCOUNT).Titled("Bank Acnt");
                 grid.Columns.Add(model => model.TRANSACTION_DETAILS).Titled("Description");
                 grid.Columns.Add(model => model.INSERTED_USERNAME).Titled("Transaction Done By");
                 grid.Columns.Add(model => model.PAYMENT_TXN_DETAILS).Titled("Payment Details");
+                grid.Columns.Add(model => model.STATUS).Titled("Req Status");
                 grid.Columns.Add(model => model.SLN).Titled("Edit").Encoded(false).Filterable(false).Sortable(false)
-                    .RenderedAs(model => "<div style='text-align:center'><a href='" + @Url.Action("RequisitionDetails", "DistributorRequisition", new { area = "Distributor", transId = Encrypt.EncryptMe(model.SLN.ToString()) }) + "' title='Edit'><i class='fa fa-edit'></i></a></div>");
+                        .RenderedAs(model =>model.STATUS== "Pending" ? ("<div style='text-align:center'><a href='" + @Url.Action("RequisitionDetails", "DistributorRequisition", new { area = "Distributor", transId = Encrypt.EncryptMe(model.SLN.ToString()) }) + "' title='Edit'><i class='fa fa-edit'></i></a></div>"):"");
+                //.RenderedAs(model => "<div style='text-align:center'><a href='" + @Url.Action("RequisitionDetails", "DistributorRequisition", new { area = "Distributor", transId = Encrypt.EncryptMe(model.SLN.ToString()) }) + "' title='Edit'><i class='fa fa-edit'></i></a></div>");
                 grid.Columns.Add(model => model.SLN).Titled("Action").Encoded(false).Filterable(false).Sortable(false)
                         .RenderedAs(model => "<div style='text-align:center'> <a href='javascript:void(0);' class='btn btn-primary btn-xs' data-toggle='modal' data-target='.transd' id='transactionvalueid' data-id=" + model.SLN + " onclick='getvalue(" + model.SLN + ");' title='Activate/Deactivate'>Action</a></div>");
 
@@ -276,7 +280,8 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                 DateTime Todaydate = Convert.ToDateTime(DateTime.Now.ToString("yyyy-MM-dd"));
                 var transactionlist = (from x in db.TBL_BALANCE_TRANSFER_LOGS
                                        join y in db.TBL_MASTER_MEMBER on x.FROM_MEMBER equals y.MEM_ID
-                                       where x.STATUS == "Pending" && x.TO_MEMBER == MemberCurrentUser.MEM_ID && x.REQUEST_DATE == Todaydate
+                                       //where x.STATUS == "Pending" && x.TO_MEMBER == MemberCurrentUser.MEM_ID && x.REQUEST_DATE == Todaydate
+                                       where x.STATUS == "Pending" && x.TO_MEMBER == MemberCurrentUser.MEM_ID 
                                        select new
                                        {
                                            Touser = "DISTRIBUTOR",
@@ -293,7 +298,8 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                            INSERTED_BY = x.INSERTED_BY,
                                            InsertedByUserName = (db.TBL_MASTER_MEMBER.Where(s => s.MEM_ID == x.INSERTED_BY).Select(a => a.UName).FirstOrDefault()),
                                            ComnanyName = y.COMPANY,
-                                           PaymentTrnDetails = x.PAYMENT_TXN_DETAILS
+                                           PaymentTrnDetails = x.PAYMENT_TXN_DETAILS,
+                                           STATUS=x.STATUS
                                        }).AsEnumerable().Select(z => new TBL_BALANCE_TRANSFER_LOGS
                                        {
                                            ToUser = z.Touser,
@@ -309,7 +315,8 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                            PAYMENT_METHOD = z.PAY_MODE,
                                            INSERTED_USERNAME = z.InsertedByUserName,
                                            CompanyName = z.ComnanyName,
-                                           PAYMENT_TXN_DETAILS = z.PaymentTrnDetails
+                                           PAYMENT_TXN_DETAILS = z.PaymentTrnDetails,
+                                           STATUS=z.STATUS
                                        }).ToList().OrderByDescending(x => x.SLN);
 
                 IGrid<TBL_BALANCE_TRANSFER_LOGS> grid = new Grid<TBL_BALANCE_TRANSFER_LOGS>(transactionlist);
@@ -320,16 +327,18 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                 grid.Columns.Add(model => model.FromUser).Titled("From Member");
                 grid.Columns.Add(model => model.CompanyName).Titled("Company Name");
                 grid.Columns.Add(model => model.REFERENCE_NO).Titled("Reference No");
-                grid.Columns.Add(model => model.REQUEST_DATE).Titled("Req Date").Formatted("{0:yyyy-MM-dd}").MultiFilterable(true);
-                grid.Columns.Add(model => model.REQUEST_TIME).Titled("Req Date").Formatted("{0:T}");
+                grid.Columns.Add(model => model.REQUEST_DATE).Titled("Req Date").Formatted("{0:MM/dd/yyyy}").MultiFilterable(true);
+                grid.Columns.Add(model => model.REQUEST_TIME).Titled("Req Date").Formatted("{0:T}").Filterable(false);
                 grid.Columns.Add(model => model.AMOUNT).Titled("Amount");
                 grid.Columns.Add(model => model.PAYMENT_METHOD).Titled("Pay Mode");
                 grid.Columns.Add(model => model.BANK_ACCOUNT).Titled("Bank Acnt");
                 grid.Columns.Add(model => model.TRANSACTION_DETAILS).Titled("Description");
                 grid.Columns.Add(model => model.INSERTED_USERNAME).Titled("Transaction Done By");
                 grid.Columns.Add(model => model.PAYMENT_TXN_DETAILS).Titled("Payment Details");
+                grid.Columns.Add(model => model.STATUS).Titled("Req Status");
                 grid.Columns.Add(model => model.SLN).Titled("Edit").Encoded(false).Filterable(false).Sortable(false)
-                    .RenderedAs(model => "<div style='text-align:center'><a href='" + @Url.Action("RequisitionDetails", "DistributorRequisition", new { area = "Distributor", transId = Encrypt.EncryptMe(model.SLN.ToString()) }) + "' title='Edit'><i class='fa fa-edit'></i></a></div>");
+                                        .RenderedAs(model => model.STATUS== "Pending"?("<div style='text-align:center'><a href='" + @Url.Action("RequisitionDetails", "DistributorRequisition", new { area = "Distributor", transId = Encrypt.EncryptMe(model.SLN.ToString()) }) + "' title='Edit'><i class='fa fa-edit'></i></a></div>"):"");
+                //.RenderedAs(model => "<div style='text-align:center'><a href='" + @Url.Action("RequisitionDetails", "DistributorRequisition", new { area = "Distributor", transId = Encrypt.EncryptMe(model.SLN.ToString()) }) + "' title='Edit'><i class='fa fa-edit'></i></a></div>");
                 grid.Columns.Add(model => model.SLN).Titled("Action").Encoded(false).Filterable(false).Sortable(false)
                         .RenderedAs(model => "<div style='text-align:center'> <a href='javascript:void(0);' class='btn btn-primary btn-xs' data-toggle='modal' data-target='.transd' id='transactionvalueid' data-id=" + model.SLN + " onclick='getvalue(" + model.SLN + ");' title='Activate/Deactivate'>Action</a></div>");
 
@@ -887,7 +896,8 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                         };
                                         db.TBL_ACCOUNTS.Add(DIST_objACCOUNT);
                                         //END Distributor Main Balanve Update and insert innfor in Account table
-                                        Mer_Add_MainBalance = MER_MainBal + Trans_Req_Amount - CREDITED_REQ_AMT;
+                                        Mer_Add_MainBalance = MER_MainBal + Trans_Req_Amount - MER_CR_LMT_AMT;
+                                        //Mer_Add_MainBalance = MER_MainBal + Trans_Req_Amount - CREDITED_REQ_AMT;
                                         Merchant_Info.BALANCE = Mer_Add_MainBalance;
                                         Merchant_Info.CREDIT_LIMIT = 0;
                                         //Merchant_Info.RESERVED_CREDIT_LIMIT = 0;
@@ -2103,7 +2113,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                            transid = x.TransactionID,
                                            ReferenceNo = x.REFERENCE_NO,
                                            FromUser = y.UName,
-                                           REQUEST_DATE = x.REQUEST_DATE,
+                                           REQUEST_TIME = x.REQUEST_TIME,
                                            AMOUNT = x.AMOUNT,
                                            BANK_ACCOUNT = x.BANK_ACCOUNT,
                                            TRANSACTION_DETAILS = x.TRANSACTION_DETAILS,
@@ -2119,7 +2129,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                            REFERENCE_NO = z.ReferenceNo,
                                            FromUser = z.FromUser,
                                            AMOUNT = z.AMOUNT,
-                                           REQUEST_DATE = z.REQUEST_DATE,
+                                           REQUEST_TIME = z.REQUEST_TIME,
                                            BANK_ACCOUNT = z.BANK_ACCOUNT,
                                            TRANSACTION_DETAILS = z.TRANSACTION_DETAILS,
                                            SLN = z.SLN,
@@ -2140,14 +2150,15 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
 
                 var transactionlist = (from x in db.TBL_BALANCE_TRANSFER_LOGS
                                        join y in db.TBL_MASTER_MEMBER on x.FROM_MEMBER equals y.MEM_ID
-                                       where x.STATUS == "Decline" && x.TO_MEMBER == MemberCurrentUser.MEM_ID && x.APPROVAL_DATE >= NowDate && x.APPROVAL_DATE<= Today_date
+                                       where x.STATUS == "Decline" && x.TO_MEMBER == MemberCurrentUser.MEM_ID 
+                                       //where x.STATUS == "Decline" && x.TO_MEMBER == MemberCurrentUser.MEM_ID && x.APPROVAL_DATE >= NowDate && x.APPROVAL_DATE<= Today_date
                                        select new
                                        {
                                            Touser = "DISTRIBUTOR",
                                            transid = x.TransactionID,
                                            ReferenceNo = x.REFERENCE_NO,
                                            FromUser = y.UName,
-                                           REQUEST_DATE = x.REQUEST_DATE,
+                                           REQUEST_TIME = x.REQUEST_TIME,
                                            AMOUNT = x.AMOUNT,
                                            BANK_ACCOUNT = x.BANK_ACCOUNT,
                                            TRANSACTION_DETAILS = x.TRANSACTION_DETAILS,
@@ -2161,7 +2172,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                            REFERENCE_NO = z.ReferenceNo,
                                            FromUser = z.FromUser,
                                            AMOUNT = z.AMOUNT,
-                                           REQUEST_DATE = z.REQUEST_DATE,
+                                           REQUEST_TIME = z.REQUEST_TIME,
                                            BANK_ACCOUNT = z.BANK_ACCOUNT,
                                            TRANSACTION_DETAILS = z.TRANSACTION_DETAILS,
                                            SLN = z.SLN,
@@ -2340,9 +2351,9 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
 
                     row++;
                 }
-
-                return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-                //return File(fileContents: package.GetAsByteArray(), contentType: "application/unknown");
+                return File(package.GetAsByteArray(), "application/unknown", "DistributorRequisitionReport.xlsx");
+                //return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                ////return File(fileContents: package.GetAsByteArray(), contentType: "application/unknown");
             }
         }
         private IGrid<TBL_BALANCE_TRANSFER_LOGS> CreateExportMerchnatDistributorRequisitionGrid(string Disid, string statusval, string DateFrom = "", string Date_To = "")
@@ -2462,9 +2473,9 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
 
                     row++;
                 }
-
-                return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-                //return File(fileContents: package.GetAsByteArray(), contentType: "application/unknown");
+                return File(package.GetAsByteArray(), "application/unknown", "DistributorRequisitionReport.xlsx");
+                //return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                ////return File(fileContents: package.GetAsByteArray(), contentType: "application/unknown");
             }
         }
         private IGrid<TBL_BALANCE_TRANSFER_LOGS> CreateExportDistributorRequisitionGrid(string statusval, string DateFrom = "", string Date_To = "")
@@ -2525,9 +2536,9 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
 
                     row++;
                 }
-
-                return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-                //return File(fileContents: package.GetAsByteArray(), contentType: "application/unknown");
+                return File(package.GetAsByteArray(), "application/unknown", "DistributorRequisitionReport.xlsx");
+                //return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                ////return File(fileContents: package.GetAsByteArray(), contentType: "application/unknown");
             }
         }
 
@@ -2694,7 +2705,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                                TransId = x.TransactionID,
                                                FromUser = y.UName,
                                                Reference_NO = x.REFERENCE_NO,
-                                               REQUEST_DATE = x.REQUEST_DATE,
+                                               REQUEST_TIME = x.REQUEST_TIME,
                                                AMOUNT = x.AMOUNT,
                                                BANK_ACCOUNT = x.BANK_ACCOUNT,
                                                TRANSACTION_DETAILS = x.TRANSACTION_DETAILS,
@@ -2711,7 +2722,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                                REFERENCE_NO = z.Reference_NO,
                                                FromUser = z.FromUser,
                                                AMOUNT = z.AMOUNT,
-                                               REQUEST_DATE = z.REQUEST_DATE,
+                                               REQUEST_TIME = z.REQUEST_TIME,
                                                BANK_ACCOUNT = z.BANK_ACCOUNT,
                                                TRANSACTION_DETAILS = z.TRANSACTION_DETAILS,
                                                SLN = z.SLN,
@@ -2741,7 +2752,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                                TransId = x.TransactionID,
                                                FromUser = y.UName,
                                                Reference_NO = x.REFERENCE_NO,
-                                               REQUEST_DATE = x.REQUEST_DATE,
+                                               REQUEST_TIME = x.REQUEST_TIME,
                                                AMOUNT = x.AMOUNT,
                                                BANK_ACCOUNT = x.BANK_ACCOUNT,
                                                TRANSACTION_DETAILS = x.TRANSACTION_DETAILS,
@@ -2758,7 +2769,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                                REFERENCE_NO = z.Reference_NO,
                                                FromUser = z.FromUser,
                                                AMOUNT = z.AMOUNT,
-                                               REQUEST_DATE = z.REQUEST_DATE,
+                                               REQUEST_TIME = z.REQUEST_TIME,
                                                BANK_ACCOUNT = z.BANK_ACCOUNT,
                                                TRANSACTION_DETAILS = z.TRANSACTION_DETAILS,
                                                SLN = z.SLN,
@@ -2787,7 +2798,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                                TransId = x.TransactionID,
                                                FromUser = y.UName,
                                                Reference_NO = x.REFERENCE_NO,
-                                               REQUEST_DATE = x.REQUEST_DATE,
+                                               REQUEST_TIME = x.REQUEST_TIME,
                                                AMOUNT = x.AMOUNT,
                                                BANK_ACCOUNT = x.BANK_ACCOUNT,
                                                TRANSACTION_DETAILS = x.TRANSACTION_DETAILS,
@@ -2804,7 +2815,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                                REFERENCE_NO = z.Reference_NO,
                                                FromUser = z.FromUser,
                                                AMOUNT = z.AMOUNT,
-                                               REQUEST_DATE = z.REQUEST_DATE,
+                                               REQUEST_TIME = z.REQUEST_TIME,
                                                BANK_ACCOUNT = z.BANK_ACCOUNT,
                                                TRANSACTION_DETAILS = z.TRANSACTION_DETAILS,
                                                SLN = z.SLN,
@@ -2833,7 +2844,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                                TransId = x.TransactionID,
                                                FromUser = y.UName,
                                                Reference_NO = x.REFERENCE_NO,
-                                               REQUEST_DATE = x.REQUEST_DATE,
+                                               REQUEST_TIME = x.REQUEST_TIME,
                                                AMOUNT = x.AMOUNT,
                                                BANK_ACCOUNT = x.BANK_ACCOUNT,
                                                TRANSACTION_DETAILS = x.TRANSACTION_DETAILS,
@@ -2850,7 +2861,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                                REFERENCE_NO = z.Reference_NO,
                                                FromUser = z.FromUser,
                                                AMOUNT = z.AMOUNT,
-                                               REQUEST_DATE = z.REQUEST_DATE,
+                                               REQUEST_TIME = z.REQUEST_TIME,
                                                BANK_ACCOUNT = z.BANK_ACCOUNT,
                                                TRANSACTION_DETAILS = z.TRANSACTION_DETAILS,
                                                SLN = z.SLN,
@@ -2872,7 +2883,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                                TransId = x.TransactionID,
                                                FromUser = y.UName,
                                                Reference_NO = x.REFERENCE_NO,
-                                               REQUEST_DATE = x.REQUEST_DATE,
+                                               REQUEST_TIME = x.REQUEST_TIME,
                                                AMOUNT = x.AMOUNT,
                                                BANK_ACCOUNT = x.BANK_ACCOUNT,
                                                TRANSACTION_DETAILS = x.TRANSACTION_DETAILS,
@@ -2889,7 +2900,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                                REFERENCE_NO = z.Reference_NO,
                                                FromUser = z.FromUser,
                                                AMOUNT = z.AMOUNT,
-                                               REQUEST_DATE = z.REQUEST_DATE,
+                                               REQUEST_TIME = z.REQUEST_TIME,
                                                BANK_ACCOUNT = z.BANK_ACCOUNT,
                                                TRANSACTION_DETAILS = z.TRANSACTION_DETAILS,
                                                SLN = z.SLN,
@@ -2911,7 +2922,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                                TransId = x.TransactionID,
                                                FromUser = y.UName,
                                                Reference_NO = x.REFERENCE_NO,
-                                               REQUEST_DATE = x.REQUEST_DATE,
+                                               REQUEST_TIME = x.REQUEST_TIME,
                                                AMOUNT = x.AMOUNT,
                                                BANK_ACCOUNT = x.BANK_ACCOUNT,
                                                TRANSACTION_DETAILS = x.TRANSACTION_DETAILS,
@@ -2928,7 +2939,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                                REFERENCE_NO = z.Reference_NO,
                                                FromUser = z.FromUser,
                                                AMOUNT = z.AMOUNT,
-                                               REQUEST_DATE = z.REQUEST_DATE,
+                                               REQUEST_TIME = z.REQUEST_TIME,
                                                BANK_ACCOUNT = z.BANK_ACCOUNT,
                                                TRANSACTION_DETAILS = z.TRANSACTION_DETAILS,
                                                SLN = z.SLN,
@@ -2950,7 +2961,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                                TransId = x.TransactionID,
                                                FromUser = y.UName,
                                                Reference_NO = x.REFERENCE_NO,
-                                               REQUEST_DATE = x.REQUEST_DATE,
+                                               REQUEST_TIME = x.REQUEST_TIME,
                                                AMOUNT = x.AMOUNT,
                                                BANK_ACCOUNT = x.BANK_ACCOUNT,
                                                TRANSACTION_DETAILS = x.TRANSACTION_DETAILS,
@@ -2967,7 +2978,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                                REFERENCE_NO = z.Reference_NO,
                                                FromUser = z.FromUser,
                                                AMOUNT = z.AMOUNT,
-                                               REQUEST_DATE = z.REQUEST_DATE,
+                                               REQUEST_TIME = z.REQUEST_TIME,
                                                BANK_ACCOUNT = z.BANK_ACCOUNT,
                                                TRANSACTION_DETAILS = z.TRANSACTION_DETAILS,
                                                SLN = z.SLN,
@@ -2984,14 +2995,15 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                     DateTime Todaydate = Convert.ToDateTime(DateTime.Now.ToString("yyyy-MM-dd"));
                     var transactionlist = (from x in db.TBL_BALANCE_TRANSFER_LOGS
                                            join y in db.TBL_MASTER_MEMBER on x.FROM_MEMBER equals y.MEM_ID
-                                           where x.TO_MEMBER == MemberCurrentUser.MEM_ID && x.REQUEST_DATE == Todaydate
+                                           where x.TO_MEMBER == MemberCurrentUser.MEM_ID 
+                                           //where x.TO_MEMBER == MemberCurrentUser.MEM_ID && x.REQUEST_DATE == Todaydate
                                            select new
                                            {
                                                //Touser = "White Label",
                                                TransId = x.TransactionID,
                                                FromUser = y.UName,
                                                Reference_NO = x.REFERENCE_NO,
-                                               REQUEST_DATE = x.REQUEST_DATE,
+                                               REQUEST_TIME = x.REQUEST_TIME,
                                                AMOUNT = x.AMOUNT,
                                                BANK_ACCOUNT = x.BANK_ACCOUNT,
                                                TRANSACTION_DETAILS = x.TRANSACTION_DETAILS,
@@ -3008,7 +3020,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                                REFERENCE_NO = z.Reference_NO,
                                                FromUser = z.FromUser,
                                                AMOUNT = z.AMOUNT,
-                                               REQUEST_DATE = z.REQUEST_DATE,
+                                               REQUEST_TIME = z.REQUEST_TIME,
                                                BANK_ACCOUNT = z.BANK_ACCOUNT,
                                                TRANSACTION_DETAILS = z.TRANSACTION_DETAILS,
                                                SLN = z.SLN,
@@ -3055,9 +3067,9 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
 
                     row++;
                 }
-
-                return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-                //return File(fileContents: package.GetAsByteArray(), contentType: "application/unknown");
+                return File(package.GetAsByteArray(), "application/unknown", "DistributorRequisitionReport.xlsx");
+                //return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                ////return File(fileContents: package.GetAsByteArray(), contentType: "application/unknown");
             }
         }
         private IGrid<TBL_BALANCE_TRANSFER_LOGS> ApproveExportableGridINExcel(string status = "", string DateFrom = "", string Date_To = "")
@@ -3607,7 +3619,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                                TransId = x.TransactionID,
                                                FromUser = y.UName,
                                                Reference_NO = x.REFERENCE_NO,
-                                               REQUEST_DATE = x.REQUEST_DATE,
+                                               REQUEST_TIME = x.REQUEST_TIME,
                                                AMOUNT = x.AMOUNT,
                                                BANK_ACCOUNT = x.BANK_ACCOUNT,
                                                TRANSACTION_DETAILS = x.TRANSACTION_DETAILS,
@@ -3624,7 +3636,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                                REFERENCE_NO = z.Reference_NO,
                                                FromUser = z.FromUser,
                                                AMOUNT = z.AMOUNT,
-                                               REQUEST_DATE = z.REQUEST_DATE,
+                                               REQUEST_TIME = z.REQUEST_TIME,
                                                BANK_ACCOUNT = z.BANK_ACCOUNT,
                                                TRANSACTION_DETAILS = z.TRANSACTION_DETAILS,
                                                SLN = z.SLN,
@@ -3653,7 +3665,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                                TransId = x.TransactionID,
                                                FromUser = y.UName,
                                                Reference_NO = x.REFERENCE_NO,
-                                               REQUEST_DATE = x.REQUEST_DATE,
+                                               REQUEST_TIME = x.REQUEST_TIME,
                                                AMOUNT = x.AMOUNT,
                                                BANK_ACCOUNT = x.BANK_ACCOUNT,
                                                TRANSACTION_DETAILS = x.TRANSACTION_DETAILS,
@@ -3670,7 +3682,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                                REFERENCE_NO = z.Reference_NO,
                                                FromUser = z.FromUser,
                                                AMOUNT = z.AMOUNT,
-                                               REQUEST_DATE = z.REQUEST_DATE,
+                                               REQUEST_TIME = z.REQUEST_TIME,
                                                BANK_ACCOUNT = z.BANK_ACCOUNT,
                                                TRANSACTION_DETAILS = z.TRANSACTION_DETAILS,
                                                SLN = z.SLN,
@@ -3699,7 +3711,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                                TransId = x.TransactionID,
                                                FromUser = y.UName,
                                                Reference_NO = x.REFERENCE_NO,
-                                               REQUEST_DATE = x.REQUEST_DATE,
+                                               REQUEST_TIME = x.REQUEST_TIME,
                                                AMOUNT = x.AMOUNT,
                                                BANK_ACCOUNT = x.BANK_ACCOUNT,
                                                TRANSACTION_DETAILS = x.TRANSACTION_DETAILS,
@@ -3716,7 +3728,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                                REFERENCE_NO = z.Reference_NO,
                                                FromUser = z.FromUser,
                                                AMOUNT = z.AMOUNT,
-                                               REQUEST_DATE = z.REQUEST_DATE,
+                                               REQUEST_TIME = z.REQUEST_TIME,
                                                BANK_ACCOUNT = z.BANK_ACCOUNT,
                                                TRANSACTION_DETAILS = z.TRANSACTION_DETAILS,
                                                SLN = z.SLN,
@@ -3745,7 +3757,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                                TransId = x.TransactionID,
                                                FromUser = y.UName,
                                                Reference_NO = x.REFERENCE_NO,
-                                               REQUEST_DATE = x.REQUEST_DATE,
+                                               REQUEST_TIME = x.REQUEST_TIME,
                                                AMOUNT = x.AMOUNT,
                                                BANK_ACCOUNT = x.BANK_ACCOUNT,
                                                TRANSACTION_DETAILS = x.TRANSACTION_DETAILS,
@@ -3762,7 +3774,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                                REFERENCE_NO = z.Reference_NO,
                                                FromUser = z.FromUser,
                                                AMOUNT = z.AMOUNT,
-                                               REQUEST_DATE = z.REQUEST_DATE,
+                                               REQUEST_TIME = z.REQUEST_TIME,
                                                BANK_ACCOUNT = z.BANK_ACCOUNT,
                                                TRANSACTION_DETAILS = z.TRANSACTION_DETAILS,
                                                SLN = z.SLN,
@@ -3784,7 +3796,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                                TransId = x.TransactionID,
                                                FromUser = y.UName,
                                                Reference_NO = x.REFERENCE_NO,
-                                               REQUEST_DATE = x.REQUEST_DATE,
+                                               REQUEST_TIME = x.REQUEST_TIME,
                                                AMOUNT = x.AMOUNT,
                                                BANK_ACCOUNT = x.BANK_ACCOUNT,
                                                TRANSACTION_DETAILS = x.TRANSACTION_DETAILS,
@@ -3801,7 +3813,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                                REFERENCE_NO = z.Reference_NO,
                                                FromUser = z.FromUser,
                                                AMOUNT = z.AMOUNT,
-                                               REQUEST_DATE = z.REQUEST_DATE,
+                                               REQUEST_TIME = z.REQUEST_TIME,
                                                BANK_ACCOUNT = z.BANK_ACCOUNT,
                                                TRANSACTION_DETAILS = z.TRANSACTION_DETAILS,
                                                SLN = z.SLN,
@@ -3823,7 +3835,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                                TransId = x.TransactionID,
                                                FromUser = y.UName,
                                                Reference_NO = x.REFERENCE_NO,
-                                               REQUEST_DATE = x.REQUEST_DATE,
+                                               REQUEST_TIME = x.REQUEST_TIME,
                                                AMOUNT = x.AMOUNT,
                                                BANK_ACCOUNT = x.BANK_ACCOUNT,
                                                TRANSACTION_DETAILS = x.TRANSACTION_DETAILS,
@@ -3840,7 +3852,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                                REFERENCE_NO = z.Reference_NO,
                                                FromUser = z.FromUser,
                                                AMOUNT = z.AMOUNT,
-                                               REQUEST_DATE = z.REQUEST_DATE,
+                                               REQUEST_TIME = z.REQUEST_TIME,
                                                BANK_ACCOUNT = z.BANK_ACCOUNT,
                                                TRANSACTION_DETAILS = z.TRANSACTION_DETAILS,
                                                SLN = z.SLN,
@@ -3862,7 +3874,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                                TransId = x.TransactionID,
                                                FromUser = y.UName,
                                                Reference_NO = x.REFERENCE_NO,
-                                               REQUEST_DATE = x.REQUEST_DATE,
+                                               REQUEST_TIME = x.REQUEST_TIME,
                                                AMOUNT = x.AMOUNT,
                                                BANK_ACCOUNT = x.BANK_ACCOUNT,
                                                TRANSACTION_DETAILS = x.TRANSACTION_DETAILS,
@@ -3879,7 +3891,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                                REFERENCE_NO = z.Reference_NO,
                                                FromUser = z.FromUser,
                                                AMOUNT = z.AMOUNT,
-                                               REQUEST_DATE = z.REQUEST_DATE,
+                                               REQUEST_TIME = z.REQUEST_TIME,
                                                BANK_ACCOUNT = z.BANK_ACCOUNT,
                                                TRANSACTION_DETAILS = z.TRANSACTION_DETAILS,
                                                SLN = z.SLN,
@@ -3896,14 +3908,15 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                     DateTime Todaydate = Convert.ToDateTime(DateTime.Now.ToString("yyyy-MM-dd"));
                     var transactionlist = (from x in db.TBL_BALANCE_TRANSFER_LOGS
                                            join y in db.TBL_MASTER_MEMBER on x.FROM_MEMBER equals y.MEM_ID
-                                           where x.TO_MEMBER == y.UNDER_WHITE_LEVEL && x.STATUS == status && y.INTRODUCER == MemberCurrentUser.MEM_ID && x.REQUEST_DATE == Todaydate
+                                           //where x.TO_MEMBER == y.UNDER_WHITE_LEVEL && x.STATUS == status && y.INTRODUCER == MemberCurrentUser.MEM_ID && x.REQUEST_DATE == Todaydate
+                                           where x.TO_MEMBER == y.UNDER_WHITE_LEVEL && x.STATUS == status && y.INTRODUCER == MemberCurrentUser.MEM_ID 
                                            select new
                                            {
                                                //Touser = "White Label",
                                                TransId = x.TransactionID,
                                                FromUser = y.UName,
                                                Reference_NO = x.REFERENCE_NO,
-                                               REQUEST_DATE = x.REQUEST_DATE,
+                                               REQUEST_TIME = x.REQUEST_TIME,
                                                AMOUNT = x.AMOUNT,
                                                BANK_ACCOUNT = x.BANK_ACCOUNT,
                                                TRANSACTION_DETAILS = x.TRANSACTION_DETAILS,
@@ -3920,7 +3933,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                                REFERENCE_NO = z.Reference_NO,
                                                FromUser = z.FromUser,
                                                AMOUNT = z.AMOUNT,
-                                               REQUEST_DATE = z.REQUEST_DATE,
+                                               REQUEST_TIME = z.REQUEST_TIME,
                                                BANK_ACCOUNT = z.BANK_ACCOUNT,
                                                TRANSACTION_DETAILS = z.TRANSACTION_DETAILS,
                                                SLN = z.SLN,
@@ -3969,9 +3982,9 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
 
                     row++;
                 }
-
-                return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-                //return File(fileContents: package.GetAsByteArray(), contentType: "application/unknown");
+                return File(package.GetAsByteArray(), "application/unknown", "DistributorRequisitionReport.xlsx");
+                //return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                ////return File(fileContents: package.GetAsByteArray(), contentType: "application/unknown");
             }
         }
         private IGrid<TBL_BALANCE_TRANSFER_LOGS> CreateExportMerApproveRequisitionGrid(string status, string DateFrom, string Date_To)
@@ -4644,5 +4657,490 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
         }
 
 
+        public ActionResult MerchantCreditRequisitionList()
+        {
+            if (Session["DistributorUserId"] != null)
+            {
+                initpage();
+                return View();
+            }
+            else
+            {
+                Session["DistributorUserId"] = null;
+                Session["DistributorUserName"] = null;
+                Session["UserType"] = null;
+                Session.Remove("DistributorUserId");
+                Session.Remove("DistributorUserName");
+                Session.Remove("UserType");
+                return RedirectToAction("Index", "Login", new { area = "" });
+            }
+        }
+        public PartialViewResult AllMerchantCreditRequisitionIndexGrid(string DateFrom = "", string Date_To = "")
+        {
+            try
+            {
+                var db = new DBContext();
+                if (DateFrom != "" && Date_To != "")
+                {
+                    string FromDATE = string.Empty;
+                    string TO_DATE = string.Empty;
+                    FromDATE = DateTime.Parse(DateFrom.ToString()).ToString("yyyy-MM-dd");
+                    DateTime Date_From_Val = Convert.ToDateTime(FromDATE);
+                    string From_TO = string.Empty;
+                    TO_DATE = DateTime.Parse(Date_To.ToString()).ToString("yyyy-MM-dd");
+                    DateTime Date_To_Val = Convert.ToDateTime(TO_DATE);
+                    DateTime To_Date_Val = Date_To_Val.AddDays(1);
+
+                    var memberinfo = (from tblcre in db.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
+                                      join mem in db.TBL_MASTER_MEMBER on tblcre.FROM_MEM_ID equals mem.MEM_ID
+                                      //where tblcre.TO_MEM_ID == MemberCurrentUser.MEM_ID && tblcre.CREDIT_DATE>= Date_From_Val && tblcre.CREDIT_DATE<= Date_To_Val
+                                      where tblcre.TO_MEM_ID == MemberCurrentUser.MEM_ID && tblcre.CREDIT_DATE >= Date_From_Val && tblcre.CREDIT_DATE <= To_Date_Val && tblcre.CREDIT_STATUS == false
+                                      select new
+                                      {
+                                          sln = tblcre.SLN,
+                                          Mem_Name = mem.UName + "-" + mem.MEMBER_NAME + "-" + (db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == tblcre.TO_MEM_ID).MEMBER_ROLE == 4 ? "DISTRIBUTOR" : "MERCHANT"),
+                                          TO_MEMBER = "ADMIN",
+                                          Credit_note = tblcre.CREDIT_NOTE_DESCRIPTION,
+                                          CreditNoteDate = tblcre.CREDIT_DATE,
+                                          CreditAmount = tblcre.CREDIT_AMOUNT,
+                                          creditStatus = tblcre.CREDIT_STATUS,
+                                          OpeningAmt = tblcre.CREDIT_OPENING,
+                                          DR_CR = tblcre.CREDIT_AMOUNT,
+                                          Closingamt = tblcre.CREDITCLOSING,
+                                          creditType = tblcre.CREDIT_TRN_TYPE
+                                      }).AsEnumerable().Select(z => new TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
+                                      {
+                                          SLN = z.sln,
+                                          FromUser = z.Mem_Name,
+                                          TOUser = z.TO_MEMBER,
+                                          CREDIT_DATE = z.CreditNoteDate,
+                                          //CREDIT_AMOUNT = z.CreditAmount,
+                                          CREDIT_AMOUNT = z.DR_CR,
+                                          CREDIT_NOTE_DESCRIPTION = z.Credit_note,
+                                          CREDIT_STATUS = z.creditStatus,
+                                          CREDITCLOSING = z.Closingamt,
+                                          CR_Col = (z.creditType == "CR" ? z.CreditAmount.ToString() : "0"),
+                                          DR_Col = (z.creditType == "DR" ? z.CreditAmount.ToString() : "0"),
+                                          CREDIT_OPENING = z.OpeningAmt,
+                                          CREDIT_TRN_TYPE = z.creditType
+                                      }).ToList().OrderByDescending(a => a.CREDIT_DATE); ;
+                    return PartialView("AllMerchantCreditRequisitionIndexGrid", memberinfo);
+                }
+                else
+                {
+                    var memberinfo = (from tblcre in db.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
+                                      join mem in db.TBL_MASTER_MEMBER on tblcre.FROM_MEM_ID equals mem.MEM_ID
+                                      //where tblcre.TO_MEM_ID == MemberCurrentUser.MEM_ID && tblcre.CREDIT_DATE>= Date_From_Val && tblcre.CREDIT_DATE<= Date_To_Val
+                                      where tblcre.TO_MEM_ID == MemberCurrentUser.MEM_ID && tblcre.CREDIT_STATUS == false
+                                      select new
+                                      {
+                                          sln = tblcre.SLN,
+                                          Mem_Name = mem.UName + "-" + mem.MEMBER_NAME + "-" + (db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == tblcre.TO_MEM_ID).MEMBER_ROLE == 4 ? "DISTRIBUTOR" : "MERCHANT"),
+                                          TO_MEMBER = "ADMIN",
+                                          Credit_note = tblcre.CREDIT_NOTE_DESCRIPTION,
+                                          CreditNoteDate = tblcre.CREDIT_DATE,
+                                          CreditAmount = tblcre.CREDIT_AMOUNT,
+                                          creditStatus = tblcre.CREDIT_STATUS,
+                                          OpeningAmt = tblcre.CREDIT_OPENING,
+                                          DR_CR = tblcre.CREDIT_AMOUNT,
+                                          Closingamt = tblcre.CREDITCLOSING,
+                                          creditType = tblcre.CREDIT_TRN_TYPE
+                                      }).AsEnumerable().Select(z => new TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
+                                      {
+                                          SLN = z.sln,
+                                          FromUser = z.Mem_Name,
+                                          TOUser = z.TO_MEMBER,
+                                          CREDIT_DATE = z.CreditNoteDate,
+                                          //CREDIT_AMOUNT = z.CreditAmount,
+                                          CREDIT_AMOUNT = z.DR_CR,
+                                          CREDIT_NOTE_DESCRIPTION = z.Credit_note,
+                                          CREDIT_STATUS = z.creditStatus,
+                                          CREDITCLOSING = z.Closingamt,
+                                          CR_Col = (z.creditType == "CR" ? z.CreditAmount.ToString() : "0"),
+                                          DR_Col = (z.creditType == "DR" ? z.CreditAmount.ToString() : "0"),
+                                          CREDIT_OPENING = z.OpeningAmt,
+                                          CREDIT_TRN_TYPE = z.creditType
+                                      }).ToList().OrderByDescending(a => a.CREDIT_DATE); ;
+                    return PartialView("AllMerchantCreditRequisitionIndexGrid", memberinfo);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+
+        [HttpPost]
+        public JsonResult getMerchantCreditRequistionTransdata(string TransId = "")
+        {
+            initpage();////
+            try
+            {
+                var db = new DBContext();
+                long transid = long.Parse(TransId);
+                //var listdetails = db.TBL_BALANCE_TRANSFER_LOGS.Where(x => x.SLN == transid).FirstOrDefault();
+                var listdetails = (from x in db.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
+                                   join y in db.TBL_MASTER_MEMBER on x.FROM_MEM_ID equals y.MEM_ID
+                                   where x.SLN == transid
+                                   select new
+                                   {
+                                       Touser = "PowerAdmin",
+                                       FromUser = y.UName + "-" + y.MEMBER_NAME,
+                                       REQUEST_DATE = x.CREDIT_DATE,
+                                       AMOUNT = x.CREDIT_AMOUNT,
+                                       SLN = x.SLN
+                                   }).AsEnumerable().Select(z => new TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
+                                   {
+                                       TOUser = z.Touser,
+                                       FromUser = z.FromUser,
+                                       CREDIT_AMOUNT = z.AMOUNT,
+                                       CREDIT_DATE = z.REQUEST_DATE,
+                                       SLN = z.SLN
+                                   }).FirstOrDefault();
+
+                return Json(new { Result = "true", data = listdetails });
+            }
+            catch (Exception ex)
+            {
+                var listdetails = new TBL_BALANCE_TRANSFER_LOGS();
+                Logger.Error("Controller:-  MemberRequisition(Admin), method:- getTransdata (POST) Line No:- 433", ex);
+                return Json(new { Result = "false", data = listdetails });
+            }
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> MerchantCreditRequisitionDecline(string slnval = "")
+        {
+            initpage();////
+            var db = new DBContext();
+            using (System.Data.Entity.DbContextTransaction ContextTransaction = db.Database.BeginTransaction())
+            {
+                try
+                {
+                    //var db = new DBContext();
+                    long sln = long.Parse(slnval);
+                    var transinfo = await db.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION.Where(x => x.SLN == sln).FirstOrDefaultAsync();
+                    //transinfo.REQUEST_DATE = Convert.ToDateTime(trandate);
+                    transinfo.CREDIT_STATUS = false;
+                    transinfo.FromUser = "test";
+                    db.Entry(transinfo).State = System.Data.Entity.EntityState.Modified;
+                    await db.SaveChangesAsync();
+                    var memberlist = await db.TBL_MASTER_MEMBER.Where(x => x.MEM_ID == transinfo.FROM_MEM_ID).FirstOrDefaultAsync();
+
+                    #region Email Code done by Sayan at 10-10-2020
+                    string name = memberlist.MEMBER_NAME;
+                    string mailbody = "Hi " + memberlist.UName + "(" + memberlist.MEMBER_NAME + ")" + ",<p>Your credit requisition has been declined of amount:- " + transinfo.CREDIT_AMOUNT + " by Admin. Sorry for the inconvenience.</p>" + ".<br /> Regards, <br/>< br />BOOM Travels";
+                    EmailHelper emailhelper = new EmailHelper();
+                    string msgbody = emailhelper.GetEmailTemplate(name, mailbody, "UserEmailTemplate.html");
+                    emailhelper.SendUserEmail(memberlist.EMAIL_ID, "Oops! Requisition Declined", msgbody);
+                    #endregion
+
+                    ContextTransaction.Commit();
+                    return Json(new { Result = "true" });
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error("Controller:-  MemberRequisition(Admin), method:- TransactionDecline (POST) Line No:- 631", ex);
+                    ContextTransaction.Rollback();
+                    return Json(new { Result = "false" });
+                }
+            }
+
+
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> MerchantCreditRequisitionApprove(string slnval = "")
+        {
+            var db = new DBContext();
+            using (System.Data.Entity.DbContextTransaction ContextTransaction = db.Database.BeginTransaction())
+            {
+
+                try
+                {
+                    long sln = long.Parse(slnval);
+                    var transinfo = await db.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION.Where(x => x.SLN == sln).FirstOrDefaultAsync();
+
+
+
+                    decimal CreditLimitAmt = 0;
+                    decimal.TryParse(transinfo.CREDIT_AMOUNT.ToString(), out CreditLimitAmt);
+                    decimal MerchantMainBal = 0;
+                    decimal DistributorMainBal = 0;
+                    decimal DistributorCreditLimit = 0;
+                    decimal SUBDistributorCreditLimit = 0;
+                    decimal AddMerchantMainBal = 0;
+                    decimal MerchantCreditLimit = 0;
+                    decimal AddMerchantCreditLimit = 0;
+
+                    decimal SubDistributorMainBal = 0;
+                    decimal MerchantClosingAmt = 0;
+                    decimal DistributorClosingAmt = 0;
+                    decimal MerchantAddClosingAmt = 0;
+                    decimal DistributorSubClosingAmt = 0;
+                    string COrelationID = Settings.GetUniqueKey(MemberCurrentUser.MEM_ID.ToString());
+                    //var distributorAcnt = db.TBL_ACCOUNTS.Where(x => x.MEM_ID == MemberCurrentUser.MEM_ID).OrderByDescending(z => z.TRANSACTION_TIME).FirstOrDefault();
+                    var distributorAcnt = db.TBL_ACCOUNTS.Where(x => x.MEM_ID == MemberCurrentUser.MEM_ID).OrderByDescending(z => z.ACC_NO).FirstOrDefault();
+                    if (distributorAcnt != null)
+                    {
+                        decimal.TryParse(distributorAcnt.CLOSING.ToString(), out DistributorClosingAmt);
+                    }
+                    else
+                    {
+                        DistributorClosingAmt = 0;
+                    }
+
+                    DistributorSubClosingAmt = DistributorClosingAmt - CreditLimitAmt;
+                    TBL_ACCOUNTS objMDistributorAcnt = new TBL_ACCOUNTS()
+                    {
+                        API_ID = 0,
+                        MEM_ID = MemberCurrentUser.MEM_ID,
+                        MEMBER_TYPE = "DISTRIBUTOR",
+                        TRANSACTION_TYPE = "CREDIT LIMIT",
+                        TRANSACTION_DATE = DateTime.Now,
+                        TRANSACTION_TIME = DateTime.Now,
+                        DR_CR = "DR",
+                        AMOUNT = CreditLimitAmt,
+                        NARRATION = transinfo.CREDIT_NOTE_DESCRIPTION,
+                        OPENING = DistributorClosingAmt,
+                        CLOSING = DistributorSubClosingAmt,
+                        REC_NO = 0,
+                        COMM_AMT = 0,
+                        GST = 0,
+                        TDS = 0,
+                        IPAddress = "",
+                        SERVICE_ID = 0,
+                        CORELATIONID = COrelationID
+
+                    };
+                    db.TBL_ACCOUNTS.Add(objMDistributorAcnt);
+                    //db.SaveChanges();
+
+
+                    decimal CR_Opening = 0;
+                    decimal CR_Closinging = 0;
+                    decimal ADD_CR_Closinging = 0;
+                    var CreditLimit_Val = db.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION.Where(x => x.FROM_MEM_ID == transinfo.FROM_MEM_ID).OrderByDescending(c => c.SLN).FirstOrDefault();
+                    if (CreditLimit_Val != null)
+                    {
+                        CR_Opening = (decimal)CreditLimit_Val.CREDIT_OPENING;
+                        CR_Closinging = (decimal)CreditLimit_Val.CREDITCLOSING;
+                        ADD_CR_Closinging = CR_Closinging + CreditLimitAmt;
+                    }
+                    else
+                    {
+                        CR_Closinging = 0;
+                        ADD_CR_Closinging = CreditLimitAmt;
+                    }
+
+                    TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION objMerLimit = new TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION()
+                    {
+                        TO_MEM_ID = MemberCurrentUser.MEM_ID,
+                        FROM_MEM_ID = transinfo.FROM_MEM_ID,
+                        CREDIT_DATE = DateTime.Now,
+                        //CREDIT_AMOUNT = objCredit.CREDIT_AMOUNT,
+                        CREDIT_AMOUNT = CreditLimitAmt,
+                        GST_VAL = 0,
+                        GST_AMOUNT = 0,
+                        TDS_VAL = 0,
+                        TDS_AMOUNT = 0,
+                        CREDIT_NOTE_DESCRIPTION = transinfo.CREDIT_NOTE_DESCRIPTION,
+                        CREDIT_STATUS = true,
+                        CREDIT_OPENING = CR_Closinging,
+                        CREDITCLOSING = ADD_CR_Closinging,
+                        CREDIT_TRN_TYPE = "CR",
+                        CORELATIONID = COrelationID
+                    };
+                    db.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION.Add(objMerLimit);
+                    // db.SaveChanges();
+                    var DistributorInfo = db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == MemberCurrentUser.MEM_ID);
+                    decimal.TryParse(DistributorInfo.BALANCE.ToString(), out DistributorMainBal);
+                    decimal.TryParse(DistributorInfo.CREDIT_LIMIT.ToString(), out DistributorCreditLimit);
+                    SubDistributorMainBal = DistributorMainBal - CreditLimitAmt;
+                    SUBDistributorCreditLimit = DistributorCreditLimit - CreditLimitAmt;
+                    DistributorInfo.BALANCE = SubDistributorMainBal;
+                    //DistributorInfo.CREDIT_LIMIT = SUBDistributorCreditLimit;
+                    db.Entry(DistributorInfo).State = System.Data.Entity.EntityState.Modified;
+                    //db.SaveChanges();
+
+                    var MerchantInfo = db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == transinfo.FROM_MEM_ID);
+                    decimal.TryParse(MerchantInfo.BALANCE.ToString(), out MerchantMainBal);
+                    decimal.TryParse(MerchantInfo.CREDIT_LIMIT.ToString(), out MerchantCreditLimit);
+                    AddMerchantMainBal = MerchantMainBal + CreditLimitAmt;
+                    AddMerchantCreditLimit = MerchantCreditLimit + CreditLimitAmt;
+                    MerchantInfo.BALANCE = AddMerchantMainBal;
+                    MerchantInfo.CREDIT_LIMIT = AddMerchantCreditLimit;
+                    db.Entry(MerchantInfo).State = System.Data.Entity.EntityState.Modified;
+                    // db.SaveChanges();
+
+                    decimal MEr_OpeningAmt = 0;
+                    //var MerchantAcount=db.TBL_ACCOUNTS.Where(x=>x.MEM_ID==objCredit.FROM_MEM_ID ).OrderByDescending(z => z.TRANSACTION_TIME).FirstOrDefault();
+                    var MerchantAcount = db.TBL_ACCOUNTS.Where(x => x.MEM_ID == transinfo.FROM_MEM_ID).OrderByDescending(u => u.ACC_NO).FirstOrDefault();
+                    if (MerchantAcount == null)
+                    {
+                        MerchantClosingAmt = CreditLimitAmt;
+                        MEr_OpeningAmt = 0;
+                        MerchantAddClosingAmt = MerchantClosingAmt;
+                    }
+                    else
+                    {
+                        decimal.TryParse(MerchantAcount.CLOSING.ToString(), out MEr_OpeningAmt);
+                        decimal.TryParse(MerchantAcount.CLOSING.ToString(), out MerchantClosingAmt);
+                        MerchantAddClosingAmt = MerchantClosingAmt + CreditLimitAmt;
+                    }
+
+
+                    TBL_ACCOUNTS objMerchantAcnt = new TBL_ACCOUNTS()
+                    {
+                        API_ID = 0,
+                        MEM_ID = transinfo.FROM_MEM_ID,
+                        MEMBER_TYPE = "MERCHANT",
+                        TRANSACTION_TYPE = "CREDIT LIMIT",
+                        TRANSACTION_DATE = DateTime.Now,
+                        TRANSACTION_TIME = DateTime.Now,
+                        DR_CR = "CR",
+                        AMOUNT = CreditLimitAmt,
+                        NARRATION = transinfo.CREDIT_NOTE_DESCRIPTION,
+                        OPENING = MEr_OpeningAmt,
+                        CLOSING = MerchantAddClosingAmt,
+                        REC_NO = 0,
+                        COMM_AMT = 0,
+                        GST = 0,
+                        TDS = 0,
+                        IPAddress = "",
+                        SERVICE_ID = 0,
+                        CORELATIONID = COrelationID
+                    };
+                    db.TBL_ACCOUNTS.Add(objMerchantAcnt);
+                    db.SaveChanges();
+
+                    ContextTransaction.Commit();
+                    return Json("Credit limit is given to merchant");
+                }
+                catch (Exception ex)
+                {
+                    ContextTransaction.Rollback();
+                    return Json("try again after some time");
+                    throw ex;
+                }
+            }   
+        }
+
+        public ActionResult MerchantCreditRequisitionReport()
+        {
+            if (Session["DistributorUserId"] != null)
+            {
+                initpage();
+                return View();
+            }
+            else
+            {
+                Session["DistributorUserId"] = null;
+                Session["DistributorUserName"] = null;
+                Session["UserType"] = null;
+                Session.Remove("DistributorUserId");
+                Session.Remove("DistributorUserName");
+                Session.Remove("UserType");
+                return RedirectToAction("Index", "Login", new { area = "" });
+            }
+        }
+        public PartialViewResult AllMerchantCreditReportIndexGrid(string DateFrom = "", string Date_To = "")
+        {
+            try
+            {
+                var db = new DBContext();
+                if (DateFrom != "" && Date_To != "")
+                {
+                    string FromDATE = string.Empty;
+                    string TO_DATE = string.Empty;
+                    FromDATE = DateTime.Parse(DateFrom.ToString()).ToString("yyyy-MM-dd");
+                    DateTime Date_From_Val = Convert.ToDateTime(FromDATE);
+                    string From_TO = string.Empty;
+                    TO_DATE = DateTime.Parse(Date_To.ToString()).ToString("yyyy-MM-dd");
+                    DateTime Date_To_Val = Convert.ToDateTime(TO_DATE);
+                    DateTime To_Date_Val = Date_To_Val.AddDays(1);
+
+                    var memberinfo = (from tblcre in db.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
+                                      join mem in db.TBL_MASTER_MEMBER on tblcre.FROM_MEM_ID equals mem.MEM_ID
+                                      //where tblcre.TO_MEM_ID == MemberCurrentUser.MEM_ID && tblcre.CREDIT_DATE>= Date_From_Val && tblcre.CREDIT_DATE<= Date_To_Val
+                                      where tblcre.TO_MEM_ID == MemberCurrentUser.MEM_ID && tblcre.CREDIT_DATE >= Date_From_Val && tblcre.CREDIT_DATE <= To_Date_Val 
+                                      select new
+                                      {
+                                          sln = tblcre.SLN,
+                                          Mem_Name = mem.UName + "-" + mem.MEMBER_NAME + "-" + (db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == tblcre.TO_MEM_ID).MEMBER_ROLE == 4 ? "DISTRIBUTOR" : "MERCHANT"),
+                                          TO_MEMBER = "ADMIN",
+                                          Credit_note = tblcre.CREDIT_NOTE_DESCRIPTION,
+                                          CreditNoteDate = tblcre.CREDIT_DATE,
+                                          CreditAmount = tblcre.CREDIT_AMOUNT,
+                                          creditStatus = tblcre.CREDIT_STATUS,
+                                          OpeningAmt = tblcre.CREDIT_OPENING,
+                                          DR_CR = tblcre.CREDIT_AMOUNT,
+                                          Closingamt = tblcre.CREDITCLOSING,
+                                          creditType = tblcre.CREDIT_TRN_TYPE
+                                      }).AsEnumerable().Select(z => new TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
+                                      {
+                                          SLN = z.sln,
+                                          FromUser = z.Mem_Name,
+                                          TOUser = z.TO_MEMBER,
+                                          CREDIT_DATE = z.CreditNoteDate,
+                                          //CREDIT_AMOUNT = z.CreditAmount,
+                                          CREDIT_AMOUNT = z.DR_CR,
+                                          CREDIT_NOTE_DESCRIPTION = z.Credit_note,
+                                          CREDIT_STATUS = z.creditStatus,
+                                          CREDITCLOSING = z.Closingamt,
+                                          CR_Col = (z.creditType == "CR" ? z.CreditAmount.ToString() : "0"),
+                                          DR_Col = (z.creditType == "DR" ? z.CreditAmount.ToString() : "0"),
+                                          CREDIT_OPENING = z.OpeningAmt,
+                                          CREDIT_TRN_TYPE = z.creditType
+                                      }).ToList().OrderByDescending(a => a.CREDIT_DATE); ;
+                    return PartialView("AllMerchantCreditReportIndexGrid", memberinfo);
+                }
+                else
+                {
+                    var memberinfo = (from tblcre in db.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
+                                      join mem in db.TBL_MASTER_MEMBER on tblcre.FROM_MEM_ID equals mem.MEM_ID
+                                      //where tblcre.TO_MEM_ID == MemberCurrentUser.MEM_ID && tblcre.CREDIT_DATE>= Date_From_Val && tblcre.CREDIT_DATE<= Date_To_Val
+                                      where tblcre.TO_MEM_ID == MemberCurrentUser.MEM_ID 
+                                      select new
+                                      {
+                                          sln = tblcre.SLN,
+                                          Mem_Name = mem.UName + "-" + mem.MEMBER_NAME + "-" + (db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == tblcre.TO_MEM_ID).MEMBER_ROLE == 4 ? "DISTRIBUTOR" : "MERCHANT"),
+                                          TO_MEMBER = "ADMIN",
+                                          Credit_note = tblcre.CREDIT_NOTE_DESCRIPTION,
+                                          CreditNoteDate = tblcre.CREDIT_DATE,
+                                          CreditAmount = tblcre.CREDIT_AMOUNT,
+                                          creditStatus = tblcre.CREDIT_STATUS,
+                                          OpeningAmt = tblcre.CREDIT_OPENING,
+                                          DR_CR = tblcre.CREDIT_AMOUNT,
+                                          Closingamt = tblcre.CREDITCLOSING,
+                                          creditType = tblcre.CREDIT_TRN_TYPE
+                                      }).AsEnumerable().Select(z => new TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
+                                      {
+                                          SLN = z.sln,
+                                          FromUser = z.Mem_Name,
+                                          TOUser = z.TO_MEMBER,
+                                          CREDIT_DATE = z.CreditNoteDate,
+                                          //CREDIT_AMOUNT = z.CreditAmount,
+                                          CREDIT_AMOUNT = z.DR_CR,
+                                          CREDIT_NOTE_DESCRIPTION = z.Credit_note,
+                                          CREDIT_STATUS = z.creditStatus,
+                                          CREDITCLOSING = z.Closingamt,
+                                          CR_Col = (z.creditType == "CR" ? z.CreditAmount.ToString() : "0"),
+                                          DR_Col = (z.creditType == "DR" ? z.CreditAmount.ToString() : "0"),
+                                          CREDIT_OPENING = z.OpeningAmt,
+                                          CREDIT_TRN_TYPE = z.creditType
+                                      }).ToList().OrderByDescending(a => a.CREDIT_DATE); ;
+                    return PartialView("AllMerchantCreditReportIndexGrid", memberinfo);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
     }
 }

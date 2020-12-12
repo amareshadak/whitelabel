@@ -12,11 +12,12 @@
                             .Build(columns =>
                             {
                                 //columns.Add(model => model.ACC_NO).Titled("Sln");
-                                columns.Add(model => model.SerialNo).Titled("Id");
+                                //columns.Add(model => model.SerialNo).Titled("Id");
                                 columns.Add(model => model.UserName).Titled("Merchant");
                                 columns.Add(model => model.MEMBER_TYPE).Titled("Member Type");
                                 columns.Add(model => model.TRANSACTION_TYPE).Titled("Trans Type");
-                                columns.Add(model => model.TRANSACTION_DATE).Formatted("{0:yyyy-MM-dd}").Titled("Trans Date").MultiFilterable(true);
+                                columns.Add(model => model.TRANSACTION_DATE).Titled("Trans Date").Formatted("{0:MM/dd/yyyy}").MultiFilterable(true);
+                                columns.Add(model => model.TRANSACTION_DATE).Titled("Trans Time").Formatted("{0:T}").Filterable(false).Sortable(false);
                                 //columns.Add(model => model.AMOUNT).Titled("Amount");
                                 //columns.Add(model => model.DR_CR).Titled("Dr/Cr");
                                 columns.Add(model => model.OPENING).Titled("Opening Amt");

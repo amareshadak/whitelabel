@@ -30,13 +30,13 @@
                                             </span> <span class="text_holder">ADD SUPER</span>
                                         </a>
                                     </li>*@
-                                <li class="active">
+                                <li class="active" style="display:none;">
                                     <a href="#tab4_2" data-toggle="tab">
                                         <span class="svg_holder">
                                         </span> <span class="text_holder">ADD DISTRIBUTOR</span>
                                     </a>
                                 </li>
-                                <li class="">
+                                <li class="active">
                                     <a href="#tab4_3" data-toggle="tab">
                                         <span class="svg_holder">
                                         </span> <span class="text_holder">ADD MERCHANT</span>
@@ -48,13 +48,13 @@
                                         @Html.Action("ADDSUPERDISTRIBUTOR", "MemberChannelRegistration", new { area = "Admin" })
                                     </div>*@
                                 <!--.tab-pane-->
-                                <div class="tab-pane active" id="tab4_2">
+                                <div class="tab-pane active" id="tab4_2" style="display:none;">
                                     <div>
                                         @Html.Action("ADDDISTRIBUTOR")
                                     </div>
                                 </div>
                                 <!--.tab-pane-->
-                                <div class="tab-pane" id="tab4_3">
+                                <div class="tab-pane active" id="tab4_3">
                                     <div>
                                         <script src="~/Areas/Admin/AdminHelperJS/MemberCheckEmail/Index.js"></script>
                                         @Html.Action("ADDMERCHANT")

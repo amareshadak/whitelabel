@@ -102,8 +102,7 @@
         });
         return request;
     }
-    this.getFlightBookingPrintInvoice = function (data) {
-        debugger;
+    this.getFlightBookingPrintInvoice = function (data) {        
         var request = $http({
             method: "POST",
             data: data,
@@ -111,6 +110,31 @@
         });
         return request;
     }
+    this.getFlightBookingWithoutFareInvoice = function (data) {
+        var request = $http({
+            method: "POST",
+            data: data,
+            url: "/Merchant/MerchantFlightDetails/PrintWithOutFareInvoice"
+        });
+        return request;
+    }
+    this.getFlightBookingPublishFareInvoice = function (data) {
+        var request = $http({
+            method: "POST",
+            data: data,
+            url: "/Merchant/MerchantFlightDetails/PrintPublishFareInvoice"
+        });
+        return request;
+    }
+    this.getFlightBookingPrintNetFareInvoice = function (data) {
+        var request = $http({
+            method: "POST",
+            data: data,
+            url: "/Merchant/MerchantFlightDetails/PrintNetFareInvoice"
+        });
+        return request;
+    }
+    //PrintNetFareInvoice
     this.getFlightBookingInformation = function (data) {
         debugger;
         var request = $http({
@@ -156,6 +180,16 @@
         });
         return request;
     }
+    this.GetFligfhtBookingDetails = function (data) {
+        debugger;
+        var request = $http({
+            method: "POST",
+            data: data,
+            url: "/Merchant/MerchantFlightDetails/BookedTicketDeatils"
+        });
+        return request;
+    }
+
     this.getFullCancellationBooedPassangerList = function (data) {
         debugger;
         var request = $http({

@@ -44,7 +44,9 @@
                                            APPROVED_BY = x.APPROVED_BY,
                                            APPROVAL_DATE = x.APPROVAL_DATE,
                                            SLN = x.SLN,
-                                           Pay_Mode = x.PAYMENT_METHOD
+                                           Pay_Mode = x.PAYMENT_METHOD,
+                                           Company_Name=y.COMPANY,
+                                           Company_gst = y.COMPANY_GST_NO,
                                        }).AsEnumerable().Select((z, index) => new TBL_BALANCE_TRANSFER_LOGS
                                        {
                                            Serial_No = index + 1,
@@ -60,7 +62,9 @@
                                            APPROVED_BY = z.APPROVED_BY,
                                            APPROVAL_DATE = z.APPROVAL_DATE,
                                            SLN = z.SLN,
-                                           PAYMENT_METHOD = z.Pay_Mode
+                                           PAYMENT_METHOD = z.Pay_Mode,
+                                           CompanyName=z.Company_Name,
+                                           Company_GST=z.Company_gst
                                        }).ToList();
                 return transactionlist;
             }
@@ -93,7 +97,9 @@
                                                APPROVED_BY = x.APPROVED_BY,
                                                APPROVAL_DATE = x.APPROVAL_DATE,
                                                SLN = x.SLN,
-                                               Pay_Mode = x.PAYMENT_METHOD
+                                               Pay_Mode = x.PAYMENT_METHOD,
+                                               Company_Name = y.COMPANY,
+                                               Company_gst = y.COMPANY_GST_NO,
                                            }).AsEnumerable().Select((z, index) => new TBL_BALANCE_TRANSFER_LOGS
                                            {
                                                Serial_No = index + 1,
@@ -109,7 +115,9 @@
                                                APPROVED_BY = z.APPROVED_BY,
                                                APPROVAL_DATE = z.APPROVAL_DATE,
                                                SLN = z.SLN,
-                                               PAYMENT_METHOD = z.Pay_Mode
+                                               PAYMENT_METHOD = z.Pay_Mode,
+                                               CompanyName = z.Company_Name,
+                                               Company_GST = z.Company_gst
                                            }).ToList();
                     return transactionlist;
                 }
@@ -132,7 +140,9 @@
                                                APPROVED_BY = x.APPROVED_BY,
                                                APPROVAL_DATE = x.APPROVAL_DATE,
                                                SLN = x.SLN,
-                                               Pay_Mode = x.PAYMENT_METHOD
+                                               Pay_Mode = x.PAYMENT_METHOD,
+                                               Company_Name = y.COMPANY,
+                                               Company_gst = y.COMPANY_GST_NO,
                                            }).AsEnumerable().Select((z, index) => new TBL_BALANCE_TRANSFER_LOGS
                                            {
                                                Serial_No = index + 1,
@@ -148,7 +158,9 @@
                                                APPROVED_BY = z.APPROVED_BY,
                                                APPROVAL_DATE = z.APPROVAL_DATE,
                                                SLN = z.SLN,
-                                               PAYMENT_METHOD = z.Pay_Mode
+                                               PAYMENT_METHOD = z.Pay_Mode,
+                                               CompanyName = z.Company_Name,
+                                               Company_GST = z.Company_gst
                                            }).ToList();
                     return transactionlist;
 
@@ -182,7 +194,9 @@
                                            APPROVED_BY = x.APPROVED_BY,
                                            APPROVAL_DATE = x.APPROVAL_DATE,
                                            SLN = x.SLN,
-                                           Pay_Mode = x.PAYMENT_METHOD
+                                           Pay_Mode = x.PAYMENT_METHOD,
+                                           Company_Name = y.COMPANY,
+                                           Company_gst = y.COMPANY_GST_NO,
                                        }).AsEnumerable().Select((z, index) => new TBL_BALANCE_TRANSFER_LOGS
                                        {
                                            Serial_No = index + 1,
@@ -198,7 +212,9 @@
                                            APPROVED_BY = z.APPROVED_BY,
                                            APPROVAL_DATE = z.APPROVAL_DATE,
                                            SLN = z.SLN,
-                                           PAYMENT_METHOD = z.Pay_Mode
+                                           PAYMENT_METHOD = z.Pay_Mode,
+                                           CompanyName = z.Company_Name,
+                                           Company_GST = z.Company_gst
                                        }).ToList();
                 return transactionlist;
             }
@@ -223,7 +239,9 @@
                                            APPROVED_BY = x.APPROVED_BY,
                                            APPROVAL_DATE = x.APPROVAL_DATE,
                                            SLN = x.SLN,
-                                           Pay_Mode = x.PAYMENT_METHOD
+                                           Pay_Mode = x.PAYMENT_METHOD,
+                                           Company_Name = y.COMPANY,
+                                           Company_gst = y.COMPANY_GST_NO,
                                        }).AsEnumerable().Select((z, index) => new TBL_BALANCE_TRANSFER_LOGS
                                        {
                                            Serial_No = index + 1,
@@ -239,7 +257,9 @@
                                            APPROVED_BY = z.APPROVED_BY,
                                            APPROVAL_DATE = z.APPROVAL_DATE,
                                            SLN = z.SLN,
-                                           PAYMENT_METHOD = z.Pay_Mode
+                                           PAYMENT_METHOD = z.Pay_Mode,
+                                           CompanyName = z.Company_Name,
+                                           Company_GST = z.Company_gst
                                        }).ToList();
                 return transactionlist;
             }

@@ -216,28 +216,30 @@ function GetPassword(id) {
     });
 }
 
-$('#emailaddress').on('input blur change keyup', function () {
+$('#txtdistributedAddMerchantEmail').on('input blur change keyup', function () {
 
     if ($(this).val().length != 0) {
+        const MobileNoval = $('#txtdistributedAddMerchantMob').val();
         var token = $(':input[name="__RequestVerificationToken"]').val();
         $.ajax({
-            url: "/Retailer/CheckEmailAvailability?area=Distributor",
+            url: "/Retailer/CheckMobileNoEmailAvailability?area=Distributor",
             //url: "@Url.Action("CheckEmailAvailability", "Retailer", new {area= "Distributor" })",
             data: {
                 __RequestVerificationToken: token,
-                emailid: $(this).val()
+                MobileNo:MobileNoval,
+                EmailId: $(this).val()
             },
             cache: false,
             type: "POST",
             success: function (data) {
                 // DONE               
                 if (data.result == "available") {
-                    $('#emailaddress').css('border', '3px #090 solid');
-                    $('#btnsubmit').attr('disabled', false);
+                    $('#txtdistributedAddMerchantEmail').css('border', '3px #090 solid');
+                    $('#btnDistsubmit').attr('disabled', false);
                 }
                 else {
-                    $('#emailaddress').css('border', '3px #C33 solid');
-                    $('#btnsubmit').attr('disabled', true);
+                    $('#txtdistributedAddMerchantEmail').css('border', '3px #C33 solid');
+                    $('#btnDistsubmit').attr('disabled', true);
                     //alert("This email id is already registered");
                 }
             },
@@ -248,7 +250,45 @@ $('#emailaddress').on('input blur change keyup', function () {
         });
     }
     else {
-        $('#btnsubmit').attr('disabled', true);
+        $('#btnDistsubmit').attr('disabled', true);
+    }
+});
+
+$('#txtdistributedAddMerchantMob').on('input blur change keyup', function () {
+
+    if ($(this).val().length != 0) {
+        const EmailIDVal = $('#txtdistributedAddMerchantEmail').val();
+        var token = $(':input[name="__RequestVerificationToken"]').val();
+        $.ajax({
+            url: "/Retailer/CheckMobileNoEmailAvailability?area=Distributor",
+            //url: "@Url.Action("CheckEmailAvailability", "Retailer", new {area= "Distributor" })",
+            data: {
+                __RequestVerificationToken: token,
+                MobileNo: $(this).val(),
+                EmailId: EmailIDVal
+            },
+            cache: false,
+            type: "POST",
+            success: function (data) {
+                // DONE               
+                if (data.result == "available") {
+                    $('#txtdistributedAddMerchantMob').css('border', '3px #090 solid');
+                    $('#btnDistsubmit').attr('disabled', false);
+                }
+                else {
+                    $('#txtdistributedAddMerchantMob').css('border', '3px #C33 solid');
+                    $('#btnDistsubmit').attr('disabled', true);
+                    //alert("This email id is already registered");
+                }
+            },
+            error: function (xhr, status, error) {
+                console.log(xhr.responseText);
+                alert("message : \n" + "An error occurred" + "\n status : \n" + status + " \n error : \n" + error);
+            }
+        });
+    }
+    else {
+        $('#btnDistsubmit').attr('disabled', true);
     }
 });
 

@@ -12,12 +12,13 @@
                                         .Build(columns =>
                                         {
                                             columns.Add(model => model.Serial_No).Titled("Sr Id");
-                                //columns.Add(model => model.ToUser).Titled("To User");
-                                columns.Add(model => model.FromUser).Titled("From Member");
+                                            //columns.Add(model => model.ToUser).Titled("To User");
+                                            columns.Add(model => model.FromUser).Titled("From Member");
                                             columns.Add(model => model.CompanyName).Titled("Company Name");
 
                                             columns.Add(model => model.REFERENCE_NO).Titled("Reference No");
-                                            columns.Add(model => model.REQUEST_DATE).Titled("Req Date").Formatted("{0:yyyy-MM-dd}");
+                                            columns.Add(model => model.REQUEST_DATE).Titled("Req Date").Formatted("{0:MM/dd/yyyy}").MultiFilterable(true);
+                                            columns.Add(model => model.REQUEST_TIME).Titled("Req Time").Formatted("{0:T}").Filterable(false);
                                             columns.Add(model => model.AMOUNT).Titled("Amount");
                                             columns.Add(model => model.PAYMENT_METHOD).Titled("Pay Mode");
                                             columns.Add(model => model.BANK_ACCOUNT).Titled("Bank Account");

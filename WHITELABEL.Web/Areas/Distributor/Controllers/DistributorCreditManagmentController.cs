@@ -551,7 +551,8 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                     var memberinfo = (from tblcre in dbcontext.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
                                       join mem in dbcontext.TBL_MASTER_MEMBER on tblcre.FROM_MEM_ID equals mem.MEM_ID
                                       join MemRol in dbcontext.TBL_MASTER_MEMBER_ROLE on mem.MEMBER_ROLE equals MemRol.ROLE_ID
-                                      where tblcre.TO_MEM_ID == MemberCurrentUser.MEM_ID  && tblcre.CREDIT_DATE >= NowDate && tblcre.CREDIT_DATE <= Today_date
+                                      where tblcre.TO_MEM_ID == MemberCurrentUser.MEM_ID
+                                      //where tblcre.TO_MEM_ID == MemberCurrentUser.MEM_ID  && tblcre.CREDIT_DATE >= NowDate && tblcre.CREDIT_DATE <= Today_date
                                       select new
                                       {
                                           sln = tblcre.SLN,
@@ -1030,7 +1031,8 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                     DateTime Today_date = Convert.ToDateTime(Todaydate.ToString("yyyy-MM-dd"));
                     var memberinfo = (from tblcre in dbcontext.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
                                       join mem in dbcontext.TBL_MASTER_MEMBER on tblcre.TO_MEM_ID equals mem.MEM_ID
-                                      where tblcre.TO_MEM_ID == MemberCurrentUser.MEM_ID && tblcre.CREDIT_DATE >= NowDate && tblcre.CREDIT_DATE <= Today_date
+                                      where tblcre.TO_MEM_ID == MemberCurrentUser.MEM_ID
+                                      //where tblcre.TO_MEM_ID == MemberCurrentUser.MEM_ID && tblcre.CREDIT_DATE >= NowDate && tblcre.CREDIT_DATE <= Today_date
                                       select new
                                       {
                                           sln = tblcre.SLN,
@@ -1151,7 +1153,8 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                     var Mem_info = dbcontext.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == MemberCurrentUser.MEM_ID).INTRODUCER;
                     var memberinfo = (from tblcre in dbcontext.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
                                       join mem in dbcontext.TBL_MASTER_MEMBER on tblcre.FROM_MEM_ID equals mem.MEM_ID
-                                      where tblcre.TO_MEM_ID == Mem_info && tblcre.FROM_MEM_ID == MemberCurrentUser.MEM_ID && tblcre.CREDIT_DATE >= NowDate && tblcre.CREDIT_DATE <= Today_date
+                                      where tblcre.TO_MEM_ID == Mem_info && tblcre.FROM_MEM_ID == MemberCurrentUser.MEM_ID 
+                                      //where tblcre.TO_MEM_ID == Mem_info && tblcre.FROM_MEM_ID == MemberCurrentUser.MEM_ID && tblcre.CREDIT_DATE >= NowDate && tblcre.CREDIT_DATE <= Today_date
                                       select new
                                       {
                                           sln = tblcre.SLN,

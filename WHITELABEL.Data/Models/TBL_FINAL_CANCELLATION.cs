@@ -52,5 +52,13 @@
         public string FROM_DATE { get; set; }
         [NotMapped]
         public string TO_DATE { get; set; }
+        [NotMapped]
+        public string FromUser { get; set; }
+        [NotMapped]
+        public long SUPER_ID { get; set; }
+        [NotMapped]
+        public string Company_Name { get; set; }
+        [NotMapped]
+        public string Company_GST { get; set; }
     }
 }

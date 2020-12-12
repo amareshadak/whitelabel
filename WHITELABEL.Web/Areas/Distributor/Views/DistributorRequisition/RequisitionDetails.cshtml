@@ -106,7 +106,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="control-label col-md-3">Bank Account</label>
+                                        <label class="control-label col-md-3">Payment Type</label>
                                         <div class="col-md-9">
                                             <div class="inputer">
                                                 <div class="input-wrapper">
@@ -125,7 +125,8 @@
                                             <div class="inputer">
                                                 <div class="input-wrapper">
                                                     @Html.DropDownListFor(m => m.PAYMENT_METHOD, new List<SelectListItem>
-                                                                            { new SelectListItem{Text="NEFT", Value="NEFT"},
+                                                                            { new SelectListItem{Text="Cash Deposit", Value="Cash Deposit"},
+                                                   new SelectListItem{Text="NEFT", Value="NEFT"},
                                                                                 new SelectListItem{Text="RTGS", Value="RTGS"},
                                                                                 new SelectListItem{Text="IMPS", Value="IMPS"},
                                                                                 new SelectListItem{Text="Cash Deposit in bank", Value="Cash Deposit in bank"}},
@@ -142,14 +143,14 @@
                                         <div class="col-md-9">
                                             <div class="inputer">
                                                 <div class="input-wrapper">
-                                                    @Html.EditorFor(model => model.TRANSACTION_DETAILS, new { htmlAttributes = new { @class = "form-control", @placeholder = "Transaction Details" } })
+                                                    @Html.TextAreaFor(model => model.TRANSACTION_DETAILS, 4, 73, new { htmlAttributes = new { @class = "form-control", @placeholder = "Transaction Details" } })
                                                 </div>
                                                 <span><small>@Html.ValidationMessageFor(model => model.TRANSACTION_DETAILS, "", new { @class = "text-danger" })</small></span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6" style="display:none;">
                                     <div class="form-group">
                                         <label class="control-label col-md-3">Bank Charges</label>
                                         <div class="col-md-9">
@@ -198,11 +199,11 @@
             const currentYear = (new Date).getFullYear();
             const currentMonth = (new Date).getMonth();
             const currentDay = (new Date).getDate();
-         $('#txtRequestDate').datepicker({
-             dateFormat: "yy-mm-dd",
-             maxDate: new Date(currentYear, currentMonth, currentDay),
-             uiLibrary: 'bootstrap4'
-         });
+         //$('#txtRequestDate').datepicker({
+         //    dateFormat: "yy-mm-dd",
+         //    maxDate: new Date(currentYear, currentMonth, currentDay),
+         //    uiLibrary: 'bootstrap4'
+         //});
          window.setTimeout(function () {
              $("#informationMessage").fadeOut('slow');
          }, 3000);

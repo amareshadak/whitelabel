@@ -19,7 +19,8 @@
                                 //columns.Add(model => model.ToUser).Titled("To User");
                                 columns.Add(model => model.PAY_REF_NO).Titled("Transaction Id");
                                 columns.Add(model => model.TRANSACTION_AMOUNT).Titled("Account");
-                                columns.Add(model => model.RES_DATE).Titled("Recharge Date").MultiFilterable(true);
+                                columns.Add(model => model.RES_DATE).Titled("Recharge Date").Formatted("{0:MM/dd/yyyy}").MultiFilterable(true).Sortable(true);
+                                columns.Add(model => model.RES_DATE).Titled("Recharge Time").Formatted("{0:T}").Filterable(false).Sortable(false);
                                 columns.Add(model => model.RES_STATUS).Titled("Status");
                                 columns.Add(model => model.CORELATION_ID).Titled("Co-Relation Id");
                                 //columns.Add(model => model.RES_CODE).Titled("Co-Relation Id");
