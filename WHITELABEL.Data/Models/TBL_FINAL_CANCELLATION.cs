@@ -60,5 +60,7 @@
         public string Company_Name { get; set; }
         [NotMapped]
         public string Company_GST { get; set; }
+        [NotMapped]
+        public long SerialNo { get; set; }
     }
 }

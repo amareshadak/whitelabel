@@ -19,11 +19,12 @@
                                     columns.Add(model => model.COMPANY).Titled("Company").Filterable(true).Sortable(true);
                                     columns.Add(model => model.MEMBER_MOBILE).Titled("Mobile").Filterable(true).Sortable(true);
                                     columns.Add(model => model.RAIL_ID).Titled("Rail User Id").Filterable(true).Sortable(true);
+                                    columns.Add(model => model.RAIL_PWD).Titled("Rail Password").Filterable(true).Sortable(true);
                                     columns.Add(model => model.SECURITY_PIN_MD5).Titled("M Pin").Filterable(true).Sortable(true);
                                     columns.Add(model => (model.ACTIVE_MEMBER == true ? "Active" : "Deactive")).Titled("Status").Css("<style>.table - hover tbody tr: hover {background - color:red;}</style> ").Filterable(true).Sortable(true);
                                     //   columns.Add(model => model.MEM_ID).Encoded(false).Filterable(false).Sortable(false).Titled("Edit Password")
                                     //.RenderedAs(model => "<div style='text-align:center'><a href='" + @Url.Action("ChangeMemberPassword", "MemberRailwayMappingSetting", new { area = "Admin", memid = Encrypt.EncryptMe(model.MEM_ID.ToString()) }) + "' style='margin-right:10px' title='Edit'><i class='fa fa-eye'></i></a></div>");
-                                    columns.Add(model => model.MEM_ID).Encoded(false).Filterable(false).Sortable(false).Titled("Edit Password")
+                                    columns.Add(model => model.MEM_ID).Encoded(false).Filterable(false).Sortable(false).Titled("Edit Rail Password")
                                  .RenderedAs(model => (model.ACTIVE_MEMBER == true ? "<div style='text-align:center'><a href='" + @Url.Action("ChangeMemberPassword", "MemberRailwayMappingSetting", new { area = "Admin", memid = Encrypt.EncryptMe(model.MEM_ID.ToString()) }) + "' style='margin-right:10px' title='Edit'><i class='fa fa-eye'></i></a></div>" : ""));
 
                                     columns.Add(model => model.MEM_ID).Encoded(false).Filterable(false).Sortable(false).Titled("Tag Rail Id")

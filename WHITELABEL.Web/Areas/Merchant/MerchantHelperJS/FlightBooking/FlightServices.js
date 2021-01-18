@@ -208,5 +208,13 @@
         });
         return request;
     }
-
+    this.RefundBookingAmountProcess = function (data) {
+        debugger;
+        var request = $http({
+            method: "POST",
+            data: data,
+            url: "/Merchant/MerchantFlightDetails/RefundBookingAmount"
+        });
+        return request;
+    }
 }]);

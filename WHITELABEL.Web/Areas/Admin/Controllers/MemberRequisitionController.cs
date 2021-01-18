@@ -196,9 +196,13 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 string From_TO = string.Empty;
                 TO_DATE = DateTime.Parse(Date_To.ToString()).ToString("yyyy-MM-dd");
                 DateTime Date_To_Val = Convert.ToDateTime(TO_DATE);
+                DateTime Date_To_Value = Date_To_Val.AddDays(1);
+                //var transactionlist = (from x in db.TBL_BALANCE_TRANSFER_LOGS
+                //                       join y in db.TBL_MASTER_MEMBER on x.FROM_MEMBER equals y.MEM_ID
+                //                       where x.STATUS == "Pending" && x.TO_MEMBER == MemberCurrentUser.MEM_ID && x.REQUEST_DATE>= Date_From_Val && x.REQUEST_DATE<= Date_To_Val && (y.COMPANY.Contains(MemberInfo)|| y.COMPANY_GST_NO.Contains(MemberInfo) || y.UName.Contains(MemberInfo) || y.MEMBER_MOBILE.Contains(MemberInfo) || y.MEMBER_MOBILE.Contains(MemberInfo) || y.EMAIL_ID.Contains(MemberInfo) || x.AMOUNT.ToString().Contains(MemberInfo))
                 var transactionlist = (from x in db.TBL_BALANCE_TRANSFER_LOGS
                                        join y in db.TBL_MASTER_MEMBER on x.FROM_MEMBER equals y.MEM_ID
-                                       where x.STATUS == "Pending" && x.TO_MEMBER == MemberCurrentUser.MEM_ID && x.REQUEST_DATE>= Date_From_Val && x.REQUEST_DATE<= Date_To_Val && (y.COMPANY.Contains(MemberInfo)|| y.COMPANY_GST_NO.Contains(MemberInfo) || y.UName.Contains(MemberInfo) || y.MEMBER_MOBILE.Contains(MemberInfo) || y.MEMBER_MOBILE.Contains(MemberInfo) || y.EMAIL_ID.Contains(MemberInfo) || x.AMOUNT.ToString().Contains(MemberInfo))
+                                       where x.STATUS == "Pending" && x.TO_MEMBER == MemberCurrentUser.MEM_ID && x.REQUEST_DATE >= Date_From_Val && x.REQUEST_DATE <= Date_To_Val && (y.COMPANY.Contains(MemberInfo) || y.COMPANY_GST_NO.Contains(MemberInfo) || y.UName.Contains(MemberInfo) || y.MEMBER_MOBILE.Contains(MemberInfo) || y.MEMBER_MOBILE.Contains(MemberInfo) || y.EMAIL_ID.Contains(MemberInfo) || x.AMOUNT.ToString().Contains(MemberInfo))
                                        select new
                                        {
                                            Touser = "Admin",
@@ -248,7 +252,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 grid.Columns.Add(model => model.MemberRole).Titled("Member Type").Filterable(true);
                 grid.Columns.Add(model => model.CompanyName).Titled("Company Name").Filterable(true); 
                 grid.Columns.Add(model => model.REFERENCE_NO).Titled("Reference No").Filterable(true);
-                grid.Columns.Add(model => model.REQUEST_TIME).Titled("Req Date").Formatted("{0:MM/dd/yyyy}").MultiFilterable(true).Sortable(true); 
+                grid.Columns.Add(model => model.REQUEST_DATE).Titled("Req Date").Formatted("{0:MM/dd/yyyy}").MultiFilterable(true).Sortable(true); 
                 grid.Columns.Add(model => model.REQUEST_TIME).Titled("Req Time").Formatted("{0:T}").Filterable(false).Sortable(false); 
                 grid.Columns.Add(model => model.AMOUNT).Titled("Amount").Filterable(true);
                 grid.Columns.Add(model => model.PAYMENT_METHOD).Titled("Pay Mode").Filterable(true);
@@ -285,13 +289,19 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 string FromDATE = string.Empty;
                 string TO_DATE = string.Empty;
                 FromDATE = DateTime.Parse(DateFrom.ToString()).ToString("yyyy-MM-dd");
+
                 DateTime Date_From_Val = Convert.ToDateTime(FromDATE);
                 string From_TO = string.Empty;
                 TO_DATE = DateTime.Parse(Date_To.ToString()).ToString("yyyy-MM-dd");
                 DateTime Date_To_Val = Convert.ToDateTime(TO_DATE);
+                DateTime Date_To_Value = Date_To_Val.AddDays(1);
                 var transactionlist = (from x in db.TBL_BALANCE_TRANSFER_LOGS
                                        join y in db.TBL_MASTER_MEMBER on x.FROM_MEMBER equals y.MEM_ID
-                                       where x.STATUS == "Pending" && x.TO_MEMBER == MemberCurrentUser.MEM_ID && x.REQUEST_DATE >= Date_From_Val && x.REQUEST_DATE <= Date_To_Val
+                                       where x.STATUS == "Pending" && x.TO_MEMBER == MemberCurrentUser.MEM_ID && x.REQUEST_DATE >= Date_From_Val &&
+                                       x.REQUEST_DATE <= Date_To_Val
+                                       //var transactionlist = (from x in db.TBL_BALANCE_TRANSFER_LOGS
+                                       //                       join y in db.TBL_MASTER_MEMBER on x.FROM_MEMBER equals y.MEM_ID
+                                       //                       where x.STATUS == "Pending" && x.TO_MEMBER == MemberCurrentUser.MEM_ID
                                        select new
                                        {
                                            Touser = "Admin",
@@ -319,7 +329,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                            FromUser = z.FromUser,
                                            MemberRole = z.MemberRole,
                                            AMOUNT = z.AMOUNT,
-                                           REQUEST_DATE = z.REQUEST_DATE,
+                                           REQUEST_DATE = Convert.ToDateTime((z.REQUEST_DATE.ToString("yyyy-MM-dd"))),
                                            REQUEST_TIME = z.REQUEST_TIME,
                                            BANK_ACCOUNT = z.BANK_ACCOUNT,
                                            TRANSACTION_DETAILS = z.TRANSACTION_DETAILS,
@@ -330,7 +340,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                            Company_GST = z.Company_GST,
                                            STATUS = z.STATUS
                                        }).ToList().OrderByDescending(x => x.SLN);
-
+                //var transactionlist = transactionlist_Val.Where(x => x.REQUEST_DATE >= Date_From_Val && x.REQUEST_DATE <= Date_To_Val).ToList();
                 IGrid<TBL_BALANCE_TRANSFER_LOGS> grid = new Grid<TBL_BALANCE_TRANSFER_LOGS>(transactionlist);
                 grid.ViewContext = new ViewContext { HttpContext = HttpContext };
                 grid.Query = Request.QueryString;
@@ -341,7 +351,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 grid.Columns.Add(model => model.CompanyName).Titled("Company").Filterable(true);
                 grid.Columns.Add(model => model.CompanyName).Titled("Company Name").Filterable(true);
                 grid.Columns.Add(model => model.REFERENCE_NO).Titled("Reference No").Filterable(true);
-                grid.Columns.Add(model => model.REQUEST_TIME).Titled("Req Date").Formatted("{0:MM/dd/yyyy}").MultiFilterable(true).Sortable(true);
+                grid.Columns.Add(model => model.REQUEST_DATE).Titled("Req Date").Formatted("{0:MM/dd/yyyy}").MultiFilterable(true).Sortable(true);
                 grid.Columns.Add(model => model.REQUEST_TIME).Titled("Req Time").Formatted("{0:T}").Filterable(false).Sortable(false);
                 grid.Columns.Add(model => model.AMOUNT).Titled("Amount").Filterable(true);
                 grid.Columns.Add(model => model.PAYMENT_METHOD).Titled("Pay Mode").Filterable(true);
@@ -427,7 +437,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 grid.Columns.Add(model => model.MemberRole).Titled("Member Type").Filterable(true);
                 grid.Columns.Add(model => model.CompanyName).Titled("Company Name").Filterable(true);
                 grid.Columns.Add(model => model.REFERENCE_NO).Titled("Reference No").Filterable(true);
-                grid.Columns.Add(model => model.REQUEST_TIME).Titled("Req Date").Formatted("{0:MM/dd/yyyy}").MultiFilterable(true).Sortable(true);
+                grid.Columns.Add(model => model.REQUEST_DATE).Titled("Req Date").Formatted("{0:MM/dd/yyyy}").MultiFilterable(true).Sortable(true);
                 grid.Columns.Add(model => model.REQUEST_TIME).Titled("Req Time").Formatted("{0:T}").Filterable(false).Sortable(false);
                 grid.Columns.Add(model => model.AMOUNT).Titled("Amount").Filterable(true);
                 grid.Columns.Add(model => model.PAYMENT_METHOD).Titled("Pay Mode").Filterable(true);
@@ -516,7 +526,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 grid.Columns.Add(model => model.CompanyName).Titled("Company").Filterable(true);
                 grid.Columns.Add(model => model.CompanyName).Titled("Company Name").Filterable(true);
                 grid.Columns.Add(model => model.REFERENCE_NO).Titled("Reference No").Filterable(true);
-                grid.Columns.Add(model => model.REQUEST_TIME).Titled("Req Date").Formatted("{0:MM/dd/yyyy}").MultiFilterable(true).Sortable(true);
+                grid.Columns.Add(model => model.REQUEST_DATE).Titled("Req Date").Formatted("{0:MM/dd/yyyy}").MultiFilterable(true).Sortable(true);
                 grid.Columns.Add(model => model.REQUEST_TIME).Titled("Req Time").Formatted("{0:T}").Filterable(false).Sortable(false);
                 grid.Columns.Add(model => model.AMOUNT).Titled("Amount").Filterable(true);
                 grid.Columns.Add(model => model.PAYMENT_METHOD).Titled("Pay Mode").Filterable(true);
@@ -969,7 +979,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                 //    MEMBER_TYPE = "DISTRIBUTOR",
                                 //    TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
                                 //    TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                                //    TRANSACTION_TIME = DateTime.Now,
+                                //    TRANSACTION_TIME = Convert.ToDateTime(transinfo.REQUEST_TIME),
                                 //    DR_CR = "DR",
                                 //    //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
                                 //    AMOUNT = Trans_Req_Amount,
@@ -1005,7 +1015,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                     //TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
                                     TRANSACTION_TYPE = "DEPOSIT",
                                     TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                                    TRANSACTION_TIME = DateTime.Now,
+                                    TRANSACTION_TIME = Convert.ToDateTime(transinfo.REQUEST_TIME),
                                     DR_CR = "CR",
                                     //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
                                     AMOUNT = Trans_Req_Amount,
@@ -1077,7 +1087,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                         //    MEMBER_TYPE = "DISTRIBUTOR",
                                         //    TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
                                         //    TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                                        //    TRANSACTION_TIME = DateTime.Now,
+                                        //    TRANSACTION_TIME = Convert.ToDateTime(transinfo.REQUEST_TIME),
                                         //    DR_CR = "DR",
                                         //    //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
                                         //    AMOUNT = CREDITED_REQ_AMT,
@@ -1116,7 +1126,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                             //TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
                                             TRANSACTION_TYPE = "DEPOSIT",
                                             TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                                            TRANSACTION_TIME = DateTime.Now,
+                                            TRANSACTION_TIME = Convert.ToDateTime(transinfo.REQUEST_TIME),
                                             DR_CR = "CR",
                                             //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
                                             AMOUNT = Trans_Req_Amount,
@@ -1146,7 +1156,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                             //TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
                                             TRANSACTION_TYPE = "CREDIT SETTLEMENT",
                                             TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                                            TRANSACTION_TIME = DateTime.Now,
+                                            TRANSACTION_TIME = Convert.ToDateTime(transinfo.REQUEST_TIME),
                                             DR_CR = "DR",
                                             //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
                                             AMOUNT = MER_CR_LMT_AMT,
@@ -1179,7 +1189,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                             CREDIT_OPENING = 0,
                                             CREDITCLOSING = 0,
                                             CREDIT_TRN_TYPE = "DR",
-                                            CORELATIONID = COrelationID
+                                            CORELATIONID = COrelationID,
+                                            STATUS="APPROVE"
                                         };
                                         db.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION.Add(OBJMERCHANTCREDIT_VAL);
 
@@ -1254,7 +1265,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                     //    MEMBER_TYPE = "DISTRIBUTOR",
                                     //    TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
                                     //    TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                                    //    TRANSACTION_TIME = DateTime.Now,
+                                    //    TRANSACTION_TIME = Convert.ToDateTime(transinfo.REQUEST_TIME),
                                     //    DR_CR = "DR",
                                     //    //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
                                     //    AMOUNT = CREDITED_REQ_AMT,
@@ -1293,7 +1304,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                         //TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
                                         TRANSACTION_TYPE = "DEPOSIT",
                                         TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                                        TRANSACTION_TIME = DateTime.Now,
+                                        TRANSACTION_TIME = Convert.ToDateTime(transinfo.REQUEST_TIME),
                                         DR_CR = "CR",
                                         //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
                                         AMOUNT = Trans_Req_Amount,
@@ -1323,7 +1334,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                         //TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
                                         TRANSACTION_TYPE = "CREDIT SETTLEMENT",
                                         TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                                        TRANSACTION_TIME = DateTime.Now,
+                                        TRANSACTION_TIME = Convert.ToDateTime(transinfo.REQUEST_TIME),
                                         DR_CR = "DR",
                                         //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
                                         AMOUNT = Trans_Req_Amount,
@@ -1356,7 +1367,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                         CREDIT_OPENING = 0,
                                         CREDITCLOSING = 0,
                                         CREDIT_TRN_TYPE = "DR",
-                                        CORELATIONID = COrelationID
+                                        CORELATIONID = COrelationID,
+                                        STATUS="APPROVE"
                                     };
                                     db.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION.Add(OBJMERCHANTCREDIT_VAL);
 
@@ -1393,10 +1405,145 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                 }
                                 else
                                 {
-                                    string msg = "This payment requisition can't be update in full settlement mode. Requisition amount is less than the credit limit amount";
-                                    return Json(msg, JsonRequestBehavior.AllowGet);
-                                    //THIS PAYMENT REQUISITION CAN'T BE UPDATE IN FULL SETTLEMENT MODE. REQUISITION AMOUNT IS LESS THAN THE CREDIT LIMIT AMOUNT
+                                    transinfo.STATUS = "Approve";
+                                    transinfo.APPROVAL_DATE = DateTime.Now;
+                                    transinfo.APPROVAL_TIME = DateTime.Now;
+                                    transinfo.FromUser = "test";
+                                    transinfo.REMARKS = SettlementTYPE;
+                                    transinfo.APPROVED_BY = "ADMIN";
+                                    transinfo.PAYMENT_TXN_DETAILS = PaymentTrnId;
+                                    db.Entry(transinfo).State = System.Data.Entity.EntityState.Modified;
+
+                                    decimal REMAINING_CREDIT_AMT = 0;
+                                    REMAINING_CREDIT_AMT = MER_CR_LMT_AMT - Trans_Req_Amount;
+                                    Mer_Add_MainBalance = MER_MainBal + Trans_Req_Amount - Trans_Req_Amount;
+                                    Merchant_Info.CREDIT_LIMIT = REMAINING_CREDIT_AMT;                                    
+                                    //Merchant_Info.BALANCE = Mer_Add_MainBalance;
+                                    db.Entry(Merchant_Info).State = System.Data.Entity.EntityState.Modified;
+                                    if (MER_CLOSING_AMT > 0)
+                                    {
+                                        MER_ADJ_CLOSING_AMT = MER_CLOSING_AMT + Trans_Req_Amount;
+                                    }
+                                    else
+                                    {
+                                        MER_ADJ_CLOSING_AMT = Trans_Req_Amount;
+                                    }
+                                    TBL_ACCOUNTS MERCH_CreeditobjACCOUNT = new TBL_ACCOUNTS()
+                                    {
+                                        API_ID = 0,
+                                        MEM_ID = transinfo.FROM_MEMBER,
+                                        MEMBER_TYPE = MemberType,
+                                        //TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
+                                        TRANSACTION_TYPE = "DEPOSIT",
+                                        TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
+                                        TRANSACTION_TIME = Convert.ToDateTime(transinfo.REQUEST_TIME),
+                                        DR_CR = "CR",
+                                        //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
+                                        AMOUNT = Trans_Req_Amount,
+                                        NARRATION = transinfo.TRANSACTION_DETAILS,
+                                        OPENING = MER_CLOSING_AMT,
+                                        CLOSING = MER_ADJ_CLOSING_AMT,
+                                        REC_NO = 0,
+                                        COMM_AMT = 0,
+                                        TDS = 0,
+                                        GST = 0,
+                                        IPAddress = "",
+                                        SERVICE_ID = 0,
+                                        CORELATIONID = COrelationID
+                                    };
+                                    db.TBL_ACCOUNTS.Add(MERCH_CreeditobjACCOUNT);
+
+                                    decimal MERCH_Deduct_CR_AMT = 0;
+
+                                    //MERCH_Deduct_CR_AMT = MER_ADJ_CLOSING_AMT - CREDITED_REQ_AMT;
+                                    MERCH_Deduct_CR_AMT = MER_ADJ_CLOSING_AMT - Trans_Req_Amount;
+
+                                    TBL_ACCOUNTS MERCH_objDECUR_AMT = new TBL_ACCOUNTS()
+                                    {
+                                        API_ID = 0,
+                                        MEM_ID = transinfo.FROM_MEMBER,
+                                        MEMBER_TYPE = MemberType,
+                                        //TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
+                                        TRANSACTION_TYPE = "CREDIT SETTLEMENT",
+                                        TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
+                                        TRANSACTION_TIME = Convert.ToDateTime(transinfo.REQUEST_TIME),
+                                        DR_CR = "DR",
+                                        //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
+                                        AMOUNT = Trans_Req_Amount,
+                                        NARRATION = transinfo.TRANSACTION_DETAILS,
+                                        OPENING = MER_ADJ_CLOSING_AMT,
+                                        CLOSING = MERCH_Deduct_CR_AMT,
+                                        REC_NO = 0,
+                                        COMM_AMT = 0,
+                                        TDS = 0,
+                                        GST = 0,
+                                        IPAddress = "",
+                                        SERVICE_ID = 0,
+                                        CORELATIONID = COrelationID
+                                    };
+                                    db.TBL_ACCOUNTS.Add(MERCH_objDECUR_AMT);
+
+
+                                    TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION OBJMERCHANTCREDIT_VAL = new TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION()
+                                    {
+                                        TO_MEM_ID = transinfo.TO_MEMBER,
+                                        FROM_MEM_ID = transinfo.FROM_MEMBER,
+                                        CREDIT_DATE = DateTime.Now,
+                                        CREDIT_AMOUNT = Trans_Req_Amount,
+                                        CREDIT_NOTE_DESCRIPTION = "CREDIT LIMIT AMOUNT LOGS",
+                                        CREDIT_STATUS = true,
+                                        GST_VAL = 0,
+                                        GST_AMOUNT = 0,
+                                        TDS_AMOUNT = 0,
+                                        TDS_VAL = 0,
+                                        CREDIT_OPENING = 0,
+                                        CREDITCLOSING = 0,
+                                        CREDIT_TRN_TYPE = "DR",
+                                        CORELATIONID = COrelationID,
+                                        STATUS="APPROVE"
+                                    };
+                                    db.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION.Add(OBJMERCHANTCREDIT_VAL);
+
+                                    //TBL_MEMBER_CREDIT_ACCOUNT_LOGS MEM_CREDIT_ACNT_LOGS = new TBL_MEMBER_CREDIT_ACCOUNT_LOGS()
+                                    //{
+                                    //    MEM_ID = MemberCurrentUser.MEM_ID,
+                                    //    CREDIT_ID = MemberCurrentUser.MEM_ID,
+                                    //    CORELATIONID = COrelationID,
+                                    //    CREDIT_TRAN_TYPE = "DR",
+                                    //    USED_CREDIT_AMOUNT = CREDITED_REQ_AMT,
+                                    //    CREDIT_OPENING_BALANCE = 0,
+                                    //    CREDIT_CLOSING_BALANCE = 0,
+                                    //    CREDIT_USED_DATE = DateTime.Now,
+                                    //    IPADDRESS = "",
+                                    //    WLP_ID = (long)Merchant_Info.UNDER_WHITE_LEVEL,
+                                    //    DIST_ID = (long)Merchant_Info.INTRODUCER,
+                                    //    SUPER_ID = 0,
+                                    //    MER_ID = MemberCurrentUser.MEM_ID,
+                                    //    NARRATION = "CREDIT LIMIT AMOUNT LOGS"
+                                    //};
+                                    //db.TBL_MEMBER_CREDIT_ACCOUNT_LOGS.Add(MEM_CREDIT_ACNT_LOGS);
+                                    await db.SaveChangesAsync();
+                                    ContextTransaction.Commit();
+
+                                    #region Email Code done by Sayan at 10-10-2020
+                                    string name = Merchant_Info.MEMBER_NAME;
+                                    string mailbody = "Hi " + Merchant_Info.UName + "(" + Merchant_Info.MEMBER_NAME + ")" + ",<p>Your requisition has been approved of amount " + Trans_Req_Amount + " by admin (" + Distributor_Info.MEM_UNIQUE_ID + ").</p>";
+                                    EmailHelper emailhelper = new EmailHelper();
+                                    string msgbody = emailhelper.GetEmailTemplate(name, mailbody, "UserEmailTemplate.html");
+                                    emailhelper.SendUserEmail(Merchant_Info.EMAIL_ID, "Great! Your Requisition Approved", msgbody);
+                                    #endregion
+
+                                    return Json("Transaction Approve.", JsonRequestBehavior.AllowGet);
+
+
+
                                 }
+                                //else
+                                //{
+                                //    string msg = "This payment requisition can't be update in full settlement mode. Requisition amount is less than the credit limit amount";
+                                //    return Json(msg, JsonRequestBehavior.AllowGet);
+                                //    //THIS PAYMENT REQUISITION CAN'T BE UPDATE IN FULL SETTLEMENT MODE. REQUISITION AMOUNT IS LESS THAN THE CREDIT LIMIT AMOUNT
+                                //}
                             }
                             else
                             {
@@ -1462,7 +1609,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                         //    MEMBER_TYPE = "DISTRIBUTOR",
                                         //    TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
                                         //    TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                                        //    TRANSACTION_TIME = DateTime.Now,
+                                        //    TRANSACTION_TIME = Convert.ToDateTime(transinfo.REQUEST_TIME),
                                         //    DR_CR = "DR",
                                         //    //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
                                         //    AMOUNT = CHECK_DIST_VAL,
@@ -1502,7 +1649,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                             //TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
                                             TRANSACTION_TYPE = "DEPOSIT",
                                             TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                                            TRANSACTION_TIME = DateTime.Now,
+                                            TRANSACTION_TIME = Convert.ToDateTime(transinfo.REQUEST_TIME),
                                             DR_CR = "CR",
                                             //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
                                             AMOUNT = Trans_Req_Amount,
@@ -1530,7 +1677,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                             //TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
                                             TRANSACTION_TYPE = "CREDIT SETTLEMENT",
                                             TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                                            TRANSACTION_TIME = DateTime.Now,
+                                            TRANSACTION_TIME = Convert.ToDateTime(transinfo.REQUEST_TIME),
                                             DR_CR = "DR",
                                             //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
                                             AMOUNT = MER_DEBIT_BAL,
@@ -1563,7 +1710,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                             CREDIT_OPENING = MER_CR_LMT_AMT,
                                             CREDITCLOSING = SUBCRLIMIAMT,
                                             CREDIT_TRN_TYPE = "DR",
-                                            CORELATIONID = COrelationID
+                                            CORELATIONID = COrelationID,
+                                            STATUS="APPROVE"
                                         };
                                         db.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION.Add(OBJMERCHANTCREDIT_VAL);
 
@@ -1640,7 +1788,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                     //    MEMBER_TYPE = "DISTRIBUTOR",
                                     //    TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
                                     //    TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                                    //    TRANSACTION_TIME = DateTime.Now,
+                                    //    TRANSACTION_TIME = Convert.ToDateTime(transinfo.REQUEST_TIME),
                                     //    DR_CR = "DR",
                                     //    //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
                                     //    AMOUNT = CHECK_DIST_VAL,
@@ -1682,7 +1830,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                         //TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
                                         TRANSACTION_TYPE = "DEPOSIT",
                                         TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                                        TRANSACTION_TIME = DateTime.Now,
+                                        TRANSACTION_TIME = Convert.ToDateTime(transinfo.REQUEST_TIME),
                                         DR_CR = "CR",
                                         //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
                                         AMOUNT = Trans_Req_Amount,
@@ -1710,7 +1858,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                         //TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
                                         TRANSACTION_TYPE = "CREDIT SETTLEMENT",
                                         TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                                        TRANSACTION_TIME = DateTime.Now,
+                                        TRANSACTION_TIME = Convert.ToDateTime(transinfo.REQUEST_TIME),
                                         DR_CR = "DR",
                                         //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
                                         AMOUNT = MER_DEBIT_BAL,
@@ -1742,7 +1890,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                         CREDIT_OPENING = MER_CR_LMT_AMT,
                                         CREDITCLOSING = SUBCRLIMIAMT,
                                         CREDIT_TRN_TYPE = "DR",
-                                        CORELATIONID = COrelationID
+                                        CORELATIONID = COrelationID,
+                                        STATUS="APPROVE"
                                     };
                                     db.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION.Add(OBJMERCHANTCREDIT_VAL);
 
@@ -1811,7 +1960,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                     //    MEMBER_TYPE = "DISTRIBUTOR",
                                     //    TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
                                     //    TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                                    //    TRANSACTION_TIME = DateTime.Now,
+                                    //    TRANSACTION_TIME = Convert.ToDateTime(transinfo.REQUEST_TIME),
                                     //    DR_CR = "DR",
                                     //    //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
                                     //    AMOUNT = CHECK_DIST_VAL,
@@ -1853,7 +2002,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                         //TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
                                         TRANSACTION_TYPE = "DEPOSIT",
                                         TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                                        TRANSACTION_TIME = DateTime.Now,
+                                        TRANSACTION_TIME = Convert.ToDateTime(transinfo.REQUEST_TIME),
                                         DR_CR = "CR",
                                         //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
                                         AMOUNT = Trans_Req_Amount,
@@ -1881,7 +2030,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                         //TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
                                         TRANSACTION_TYPE = "CREDIT SETTLEMENT",
                                         TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                                        TRANSACTION_TIME = DateTime.Now,
+                                        TRANSACTION_TIME = Convert.ToDateTime(transinfo.REQUEST_TIME),
                                         DR_CR = "DR",
                                         //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
                                         AMOUNT = MER_DEBIT_BAL,
@@ -1912,7 +2061,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                         CREDIT_OPENING = MER_CR_LMT_AMT,
                                         CREDITCLOSING = SUB_CREDItAMT,
                                         CREDIT_TRN_TYPE = "DR",
-                                        CORELATIONID = COrelationID
+                                        CORELATIONID = COrelationID,STATUS="APPROVE"
                                     };
                                     db.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION.Add(OBJMERCHANTCREDIT_VAL);
 
@@ -2084,7 +2233,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                     //        MEMBER_TYPE = membtype.roleName,
                     //        TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
                     //        TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                    //        TRANSACTION_TIME = DateTime.Now,
+                    //        TRANSACTION_TIME = Convert.ToDateTime(transinfo.REQUEST_TIME),
                     //        DR_CR = "CR",
                     //        AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
                     //        NARRATION = transinfo.TRANSACTION_DETAILS,
@@ -2106,7 +2255,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                     //        MEMBER_TYPE = membtype.roleName,
                     //        TRANSACTION_TYPE = SettlementTYPE + "SETTLEMENT",
                     //        TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                    //        TRANSACTION_TIME = DateTime.Now,
+                    //        TRANSACTION_TIME = Convert.ToDateTime(transinfo.REQUEST_TIME),
                     //        DR_CR = "CR",
                     //        AMOUNT = DeductResev_LimitAmtToTrasamt,
                     //        NARRATION = "CREDIT LIMIT SETTLEMENT",
@@ -2132,7 +2281,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                     //            MEMBER_TYPE = membtype.roleName,
                     //            TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
                     //            TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                    //            TRANSACTION_TIME = DateTime.Now,
+                    //            TRANSACTION_TIME = Convert.ToDateTime(transinfo.REQUEST_TIME),
                     //            DR_CR = "DR",
                     //            AMOUNT = decimal.Parse(transinfo.BANK_CHARGES.ToString()),
                     //            NARRATION = transinfo.TRANSACTION_DETAILS,
@@ -2167,7 +2316,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                     //    //    MEMBER_TYPE = checkAvailAmtWL.MEMBER_TYPE,
                     //    //    TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
                     //    //    TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                    //    //    TRANSACTION_TIME = DateTime.Now,
+                    //    //    TRANSACTION_TIME = Convert.ToDateTime(transinfo.REQUEST_TIME),
                     //    //    DR_CR = "DR",
                     //    //    AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
                     //    //    NARRATION = transinfo.TRANSACTION_DETAILS,
@@ -2311,7 +2460,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                     DateTime Date_To_Val = Convert.ToDateTime(TO_DATE);
                     var transactionlist = (from x in db.TBL_BALANCE_TRANSFER_LOGS
                                            join y in db.TBL_MASTER_MEMBER on x.FROM_MEMBER equals y.MEM_ID
-                                           where x.STATUS == "Decline" && x.TO_MEMBER == MemberCurrentUser.MEM_ID && x.APPROVAL_DATE>= Date_From_Val && x.APPROVAL_DATE<= Date_To_Val
+                                           where x.STATUS == "Decline" && x.TO_MEMBER == MemberCurrentUser.MEM_ID && x.REQUEST_DATE>= Date_From_Val && x.REQUEST_DATE <= Date_To_Val
                                            select new
                                            {
                                                Touser = "White Label",
@@ -2326,7 +2475,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                                SLN = x.SLN,
                                                PAY_MODE = x.PAYMENT_METHOD,
                                                Comapany_Name=y.COMPANY,
-                                               Company_GSt =y.COMPANY_GST_NO
+                                               Company_GSt =y.COMPANY_GST_NO,
+                                               DeclineDate=x.APPROVAL_DATE
                                            }).AsEnumerable().Select((z, index) => new TBL_BALANCE_TRANSFER_LOGS
                                            {
                                                Serial_No = index + 1,
@@ -2342,7 +2492,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                                SLN = z.SLN,
                                                PAYMENT_METHOD = z.PAY_MODE,
                                                CompanyName=z.Comapany_Name,
-                                               Company_GST=z.Company_GSt
+                                               Company_GST=z.Company_GSt,
+                                               APPROVAL_DATE=z.DeclineDate
                                            }).ToList();
                     return PartialView("DeclinedIndexGrid", transactionlist);
                 }
@@ -2367,7 +2518,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                                SLN = x.SLN,
                                                PAY_MODE = x.PAYMENT_METHOD,
                                                Comapany_Name = y.COMPANY,
-                                               Company_GSt = y.COMPANY_GST_NO
+                                               Company_GSt = y.COMPANY_GST_NO,
+                                               Decline_Date=x.APPROVAL_DATE
                                            }).AsEnumerable().Select((z, index) => new TBL_BALANCE_TRANSFER_LOGS
                                            {
                                                Serial_No = index + 1,
@@ -2383,7 +2535,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                                SLN = z.SLN,
                                                PAYMENT_METHOD = z.PAY_MODE,
                                                CompanyName = z.Comapany_Name,
-                                               Company_GST = z.Company_GSt
+                                               Company_GST = z.Company_GSt,
+                                               APPROVAL_DATE=z.Decline_Date
                                            }).ToList();
                     return PartialView("DeclinedIndexGrid", transactionlist);
                 }
@@ -2757,7 +2910,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                                PAY_MODE = x.PAYMENT_METHOD,
                                                CompanyNamey=y.COMPANY ,
                                                PaymentDetail=x.PAYMENT_TXN_DETAILS,
-                                               
+                                               APPROVAL_DATE=(status == "Pending"?null:x.APPROVAL_DATE),
                                                Company_GSt = y.COMPANY_GST_NO
                                            }).AsEnumerable().Select((z, index) => new TBL_BALANCE_TRANSFER_LOGS
                                            {
@@ -2776,7 +2929,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                                PAYMENT_METHOD = z.PAY_MODE,
                                                CompanyName=z.CompanyNamey,
                                                PAYMENT_TXN_DETAILS=z.PaymentDetail,
-                                               
+                                               APPROVAL_DATE=z.APPROVAL_DATE,
                                                Company_GST = z.Company_GSt
                                            }).ToList();
                     return PartialView("ApprovedIndexGrid", transactionlist);
@@ -2792,7 +2945,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                     DateTime Date_To_Val = Convert.ToDateTime(TO_DATE);
                     var transactionlist = (from x in db.TBL_BALANCE_TRANSFER_LOGS
                                            join y in db.TBL_MASTER_MEMBER on x.FROM_MEMBER equals y.MEM_ID
-                                           where x.TO_MEMBER == MemberCurrentUser.MEM_ID && x.APPROVAL_DATE >= Date_From_Val && x.APPROVAL_DATE <= Date_To_Val && x.STATUS == status
+                                           where x.TO_MEMBER == MemberCurrentUser.MEM_ID && x.REQUEST_DATE >= Date_From_Val && x.REQUEST_DATE <= Date_To_Val && x.STATUS == status
                                            select new
                                            {
                                                Touser = "White Label",
@@ -2809,7 +2962,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                                PAY_MODE = x.PAYMENT_METHOD,
                                                CompanyNamey = y.COMPANY,
                                                PaymentDetail = x.PAYMENT_TXN_DETAILS,
-                                               
+                                               APPROVAL_DATE=x.APPROVAL_DATE,
                                                Company_GSt = y.COMPANY_GST_NO
                                            }).AsEnumerable().Select((z, index) => new TBL_BALANCE_TRANSFER_LOGS
                                            {
@@ -2828,7 +2981,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                                PAYMENT_METHOD = z.PAY_MODE,
                                                CompanyName = z.CompanyNamey,
                                                PAYMENT_TXN_DETAILS = z.PaymentDetail,
-                                               
+                                               APPROVAL_DATE=z.APPROVAL_DATE,
                                                Company_GST = z.Company_GSt
                                            }).ToList();
                     return PartialView("ApprovedIndexGrid", transactionlist);
@@ -2844,7 +2997,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                     DateTime Date_To_Val = Convert.ToDateTime(TO_DATE);
                     var transactionlist = (from x in db.TBL_BALANCE_TRANSFER_LOGS
                                            join y in db.TBL_MASTER_MEMBER on x.FROM_MEMBER equals y.MEM_ID
-                                           where x.STATUS==status && x.TO_MEMBER == MemberCurrentUser.MEM_ID && x.APPROVAL_DATE >= Date_From_Val && x.APPROVAL_DATE <= Date_To_Val
+                                           where x.STATUS==status && x.TO_MEMBER == MemberCurrentUser.MEM_ID && x.REQUEST_DATE >= Date_From_Val && x.REQUEST_DATE <= Date_To_Val
                                            select new
                                            {
                                                Touser = "White Label",
@@ -2861,7 +3014,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                                PAY_MODE = x.PAYMENT_METHOD,
                                                CompanyNamey = y.COMPANY,
                                                PaymentDetail = x.PAYMENT_TXN_DETAILS,
-                                               
+                                               DeclineDate=x.APPROVAL_DATE,
                                                Company_GSt = y.COMPANY_GST_NO
                                            }).AsEnumerable().Select((z, index) => new TBL_BALANCE_TRANSFER_LOGS
                                            {
@@ -2880,7 +3033,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                                PAYMENT_METHOD = z.PAY_MODE,
                                                CompanyName = z.CompanyNamey,
                                                PAYMENT_TXN_DETAILS = z.PaymentDetail,
-                                               
+                                               APPROVAL_DATE=z.DeclineDate,
                                                Company_GST = z.Company_GSt
                                            }).ToList();
                     return PartialView("ApprovedIndexGrid", transactionlist);
@@ -2913,7 +3066,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                                PAY_MODE = x.PAYMENT_METHOD,
                                                CompanyNamey = y.COMPANY,
                                                PaymentDetail = x.PAYMENT_TXN_DETAILS,
-                                               
+                                               APPROVAL_DATE=x.APPROVAL_DATE,
                                                Company_GSt = y.COMPANY_GST_NO
                                            }).AsEnumerable().Select((z, index) => new TBL_BALANCE_TRANSFER_LOGS
                                            {
@@ -2932,7 +3085,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                                PAYMENT_METHOD = z.PAY_MODE,
                                                CompanyName = z.CompanyNamey,
                                                PAYMENT_TXN_DETAILS = z.PaymentDetail,
-                                               
+                                               APPROVAL_DATE=z.APPROVAL_DATE,
                                                Company_GST = z.Company_GSt
                                            }).ToList();
                     return PartialView("ApprovedIndexGrid", transactionlist);
@@ -2959,7 +3112,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                                PAY_MODE = x.PAYMENT_METHOD,                                               
                                                CompanyNamey = y.COMPANY,
                                                PaymentDetail = x.PAYMENT_TXN_DETAILS,
-                                               
+                                               APPROVAL_DATE = (status == "Pending" ? null : x.APPROVAL_DATE),
                                                Company_GSt = y.COMPANY_GST_NO
                                            }).AsEnumerable().Select((z, index) => new TBL_BALANCE_TRANSFER_LOGS
                                            {
@@ -2978,7 +3131,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                                PAYMENT_METHOD = z.PAY_MODE,
                                                CompanyName = z.CompanyNamey,
                                                PAYMENT_TXN_DETAILS = z.PaymentDetail,
-                                               
+                                               APPROVAL_DATE=z.APPROVAL_DATE,
                                                Company_GST = z.Company_GSt
                                            }).ToList();
                     return PartialView("ApprovedIndexGrid", transactionlist);
@@ -3006,7 +3159,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                                PAY_MODE = x.PAYMENT_METHOD,
                                                CompanyNamey = y.COMPANY,
                                                PaymentDetail = x.PAYMENT_TXN_DETAILS,
-                                               
+                                               APPROVAl_DATE=x.APPROVAL_DATE,
                                                Company_GSt = y.COMPANY_GST_NO
                                            }).AsEnumerable().Select((z, index) => new TBL_BALANCE_TRANSFER_LOGS
                                            {
@@ -3025,7 +3178,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                                PAYMENT_METHOD = z.PAY_MODE,
                                                CompanyName = z.CompanyNamey,
                                                PAYMENT_TXN_DETAILS = z.PaymentDetail,
-                                               
+                                               APPROVAL_DATE=z.APPROVAl_DATE,
                                                Company_GST = z.Company_GSt
                                            }).ToList();
                     return PartialView("ApprovedIndexGrid", transactionlist);
@@ -3094,6 +3247,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                                FromUser = y.UName,
                                                Reference_NO = x.REFERENCE_NO,
                                                REQUEST_DATE = x.REQUEST_DATE,
+                                               REQUEST_TIME = x.REQUEST_TIME,
                                                AMOUNT = x.AMOUNT,
                                                BANK_ACCOUNT = x.BANK_ACCOUNT,
                                                TRANSACTION_DETAILS = x.TRANSACTION_DETAILS,
@@ -3101,7 +3255,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                                STATUS = x.STATUS,
                                                PAY_MODE = x.PAYMENT_METHOD,
                                                CompanyNamey = y.COMPANY,
-                                               PaymentDetail = x.PAYMENT_TXN_DETAILS
+                                               PaymentDetail = x.PAYMENT_TXN_DETAILS,
+                                               APPROVAL_DATE=(status=="Pending"?null:x.APPROVAL_DATE)
                                            }).AsEnumerable().Select((z, index) => new TBL_BALANCE_TRANSFER_LOGS
                                            {
                                                Serial_No = index + 1,
@@ -3111,13 +3266,15 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                                FromUser = z.FromUser,
                                                AMOUNT = z.AMOUNT,
                                                REQUEST_DATE = z.REQUEST_DATE,
+                                               REQUEST_TIME = z.REQUEST_TIME,
                                                BANK_ACCOUNT = z.BANK_ACCOUNT,
                                                TRANSACTION_DETAILS = z.TRANSACTION_DETAILS,
                                                SLN = z.SLN,
                                                STATUS = z.STATUS,
                                                PAYMENT_METHOD = z.PAY_MODE,
                                                CompanyName = z.CompanyNamey,
-                                               PAYMENT_TXN_DETAILS = z.PaymentDetail
+                                               PAYMENT_TXN_DETAILS = z.PaymentDetail,
+                                               APPROVAL_DATE=z.APPROVAL_DATE
                                            }).ToList();
                     IGrid<TBL_BALANCE_TRANSFER_LOGS> grid = new Grid<TBL_BALANCE_TRANSFER_LOGS>(transactionlist);
                     grid.ViewContext = new ViewContext { HttpContext = HttpContext };
@@ -3127,13 +3284,15 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                     grid.Columns.Add(model => model.CompanyName).Titled("Company Name");
                     grid.Columns.Add(model => model.REFERENCE_NO).Titled("Reference No");
                     grid.Columns.Add(model => model.REQUEST_DATE).Titled("Req Date").Formatted("{0:yyyy-MM-dd}");
-                    //grid.Columns.Add(model => model.REQUEST_TIME).Titled("Req Time").Formatted("{0:T}");
+                    grid.Columns.Add(model => model.REQUEST_TIME).Titled("Req Time").Formatted("{0:T}");
                     grid.Columns.Add(model => model.AMOUNT).Titled("Amouont");
                     grid.Columns.Add(model => model.PAYMENT_METHOD).Titled("Pay Mode");
                     grid.Columns.Add(model => model.BANK_ACCOUNT).Titled("Bank Account");
                     grid.Columns.Add(model => model.TRANSACTION_DETAILS).Titled("Transaction Details");
                     grid.Columns.Add(model => model.PAYMENT_TXN_DETAILS).Titled("Payment Details");
                     grid.Columns.Add(model => model.STATUS).Titled("Status");
+                    grid.Columns.Add(model => model.APPROVAL_DATE).Titled("Processing Date").Formatted("{0:yyyy-MM-dd}");
+                    grid.Columns.Add(model => model.APPROVAL_DATE).Titled("Processing Time").Formatted("{0:T}");
                     grid.Pager = new GridPager<TBL_BALANCE_TRANSFER_LOGS>(grid);
                     grid.Processors.Add(grid.Pager);
                     grid.Pager.RowsPerPage = 1000000;
@@ -3158,6 +3317,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                                FromUser = y.UName,
                                                Reference_NO = x.REFERENCE_NO,
                                                REQUEST_DATE = x.REQUEST_DATE,
+                                               REQUEST_TIME = x.REQUEST_TIME,
                                                AMOUNT = x.AMOUNT,
                                                BANK_ACCOUNT = x.BANK_ACCOUNT,
                                                TRANSACTION_DETAILS = x.TRANSACTION_DETAILS,
@@ -3165,7 +3325,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                                STATUS = x.STATUS,
                                                PAY_MODE = x.PAYMENT_METHOD,
                                                CompanyNamey = y.COMPANY,
-                                               PaymentDetail = x.PAYMENT_TXN_DETAILS
+                                               PaymentDetail = x.PAYMENT_TXN_DETAILS,
+                                               APPROVAL_DATE=x.APPROVAL_DATE
                                            }).AsEnumerable().Select((z, index) => new TBL_BALANCE_TRANSFER_LOGS
                                            {
                                                Serial_No = index + 1,
@@ -3175,13 +3336,15 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                                FromUser = z.FromUser,
                                                AMOUNT = z.AMOUNT,
                                                REQUEST_DATE = z.REQUEST_DATE,
+                                               REQUEST_TIME = z.REQUEST_TIME,
                                                BANK_ACCOUNT = z.BANK_ACCOUNT,
                                                TRANSACTION_DETAILS = z.TRANSACTION_DETAILS,
                                                SLN = z.SLN,
                                                STATUS = z.STATUS,
                                                PAYMENT_METHOD = z.PAY_MODE,
                                                CompanyName = z.CompanyNamey,
-                                               PAYMENT_TXN_DETAILS = z.PaymentDetail
+                                               PAYMENT_TXN_DETAILS = z.PaymentDetail,
+                                               APPROVAL_DATE=z.APPROVAL_DATE
                                            }).ToList();
                     IGrid<TBL_BALANCE_TRANSFER_LOGS> grid = new Grid<TBL_BALANCE_TRANSFER_LOGS>(transactionlist);
                     grid.ViewContext = new ViewContext { HttpContext = HttpContext };
@@ -3191,13 +3354,15 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                     grid.Columns.Add(model => model.CompanyName).Titled("Company Name");
                     grid.Columns.Add(model => model.REFERENCE_NO).Titled("Reference No");
                     grid.Columns.Add(model => model.REQUEST_DATE).Titled("Req Date").Formatted("{0:yyyy-MM-dd}");
-                    //grid.Columns.Add(model => model.REQUEST_TIME).Titled("Req Date").Formatted("{0:T}");
+                    grid.Columns.Add(model => model.REQUEST_TIME).Titled("Req Date").Formatted("{0:T}");
                     grid.Columns.Add(model => model.AMOUNT).Titled("Amouont");
                     grid.Columns.Add(model => model.PAYMENT_METHOD).Titled("Pay Mode");
                     grid.Columns.Add(model => model.BANK_ACCOUNT).Titled("Bank Account");
                     grid.Columns.Add(model => model.TRANSACTION_DETAILS).Titled("Transaction Details");
                     grid.Columns.Add(model => model.PAYMENT_TXN_DETAILS).Titled("Payment Details");
                     grid.Columns.Add(model => model.STATUS).Titled("Status");
+                    grid.Columns.Add(model => model.APPROVAL_DATE).Titled("Processing Date").Formatted("{0:yyyy-MM-dd}");
+                    grid.Columns.Add(model => model.APPROVAL_DATE).Titled("Processing Time").Formatted("{0:T}");
                     grid.Pager = new GridPager<TBL_BALANCE_TRANSFER_LOGS>(grid);
                     grid.Processors.Add(grid.Pager);
                     grid.Pager.RowsPerPage = 1000000;
@@ -3222,6 +3387,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                                FromUser = y.UName,
                                                Reference_NO = x.REFERENCE_NO,
                                                REQUEST_DATE = x.REQUEST_DATE,
+                                               REQUEST_TIME = x.REQUEST_TIME,
                                                AMOUNT = x.AMOUNT,
                                                BANK_ACCOUNT = x.BANK_ACCOUNT,
                                                TRANSACTION_DETAILS = x.TRANSACTION_DETAILS,
@@ -3239,6 +3405,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                                FromUser = z.FromUser,
                                                AMOUNT = z.AMOUNT,
                                                REQUEST_DATE = z.REQUEST_DATE,
+                                               REQUEST_TIME = z.REQUEST_TIME,
                                                BANK_ACCOUNT = z.BANK_ACCOUNT,
                                                TRANSACTION_DETAILS = z.TRANSACTION_DETAILS,
                                                SLN = z.SLN,
@@ -3255,13 +3422,15 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                     grid.Columns.Add(model => model.CompanyName).Titled("Company Name");
                     grid.Columns.Add(model => model.REFERENCE_NO).Titled("Reference No");
                     grid.Columns.Add(model => model.REQUEST_DATE).Titled("Req Date").Formatted("{0:yyyy-MM-dd}");
-                    //grid.Columns.Add(model => model.REQUEST_TIME).Titled("Req Date").Formatted("{0:T}");
+                    grid.Columns.Add(model => model.REQUEST_TIME).Titled("Req Date").Formatted("{0:T}");
                     grid.Columns.Add(model => model.AMOUNT).Titled("Amouont");
                     grid.Columns.Add(model => model.PAYMENT_METHOD).Titled("Pay Mode");
                     grid.Columns.Add(model => model.BANK_ACCOUNT).Titled("Bank Account");
                     grid.Columns.Add(model => model.TRANSACTION_DETAILS).Titled("Transaction Details");
                     grid.Columns.Add(model => model.PAYMENT_TXN_DETAILS).Titled("Payment Details");
                     grid.Columns.Add(model => model.STATUS).Titled("Status");
+                    grid.Columns.Add(model => model.APPROVAL_DATE).Titled("Processing Date").Formatted("{0:yyyy-MM-dd}");
+                    grid.Columns.Add(model => model.APPROVAL_DATE).Titled("Processing Date").Formatted("{0:T}");
                     grid.Pager = new GridPager<TBL_BALANCE_TRANSFER_LOGS>(grid);
                     grid.Processors.Add(grid.Pager);
                     grid.Pager.RowsPerPage = 1000000;
@@ -3286,6 +3455,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                                FromUser = y.UName,
                                                Reference_NO = x.REFERENCE_NO,
                                                REQUEST_DATE = x.REQUEST_DATE,
+                                               REQUEST_TIME = x.REQUEST_TIME,
                                                AMOUNT = x.AMOUNT,
                                                BANK_ACCOUNT = x.BANK_ACCOUNT,
                                                TRANSACTION_DETAILS = x.TRANSACTION_DETAILS,
@@ -3293,7 +3463,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                                STATUS = x.STATUS,
                                                PAY_MODE = x.PAYMENT_METHOD,
                                                CompanyNamey = y.COMPANY,
-                                               PaymentDetail = x.PAYMENT_TXN_DETAILS
+                                               PaymentDetail = x.PAYMENT_TXN_DETAILS,
+                                               APPROVAL_DATE=x.APPROVAL_DATE
                                            }).AsEnumerable().Select((z, index) => new TBL_BALANCE_TRANSFER_LOGS
                                            {
                                                Serial_No = index + 1,
@@ -3303,13 +3474,15 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                                FromUser = z.FromUser,
                                                AMOUNT = z.AMOUNT,
                                                REQUEST_DATE = z.REQUEST_DATE,
+                                               REQUEST_TIME = z.REQUEST_TIME,
                                                BANK_ACCOUNT = z.BANK_ACCOUNT,
                                                TRANSACTION_DETAILS = z.TRANSACTION_DETAILS,
                                                SLN = z.SLN,
                                                STATUS = z.STATUS,
                                                PAYMENT_METHOD = z.PAY_MODE,
                                                CompanyName = z.CompanyNamey,
-                                               PAYMENT_TXN_DETAILS = z.PaymentDetail
+                                               PAYMENT_TXN_DETAILS = z.PaymentDetail,
+                                               APPROVAL_DATE = z.APPROVAL_DATE
                                            }).ToList();
                     IGrid<TBL_BALANCE_TRANSFER_LOGS> grid = new Grid<TBL_BALANCE_TRANSFER_LOGS>(transactionlist);
                     grid.ViewContext = new ViewContext { HttpContext = HttpContext };
@@ -3319,13 +3492,15 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                     grid.Columns.Add(model => model.CompanyName).Titled("Company Name");
                     grid.Columns.Add(model => model.REFERENCE_NO).Titled("Reference No");
                     grid.Columns.Add(model => model.REQUEST_DATE).Titled("Req Date").Formatted("{0:yyyy-MM-dd}");
-                    //grid.Columns.Add(model => model.REQUEST_TIME).Titled("Req Date").Formatted("{0:T}");
+                    grid.Columns.Add(model => model.REQUEST_TIME).Titled("Req Date").Formatted("{0:T}");
                     grid.Columns.Add(model => model.AMOUNT).Titled("Amouont");
                     grid.Columns.Add(model => model.PAYMENT_METHOD).Titled("Pay Mode");
                     grid.Columns.Add(model => model.BANK_ACCOUNT).Titled("Bank Account");
                     grid.Columns.Add(model => model.TRANSACTION_DETAILS).Titled("Transaction Details");
                     grid.Columns.Add(model => model.PAYMENT_TXN_DETAILS).Titled("Payment Details");
                     grid.Columns.Add(model => model.STATUS).Titled("Status");
+                    grid.Columns.Add(model => model.APPROVAL_DATE).Titled("Processing Date").Formatted("{0:yyyy-MM-dd}");
+                    grid.Columns.Add(model => model.APPROVAL_DATE).Titled("Processing Date").Formatted("{0:T}");
                     grid.Pager = new GridPager<TBL_BALANCE_TRANSFER_LOGS>(grid);
                     grid.Processors.Add(grid.Pager);
                     grid.Pager.RowsPerPage = 1000000;
@@ -3344,6 +3519,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                                FromUser = y.UName,
                                                Reference_NO = x.REFERENCE_NO,
                                                REQUEST_DATE = x.REQUEST_DATE,
+                                               REQUEST_TIME = x.REQUEST_TIME,
                                                AMOUNT = x.AMOUNT,
                                                BANK_ACCOUNT = x.BANK_ACCOUNT,
                                                TRANSACTION_DETAILS = x.TRANSACTION_DETAILS,
@@ -3351,7 +3527,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                                STATUS = x.STATUS,
                                                PAY_MODE = x.PAYMENT_METHOD,
                                                CompanyNamey = y.COMPANY,
-                                               PaymentDetail = x.PAYMENT_TXN_DETAILS
+                                               PaymentDetail = x.PAYMENT_TXN_DETAILS,
+                                               APPROVAL_DATE = (status == "Pending" ? null : x.APPROVAL_DATE)
                                            }).AsEnumerable().Select((z, index) => new TBL_BALANCE_TRANSFER_LOGS
                                            {
                                                Serial_No = index + 1,
@@ -3361,13 +3538,15 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                                FromUser = z.FromUser,
                                                AMOUNT = z.AMOUNT,
                                                REQUEST_DATE = z.REQUEST_DATE,
+                                               REQUEST_TIME = z.REQUEST_TIME,
                                                BANK_ACCOUNT = z.BANK_ACCOUNT,
                                                TRANSACTION_DETAILS = z.TRANSACTION_DETAILS,
                                                SLN = z.SLN,
                                                STATUS = z.STATUS,
                                                PAYMENT_METHOD = z.PAY_MODE,
                                                CompanyName = z.CompanyNamey,
-                                               PAYMENT_TXN_DETAILS = z.PaymentDetail
+                                               PAYMENT_TXN_DETAILS = z.PaymentDetail,
+                                               APPROVAL_DATE=z.APPROVAL_DATE
                                            }).ToList();
                     IGrid<TBL_BALANCE_TRANSFER_LOGS> grid = new Grid<TBL_BALANCE_TRANSFER_LOGS>(transactionlist);
                     grid.ViewContext = new ViewContext { HttpContext = HttpContext };
@@ -3377,13 +3556,15 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                     grid.Columns.Add(model => model.CompanyName).Titled("Company Name");
                     grid.Columns.Add(model => model.REFERENCE_NO).Titled("Reference No");
                     grid.Columns.Add(model => model.REQUEST_DATE).Titled("Req Date").Formatted("{0:yyyy-MM-dd}");
-                    //grid.Columns.Add(model => model.REQUEST_TIME).Titled("Req Date").Formatted("{0:T}");
+                    grid.Columns.Add(model => model.REQUEST_TIME).Titled("Req Date").Formatted("{0:T}");
                     grid.Columns.Add(model => model.AMOUNT).Titled("Amouont");
                     grid.Columns.Add(model => model.PAYMENT_METHOD).Titled("Pay Mode");
                     grid.Columns.Add(model => model.BANK_ACCOUNT).Titled("Bank Account");
                     grid.Columns.Add(model => model.TRANSACTION_DETAILS).Titled("Transaction Details");
                     grid.Columns.Add(model => model.PAYMENT_TXN_DETAILS).Titled("Payment Details");
                     grid.Columns.Add(model => model.STATUS).Titled("Status");
+                    grid.Columns.Add(model => model.APPROVAL_DATE).Titled("Processing Date").Formatted("{0:yyyy-MM-dd}");
+                    grid.Columns.Add(model => model.APPROVAL_DATE).Titled("Processing Date").Formatted("{0:T}");
                     grid.Pager = new GridPager<TBL_BALANCE_TRANSFER_LOGS>(grid);
                     grid.Processors.Add(grid.Pager);
                     grid.Pager.RowsPerPage = 1000000;
@@ -3402,6 +3583,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                                FromUser = y.UName,
                                                Reference_NO = x.REFERENCE_NO,
                                                REQUEST_DATE = x.REQUEST_DATE,
+                                               REQUEST_TIME = x.REQUEST_TIME,
                                                AMOUNT = x.AMOUNT,
                                                BANK_ACCOUNT = x.BANK_ACCOUNT,
                                                TRANSACTION_DETAILS = x.TRANSACTION_DETAILS,
@@ -3409,7 +3591,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                                STATUS = x.STATUS,
                                                PAY_MODE = x.PAYMENT_METHOD,
                                                CompanyNamey = y.COMPANY,
-                                               PaymentDetail = x.PAYMENT_TXN_DETAILS
+                                               PaymentDetail = x.PAYMENT_TXN_DETAILS,
+                                               APPROVAL_DATE=x.APPROVAL_DATE
                                            }).AsEnumerable().Select((z, index) => new TBL_BALANCE_TRANSFER_LOGS
                                            {
                                                Serial_No = index + 1,
@@ -3419,13 +3602,15 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                                FromUser = z.FromUser,
                                                AMOUNT = z.AMOUNT,
                                                REQUEST_DATE = z.REQUEST_DATE,
+                                               REQUEST_TIME = z.REQUEST_TIME,
                                                BANK_ACCOUNT = z.BANK_ACCOUNT,
                                                TRANSACTION_DETAILS = z.TRANSACTION_DETAILS,
                                                SLN = z.SLN,
                                                STATUS = z.STATUS,
                                                PAYMENT_METHOD = z.PAY_MODE,
                                                CompanyName = z.CompanyNamey,
-                                               PAYMENT_TXN_DETAILS = z.PaymentDetail
+                                               PAYMENT_TXN_DETAILS = z.PaymentDetail,
+                                               APPROVAL_DATE=z.APPROVAL_DATE
                                            }).ToList();
                     IGrid<TBL_BALANCE_TRANSFER_LOGS> grid = new Grid<TBL_BALANCE_TRANSFER_LOGS>(transactionlist);
                     grid.ViewContext = new ViewContext { HttpContext = HttpContext };
@@ -3435,13 +3620,15 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                     grid.Columns.Add(model => model.CompanyName).Titled("Company Name");
                     grid.Columns.Add(model => model.REFERENCE_NO).Titled("Reference No");
                     grid.Columns.Add(model => model.REQUEST_DATE).Titled("Req Date").Formatted("{0:yyyy-MM-dd}");
-                    //grid.Columns.Add(model => model.REQUEST_TIME).Titled("Req Date").Formatted("{0:T}");
+                    grid.Columns.Add(model => model.REQUEST_TIME).Titled("Req Date").Formatted("{0:T}");
                     grid.Columns.Add(model => model.AMOUNT).Titled("Amouont");
                     grid.Columns.Add(model => model.PAYMENT_METHOD).Titled("Pay Mode");
                     grid.Columns.Add(model => model.BANK_ACCOUNT).Titled("Bank Account");
                     grid.Columns.Add(model => model.TRANSACTION_DETAILS).Titled("Transaction Details");
                     grid.Columns.Add(model => model.PAYMENT_TXN_DETAILS).Titled("Payment Details");
                     grid.Columns.Add(model => model.STATUS).Titled("Status");
+                    grid.Columns.Add(model => model.APPROVAL_DATE).Titled("Processing Date").Formatted("{0:yyyy-MM-dd}");
+                    grid.Columns.Add(model => model.APPROVAL_DATE).Titled("Processing Date").Formatted("{0:T}");
                     grid.Pager = new GridPager<TBL_BALANCE_TRANSFER_LOGS>(grid);
                     grid.Processors.Add(grid.Pager);
                     grid.Pager.RowsPerPage = 1000000;
@@ -3493,7 +3680,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                     var memberinfo = (from tblcre in db.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
                                       join mem in db.TBL_MASTER_MEMBER on tblcre.FROM_MEM_ID equals mem.MEM_ID
                                       //where tblcre.TO_MEM_ID == MemberCurrentUser.MEM_ID && tblcre.CREDIT_DATE>= Date_From_Val && tblcre.CREDIT_DATE<= Date_To_Val
-                                      where tblcre.TO_MEM_ID == MemberCurrentUser.MEM_ID && tblcre.CREDIT_DATE >= Date_From_Val && tblcre.CREDIT_DATE <= To_Date_Val && tblcre.CREDIT_STATUS==false
+                                      where tblcre.TO_MEM_ID == MemberCurrentUser.MEM_ID && tblcre.CREDIT_DATE >= Date_From_Val && tblcre.CREDIT_DATE <= To_Date_Val && tblcre.CREDIT_STATUS==false && tblcre.STATUS== "PENDING"
                                       select new
                                       {
                                           sln = tblcre.SLN,
@@ -3508,7 +3695,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                           Closingamt = tblcre.CREDITCLOSING,
                                           creditType = tblcre.CREDIT_TRN_TYPE,
                                           COMPANY_NAME=mem.COMPANY,
-                                          COMPANy_GST=mem.COMPANY_GST_NO
+                                          COMPANy_GST=mem.COMPANY_GST_NO,
+                                          STATUS=tblcre.STATUS
                                       }).AsEnumerable().Select(z => new TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
                                       {
                                           SLN = z.sln,
@@ -3525,7 +3713,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                           CREDIT_OPENING = z.OpeningAmt,
                                           CREDIT_TRN_TYPE = z.creditType,
                                           COMPANY_NAME = z.COMPANY_NAME,
-                                          COMPANY_GST = z.COMPANy_GST
+                                          COMPANY_GST = z.COMPANy_GST,
+                                          STATUS=z.STATUS
                                       }).ToList().OrderByDescending(a => a.CREDIT_DATE); ;
                     return PartialView("AllCreditRequisitionIndexGrid", memberinfo);
                 }
@@ -3534,7 +3723,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                     var memberinfo = (from tblcre in db.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
                                       join mem in db.TBL_MASTER_MEMBER on tblcre.FROM_MEM_ID equals mem.MEM_ID
                                       //where tblcre.TO_MEM_ID == MemberCurrentUser.MEM_ID && tblcre.CREDIT_DATE>= Date_From_Val && tblcre.CREDIT_DATE<= Date_To_Val
-                                      where tblcre.TO_MEM_ID == MemberCurrentUser.MEM_ID && tblcre.CREDIT_STATUS == false
+                                      where tblcre.TO_MEM_ID == MemberCurrentUser.MEM_ID && tblcre.CREDIT_STATUS == false && tblcre.STATUS == "PENDING"
                                       select new
                                       {
                                           sln = tblcre.SLN,
@@ -3549,7 +3738,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                           Closingamt = tblcre.CREDITCLOSING,
                                           creditType = tblcre.CREDIT_TRN_TYPE,
                                           COMPANY_NAME = mem.COMPANY,
-                                          COMPANy_GST = mem.COMPANY_GST_NO
+                                          COMPANy_GST = mem.COMPANY_GST_NO,
+                                          STATUS=tblcre.STATUS
                                       }).AsEnumerable().Select(z => new TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
                                       {
                                           SLN = z.sln,
@@ -3566,7 +3756,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                           CREDIT_OPENING = z.OpeningAmt,
                                           CREDIT_TRN_TYPE = z.creditType,
                                           COMPANY_NAME = z.COMPANY_NAME,
-                                          COMPANY_GST = z.COMPANy_GST
+                                          COMPANY_GST = z.COMPANy_GST,
+                                          STATUS=z.STATUS
                                       }).ToList().OrderByDescending(a => a.CREDIT_DATE); ;
                     return PartialView("AllCreditRequisitionIndexGrid", memberinfo);
                 }
@@ -3632,6 +3823,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                     var transinfo = await db.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION.Where(x => x.SLN == sln).FirstOrDefaultAsync();
                     //transinfo.REQUEST_DATE = Convert.ToDateTime(trandate);
                     transinfo.CREDIT_STATUS = false;
+                    transinfo.STATUS = "DECLINE";
                     transinfo.FromUser = "test";                    
                     db.Entry(transinfo).State = System.Data.Entity.EntityState.Modified;
                     await db.SaveChangesAsync();
@@ -3681,7 +3873,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                     decimal CR_Opening = 0;
                     decimal CR_Closinging = 0;
                     decimal ADD_CR_Closinging = 0;
-
+                    transinfo.STATUS = "APPROVE";
                     transinfo.CREDIT_STATUS = true;
                     db.Entry(transinfo).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
@@ -3723,8 +3915,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                         MEM_ID = transinfo.FROM_MEM_ID,
                         MEMBER_TYPE = MEM_ROLE,
                         TRANSACTION_TYPE = "CREDIT LIMIT",
-                        TRANSACTION_DATE = DateTime.Now,
-                        TRANSACTION_TIME = DateTime.Now,
+                        TRANSACTION_DATE = transinfo.CREDIT_DATE,
+                        TRANSACTION_TIME = Convert.ToDateTime(transinfo.CREDIT_DATE),
                         DR_CR = "CR",
                         AMOUNT = creditlimitBalance,
                         NARRATION = transinfo.CREDIT_NOTE_DESCRIPTION,
@@ -3808,7 +4000,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                           Closingamt = tblcre.CREDITCLOSING,
                                           creditType = tblcre.CREDIT_TRN_TYPE,
                                           COMPANY_NAME = mem.COMPANY,
-                                          COMPANy_GST = mem.COMPANY_GST_NO
+                                          COMPANy_GST = mem.COMPANY_GST_NO,
+                                          STATUS =tblcre.STATUS
                                       }).AsEnumerable().Select(z => new TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
                                       {
                                           SLN = z.sln,
@@ -3825,7 +4018,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                           CREDIT_OPENING = z.OpeningAmt,
                                           CREDIT_TRN_TYPE = z.creditType,
                                           COMPANY_NAME = z.COMPANY_NAME,
-                                          COMPANY_GST = z.COMPANy_GST
+                                          COMPANY_GST = z.COMPANy_GST,
+                                          STATUS=z.STATUS
                                       }).ToList().OrderByDescending(a => a.CREDIT_DATE); ;
                     return PartialView("AllMerchantCreditRequisitionReportGrid", memberinfo);
                 }
@@ -3849,7 +4043,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                           Closingamt = tblcre.CREDITCLOSING,
                                           creditType = tblcre.CREDIT_TRN_TYPE,
                                           COMPANY_NAME = mem.COMPANY,
-                                          COMPANy_GST = mem.COMPANY_GST_NO
+                                          COMPANy_GST = mem.COMPANY_GST_NO,
+                                          STATUS = tblcre.STATUS
                                       }).AsEnumerable().Select(z => new TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
                                       {
                                           SLN = z.sln,
@@ -3866,7 +4061,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                           CREDIT_OPENING = z.OpeningAmt,
                                           CREDIT_TRN_TYPE = z.creditType,
                                           COMPANY_NAME = z.COMPANY_NAME,
-                                          COMPANY_GST = z.COMPANy_GST
+                                          COMPANY_GST = z.COMPANy_GST,
+                                          STATUS=z.STATUS
                                       }).ToList().OrderByDescending(a => a.CREDIT_DATE); ;
                     return PartialView("AllMerchantCreditRequisitionReportGrid", memberinfo);
                 }

@@ -158,7 +158,7 @@
 
             const data = response.data;
             const FlightResponse = JSON.parse(data);
-
+            
 
             //=========================== Store All Flight Information =============================//
             $scope.flightDetails = FlightResponse.GetFlightAvailibilityResponse.FlightDetails;
@@ -174,7 +174,7 @@
                 container.selected = false;
                 return container;
             });
-
+            
 
             //================= Group by track number =============================//
             let objFlightSearchResult = $filter('groupBy')($scope.flightDetails, 'TrackNo');
@@ -196,7 +196,7 @@
                 let createUniqueFlight = "";
                 for (let index = 0; index < x.length; index++) {
                     const element = x[index];
-                    createUniqueFlight = createUniqueFlight + element.FlightNo;
+                    createUniqueFlight = createUniqueFlight + element.AirlineCode + element.FlightNo;
                 }
                 let check = $scope.flightNumber.indexOf(createUniqueFlight);
                 if (check == -1) {
@@ -241,7 +241,7 @@
                 return 0;
             });
 
-
+            
             const maxPeak = $scope.fareDetails.reduce((p, c) => Math.round(p.TotalAmount) > Math.round(c.TotalAmount) ? p : c);
             const minPeak = $scope.fareDetails.reduce((p, c) => Math.round(p.TotalAmount) < Math.round(c.TotalAmount) ? p : c);
 
@@ -264,17 +264,19 @@
     }
 
     $scope.getSameFlightList = function (flight) {
+        debugger;
         if (flight) {
+            debugger;
             let createUniqueFlight = "";
             for (let index = 0; index < flight.length; index++) {
                 const element = flight[index];
-                createUniqueFlight = createUniqueFlight + element.FlightNo;
+                createUniqueFlight = createUniqueFlight + element.AirlineCode + element.FlightNo;
             }
             let checkdataTrackNo = $scope.flightsearchResultTrackNo.filter(function (x) {
                 let createUniqueFlightItem = "";
                 for (let i = 0; i < x.length; i++) {
                     const element = x[i];
-                    createUniqueFlightItem = createUniqueFlightItem + element.FlightNo;
+                    createUniqueFlightItem = createUniqueFlightItem + element.AirlineCode + element.FlightNo;
                 }
                 return createUniqueFlight == createUniqueFlightItem;
             });
@@ -472,7 +474,7 @@
     }
 
     $scope.getFlightDetails = function (Adult, Children, Infant, TrackNo, TripMode, FromAirportCode, ToAirportCode) {
-        debugger;
+    
         var Tracevalue = JSON.parse(window.localStorage.getItem("SearchTraceDetails"));
 
         const diffInMilliseconds = Math.abs(new Date() - new Date(Tracevalue.Time));

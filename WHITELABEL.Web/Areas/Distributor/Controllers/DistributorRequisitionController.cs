@@ -768,7 +768,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                     //TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
                                     TRANSACTION_TYPE = "BALANCE TRANSFER",
                                     TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                                    TRANSACTION_TIME = DateTime.Now,
+                                    TRANSACTION_TIME = Convert.ToDateTime(transinfo.REQUEST_TIME),
                                     DR_CR = "DR",
                                     //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
                                     AMOUNT = Trans_Req_Amount,
@@ -804,7 +804,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                     //TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
                                     TRANSACTION_TYPE = "DEPOSIT",
                                     TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                                    TRANSACTION_TIME = DateTime.Now,
+                                    TRANSACTION_TIME = Convert.ToDateTime(transinfo.REQUEST_TIME),
                                     DR_CR = "CR",
                                     //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
                                     AMOUNT = Trans_Req_Amount,
@@ -879,7 +879,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                             //TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
                                             TRANSACTION_TYPE = "CREDIT SETTLEMENT",
                                             TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                                            TRANSACTION_TIME = DateTime.Now,
+                                            TRANSACTION_TIME = Convert.ToDateTime(transinfo.REQUEST_TIME),
                                             DR_CR = "DR",
                                             //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
                                             AMOUNT = CREDITED_REQ_AMT,
@@ -918,7 +918,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                             MEMBER_TYPE = "RETAILER",
                                             TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
                                             TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                                            TRANSACTION_TIME = DateTime.Now,
+                                            TRANSACTION_TIME = Convert.ToDateTime(transinfo.REQUEST_TIME),
                                             DR_CR = "CR",
                                             //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
                                             AMOUNT = Trans_Req_Amount,
@@ -947,7 +947,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                             //TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
                                             TRANSACTION_TYPE = "CREDIT SETTLEMENT",
                                             TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                                            TRANSACTION_TIME = DateTime.Now,
+                                            TRANSACTION_TIME = Convert.ToDateTime(transinfo.REQUEST_TIME),
                                             DR_CR = "DR",
                                             //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
                                             AMOUNT = MER_CR_LMT_AMT,
@@ -980,7 +980,8 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                             CREDIT_OPENING = MER_CR_LMT_AMT,
                                             CREDITCLOSING = 0,
                                             CREDIT_TRN_TYPE = "DR",
-                                            CORELATIONID = COrelationID
+                                            CORELATIONID = COrelationID,
+                                            STATUS="APPROVE"
                                         };
                                         db.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION.Add(OBJMERCHANTCREDIT_VAL);
 
@@ -1007,7 +1008,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
 
                                         #region Email Code done by Sayan at 11-10-2020
                                         string name = Merchant_Info.MEMBER_NAME;
-                                        string mailbody = "Hi " + Merchant_Info.UName + "(" + Merchant_Info.MEMBER_NAME + ")" + ",<p>Your requisition has been approved of amount " + Trans_Req_Amount + " by distributor (" + Distributor_Info.MEM_UNIQUE_ID + ").</p>"+ "<br /> Regards, <br/><br/>BOOM Travels";
+                                        string mailbody = "Hi " + Merchant_Info.UName + "(" + Merchant_Info.MEMBER_NAME + ")" + ",<p>Your requisition has been approved of amount " + Trans_Req_Amount + " by distributor (" + Distributor_Info.MEM_UNIQUE_ID + ").</p>" + "<br /> Regards, <br/><br/>BOOM Travels";
                                         EmailHelper emailhelper = new EmailHelper();
                                         string msgbody = emailhelper.GetEmailTemplate(name, mailbody, "UserEmailTemplate.html");
                                         emailhelper.SendUserEmail(Merchant_Info.EMAIL_ID.Trim(), "Great! Requisition Approved!", msgbody);
@@ -1059,7 +1060,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                         // TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
                                         TRANSACTION_TYPE = "BALANCE TRANSFER",
                                         TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                                        TRANSACTION_TIME = DateTime.Now,
+                                        TRANSACTION_TIME = Convert.ToDateTime(transinfo.REQUEST_TIME),
                                         DR_CR = "DR",
                                         //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
                                         AMOUNT = CREDITED_REQ_AMT,
@@ -1099,7 +1100,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                         //TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
                                         TRANSACTION_TYPE = "DEPOSIT",
                                         TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                                        TRANSACTION_TIME = DateTime.Now,
+                                        TRANSACTION_TIME = Convert.ToDateTime(transinfo.REQUEST_TIME),
                                         DR_CR = "CR",
                                         //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
                                         AMOUNT = Trans_Req_Amount,
@@ -1128,7 +1129,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                         //TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
                                         TRANSACTION_TYPE = "CREDIT SETTLEMENT",
                                         TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                                        TRANSACTION_TIME = DateTime.Now,
+                                        TRANSACTION_TIME = Convert.ToDateTime(transinfo.REQUEST_TIME),
                                         DR_CR = "DR",
                                         //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
                                         AMOUNT = Trans_Req_Amount,
@@ -1160,7 +1161,8 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                         CREDIT_OPENING = MER_CR_LMT_AMT,
                                         CREDITCLOSING = 0,
                                         CREDIT_TRN_TYPE = "DR",
-                                        CORELATIONID = COrelationID
+                                        CORELATIONID = COrelationID,
+                                        STATUS="APPROVE"
                                     };
                                     db.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION.Add(OBJMERCHANTCREDIT_VAL);
                                     //TBL_MEMBER_CREDIT_ACCOUNT_LOGS MEM_CREDIT_ACNT_LOGS = new TBL_MEMBER_CREDIT_ACCOUNT_LOGS()
@@ -1186,7 +1188,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
 
                                     #region Email Code done by Sayan at 11-10-2020
                                     string name = Merchant_Info.MEMBER_NAME;
-                                    string mailbody = "Hi " + Merchant_Info.UName + "(" + Merchant_Info.MEMBER_NAME + ")" + ",<p>Your requisition has been approved of amount " + Trans_Req_Amount + " by distributor (" + Distributor_Info.MEM_UNIQUE_ID + ").</p>"+"<br /> Regards, <br/><br/>BOOM Travels";
+                                    string mailbody = "Hi " + Merchant_Info.UName + "(" + Merchant_Info.MEMBER_NAME + ")" + ",<p>Your requisition has been approved of amount " + Trans_Req_Amount + " by distributor (" + Distributor_Info.MEM_UNIQUE_ID + ").</p>" + "<br /> Regards, <br/><br/>BOOM Travels";
                                     EmailHelper emailhelper = new EmailHelper();
                                     string msgbody = emailhelper.GetEmailTemplate(name, mailbody, "UserEmailTemplate.html");
                                     emailhelper.SendUserEmail(Merchant_Info.EMAIL_ID.Trim(), "Great! Requisition Approved!", msgbody);
@@ -1199,10 +1201,217 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                 }
                                 else
                                 {
-                                    string msg = "This payment requisition can't be update in full settlement mode. Requisition amount is less than the credit limit amount";
-                                    return Json(msg, JsonRequestBehavior.AllowGet);
-                                    //THIS PAYMENT REQUISITION CAN'T BE UPDATE IN FULL SETTLEMENT MODE. REQUISITION AMOUNT IS LESS THAN THE CREDIT LIMIT AMOUNT
+                                    transinfo.STATUS = "Approve";
+                                    transinfo.APPROVAL_DATE = DateTime.Now;
+                                    transinfo.APPROVAL_TIME = DateTime.Now;
+                                    transinfo.FromUser = "test";
+                                    transinfo.REMARKS = SettlementTYPE;
+                                    transinfo.APPROVED_BY = "DISTRIBUTOR";
+                                    transinfo.PAYMENT_TXN_DETAILS = PaymentTrnId;
+                                    db.Entry(transinfo).State = System.Data.Entity.EntityState.Modified;
+
+
+                                    ////Distributor Main Balanve Update and insert innfor in Account table
+                                    //Dist_Sub_MainAmount = Dist_MainBal - CREDITED_REQ_AMT;
+                                    
+                                    //Distributor_Info.BALANCE = Dist_Sub_MainAmount;
+                                    //db.Entry(Distributor_Info).State = System.Data.Entity.EntityState.Modified;
+                                    if (DIST_CLOSING_AMT > 0)
+                                    {
+                                        DIST_ADJ_CLOSING_AMT = DIST_CLOSING_AMT + Trans_Req_Amount;
+                                        //DIST_ADJ_CLOSING_AMT = DIST_CLOSING_AMT - CREDITED_REQ_AMT;
+                                        ////DIST_ADJ_CLOSING_AMT =0;
+                                    }
+                                    else
+                                    {
+                                        DIST_ADJ_CLOSING_AMT = 0;
+                                    }
+                                    TBL_ACCOUNTS DIST_objACCOUNT = new TBL_ACCOUNTS()
+                                    {
+                                        API_ID = 0,
+                                        MEM_ID = transinfo.TO_MEMBER,
+                                        MEMBER_TYPE = "DISTRIBUTOR",
+                                        // TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
+                                        TRANSACTION_TYPE = "BALANCE TRANSFER",
+                                        TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
+                                        TRANSACTION_TIME = Convert.ToDateTime(transinfo.REQUEST_TIME),
+                                        DR_CR = "CR",
+                                        //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
+                                        AMOUNT = Trans_Req_Amount,
+                                        NARRATION = transinfo.TRANSACTION_DETAILS,
+                                        OPENING = DIST_CLOSING_AMT,
+                                        CLOSING = DIST_ADJ_CLOSING_AMT,
+                                        REC_NO = 0,
+                                        COMM_AMT = 0,
+                                        TDS = 0,
+                                        GST = 0,
+                                        IPAddress = "",
+                                        SERVICE_ID = 0,
+                                        CORELATIONID = COrelationID
+                                    };
+                                    db.TBL_ACCOUNTS.Add(DIST_objACCOUNT);
+
+                                    decimal DISTDR_Closing = 0;
+                                    DISTDR_Closing = DIST_CLOSING_AMT - Trans_Req_Amount;
+
+                                    TBL_ACCOUNTS DIST_DRobjACCOUNT = new TBL_ACCOUNTS()
+                                    {
+                                        API_ID = 0,
+                                        MEM_ID = transinfo.TO_MEMBER,
+                                        MEMBER_TYPE = "DISTRIBUTOR",
+                                        // TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
+                                        TRANSACTION_TYPE = "BALANCE TRANSFER",
+                                        TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
+                                        TRANSACTION_TIME = Convert.ToDateTime(transinfo.REQUEST_TIME),
+                                        DR_CR = "DR",
+                                        //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
+                                        AMOUNT = Trans_Req_Amount,
+                                        NARRATION = transinfo.TRANSACTION_DETAILS,
+                                        OPENING = DIST_CLOSING_AMT,
+                                        CLOSING = DISTDR_Closing,
+                                        REC_NO = 0,
+                                        COMM_AMT = 0,
+                                        TDS = 0,
+                                        GST = 0,
+                                        IPAddress = "",
+                                        SERVICE_ID = 0,
+                                        CORELATIONID = COrelationID
+                                    };
+                                    db.TBL_ACCOUNTS.Add(DIST_DRobjACCOUNT);
+                                    //END Distributor Main Balanve Update and insert innfor in Account table
+                                    //Mer_Add_MainBalance = MER_MainBal + Trans_Req_Amount - CREDITED_REQ_AMT;
+
+
+                                    decimal REMAINING_CREDIT_AMT = 0;
+                                    REMAINING_CREDIT_AMT = MER_CR_LMT_AMT - Trans_Req_Amount;
+
+                                    Mer_Add_MainBalance = MER_MainBal + Trans_Req_Amount - Trans_Req_Amount;
+                                    Merchant_Info.CREDIT_LIMIT = REMAINING_CREDIT_AMT;
+                                    ////Merchant_Info.RESERVED_CREDIT_LIMIT = 0;
+                                    //Merchant_Info.BALANCE = Mer_Add_MainBalance;
+                                    db.Entry(Merchant_Info).State = System.Data.Entity.EntityState.Modified;
+                                    if (MER_CLOSING_AMT > 0)
+                                    {
+                                        MER_ADJ_CLOSING_AMT = MER_CLOSING_AMT + Trans_Req_Amount;
+                                    }
+                                    else
+                                    {
+                                        //MER_ADJ_CLOSING_AMT = 0;
+                                        MER_ADJ_CLOSING_AMT = Trans_Req_Amount;
+                                    }
+                                    TBL_ACCOUNTS MERCH_CreeditobjACCOUNT = new TBL_ACCOUNTS()
+                                    {
+                                        API_ID = 0,
+                                        MEM_ID = transinfo.FROM_MEMBER,
+                                        MEMBER_TYPE = "RETAILER",
+                                        //TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
+                                        TRANSACTION_TYPE = "DEPOSIT",
+                                        TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
+                                        TRANSACTION_TIME = Convert.ToDateTime(transinfo.REQUEST_TIME),
+                                        DR_CR = "CR",
+                                        //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
+                                        AMOUNT = Trans_Req_Amount,
+                                        NARRATION = transinfo.TRANSACTION_DETAILS,
+                                        OPENING = MER_CLOSING_AMT,
+                                        CLOSING = MER_ADJ_CLOSING_AMT,
+                                        REC_NO = 0,
+                                        COMM_AMT = 0,
+                                        TDS = 0,
+                                        GST = 0,
+                                        IPAddress = "",
+                                        SERVICE_ID = 0,
+                                        CORELATIONID = COrelationID
+                                    };
+                                    db.TBL_ACCOUNTS.Add(MERCH_CreeditobjACCOUNT);
+
+                                    decimal MERCH_Deduct_CR_AMT = 0;
+
+                                    //MERCH_Deduct_CR_AMT = MER_ADJ_CLOSING_AMT - CREDITED_REQ_AMT;
+                                    MERCH_Deduct_CR_AMT = MER_ADJ_CLOSING_AMT - Trans_Req_Amount;
+                                    TBL_ACCOUNTS MERCH_objDECUR_AMT = new TBL_ACCOUNTS()
+                                    {
+                                        API_ID = 0,
+                                        MEM_ID = transinfo.FROM_MEMBER,
+                                        MEMBER_TYPE = "RETAILER",
+                                        //TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
+                                        TRANSACTION_TYPE = "CREDIT SETTLEMENT",
+                                        TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
+                                        TRANSACTION_TIME = Convert.ToDateTime(transinfo.REQUEST_TIME),
+                                        DR_CR = "DR",
+                                        //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
+                                        AMOUNT = Trans_Req_Amount,
+                                        NARRATION = transinfo.TRANSACTION_DETAILS,
+                                        OPENING = MER_ADJ_CLOSING_AMT,
+                                        CLOSING = MERCH_Deduct_CR_AMT,
+                                        REC_NO = 0,
+                                        COMM_AMT = 0,
+                                        TDS = 0,
+                                        GST = 0,
+                                        IPAddress = "",
+                                        SERVICE_ID = 0,
+                                        CORELATIONID = COrelationID
+                                    };
+                                    db.TBL_ACCOUNTS.Add(MERCH_objDECUR_AMT);
+
+                                    TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION OBJMERCHANTCREDIT_VAL = new TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION()
+                                    {
+                                        TO_MEM_ID = transinfo.TO_MEMBER,
+                                        FROM_MEM_ID = transinfo.FROM_MEMBER,
+                                        CREDIT_DATE = DateTime.Now,
+                                        CREDIT_AMOUNT = Trans_Req_Amount,
+                                        CREDIT_NOTE_DESCRIPTION = "CREDIT LIMIT AMOUNT LOGS",
+                                        CREDIT_STATUS = true,
+                                        GST_VAL = 0,
+                                        GST_AMOUNT = 0,
+                                        TDS_AMOUNT = 0,
+                                        TDS_VAL = 0,
+                                        CREDIT_OPENING = MER_CR_LMT_AMT,
+                                        CREDITCLOSING = 0,
+                                        CREDIT_TRN_TYPE = "DR",
+                                        CORELATIONID = COrelationID,
+                                        STATUS="APPROVE"
+                                    };
+                                    db.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION.Add(OBJMERCHANTCREDIT_VAL);
+                                    //TBL_MEMBER_CREDIT_ACCOUNT_LOGS MEM_CREDIT_ACNT_LOGS = new TBL_MEMBER_CREDIT_ACCOUNT_LOGS()
+                                    //{
+                                    //    MEM_ID = MemberCurrentUser.MEM_ID,
+                                    //    CREDIT_ID = MemberCurrentUser.MEM_ID,
+                                    //    CORELATIONID = COrelationID,
+                                    //    CREDIT_TRAN_TYPE = "DR",
+                                    //    USED_CREDIT_AMOUNT = CREDITED_REQ_AMT,
+                                    //    CREDIT_OPENING_BALANCE = 0,
+                                    //    CREDIT_CLOSING_BALANCE = 0,
+                                    //    CREDIT_USED_DATE = DateTime.Now,
+                                    //    IPADDRESS = "",
+                                    //    WLP_ID = (long)Merchant_Info.UNDER_WHITE_LEVEL,
+                                    //    DIST_ID = (long)Merchant_Info.INTRODUCER,
+                                    //    SUPER_ID = 0,
+                                    //    MER_ID = MemberCurrentUser.MEM_ID,
+                                    //    NARRATION = "CREDIT LIMIT AMOUNT LOGS"
+                                    //};
+                                    //db.TBL_MEMBER_CREDIT_ACCOUNT_LOGS.Add(MEM_CREDIT_ACNT_LOGS);
+                                    await db.SaveChangesAsync();
+                                    ContextTransaction.Commit();
+
+                                    #region Email Code done by Sayan at 11-10-2020
+                                    string name = Merchant_Info.MEMBER_NAME;
+                                    string mailbody = "Hi " + Merchant_Info.UName + "(" + Merchant_Info.MEMBER_NAME + ")" + ",<p>Your requisition has been approved of amount " + Trans_Req_Amount + " by distributor (" + Distributor_Info.MEM_UNIQUE_ID + ").</p>" + "<br /> Regards, <br/><br/>BOOM Travels";
+                                    EmailHelper emailhelper = new EmailHelper();
+                                    string msgbody = emailhelper.GetEmailTemplate(name, mailbody, "UserEmailTemplate.html");
+                                    emailhelper.SendUserEmail(Merchant_Info.EMAIL_ID.Trim(), "Great! Requisition Approved!", msgbody);
+                                    #endregion
+
+                                    //EmailHelper emailhelper = new EmailHelper();
+                                    //string mailbody = "Hi " + Merchant_Info.UName + ",<p>Your requisition has been approve of amount " + Trans_Req_Amount + " by distributor (" + Distributor_Info.MEM_UNIQUE_ID + ").</p>";
+                                    //emailhelper.SendUserEmail(Merchant_Info.EMAIL_ID, "Requisition Approve", mailbody);
+                                    return Json("Transaction Approve.", JsonRequestBehavior.AllowGet);
                                 }
+                                //else
+                                //{
+                                //    string msg = "This payment requisition can't be update in full settlement mode. Requisition amount is less than the credit limit amount";
+                                //    return Json(msg, JsonRequestBehavior.AllowGet);
+                                //    //THIS PAYMENT REQUISITION CAN'T BE UPDATE IN FULL SETTLEMENT MODE. REQUISITION AMOUNT IS LESS THAN THE CREDIT LIMIT AMOUNT
+                                //}
                             }
                             else
                             {
@@ -1269,7 +1478,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                             //TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
                                             TRANSACTION_TYPE = "BALANCE TRANSFER",
                                             TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                                            TRANSACTION_TIME = DateTime.Now,
+                                            TRANSACTION_TIME = Convert.ToDateTime(transinfo.REQUEST_TIME),
                                             DR_CR = "DR",
                                             //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
                                             AMOUNT = CHECK_DIST_VAL,
@@ -1309,7 +1518,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                             MEMBER_TYPE = "RETAILER",
                                             TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
                                             TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                                            TRANSACTION_TIME = DateTime.Now,
+                                            TRANSACTION_TIME = Convert.ToDateTime(transinfo.REQUEST_TIME),
                                             DR_CR = "CR",
                                             //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
                                             AMOUNT = Trans_Req_Amount,
@@ -1337,7 +1546,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                             //TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
                                             TRANSACTION_TYPE = "CREDIT SETTLEMENT",
                                             TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                                            TRANSACTION_TIME = DateTime.Now,
+                                            TRANSACTION_TIME = Convert.ToDateTime(transinfo.REQUEST_TIME),
                                             DR_CR = "DR",
                                             //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
                                             AMOUNT = MER_DEBIT_BAL,
@@ -1369,7 +1578,8 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                             CREDIT_OPENING = MER_CR_LMT_AMT,
                                             CREDITCLOSING = SUBCRLIMIAMT,
                                             CREDIT_TRN_TYPE = "DR",
-                                            CORELATIONID = COrelationID
+                                            CORELATIONID = COrelationID,
+                                            STATUS="APPROVE"
                                         };
                                         db.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION.Add(OBJMERCHANTCREDIT_VAL);
 
@@ -1449,7 +1659,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                         //TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
                                         TRANSACTION_TYPE = "BALANCE TRANSFER",
                                         TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                                        TRANSACTION_TIME = DateTime.Now,
+                                        TRANSACTION_TIME = Convert.ToDateTime(transinfo.REQUEST_TIME),
                                         DR_CR = "DR",
                                         //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
                                         AMOUNT = CHECK_DIST_VAL,
@@ -1493,7 +1703,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                         //TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
                                         TRANSACTION_TYPE = "DEPOSIT",
                                         TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                                        TRANSACTION_TIME = DateTime.Now,
+                                        TRANSACTION_TIME = Convert.ToDateTime(transinfo.REQUEST_TIME),
                                         DR_CR = "CR",
                                         //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
                                         AMOUNT = Trans_Req_Amount,
@@ -1521,7 +1731,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                         //TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
                                         TRANSACTION_TYPE = "CREDIT SETTLEMENT",
                                         TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                                        TRANSACTION_TIME = DateTime.Now,
+                                        TRANSACTION_TIME = Convert.ToDateTime(transinfo.REQUEST_TIME),
                                         DR_CR = "DR",
                                         //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
                                         AMOUNT = MER_DEBIT_BAL,
@@ -1571,7 +1781,8 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                         CREDIT_OPENING = MER_CR_LMT_AMT,
                                         CREDITCLOSING = SUBCRLIMIAMT,
                                         CREDIT_TRN_TYPE = "DR",
-                                        CORELATIONID = COrelationID
+                                        CORELATIONID = COrelationID,
+                                        STATUS="APPROVE"
                                     };
                                     db.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION.Add(OBJMERCHANTCREDIT_VAL);
                                     await db.SaveChangesAsync();
@@ -1626,7 +1837,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                         //TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
                                         TRANSACTION_TYPE = "BALANCE TRANSFER",
                                         TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                                        TRANSACTION_TIME = DateTime.Now,
+                                        TRANSACTION_TIME = Convert.ToDateTime(transinfo.REQUEST_TIME),
                                         DR_CR = "DR",
                                         //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
                                         AMOUNT = 0,
@@ -1670,7 +1881,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                         //TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
                                         TRANSACTION_TYPE = "DEPOSIT",
                                         TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                                        TRANSACTION_TIME = DateTime.Now,
+                                        TRANSACTION_TIME = Convert.ToDateTime(transinfo.REQUEST_TIME),
                                         DR_CR = "CR",
                                         //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
                                         AMOUNT = Trans_Req_Amount,
@@ -1698,7 +1909,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                         //TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
                                         TRANSACTION_TYPE = "CREDIT SETTLEMENT",
                                         TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                                        TRANSACTION_TIME = DateTime.Now,
+                                        TRANSACTION_TIME = Convert.ToDateTime(transinfo.REQUEST_TIME),
                                         DR_CR = "DR",
                                         //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
                                         AMOUNT = MER_DEBIT_BAL,
@@ -1748,7 +1959,8 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                         CREDIT_OPENING = MER_CR_LMT_AMT,
                                         CREDITCLOSING = SUB_CREDItAMT,
                                         CREDIT_TRN_TYPE = "DR",
-                                        CORELATIONID = COrelationID
+                                        CORELATIONID = COrelationID,
+                                        STATUS="APPROVE"
                                     };
                                     db.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION.Add(OBJMERCHANTCREDIT_VAL);
                                     await db.SaveChangesAsync();
@@ -1882,7 +2094,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                     //        MEMBER_TYPE = membtype.roleName,
                     //        TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
                     //        TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                    //        TRANSACTION_TIME = DateTime.Now,
+                    //        TRANSACTION_TIME = Convert.ToDateTime(transinfo.REQUEST_TIME),
                     //        DR_CR = "CR",
                     //        //AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
                     //        AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
@@ -1905,7 +2117,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                     //        MEMBER_TYPE = membtype.roleName,
                     //        TRANSACTION_TYPE = SettlementTYPE +"SETTLEMENT",
                     //        TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                    //        TRANSACTION_TIME = DateTime.Now,
+                    //        TRANSACTION_TIME = Convert.ToDateTime(transinfo.REQUEST_TIME),
                     //        DR_CR = "CR",
                     //        AMOUNT = DeductResev_LimitAmtToTrasamt,
                     //        NARRATION = "CREDIT LIMIT SETTLEMENT",
@@ -1932,7 +2144,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                     //            MEMBER_TYPE = membtype.roleName,
                     //            TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
                     //            TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                    //            TRANSACTION_TIME = DateTime.Now,
+                    //            TRANSACTION_TIME = Convert.ToDateTime(transinfo.REQUEST_TIME),
                     //            DR_CR = "DR",
                     //            AMOUNT = decimal.Parse(transinfo.BANK_CHARGES.ToString()),
                     //            NARRATION = transinfo.TRANSACTION_DETAILS,
@@ -1970,7 +2182,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                     //    //    MEMBER_TYPE = "DISTRIBUTOR",
                     //    //    TRANSACTION_TYPE = transinfo.PAYMENT_METHOD,
                     //    //    TRANSACTION_DATE = Convert.ToDateTime(transinfo.REQUEST_DATE),
-                    //    //    TRANSACTION_TIME = DateTime.Now,
+                    //    //    TRANSACTION_TIME = Convert.ToDateTime(transinfo.REQUEST_TIME),
                     //    //    DR_CR = "DR",
                     //    //    AMOUNT = decimal.Parse(transinfo.AMOUNT.ToString()),
                     //    //    NARRATION = transinfo.TRANSACTION_DETAILS,
@@ -4694,7 +4906,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                     var memberinfo = (from tblcre in db.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
                                       join mem in db.TBL_MASTER_MEMBER on tblcre.FROM_MEM_ID equals mem.MEM_ID
                                       //where tblcre.TO_MEM_ID == MemberCurrentUser.MEM_ID && tblcre.CREDIT_DATE>= Date_From_Val && tblcre.CREDIT_DATE<= Date_To_Val
-                                      where tblcre.TO_MEM_ID == MemberCurrentUser.MEM_ID && tblcre.CREDIT_DATE >= Date_From_Val && tblcre.CREDIT_DATE <= To_Date_Val && tblcre.CREDIT_STATUS == false
+                                      where tblcre.TO_MEM_ID == MemberCurrentUser.MEM_ID && tblcre.CREDIT_DATE >= Date_From_Val && tblcre.CREDIT_DATE <= To_Date_Val && tblcre.CREDIT_STATUS == false && tblcre.STATUS == "PENDING"
                                       select new
                                       {
                                           sln = tblcre.SLN,
@@ -4707,7 +4919,8 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                           OpeningAmt = tblcre.CREDIT_OPENING,
                                           DR_CR = tblcre.CREDIT_AMOUNT,
                                           Closingamt = tblcre.CREDITCLOSING,
-                                          creditType = tblcre.CREDIT_TRN_TYPE
+                                          creditType = tblcre.CREDIT_TRN_TYPE,
+                                          STATUS=tblcre.STATUS
                                       }).AsEnumerable().Select(z => new TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
                                       {
                                           SLN = z.sln,
@@ -4722,7 +4935,8 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                           CR_Col = (z.creditType == "CR" ? z.CreditAmount.ToString() : "0"),
                                           DR_Col = (z.creditType == "DR" ? z.CreditAmount.ToString() : "0"),
                                           CREDIT_OPENING = z.OpeningAmt,
-                                          CREDIT_TRN_TYPE = z.creditType
+                                          CREDIT_TRN_TYPE = z.creditType,
+                                          STATUS=z.STATUS
                                       }).ToList().OrderByDescending(a => a.CREDIT_DATE); ;
                     return PartialView("AllMerchantCreditRequisitionIndexGrid", memberinfo);
                 }
@@ -4731,7 +4945,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                     var memberinfo = (from tblcre in db.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
                                       join mem in db.TBL_MASTER_MEMBER on tblcre.FROM_MEM_ID equals mem.MEM_ID
                                       //where tblcre.TO_MEM_ID == MemberCurrentUser.MEM_ID && tblcre.CREDIT_DATE>= Date_From_Val && tblcre.CREDIT_DATE<= Date_To_Val
-                                      where tblcre.TO_MEM_ID == MemberCurrentUser.MEM_ID && tblcre.CREDIT_STATUS == false
+                                      where tblcre.TO_MEM_ID == MemberCurrentUser.MEM_ID && tblcre.CREDIT_STATUS == false && tblcre.STATUS == "PENDING"
                                       select new
                                       {
                                           sln = tblcre.SLN,
@@ -4744,7 +4958,8 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                           OpeningAmt = tblcre.CREDIT_OPENING,
                                           DR_CR = tblcre.CREDIT_AMOUNT,
                                           Closingamt = tblcre.CREDITCLOSING,
-                                          creditType = tblcre.CREDIT_TRN_TYPE
+                                          creditType = tblcre.CREDIT_TRN_TYPE,
+                                          STATUS = tblcre.STATUS
                                       }).AsEnumerable().Select(z => new TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
                                       {
                                           SLN = z.sln,
@@ -4759,7 +4974,8 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                           CR_Col = (z.creditType == "CR" ? z.CreditAmount.ToString() : "0"),
                                           DR_Col = (z.creditType == "DR" ? z.CreditAmount.ToString() : "0"),
                                           CREDIT_OPENING = z.OpeningAmt,
-                                          CREDIT_TRN_TYPE = z.creditType
+                                          CREDIT_TRN_TYPE = z.creditType,
+                                          STATUS=z.STATUS
                                       }).ToList().OrderByDescending(a => a.CREDIT_DATE); ;
                     return PartialView("AllMerchantCreditRequisitionIndexGrid", memberinfo);
                 }
@@ -4825,6 +5041,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                     var transinfo = await db.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION.Where(x => x.SLN == sln).FirstOrDefaultAsync();
                     //transinfo.REQUEST_DATE = Convert.ToDateTime(trandate);
                     transinfo.CREDIT_STATUS = false;
+                    transinfo.STATUS = "DECLINE";
                     transinfo.FromUser = "test";
                     db.Entry(transinfo).State = System.Data.Entity.EntityState.Modified;
                     await db.SaveChangesAsync();
@@ -4881,6 +5098,11 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                     decimal DistributorClosingAmt = 0;
                     decimal MerchantAddClosingAmt = 0;
                     decimal DistributorSubClosingAmt = 0;
+
+                    transinfo.CREDIT_STATUS = false;
+                    transinfo.STATUS = "APPROVE";                    
+                    db.Entry(transinfo).State = System.Data.Entity.EntityState.Modified;
+
                     string COrelationID = Settings.GetUniqueKey(MemberCurrentUser.MEM_ID.ToString());
                     //var distributorAcnt = db.TBL_ACCOUNTS.Where(x => x.MEM_ID == MemberCurrentUser.MEM_ID).OrderByDescending(z => z.TRANSACTION_TIME).FirstOrDefault();
                     var distributorAcnt = db.TBL_ACCOUNTS.Where(x => x.MEM_ID == MemberCurrentUser.MEM_ID).OrderByDescending(z => z.ACC_NO).FirstOrDefault();
@@ -4900,8 +5122,8 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                         MEM_ID = MemberCurrentUser.MEM_ID,
                         MEMBER_TYPE = "DISTRIBUTOR",
                         TRANSACTION_TYPE = "CREDIT LIMIT",
-                        TRANSACTION_DATE = DateTime.Now,
-                        TRANSACTION_TIME = DateTime.Now,
+                        TRANSACTION_DATE = transinfo.CREDIT_DATE,
+                        TRANSACTION_TIME = Convert.ToDateTime(transinfo.CREDIT_DATE),
                         DR_CR = "DR",
                         AMOUNT = CreditLimitAmt,
                         NARRATION = transinfo.CREDIT_NOTE_DESCRIPTION,
@@ -4914,7 +5136,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                         IPAddress = "",
                         SERVICE_ID = 0,
                         CORELATIONID = COrelationID
-
+                      
                     };
                     db.TBL_ACCOUNTS.Add(objMDistributorAcnt);
                     //db.SaveChanges();
@@ -4952,7 +5174,8 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                         CREDIT_OPENING = CR_Closinging,
                         CREDITCLOSING = ADD_CR_Closinging,
                         CREDIT_TRN_TYPE = "CR",
-                        CORELATIONID = COrelationID
+                        CORELATIONID = COrelationID,
+                        STATUS="APPROVE"
                     };
                     db.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION.Add(objMerLimit);
                     // db.SaveChanges();
@@ -4999,8 +5222,8 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                         MEM_ID = transinfo.FROM_MEM_ID,
                         MEMBER_TYPE = "MERCHANT",
                         TRANSACTION_TYPE = "CREDIT LIMIT",
-                        TRANSACTION_DATE = DateTime.Now,
-                        TRANSACTION_TIME = DateTime.Now,
+                        TRANSACTION_DATE =transinfo.CREDIT_DATE,
+                        TRANSACTION_TIME = Convert.ToDateTime(transinfo.CREDIT_DATE),
                         DR_CR = "CR",
                         AMOUNT = CreditLimitAmt,
                         NARRATION = transinfo.CREDIT_NOTE_DESCRIPTION,
@@ -5079,7 +5302,8 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                           OpeningAmt = tblcre.CREDIT_OPENING,
                                           DR_CR = tblcre.CREDIT_AMOUNT,
                                           Closingamt = tblcre.CREDITCLOSING,
-                                          creditType = tblcre.CREDIT_TRN_TYPE
+                                          creditType = tblcre.CREDIT_TRN_TYPE,
+                                          STATUS=tblcre.STATUS
                                       }).AsEnumerable().Select(z => new TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
                                       {
                                           SLN = z.sln,
@@ -5094,7 +5318,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                           CR_Col = (z.creditType == "CR" ? z.CreditAmount.ToString() : "0"),
                                           DR_Col = (z.creditType == "DR" ? z.CreditAmount.ToString() : "0"),
                                           CREDIT_OPENING = z.OpeningAmt,
-                                          CREDIT_TRN_TYPE = z.creditType
+                                          CREDIT_TRN_TYPE = z.creditType,STATUS=z.STATUS
                                       }).ToList().OrderByDescending(a => a.CREDIT_DATE); ;
                     return PartialView("AllMerchantCreditReportIndexGrid", memberinfo);
                 }
@@ -5116,7 +5340,8 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                           OpeningAmt = tblcre.CREDIT_OPENING,
                                           DR_CR = tblcre.CREDIT_AMOUNT,
                                           Closingamt = tblcre.CREDITCLOSING,
-                                          creditType = tblcre.CREDIT_TRN_TYPE
+                                          creditType = tblcre.CREDIT_TRN_TYPE,
+                                          STATUS = tblcre.STATUS
                                       }).AsEnumerable().Select(z => new TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
                                       {
                                           SLN = z.sln,
@@ -5131,7 +5356,8 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                           CR_Col = (z.creditType == "CR" ? z.CreditAmount.ToString() : "0"),
                                           DR_Col = (z.creditType == "DR" ? z.CreditAmount.ToString() : "0"),
                                           CREDIT_OPENING = z.OpeningAmt,
-                                          CREDIT_TRN_TYPE = z.creditType
+                                          CREDIT_TRN_TYPE = z.creditType,
+                                          STATUS=z.STATUS
                                       }).ToList().OrderByDescending(a => a.CREDIT_DATE); ;
                     return PartialView("AllMerchantCreditReportIndexGrid", memberinfo);
                 }

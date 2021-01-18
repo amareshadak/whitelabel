@@ -40,16 +40,3 @@
                             .Filterable()
                             .Sortable()
 )
-
-
-<div class="divFooterTotalComm">
-    <div class="row">
-        <div class="col-md-10">
-            <b> Total Commission</b>
-        </div>
-        <div class="col-md-2" align="center">
-            <b>@Model.Where(z => z.DR_CR == "CR").Sum(z => z.COMM_AMT)</b>
-        </div>
-    </div>    
-</div>
-

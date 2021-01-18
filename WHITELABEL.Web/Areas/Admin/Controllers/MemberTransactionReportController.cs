@@ -1355,7 +1355,83 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                     DateTime valueFrom = Convert.ToDateTime(Date_To_Val);
                     DateTime ToDateVal = valueFrom.AddDays(1);
 
-                    var flightBookedinfo = db.TBL_FLIGHT_BOOKING_DETAILS.Where(x => x.BOOKING_DATE >= Date_From_Val && x.BOOKING_DATE <= ToDateVal).ToList();
+                    //var flightBookedinfo = db.TBL_FLIGHT_BOOKING_DETAILS.Where(x => x.BOOKING_DATE >= Date_From_Val && x.BOOKING_DATE <= ToDateVal).ToList();
+
+                    var flightBookedinfo = (from flg in db.TBL_FLIGHT_BOOKING_DETAILS
+                                         join mem in db.TBL_MASTER_MEMBER on flg.MEM_ID equals mem.MEM_ID
+                                         where flg.BOOKING_DATE >= Date_From_Val && flg.BOOKING_DATE <= ToDateVal
+                                         select new
+                                         {
+                                             Ref_No = flg.REF_NO,
+                                             PNR = flg.PNR,
+                                             BOOKING_DATE = flg.BOOKING_DATE,
+                                             FLIGHT_NO = flg.FLIGHT_NO,
+                                             AIRLINE_CODE = flg.AIRLINE_CODE,
+                                             FROM_AIRPORT = flg.FROM_AIRPORT,
+                                             TO_AIRPORT = flg.TO_AIRPORT,
+                                             MAIN_CLASS = flg.MAIN_CLASS,
+                                             NO_OF_ADULT = flg.NO_OF_ADULT,
+                                             NO_OF_CHILD = flg.NO_OF_CHILD,
+                                             NO_OF_INFANT = flg.NO_OF_INFANT,
+                                             BOOKING_STATUS = flg.BOOKING_STATUS,
+                                             TOTAL_FLIGHT_BASE_FARE = flg.TOTAL_FLIGHT_BASE_FARE,
+                                             TOTAL_FLIGHT_TAX = flg.TOTAL_FLIGHT_TAX,
+                                             TOTAL_FLIGHT_ADDITIONAL_CHARGE = flg.TOTAL_FLIGHT_ADDITIONAL_CHARGE,
+                                             TOTAL_FLIGHT_CUTE_FEE = flg.TOTAL_FLIGHT_CUTE_FEE,
+                                             TOTAL_FLIGHT_AMT = flg.TOTAL_FLIGHT_AMT,
+                                             USER_MARKUP = flg.USER_MARKUP,
+                                             ADMIN_MARKUP = flg.ADMIN_MARKUP,
+                                             ADMIN_GST = flg.ADMIN_GST,
+                                             USER_MARKUP_GST = flg.USER_MARKUP_GST,
+                                             PUBLISH_FARE = flg.PUBLISH_FARE,
+                                             NET_FARE = flg.NET_FARE,
+                                             NET_TOTAL_FARE = flg.NET_TOTAL_FARE,
+                                             NET_COMM_FARE = flg.NET_COMM_FARE,
+                                             FARE_COMMISSION = flg.FARE_COMMISSION,
+                                             FARE_COMMISSION_TDS = flg.FARE_COMMISSION_TDS,
+                                             TCS_AMOUNTON_INT_FLIGHT = flg.TCS_AMOUNTON_INT_FLIGHT,
+                                             INT_FLIGHT_PANCARD = flg.INT_FLIGHT_PANCARD,
+                                             MEMBER_NAME = mem.MEMBER_NAME,
+                                             MEMBER_UNIQUE_ID = mem.MEM_UNIQUE_ID,
+                                             MEMBER_COMPANY = mem.COMPANY,
+                                             COMPANY_GST = mem.COMPANY_GST_NO
+                                         }).AsEnumerable().Select((z, index) => new TBL_FLIGHT_BOOKING_DETAILS
+                                         {
+                                             REF_NO = z.Ref_No,
+                                             PNR = z.PNR,
+                                             BOOKING_DATE = z.BOOKING_DATE,
+                                             FLIGHT_NO = z.FLIGHT_NO,
+                                             AIRLINE_CODE = z.AIRLINE_CODE,
+                                             FROM_AIRPORT = z.FROM_AIRPORT,
+                                             TO_AIRPORT = z.TO_AIRPORT,
+                                             MAIN_CLASS = z.MAIN_CLASS,
+                                             NO_OF_ADULT = z.NO_OF_ADULT,
+                                             NO_OF_CHILD = z.NO_OF_CHILD,
+                                             NO_OF_INFANT = z.NO_OF_INFANT,
+                                             BOOKING_STATUS = z.BOOKING_STATUS,
+                                             TOTAL_FLIGHT_BASE_FARE = z.TOTAL_FLIGHT_BASE_FARE,
+                                             TOTAL_FLIGHT_TAX = z.TOTAL_FLIGHT_TAX,
+                                             TOTAL_FLIGHT_ADDITIONAL_CHARGE = z.TOTAL_FLIGHT_ADDITIONAL_CHARGE,
+                                             TOTAL_FLIGHT_CUTE_FEE = z.TOTAL_FLIGHT_CUTE_FEE,
+                                             TOTAL_FLIGHT_AMT = z.TOTAL_FLIGHT_AMT,
+                                             USER_MARKUP = z.USER_MARKUP,
+                                             ADMIN_MARKUP = z.ADMIN_MARKUP,
+                                             ADMIN_GST = z.ADMIN_GST,
+                                             USER_MARKUP_GST = z.USER_MARKUP_GST,
+                                             PUBLISH_FARE = z.PUBLISH_FARE,
+                                             NET_FARE = z.NET_FARE,
+                                             NET_TOTAL_FARE = z.NET_TOTAL_FARE,
+                                             NET_COMM_FARE = z.NET_COMM_FARE,
+                                             FARE_COMMISSION = z.FARE_COMMISSION,
+                                             FARE_COMMISSION_TDS = z.FARE_COMMISSION_TDS,
+                                             TCS_AMOUNTON_INT_FLIGHT = z.TCS_AMOUNTON_INT_FLIGHT,
+                                             INT_FLIGHT_PANCARD = z.INT_FLIGHT_PANCARD,
+                                             MEMBER_NAME = z.MEMBER_NAME,
+                                             MEM_UNIQUE_ID = z.MEMBER_UNIQUE_ID,
+                                             COMPANY = z.MEMBER_COMPANY,
+                                             COMP_GST_NO = z.COMPANY_GST
+                                         }).ToList();
+
                     ViewBag.TotalBookingAmoumnt = flightBookedinfo.Sum(c => c.TOTAL_FLIGHT_AMT);
                     ViewBag.TotalNetBookingAmoumnt = flightBookedinfo.Sum(c => c.NET_TOTAL_FARE);
                     ViewBag.TotalUserMarkupAmoumnt = flightBookedinfo.Sum(c => c.USER_MARKUP);
@@ -1367,7 +1443,80 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 }
                 else
                 {
-                    var flightBookedinfo = db.TBL_FLIGHT_BOOKING_DETAILS.ToList();
+                    //var flightBookedinfo = db.TBL_FLIGHT_BOOKING_DETAILS.ToList();
+                    var flightBookedinfo = (from flg in db.TBL_FLIGHT_BOOKING_DETAILS
+                                            join mem in db.TBL_MASTER_MEMBER on flg.MEM_ID equals mem.MEM_ID                                          
+                                            select new
+                                            {
+                                                Ref_No = flg.REF_NO,
+                                                PNR = flg.PNR,
+                                                BOOKING_DATE = flg.BOOKING_DATE,
+                                                FLIGHT_NO = flg.FLIGHT_NO,
+                                                AIRLINE_CODE = flg.AIRLINE_CODE,
+                                                FROM_AIRPORT = flg.FROM_AIRPORT,
+                                                TO_AIRPORT = flg.TO_AIRPORT,
+                                                MAIN_CLASS = flg.MAIN_CLASS,
+                                                NO_OF_ADULT = flg.NO_OF_ADULT,
+                                                NO_OF_CHILD = flg.NO_OF_CHILD,
+                                                NO_OF_INFANT = flg.NO_OF_INFANT,
+                                                BOOKING_STATUS = flg.BOOKING_STATUS,
+                                                TOTAL_FLIGHT_BASE_FARE = flg.TOTAL_FLIGHT_BASE_FARE,
+                                                TOTAL_FLIGHT_TAX = flg.TOTAL_FLIGHT_TAX,
+                                                TOTAL_FLIGHT_ADDITIONAL_CHARGE = flg.TOTAL_FLIGHT_ADDITIONAL_CHARGE,
+                                                TOTAL_FLIGHT_CUTE_FEE = flg.TOTAL_FLIGHT_CUTE_FEE,
+                                                TOTAL_FLIGHT_AMT = flg.TOTAL_FLIGHT_AMT,
+                                                USER_MARKUP = flg.USER_MARKUP,
+                                                ADMIN_MARKUP = flg.ADMIN_MARKUP,
+                                                ADMIN_GST = flg.ADMIN_GST,
+                                                USER_MARKUP_GST = flg.USER_MARKUP_GST,
+                                                PUBLISH_FARE = flg.PUBLISH_FARE,
+                                                NET_FARE = flg.NET_FARE,
+                                                NET_TOTAL_FARE = flg.NET_TOTAL_FARE,
+                                                NET_COMM_FARE = flg.NET_COMM_FARE,
+                                                FARE_COMMISSION = flg.FARE_COMMISSION,
+                                                FARE_COMMISSION_TDS = flg.FARE_COMMISSION_TDS,
+                                                TCS_AMOUNTON_INT_FLIGHT = flg.TCS_AMOUNTON_INT_FLIGHT,
+                                                INT_FLIGHT_PANCARD = flg.INT_FLIGHT_PANCARD,
+                                                MEMBER_NAME = mem.MEMBER_NAME,
+                                                MEMBER_UNIQUE_ID = mem.MEM_UNIQUE_ID,
+                                                MEMBER_COMPANY = mem.COMPANY,
+                                                COMPANY_GST = mem.COMPANY_GST_NO
+                                            }).AsEnumerable().Select((z, index) => new TBL_FLIGHT_BOOKING_DETAILS
+                                            {
+                                                REF_NO = z.Ref_No,
+                                                PNR = z.PNR,
+                                                BOOKING_DATE = z.BOOKING_DATE,
+                                                FLIGHT_NO = z.FLIGHT_NO,
+                                                AIRLINE_CODE = z.AIRLINE_CODE,
+                                                FROM_AIRPORT = z.FROM_AIRPORT,
+                                                TO_AIRPORT = z.TO_AIRPORT,
+                                                MAIN_CLASS = z.MAIN_CLASS,
+                                                NO_OF_ADULT = z.NO_OF_ADULT,
+                                                NO_OF_CHILD = z.NO_OF_CHILD,
+                                                NO_OF_INFANT = z.NO_OF_INFANT,
+                                                BOOKING_STATUS = z.BOOKING_STATUS,
+                                                TOTAL_FLIGHT_BASE_FARE = z.TOTAL_FLIGHT_BASE_FARE,
+                                                TOTAL_FLIGHT_TAX = z.TOTAL_FLIGHT_TAX,
+                                                TOTAL_FLIGHT_ADDITIONAL_CHARGE = z.TOTAL_FLIGHT_ADDITIONAL_CHARGE,
+                                                TOTAL_FLIGHT_CUTE_FEE = z.TOTAL_FLIGHT_CUTE_FEE,
+                                                TOTAL_FLIGHT_AMT = z.TOTAL_FLIGHT_AMT,
+                                                USER_MARKUP = z.USER_MARKUP,
+                                                ADMIN_MARKUP = z.ADMIN_MARKUP,
+                                                ADMIN_GST = z.ADMIN_GST,
+                                                USER_MARKUP_GST = z.USER_MARKUP_GST,
+                                                PUBLISH_FARE = z.PUBLISH_FARE,
+                                                NET_FARE = z.NET_FARE,
+                                                NET_TOTAL_FARE = z.NET_TOTAL_FARE,
+                                                NET_COMM_FARE = z.NET_COMM_FARE,
+                                                FARE_COMMISSION = z.FARE_COMMISSION,
+                                                FARE_COMMISSION_TDS = z.FARE_COMMISSION_TDS,
+                                                TCS_AMOUNTON_INT_FLIGHT = z.TCS_AMOUNTON_INT_FLIGHT,
+                                                INT_FLIGHT_PANCARD = z.INT_FLIGHT_PANCARD,
+                                                MEMBER_NAME = z.MEMBER_NAME,
+                                                MEM_UNIQUE_ID = z.MEMBER_UNIQUE_ID,
+                                                COMPANY = z.MEMBER_COMPANY,
+                                                COMP_GST_NO = z.COMPANY_GST
+                                            }).ToList();
                     ViewBag.TotalBookingAmoumnt = flightBookedinfo.Sum(c => c.TOTAL_FLIGHT_AMT);
                     ViewBag.TotalNetBookingAmoumnt = flightBookedinfo.Sum(c => c.NET_TOTAL_FARE);
                     ViewBag.TotalUserMarkupAmoumnt = flightBookedinfo.Sum(c => c.USER_MARKUP);
@@ -1428,7 +1577,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 DateTime TO_DATE_Range = Date_To_Val.AddDays(1);
                 var transactionlistvalue = (from x in db.TBL_ACCOUNTS
                                             join y in db.TBL_MASTER_MEMBER on x.MEM_ID equals y.MEM_ID
-                                            where x.TRANSACTION_DATE >= Date_From_Val && x.TRANSACTION_DATE <= TO_DATE_Range && (y.COMPANY.Contains(MemberInfo) || y.UName.Contains(MemberInfo) || y.MEMBER_MOBILE.Contains(MemberInfo) || y.MEMBER_MOBILE.Contains(MemberInfo) || y.EMAIL_ID.Contains(MemberInfo) || x.AMOUNT.ToString().Contains(MemberInfo) || x.CLOSING.ToString().Contains(MemberInfo) || x.OPENING.ToString().Contains(MemberInfo)) && (x.TRANSACTION_TYPE != "ADD DISTRIBUTOR" && x.TRANSACTION_TYPE != "ADD MERCHANT")
+                                            where x.TRANSACTION_TIME >= Date_From_Val && x.TRANSACTION_TIME <= TO_DATE_Range && (y.COMPANY.Contains(MemberInfo) || y.UName.Contains(MemberInfo) || y.MEMBER_MOBILE.Contains(MemberInfo) || y.MEMBER_MOBILE.Contains(MemberInfo) || y.EMAIL_ID.Contains(MemberInfo) || y.RAIL_ID.Contains(MemberInfo) || x.AMOUNT.ToString().Contains(MemberInfo) || x.CLOSING.ToString().Contains(MemberInfo) || x.OPENING.ToString().Contains(MemberInfo)) && (x.TRANSACTION_TYPE != "ADD DISTRIBUTOR" && x.TRANSACTION_TYPE != "ADD MERCHANT")
                                             select new
                                             {
                                                 SLN = x.ACC_NO,
@@ -1466,7 +1615,9 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                                 IGST_RATE=x.IGST_RATE,
                                                 TOTAL_GST_RATE=x.TOTAL_GST_RATE,
                                                 COmpany_Name=y.COMPANY,
-                                                Company_GSt=y.COMPANY_GST_NO
+                                                Company_GSt=y.COMPANY_GST_NO,
+                                                RAIL_ID=y.RAIL_ID
+                                                
                                             }).AsEnumerable().Select((z, index) => new TBL_ACCOUNTS
                                             {
                                                 SerialNo = index + 1,
@@ -1507,8 +1658,10 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                                 IGST_RATE = z.IGST_RATE,
                                                 TOTAL_GST_RATE = z.TOTAL_GST_RATE,                                                
                                                 COMPANY_NAME=z.COmpany_Name,
-                                                COMPANY_GST=z.Company_GSt
-                                            }).OrderBy(m => m.SerialNo).ThenByDescending(a => a.TRANSACTION_DATE).ToList();
+                                                COMPANY_GST=z.Company_GSt,
+                                                RAIL_ID = z.RAIL_ID
+                                            }).OrderByDescending(a => a.ACC_NO).ToList();
+                //}).OrderBy(m => m.SerialNo).ThenByDescending(a => a.TRANSACTION_DATE).ToList();
                 return PartialView("MemberAccountsReportGrid", transactionlistvalue);
             }
             else if (MemberInfo == "" && DateFrom != "" && Date_To != "")
@@ -1523,7 +1676,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 DateTime TO_DATE_Range = Date_To_Val.AddDays(1);
                 var transactionlistvalue = (from x in db.TBL_ACCOUNTS
                                             join y in db.TBL_MASTER_MEMBER on x.MEM_ID equals y.MEM_ID
-                                            where x.TRANSACTION_DATE >= Date_From_Val && x.TRANSACTION_DATE <= TO_DATE_Range && (x.TRANSACTION_TYPE!= "ADD DISTRIBUTOR" && x.TRANSACTION_TYPE != "ADD MERCHANT")
+                                            where x.TRANSACTION_TIME >= Date_From_Val && x.TRANSACTION_TIME <= TO_DATE_Range && (x.TRANSACTION_TYPE!= "ADD DISTRIBUTOR" && x.TRANSACTION_TYPE != "ADD MERCHANT")
                                             select new
                                             {
                                                 SLN = x.ACC_NO,
@@ -1561,7 +1714,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                                 IGST_RATE = x.IGST_RATE,
                                                 TOTAL_GST_RATE = x.TOTAL_GST_RATE,
                                                 COmpany_Name = y.COMPANY,
-                                                Company_GSt = y.COMPANY_GST_NO
+                                                Company_GSt = y.COMPANY_GST_NO,
+                                                RAIL_ID =y.RAIL_ID,
                                             }).AsEnumerable().Select((z, index) => new TBL_ACCOUNTS
                                             {
                                                 SerialNo = index + 1,
@@ -1602,8 +1756,10 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                                 IGST_RATE = z.IGST_RATE,
                                                 TOTAL_GST_RATE = z.TOTAL_GST_RATE,
                                                 COMPANY_NAME = z.COmpany_Name,
-                                                COMPANY_GST = z.Company_GSt
-                                            }).OrderBy(m => m.SerialNo).ThenByDescending(a => a.TRANSACTION_DATE).ToList();
+                                                COMPANY_GST = z.Company_GSt,
+                                                RAIL_ID = z.RAIL_ID,
+                                            }).OrderByDescending(a => a.ACC_NO).ToList();
+                //}).OrderBy(m => m.SerialNo).ThenByDescending(a => a.TRANSACTION_DATE).ToList();
 
                 return PartialView("MemberAccountsReportGrid", transactionlistvalue);
             }
@@ -1613,7 +1769,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 string TO_DATE = string.Empty;                
                 var transactionlistvalue = (from x in db.TBL_ACCOUNTS
                                             join y in db.TBL_MASTER_MEMBER on x.MEM_ID equals y.MEM_ID
-                                            where (y.COMPANY.Contains(MemberInfo) || y.UName.Contains(MemberInfo) || y.MEMBER_MOBILE.Contains(MemberInfo) || y.MEMBER_MOBILE.Contains(MemberInfo) || y.EMAIL_ID.Contains(MemberInfo) || x.AMOUNT.ToString().Contains(MemberInfo) || x.CLOSING.ToString().Contains(MemberInfo) || x.OPENING.ToString().Contains(MemberInfo)) && (x.TRANSACTION_TYPE != "ADD DISTRIBUTOR" && x.TRANSACTION_TYPE != "ADD MERCHANT")
+                                            where (y.COMPANY.Contains(MemberInfo) || y.UName.Contains(MemberInfo) || y.MEMBER_MOBILE.Contains(MemberInfo) || y.MEMBER_MOBILE.Contains(MemberInfo) || y.EMAIL_ID.Contains(MemberInfo) || y.RAIL_ID.Contains(MemberInfo) || x.AMOUNT.ToString().Contains(MemberInfo) || x.CLOSING.ToString().Contains(MemberInfo) || x.OPENING.ToString().Contains(MemberInfo)) && (x.TRANSACTION_TYPE != "ADD DISTRIBUTOR" && x.TRANSACTION_TYPE != "ADD MERCHANT")
                                             select new
                                             {
                                                 SLN = x.ACC_NO,
@@ -1651,7 +1807,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                                 IGST_RATE = x.IGST_RATE,
                                                 TOTAL_GST_RATE = x.TOTAL_GST_RATE,
                                                 COmpany_Name = y.COMPANY,
-                                                Company_GSt = y.COMPANY_GST_NO
+                                                Company_GSt = y.COMPANY_GST_NO,
+                                                RAIL_ID = y.RAIL_ID,
                                             }).AsEnumerable().Select((z, index) => new TBL_ACCOUNTS
                                             {
                                                 SerialNo = index + 1,
@@ -1692,8 +1849,10 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                                 IGST_RATE = z.IGST_RATE,
                                                 TOTAL_GST_RATE = z.TOTAL_GST_RATE,
                                                 COMPANY_NAME = z.COmpany_Name,
-                                                COMPANY_GST = z.Company_GSt
-                                            }).OrderBy(m => m.SerialNo).ThenByDescending(a => a.TRANSACTION_DATE).ToList();
+                                                COMPANY_GST = z.Company_GSt,
+                                                RAIL_ID = z.RAIL_ID,
+                                            }).OrderByDescending(a => a.ACC_NO).ToList();
+                //}).OrderBy(m => m.SerialNo).ThenByDescending(a => a.TRANSACTION_DATE).ToList();
                 return PartialView("MemberAccountsReportGrid", transactionlistvalue);
             }
             else {
@@ -1737,7 +1896,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                                 IGST_RATE = x.IGST_RATE,
                                                 TOTAL_GST_RATE = x.TOTAL_GST_RATE,
                                                 COmpany_Name = y.COMPANY,
-                                                Company_GSt = y.COMPANY_GST_NO
+                                                Company_GSt = y.COMPANY_GST_NO,
+                                                RAIL_ID=y.RAIL_ID,
                                             }).AsEnumerable().Select((z, index) => new TBL_ACCOUNTS
                                             {
                                                 SerialNo = index + 1,
@@ -1778,8 +1938,10 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                                 IGST_RATE = z.IGST_RATE,
                                                 TOTAL_GST_RATE = z.TOTAL_GST_RATE,
                                                 COMPANY_NAME = z.COmpany_Name,
-                                                COMPANY_GST = z.Company_GSt
-                                            }).OrderBy(m => m.SerialNo).ThenByDescending(a => a.TRANSACTION_DATE).ToList();
+                                                COMPANY_GST = z.Company_GSt,
+                                                RAIL_ID=z.RAIL_ID
+                                            }).OrderByDescending(a => a.ACC_NO).ToList();
+                //}).OrderBy(m => m.SerialNo).ThenByDescending(a => a.TRANSACTION_DATE).ToList();
 
                 return PartialView("MemberAccountsReportGrid", transactionlistvalue);
             }
@@ -1834,7 +1996,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 DateTime TO_DATE_Range = Date_To_Val.AddDays(1);
                 var transactionlistvalue = (from x in db.TBL_ACCOUNTS
                                             join y in db.TBL_MASTER_MEMBER on x.MEM_ID equals y.MEM_ID
-                                            where x.TRANSACTION_DATE >= Date_From_Val && x.TRANSACTION_DATE <= TO_DATE_Range && (y.COMPANY.Contains(MemberInfo) || y.UName.Contains(MemberInfo) || y.MEMBER_MOBILE.Contains(MemberInfo) || y.MEMBER_MOBILE.Contains(MemberInfo) || y.EMAIL_ID.Contains(MemberInfo) || x.AMOUNT.ToString().Contains(MemberInfo) || x.CLOSING.ToString().Contains(MemberInfo) || x.OPENING.ToString().Contains(MemberInfo))
+                                            where x.TRANSACTION_TIME >= Date_From_Val && x.TRANSACTION_TIME <= TO_DATE_Range && (y.COMPANY.Contains(MemberInfo) || y.UName.Contains(MemberInfo) || y.MEMBER_MOBILE.Contains(MemberInfo) || y.MEMBER_MOBILE.Contains(MemberInfo) || y.EMAIL_ID.Contains(MemberInfo) || x.AMOUNT.ToString().Contains(MemberInfo) || x.CLOSING.ToString().Contains(MemberInfo) || x.OPENING.ToString().Contains(MemberInfo))
                                             select new
                                             {
                                                 SLN = x.ACC_NO,
@@ -1906,7 +2068,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 DateTime TO_DATE_Range = Date_To_Val.AddDays(1);
                 var transactionlistvalue = (from x in db.TBL_ACCOUNTS
                                             join y in db.TBL_MASTER_MEMBER on x.MEM_ID equals y.MEM_ID
-                                            where x.TRANSACTION_DATE >= Date_From_Val && x.TRANSACTION_DATE <= TO_DATE_Range
+                                            where x.TRANSACTION_TIME >= Date_From_Val && x.TRANSACTION_TIME <= TO_DATE_Range
                                             select new
                                             {
                                                 SLN = x.ACC_NO,

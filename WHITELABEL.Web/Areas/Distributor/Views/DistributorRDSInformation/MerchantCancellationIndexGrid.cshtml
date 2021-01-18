@@ -12,7 +12,10 @@
                                             .Grid(Model)
                                             .Build(columns =>
                                             {
-                                                columns.Add(model => model.SLN).Titled("Sln").Filterable(true).Sortable(true);
+                                                columns.Add(model => model.SerialNo).Titled("Sln").Filterable(true).Sortable(true);
+                                                columns.Add(model => model.MER_RAIL_ID).Titled("Rail Id").Filterable(true).Sortable(true);
+                                                columns.Add(model => model.MERCHANT_NAME).Titled("Member Name").Filterable(true).Sortable(true);
+                                                columns.Add(model => model.CORRELATION_ID).Titled("Corelation Id").Filterable(true).Sortable(true);
                                                 columns.Add(model => model.CANCELLATION_ID).Titled("Cancellation Id").Filterable(true).Sortable(true);
                                                 columns.Add(model => model.CANCELLATION_TYPE).Titled("Cancellation Type").Filterable(true).Sortable(true);
                                                 columns.Add(model => model.TRN_ID).Titled("Txn Id").Filterable(true).Sortable(true);
@@ -34,8 +37,8 @@
                                             .Id("my-ajax-grid")
                                             .Pageable(pager =>
                                             {
-                                                pager.PagesToDisplay = 15;
-                                                pager.RowsPerPage = 15;
+                                                pager.PagesToDisplay = 10;
+                                                pager.RowsPerPage = 10;
                                             })
                                             .Filterable()
                                             .Sortable()

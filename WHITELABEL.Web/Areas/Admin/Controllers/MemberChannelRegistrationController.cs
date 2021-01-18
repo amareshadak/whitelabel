@@ -313,7 +313,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                         ASSIGN_DATE = DateTime.Now,
                         STATUS = 0,
                         ASSIGN_TYPE = "MARK UP ASSIGN",
-                        DIST_ID = MemberCurrentUser.MEM_ID
+                        DIST_ID = MemberCurrentUser.MEM_ID,
+                        GST_APPLY = "NO"
                     };
                     db.TBL_FLIGHT_MARKUP.Add(objflight);
                     await db.SaveChangesAsync();
@@ -551,7 +552,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                         ASSIGN_DATE = DateTime.Now,
                         STATUS = 0,
                         ASSIGN_TYPE = "MARK UP ASSIGN",
-                        DIST_ID = MemberCurrentUser.MEM_ID
+                        DIST_ID = MemberCurrentUser.MEM_ID,
+                        GST_APPLY = "NO"
                     };
                     db.TBL_FLIGHT_MARKUP.Add(objflight);
                     await db.SaveChangesAsync();
@@ -811,7 +813,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                         ASSIGN_DATE = DateTime.Now,
                         STATUS = 0,
                         ASSIGN_TYPE = "MARK UP ASSIGN",
-                        DIST_ID = MemberCurrentUser.MEM_ID
+                        DIST_ID = MemberCurrentUser.MEM_ID,
+                        GST_APPLY = "NO"
                     };
                     db.TBL_FLIGHT_MARKUP.Add(objflight);
                     await db.SaveChangesAsync();

@@ -18,12 +18,12 @@
         [Display(Name = "Password")]
         [DataType(DataType.Password)]
         [MaxLength(12, ErrorMessage = "Password not greater then 12 digit")]
-        [MinLength(10, ErrorMessage = "Password not less then 10 digit")]
+        [MinLength(5, ErrorMessage = "Password not less then 10 digit")]
         public string User_pwd { get; set; }
         [Required]
         [Display(Name = "Confirm Password")]
         [DataType(DataType.Password)]
-        [StringLength(12, ErrorMessage = "Comfirm password must be at least 10 characters long", MinimumLength = 10)]
+        [StringLength(12, ErrorMessage = "Comfirm password must be at least 5 characters long", MinimumLength = 5)]
         [System.ComponentModel.DataAnnotations.Compare("User_pwd", ErrorMessage = "The new password and confirm passwords are not matching")]
         public string CONFIRMPASSWORD { get; set; }
         

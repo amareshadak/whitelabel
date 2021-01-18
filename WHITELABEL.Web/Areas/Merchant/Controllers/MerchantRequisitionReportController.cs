@@ -94,8 +94,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                 return;
             }
         }
-
-
+        
         // GET: Merchant/MerchantRequisitionReport
         public ActionResult Index()
         {
@@ -226,6 +225,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                 grid.Columns.Add(model => model.TRANSACTION_DETAILS).Titled("Pay Method");
                 grid.Columns.Add(model => model.STATUS).Titled("STATUS");
                 grid.Columns.Add(model => model.APPROVAL_DATE).Titled("Apprv/Decline Date").Formatted("{0:yyyy-MM-dd}").MultiFilterable(true);
+                grid.Columns.Add(model => model.APPROVAL_DATE).Titled("Apprv/Decline Date").Formatted("{0:T}").MultiFilterable(true);
                 grid.Columns.Add(model => model.APPROVED_BY).Titled("Apprv By");
                 grid.Pager = new GridPager<TBL_BALANCE_TRANSFER_LOGS>(grid);
                 grid.Processors.Add(grid.Pager);

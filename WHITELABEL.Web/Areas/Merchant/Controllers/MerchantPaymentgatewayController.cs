@@ -60,7 +60,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                 string Easypayid = "";
                 string error_Message = "";
                 string TXNStatus = "";
-
+                decimal AMOUNT_With_GST = 0;
                 string salt = System.Configuration.ConfigurationSettings.AppSettings["EaseBuzzSaltKey"];
                 string Key = System.Configuration.ConfigurationSettings.AppSettings["EaseBuzzKey"];
                 //string env = System.Configuration.ConfigurationSettings.AppSettings["EaseBuzzEnviroment"];
@@ -101,7 +101,8 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                         ViewBag.easepayid = Request.Form["easepayid"];
                         string MEM_ID = Request.Form["udf1"];
                         string MEM_Password = Request.Form["udf2"];
-                         Easypayid= Request.Form["easepayid"];
+                        string TransactionAmount = Request.Form["udf3"];
+                        Easypayid = Request.Form["easepayid"];
                         ViewBag.EasypayId = Easypayid;
                         txnid = Request.Form["txnid"];
                         string payment_source = Request.Form["payment_source"];
@@ -111,27 +112,43 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                          ResponseOut = Convert.ToString(Request.Form);
                         ViewBag.iewBegCheckError = ValueCheck;
                         TXNStatus = Request.Form["status"];
-                        decimal.TryParse(ValueCheck, out AmountVal);
+                        //decimal.TryParse(ValueCheck, out AmountVal);
+                        decimal.TryParse(TransactionAmount, out AmountVal);
+                        decimal.TryParse(ValueCheck, out AMOUNT_With_GST);
                         long.TryParse(MEM_ID, out MEMBER_ID);
                         var GEtMemberinfpo = db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == MEMBER_ID);
-                        TBL_PAYMENT_GATEWAY_RESPONSE objres = new TBL_PAYMENT_GATEWAY_RESPONSE()
+                        var getPaymentStatus = db.TBL_PAYMENT_GATEWAY_RESPONSE.FirstOrDefault(x => x.MEM_ID == MEMBER_ID && x.CORELATION_ID == txnid);
+                        if (getPaymentStatus != null)
                         {
-                            MEM_ID = MEMBER_ID,
-                            RES_MSG = ResponseOut,
-                            RES_DATE = DateTime.Now,
-                            RES_STATUS = TXNStatus,
-                            PAY_REF_NO = Easypayid,
-                            CORELATION_ID = txnid,
-                            EMAIL_ID = GEtMemberinfpo.EMAIL_ID,
-                            MOBILE_No = GEtMemberinfpo.MEMBER_MOBILE,
-                            TRANSACTION_AMOUNT = AmountVal,
-                            RES_CODE = error_Message,
-                            TRANSACTION_DETAILS = "Online Process"
-                        };
-                        db.TBL_PAYMENT_GATEWAY_RESPONSE.Add(objres);
-                        db.SaveChanges();
-                        string MSgAmt = AccountBalance(ValueCheck, MEM_ID);
-                       
+                            getPaymentStatus.RES_MSG = ResponseOut;
+                            getPaymentStatus.RES_STATUS = TXNStatus;
+                            getPaymentStatus.PAY_REF_NO = Easypayid;
+                            getPaymentStatus.RES_CODE = error_Message;
+                            getPaymentStatus.STATUS = 1;
+                            getPaymentStatus.TRANSACTION_DETAILS = "Online Process";
+                            db.Entry(getPaymentStatus).State = System.Data.Entity.EntityState.Modified;
+                            db.SaveChanges();
+                            string MSgAmt = AccountBalance(TransactionAmount, MEM_ID, txnid);
+                        }
+                        //TBL_PAYMENT_GATEWAY_RESPONSE objres = new TBL_PAYMENT_GATEWAY_RESPONSE()
+                        //{
+                        //    MEM_ID = MEMBER_ID,
+                        //    RES_MSG = ResponseOut,
+                        //    RES_DATE = DateTime.Now,
+                        //    RES_STATUS = TXNStatus,
+                        //    PAY_REF_NO = Easypayid,
+                        //    CORELATION_ID = txnid,
+                        //    EMAIL_ID = GEtMemberinfpo.EMAIL_ID,
+                        //    MOBILE_No = GEtMemberinfpo.MEMBER_MOBILE,
+                        //    TRANSACTION_AMOUNT = AmountVal,
+                        //    RES_CODE = error_Message,
+                        //    TRANSACTION_DETAILS = "Online Process",
+                        //    AMOUNT_WITH_GST= AMOUNT_With_GST
+                        //};
+                        //db.TBL_PAYMENT_GATEWAY_RESPONSE.Add(objres);
+                        //db.SaveChanges();
+                        
+                        //string MSgAmt = AccountBalance(TransactionAmount, MEM_ID, txnid);
                     }
                     else
                     {
@@ -139,16 +156,21 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                         ViewBag.messagevalue = Request.Form;
                         //string Res = Convert.ToString(Request.Form);
                         //string Responseval = ViewBag.messagevalue;
+                        ResponseOut = Convert.ToString(Request.Form);
                         ViewBag.TXnStatus = Request.Form["status"];
+                        TXNStatus = Request.Form["status"];
                         ViewBag.txnid = Request.Form["txnid"];
                         ViewBag.txnAmt = Request.Form["amount"];
                         ViewBag.easepayid = Request.Form["easepayid"];                        
                         string MEM_ID = Request.Form["udf1"];
                         string MEM_Password = Request.Form["udf2"];
+                        string TransactionAmount = Request.Form["udf3"];
                         decimal TranAmount = Convert.ToDecimal(Request.Form["amount"]);
                         string ValueCheck = Request.Form["amount"].ToString();
                         ViewBag.iewBegCheckError = ValueCheck;
-                         Easypayid = Request.Form["easepayid"];
+                        decimal.TryParse(TransactionAmount, out AmountVal);
+                        decimal.TryParse(ValueCheck, out AMOUNT_With_GST);
+                        Easypayid = Request.Form["easepayid"];
                         ViewBag.EasypayId = Easypayid;
                          txnid = Request.Form["txnid"];
                          string payment_source = Request.Form["payment_source"];
@@ -159,22 +181,35 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                         long.TryParse(MEM_ID, out MEMBER_ID);
                         long.TryParse(MEM_ID, out MEMBER_ID);
                         var GEtMemberinfpo = db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == MEMBER_ID);
-                        TBL_PAYMENT_GATEWAY_RESPONSE objres = new TBL_PAYMENT_GATEWAY_RESPONSE()
+                        var getPaymentStatus = db.TBL_PAYMENT_GATEWAY_RESPONSE.FirstOrDefault(x => x.MEM_ID == MEMBER_ID && x.CORELATION_ID == txnid);
+                        if (getPaymentStatus != null)
                         {
-                            MEM_ID = MEMBER_ID,
-                            RES_MSG = ResponseOut,
-                            RES_DATE = DateTime.Now,
-                            RES_STATUS = TXNStatus,
-                            PAY_REF_NO = Easypayid,
-                            CORELATION_ID = txnid,
-                            EMAIL_ID = GEtMemberinfpo.EMAIL_ID,
-                            MOBILE_No = GEtMemberinfpo.MEMBER_MOBILE,
-                            TRANSACTION_AMOUNT = AmountVal,
-                            RES_CODE = error_Message,
-                            TRANSACTION_DETAILS = "Online Process"
-                        };
-                        db.TBL_PAYMENT_GATEWAY_RESPONSE.Add(objres);
-                        db.SaveChanges();
+                            getPaymentStatus.RES_MSG = ResponseOut;
+                            getPaymentStatus.RES_STATUS = TXNStatus;
+                            getPaymentStatus.PAY_REF_NO = Easypayid;
+                            getPaymentStatus.RES_CODE = error_Message;
+                            getPaymentStatus.STATUS = 0;
+                            getPaymentStatus.TRANSACTION_DETAILS = "Online Process Pending";
+                            db.Entry(getPaymentStatus).State = System.Data.Entity.EntityState.Modified;
+                            db.SaveChanges();
+                        }
+                        //TBL_PAYMENT_GATEWAY_RESPONSE objres = new TBL_PAYMENT_GATEWAY_RESPONSE()
+                        //{
+                        //    MEM_ID = MEMBER_ID,
+                        //    RES_MSG = ResponseOut,
+                        //    RES_DATE = DateTime.Now,
+                        //    RES_STATUS = TXNStatus,
+                        //    PAY_REF_NO = Easypayid,
+                        //    CORELATION_ID = txnid,
+                        //    EMAIL_ID = GEtMemberinfpo.EMAIL_ID,
+                        //    MOBILE_No = GEtMemberinfpo.MEMBER_MOBILE,
+                        //    TRANSACTION_AMOUNT = AmountVal,
+                        //    RES_CODE = error_Message,
+                        //    TRANSACTION_DETAILS = "Online Process",
+                        //    AMOUNT_WITH_GST= AMOUNT_With_GST
+                        //};
+                        //db.TBL_PAYMENT_GATEWAY_RESPONSE.Add(objres);
+                        //db.SaveChanges();
                         //string MSgAmt = AccountBalance(ValueCheck, MEM_ID);
 
 
@@ -186,10 +221,19 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
             catch (Exception ex)
             {
                 Response.Write("<span style='color:red'>" + ex.Message + "</span>");
+                ViewBag.messagevalue = "Null";
+                ViewBag.TXnStatus = "Transaction Cancelled.Please contact your administrator.";
+                ViewBag.txnid ="XXXXXXXXX";
+                ViewBag.txnAmt = "XXXXXXXX";
+                ViewBag.easepayid = "XXXXXXXXXX";
+                ViewBag.iewBegCheckError ="Transaction Desclined";
+                ViewBag.EasypayId = "Null";
+                ViewBag.payment_source = "Boom Travel";
+                ViewBag.error_Message = "Declined";
                 return RedirectToAction("EasepaySuccess", "MerchantPaymentgateway", new { area = "Merchant" });
             }
         }
-        public string AccountBalance(string Amount,string MEMID)
+        public string AccountBalance(string Amount,string MEMID,string corelationid)
         {
             var db = new DBContext();
             decimal Baln = 0;
@@ -238,7 +282,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                             GST = 0,
                             IPAddress = "",
                             SERVICE_ID = 0,
-                            CORELATIONID = COrelationID
+                            CORELATIONID = corelationid
                         };
                         db.TBL_ACCOUNTS.Add(objmer);
                         whiteleveluser.BALANCE = AddmainBal;

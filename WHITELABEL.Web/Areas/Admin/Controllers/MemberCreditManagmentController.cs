@@ -548,7 +548,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                         CREDIT_OPENING= CR_Closinging,
                         CREDITCLOSING = ADD_CR_Closinging,
                         CREDIT_TRN_TYPE="CR",
-                        CORELATIONID= COrelationID
+                        CORELATIONID= COrelationID,
+                        STATUS="APPROVE"
                     };
                     db.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION.Add(objLimit);
                     db.SaveChanges();
@@ -680,7 +681,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                           OpeningAmt = tblcre.CREDIT_OPENING,
                                           DR_CR = tblcre.CREDIT_AMOUNT,
                                           Closingamt = tblcre.CREDITCLOSING,
-                                          creditType = tblcre.CREDIT_TRN_TYPE
+                                          creditType = tblcre.CREDIT_TRN_TYPE,
+                                          STATUS=tblcre.STATUS
                                       }).AsEnumerable().Select(z => new TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
                                       {
                                           SLN = z.sln,
@@ -697,6 +699,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                           CREDIT_TRN_TYPE = z.creditType,
                                           COMPANY_NAME = z.COMPANY_NAME,
                                           COMPANY_GST = z.COMPANY_GST,
+                                          STATUS=z.STATUS
                                       }).ToList().OrderByDescending(a => a.CREDIT_DATE); ;
                     return PartialView("CREEEDITLimitGrid", memberinfo);
                 } 
@@ -729,7 +732,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                           OpeningAmt = tblcre.CREDIT_OPENING,
                                           DR_CR = tblcre.CREDIT_AMOUNT,
                                           Closingamt = tblcre.CREDITCLOSING,
-                                          creditType = tblcre.CREDIT_TRN_TYPE
+                                          creditType = tblcre.CREDIT_TRN_TYPE,
+                                          STATUS = tblcre.STATUS
                                       }).AsEnumerable().Select(z => new TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
                                       {
                                           SLN = z.sln,
@@ -746,6 +750,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                           CREDIT_TRN_TYPE = z.creditType,
                                           COMPANY_NAME = z.COMPANY_NAME,
                                           COMPANY_GST = z.COMPANY_GST,
+                                          STATUS=z.STATUS
                                       }).ToList().OrderByDescending(a => a.CREDIT_DATE); ;
                     return PartialView("CREEEDITLimitGrid", memberinfo);
                 }
@@ -768,7 +773,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                           OpeningAmt = tblcre.CREDIT_OPENING,
                                           DR_CR = tblcre.CREDIT_AMOUNT,
                                           Closingamt = tblcre.CREDITCLOSING,
-                                          creditType = tblcre.CREDIT_TRN_TYPE
+                                          creditType = tblcre.CREDIT_TRN_TYPE,
+                                          STATUS = tblcre.STATUS
                                       }).AsEnumerable().Select(z => new TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
                                       {
                                           SLN = z.sln,
@@ -785,6 +791,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                           CREDIT_TRN_TYPE = z.creditType,
                                           COMPANY_NAME = z.COMPANY_NAME,
                                           COMPANY_GST = z.COMPANY_GST,
+                                          STATUS=z.STATUS
                                       }).ToList().OrderByDescending(a => a.CREDIT_DATE); ;
                     return PartialView("CREEEDITLimitGrid", memberinfo);
                 }
@@ -809,7 +816,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                           OpeningAmt = tblcre.CREDIT_OPENING,
                                           DR_CR = tblcre.CREDIT_AMOUNT,
                                           Closingamt = tblcre.CREDITCLOSING,
-                                          creditType = tblcre.CREDIT_TRN_TYPE
+                                          creditType = tblcre.CREDIT_TRN_TYPE,
+                                          STATUS = tblcre.STATUS
                                       }).AsEnumerable().Select(z => new TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
                                       {
                                           SLN = z.sln,
@@ -826,6 +834,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                           CREDIT_TRN_TYPE = z.creditType,
                                           COMPANY_NAME = z.COMPANY_NAME,
                                           COMPANY_GST = z.COMPANY_GST,
+                                          STATUS=z.STATUS
                                       }).ToList().OrderByDescending(a => a.CREDIT_DATE); ;
                     return PartialView("CREEEDITLimitGrid", memberinfo);
                 }
@@ -977,7 +986,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                           Credit_note = tblcre.CREDIT_NOTE_DESCRIPTION,
                                           CreditNoteDate = tblcre.CREDIT_DATE,
                                           CreditAmount = tblcre.CREDIT_AMOUNT,
-                                          creditStatus = tblcre.CREDIT_STATUS
+                                          creditStatus = tblcre.CREDIT_STATUS,
+                                          STATUS=tblcre.STATUS
                                       }).AsEnumerable().Select(z => new TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
                                       {
                                           SLN = z.sln,
@@ -988,6 +998,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                           CREDIT_STATUS = z.creditStatus,
                                           COMPANY_NAME = z.COMPANY_NAME,
                                           COMPANY_GST = z.COMPANY_GST,
+                                          STATUS=z.STATUS
                                       }).ToList();
                     return PartialView("DistributorCreditindexgrid", memberinfo);
                 }
@@ -1017,7 +1028,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                           Credit_note = tblcre.CREDIT_NOTE_DESCRIPTION,
                                           CreditNoteDate = tblcre.CREDIT_DATE,
                                           CreditAmount = tblcre.CREDIT_AMOUNT,
-                                          creditStatus = tblcre.CREDIT_STATUS
+                                          creditStatus = tblcre.CREDIT_STATUS,
+                                          STATUS = tblcre.STATUS
                                       }).AsEnumerable().Select(z => new TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
                                       {
                                           SLN = z.sln,
@@ -1029,6 +1041,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
 
                                           COMPANY_NAME = z.COMPANY_NAME,
                                           COMPANY_GST = z.COMPANY_GST,
+                                          STATUS=z.STATUS
                                       }).ToList();
                     return PartialView("DistributorCreditindexgrid", memberinfo);
                 }
@@ -1051,7 +1064,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                           Credit_note = tblcre.CREDIT_NOTE_DESCRIPTION,
                                           CreditNoteDate = tblcre.CREDIT_DATE,
                                           CreditAmount = tblcre.CREDIT_AMOUNT,
-                                          creditStatus = tblcre.CREDIT_STATUS
+                                          creditStatus = tblcre.CREDIT_STATUS,
+                                          STATUS = tblcre.STATUS
                                       }).AsEnumerable().Select(z => new TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
                                       {
                                           SLN = z.sln,
@@ -1062,7 +1076,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                           CREDIT_STATUS = z.creditStatus,
                                           COMPANY_NAME = z.COMPANY_NAME,
                                           COMPANY_GST = z.COMPANY_GST,
-
+                                          STATUS=z.STATUS
                                       }).ToList();
                     return PartialView("DistributorCreditindexgrid", memberinfo);
                 }
@@ -1086,7 +1100,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                           Credit_note = tblcre.CREDIT_NOTE_DESCRIPTION,
                                           CreditNoteDate = tblcre.CREDIT_DATE,
                                           CreditAmount = tblcre.CREDIT_AMOUNT,
-                                          creditStatus = tblcre.CREDIT_STATUS
+                                          creditStatus = tblcre.CREDIT_STATUS,
+                                          STATUS = tblcre.STATUS
                                       }).AsEnumerable().Select(z => new TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
                                       {
                                           SLN = z.sln,
@@ -1097,6 +1112,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                           CREDIT_STATUS = z.creditStatus,
                                           COMPANY_NAME = z.COMPANY_NAME,
                                           COMPANY_GST = z.COMPANY_GST,
+                                          STATUS=z.STATUS
                                       }).ToList();
                     return PartialView("DistributorCreditindexgrid", memberinfo);
                 }
@@ -1333,5 +1349,153 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 }
             }
         }
+        public ActionResult CreditCallingList()
+        {
+            if (Session["WhiteLevelUserId"] != null)
+            {
+                try
+                {
+                    initpage();                 
+                    return View();
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
+            }
+            else
+            {
+                Session["WhiteLevelUserId"] = null;
+                Session["WhiteLevelUserName"] = null;
+                Session["UserType"] = null;
+                Session.Remove("WhiteLevelUserId");
+                Session.Remove("WhiteLevelUserName");
+                Session.Remove("UserType");
+                return RedirectToAction("AdminLogin", "Login", new { area = "" });
+            }
+        }
+        public PartialViewResult AllMerchantCreditCallingGrid(string SearchVal = "")
+        {
+            try
+            {
+                var db = new DBContext();
+                if (SearchVal != "")
+                {
+                    long DistId = 0;
+                    //long.TryParse(DistributorId, out DistId);
+                    //var MerchantList = db.TBL_MASTER_MEMBER.Where(x => x.INTRODUCER == DistId && x.UNDER_WHITE_LEVEL == MemberCurrentUser.MEM_ID && x.MEMBER_ROLE == 5).OrderByDescending(x => x.JOINING_DATE).ToList();
+                    var MerchantList = db.TBL_MASTER_MEMBER.Where(x => x.ACTIVE_MEMBER == true && x.CREDIT_LIMIT > 0 && x.MEMBER_ROLE == 5 && (x.UName.StartsWith(SearchVal) || x.MEMBER_MOBILE.StartsWith(SearchVal) || x.MEMBER_NAME.StartsWith(SearchVal) || x.COMPANY.StartsWith(SearchVal) || x.COMPANY_GST_NO.StartsWith(SearchVal) || x.ADDRESS.StartsWith(SearchVal) || x.CITY.StartsWith(SearchVal) || x.PIN.StartsWith(SearchVal) || x.EMAIL_ID.StartsWith(SearchVal) || x.AADHAAR_NO.StartsWith(SearchVal) || x.PAN_NO.StartsWith(SearchVal) || x.RAIL_ID.StartsWith(SearchVal) || x.FACEBOOK_ID.StartsWith(SearchVal) || x.WEBSITE_NAME.StartsWith(SearchVal) || x.MEM_UNIQUE_ID.StartsWith(SearchVal))).ToList();
+                    return PartialView("AllMerchantCreditCallingGrid", MerchantList);
+                }
+                else
+                {
+                    var MerchantList = db.TBL_MASTER_MEMBER.Where(x => x.UNDER_WHITE_LEVEL == MemberCurrentUser.MEM_ID && x.MEMBER_ROLE == 5 && x.ACTIVE_MEMBER == true && x.CREDIT_LIMIT>0).OrderByDescending(x => x.JOINING_DATE).ToList();
+                    return PartialView("AllMerchantCreditCallingGrid", MerchantList);
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+        [HttpGet]
+        public FileResult ExportMerchantInfoIndex(string MEM_ID = "")
+        {
+            // Using EPPlus from nuget
+            using (ExcelPackage package = new ExcelPackage())
+            {
+                Int32 row = 2;
+                Int32 col = 1;
+                //long mem_Id = 0;
+                //long.TryParse(  MEM_ID,out mem_Id);
+                package.Workbook.Worksheets.Add("Data");
+                IGrid<TBL_MASTER_MEMBER> grid = CreateExporMerchantInfotableGrid(MEM_ID);
+                ExcelWorksheet sheet = package.Workbook.Worksheets["Data"];
+
+                foreach (IGridColumn column in grid.Columns)
+                {
+                    sheet.Cells[1, col].Value = column.Title;
+                    sheet.Column(col++).Width = 18;
+                }
+
+                foreach (IGridRow<TBL_MASTER_MEMBER> gridRow in grid.Rows)
+                {
+                    col = 1;
+                    foreach (IGridColumn column in grid.Columns)
+                        sheet.Cells[row, col++].Value = column.ValueFor(gridRow);
+
+                    row++;
+                }
+
+                return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                //return File(fileContents: package.GetAsByteArray(), contentType: "application/unknown");
+            }
+        }
+
+        private IGrid<TBL_MASTER_MEMBER> CreateExporMerchantInfotableGrid(string MEM_ID)
+        {
+            long userid = MemberCurrentUser.MEM_ID;
+            var dbcontext = new DBContext();
+            if (MEM_ID != "")
+            {
+                var memberinfo = dbcontext.TBL_MASTER_MEMBER.Where(x => x.ACTIVE_MEMBER == true && x.CREDIT_LIMIT > 0 && x.MEMBER_ROLE == 5 &&(x.UName.StartsWith(MEM_ID) || x.MEMBER_MOBILE.StartsWith(MEM_ID) || x.MEMBER_NAME.StartsWith(MEM_ID) || x.COMPANY.StartsWith(MEM_ID) || x.COMPANY_GST_NO.StartsWith(MEM_ID) || x.ADDRESS.StartsWith(MEM_ID) || x.CITY.StartsWith(MEM_ID) || x.PIN.StartsWith(MEM_ID) || x.EMAIL_ID.StartsWith(MEM_ID) || x.AADHAAR_NO.StartsWith(MEM_ID) || x.PAN_NO.StartsWith(MEM_ID) || x.RAIL_ID.StartsWith(MEM_ID) || x.FACEBOOK_ID.StartsWith(MEM_ID) || x.WEBSITE_NAME.StartsWith(MEM_ID) || x.MEM_UNIQUE_ID.StartsWith(MEM_ID))).ToList();
+                //var memberinfo = dbcontext.TBL_MASTER_MEMBER.Where(x => x.INTRODUCER == Mem_ID).ToList();
+                IGrid<TBL_MASTER_MEMBER> grid = new Grid<TBL_MASTER_MEMBER>(memberinfo);
+                grid.ViewContext = new ViewContext { HttpContext = HttpContext };
+                grid.Query = Request.QueryString;
+                grid.Columns.Add(model => model.MEM_UNIQUE_ID).Titled("Mem ID").Filterable(true).Sortable(true);
+                grid.Columns.Add(model => model.RAIL_ID).Titled("Rail ID").Filterable(true).Sortable(true);
+                grid.Columns.Add(model => model.EMAIL_ID).Titled("Email").Filterable(true).Sortable(true);
+                grid.Columns.Add(model => model.MEMBER_NAME).Titled("Name").Filterable(true).Sortable(true);
+                grid.Columns.Add(model => model.MEMBER_MOBILE).Titled("Mobile No").Filterable(true).Sortable(true);
+                grid.Columns.Add(model => model.COMPANY).Titled("Company").Filterable(true).Sortable(true);                
+                grid.Columns.Add(model => model.BALANCE).Titled("Balance").Filterable(true).Sortable(true);
+                grid.Columns.Add(model => model.CREDIT_LIMIT).Titled("Credit Amount").Filterable(true).Sortable(true);
+                grid.Columns.Add(model => model.BLOCKED_BALANCE).Titled("Block Balance").Filterable(true).Sortable(true);
+                grid.Pager = new GridPager<TBL_MASTER_MEMBER>(grid);
+                grid.Processors.Add(grid.Pager);
+                grid.Pager.RowsPerPage = 1000000000;
+                //grid.Pager.RowsPerPage = 6;
+
+                //foreach (IGridColumn column in grid.Columns)
+                //{
+                //    column.Filter.IsEnabled = true;
+                //    column.Sort.IsEnabled = true;
+                //}
+
+                return grid;
+            }
+            else
+            {
+                var memberinfo = dbcontext.TBL_MASTER_MEMBER.Where(x => x.UNDER_WHITE_LEVEL == MemberCurrentUser.MEM_ID && x.MEMBER_ROLE == 5 && x.ACTIVE_MEMBER == true && x.CREDIT_LIMIT > 0).OrderByDescending(x => x.JOINING_DATE).ToList();
+                IGrid<TBL_MASTER_MEMBER> grid = new Grid<TBL_MASTER_MEMBER>(memberinfo);
+                grid.ViewContext = new ViewContext { HttpContext = HttpContext };
+                grid.Query = Request.QueryString;
+                grid.Columns.Add(model => model.MEM_UNIQUE_ID).Titled("Mem ID").Filterable(true).Sortable(true);
+                grid.Columns.Add(model => model.RAIL_ID).Titled("Rail ID").Filterable(true).Sortable(true);
+                grid.Columns.Add(model => model.EMAIL_ID).Titled("Email").Filterable(true).Sortable(true);
+                grid.Columns.Add(model => model.MEMBER_NAME).Titled("Name").Filterable(true).Sortable(true);
+                grid.Columns.Add(model => model.MEMBER_MOBILE).Titled("Mobile No").Filterable(true).Sortable(true);
+                grid.Columns.Add(model => model.COMPANY).Titled("Company").Filterable(true).Sortable(true);
+                grid.Columns.Add(model => model.BALANCE).Titled("Balance").Filterable(true).Sortable(true);
+                grid.Columns.Add(model => model.CREDIT_LIMIT).Titled("Credit Amount").Filterable(true).Sortable(true);
+                grid.Columns.Add(model => model.BLOCKED_BALANCE).Titled("Block Balance").Filterable(true).Sortable(true);
+                grid.Pager = new GridPager<TBL_MASTER_MEMBER>(grid);
+                grid.Processors.Add(grid.Pager);
+                grid.Pager.RowsPerPage = 1000000000;
+
+                //foreach (IGridColumn column in grid.Columns)
+                //{
+                //    column.Filter.IsEnabled = true;
+                //    column.Sort.IsEnabled = true;
+                //}
+
+                return grid;
+            }
+
+
+        }
+
     }
 }

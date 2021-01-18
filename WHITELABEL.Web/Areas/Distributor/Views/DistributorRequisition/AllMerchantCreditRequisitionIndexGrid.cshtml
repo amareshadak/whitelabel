@@ -23,7 +23,8 @@
                                                 columns.Add(model => model.CREDIT_DATE).Titled("Credit Balance Date").Formatted("{0:MM/dd/yyyy}").Filterable(true).Sortable(true);
                                                 columns.Add(model => model.CREDIT_DATE).Titled("Credit Balance Time").Formatted("{0:T}").Filterable(false);
                                                 columns.Add(model => model.CREDIT_NOTE_DESCRIPTION).Titled("Credit Balance Note").Filterable(true).Sortable(true);
-                                                columns.Add(model => model.CREDIT_STATUS == true ? "Approved" : "Pending").Titled("Credit Balance Note").Filterable(true).Sortable(true);
+                                                //columns.Add(model => model.CREDIT_STATUS == true ? "Approved" : "Pending").Titled("Credit Balance Note").Filterable(true).Sortable(true);
+                                                columns.Add(model => model.STATUS).Titled("Credit Status").Filterable(true).Sortable(true);
                                                 columns.Add(model => model.SLN).Titled("Action").Encoded(false).Filterable(false).Sortable(false)
                         .RenderedAs(model => "<a class='btn btn-primary btn-xs' data-toggle='modal' data-target='.MerchantCreditRequisitiontransd' id='MerchantCreditRequisitionid' data-id=" + model.SLN + " onclick='getMerchantCreditRequisitionvalue(" + model.SLN + ");'>Approve</a>");
                                             })

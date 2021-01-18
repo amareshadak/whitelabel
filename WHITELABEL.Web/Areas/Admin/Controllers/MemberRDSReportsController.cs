@@ -151,8 +151,10 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                               MERCHANT_NAME = y.MEM_UNIQUE_ID,
                                               COMPANY_NAME=y.COMPANY,
                                               COMPANY_GST = y.COMPANY_GST_NO,
-                                          }).AsEnumerable().Select(z => new TBL_FINAL_RDS_BOOKING
+                                              
+                                          }).AsEnumerable().Select((z, index) => new TBL_FINAL_RDS_BOOKING
                                           {
+                                              SerialNo=index+1,
                                               SLN = z.SLN,
                                               BOOKING_GATEWAY = z.BOOKING_GATEWAY,
                                               TRAN_ID = z.TRAN_ID,
@@ -194,6 +196,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                               MERCHANT_NAME = z.MERCHANT_NAME,
                                               Company_Name = z.COMPANY_NAME,
                                               Company_GST = z.COMPANY_GST,
+                                              
                                           }).ToList();
                     return PartialView("IndexGrid", RDSbookinglist);
                 }
@@ -253,8 +256,9 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                               MERCHANT_NAME = y.MEM_UNIQUE_ID,
                                               COMPANY_NAME = y.COMPANY,
                                               COMPANY_GST = y.COMPANY_GST_NO,
-                                          }).AsEnumerable().Select(z => new TBL_FINAL_RDS_BOOKING
+                                          }).AsEnumerable().Select((z, index) => new TBL_FINAL_RDS_BOOKING
                                           {
+                                              SerialNo=index+1,
                                               SLN = z.SLN,
                                               BOOKING_GATEWAY = z.BOOKING_GATEWAY,
                                               TRAN_ID = z.TRAN_ID,
@@ -347,8 +351,9 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                               MERCHANT_NAME = y.MEM_UNIQUE_ID,
                                               COMPANY_NAME = y.COMPANY,
                                               COMPANY_GST = y.COMPANY_GST_NO,
-                                          }).AsEnumerable().Select(z => new TBL_FINAL_RDS_BOOKING
+                                          }).AsEnumerable().Select((z, index) => new TBL_FINAL_RDS_BOOKING
                                           {
+                                              SerialNo=index+1,
                                               SLN = z.SLN,
                                               BOOKING_GATEWAY = z.BOOKING_GATEWAY,
                                               TRAN_ID = z.TRAN_ID,
@@ -441,8 +446,9 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                               MERCHANT_NAME = y.MEM_UNIQUE_ID,
                                               COMPANY_NAME = y.COMPANY,
                                               COMPANY_GST = y.COMPANY_GST_NO,
-                                          }).AsEnumerable().Select(z => new TBL_FINAL_RDS_BOOKING
+                                          }).AsEnumerable().Select((z, index) => new TBL_FINAL_RDS_BOOKING
                                           {
+                                              SerialNo=index+1,
                                               SLN = z.SLN,
                                               BOOKING_GATEWAY = z.BOOKING_GATEWAY,
                                               TRAN_ID = z.TRAN_ID,
@@ -1667,7 +1673,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                     string From_TO = string.Empty;
                     TO_DATE = DateTime.Parse(Date_To.ToString()).ToString("yyyy-MM-dd");
                     DateTime Date_To_Val = Convert.ToDateTime(TO_DATE);
-                    
+
                     var RDSbookinglist = (from x in dbcontext.TBL_FINAL_CANCELLATION
                                           join y in dbcontext.TBL_MASTER_MEMBER on x.MER_ID equals y.MEM_ID
                                           where (y.UName.StartsWith(MerchantUser) || y.MEMBER_MOBILE.StartsWith(MerchantUser) || y.MEMBER_NAME.StartsWith(MerchantUser) || y.COMPANY.StartsWith(MerchantUser) || y.COMPANY_GST_NO.StartsWith(MerchantUser) || y.ADDRESS.StartsWith(MerchantUser) || y.CITY.StartsWith(MerchantUser) || y.PIN.StartsWith(MerchantUser) || y.EMAIL_ID.StartsWith(MerchantUser) || y.AADHAAR_NO.StartsWith(MerchantUser) || y.PAN_NO.StartsWith(MerchantUser) || y.RAIL_ID.StartsWith(MerchantUser) || y.MEM_UNIQUE_ID.StartsWith(MerchantUser) || x.REFUND_AMT.ToString().Contains(MerchantUser)) && x.TRN_DATE >= Date_From_Val && x.TRN_DATE <= Date_To_Val
@@ -1716,8 +1722,9 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                               MERCHANT_NAME = y.MEM_UNIQUE_ID,
                                               COMPANY_NAME = y.COMPANY,
                                               COMPANY_GST = y.COMPANY_GST_NO,
-                                          }).AsEnumerable().Select(z => new TBL_FINAL_CANCELLATION
+                                          }).AsEnumerable().Select((z, index) => new TBL_FINAL_CANCELLATION
                                           {
+                                              SerialNo = index + 1,
                                               SLN = z.SLN,
                                               //BOOKING_GATEWAY = z.BOOKING_GATEWAY,
                                               TRN_ID = z.TRAN_ID,
@@ -1821,8 +1828,9 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                               MERCHANT_NAME = y.MEM_UNIQUE_ID,
                                               COMPANY_NAME = y.COMPANY,
                                               COMPANY_GST = y.COMPANY_GST_NO,
-                                          }).AsEnumerable().Select(z => new TBL_FINAL_CANCELLATION
+                                          }).AsEnumerable().Select((z, index) => new TBL_FINAL_CANCELLATION
                                           {
+                                              SerialNo=index+1,
                                               SLN = z.SLN,
                                               //BOOKING_GATEWAY = z.BOOKING_GATEWAY,
                                               TRN_ID = z.TRAN_ID,
@@ -1919,8 +1927,9 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                               MERCHANT_NAME = y.MEM_UNIQUE_ID,
                                               COMPANY_NAME = y.COMPANY,
                                               COMPANY_GST = y.COMPANY_GST_NO,
-                                          }).AsEnumerable().Select(z => new TBL_FINAL_CANCELLATION
+                                          }).AsEnumerable().Select((z, index) => new TBL_FINAL_CANCELLATION
                                           {
+                                              SerialNo=index+1,
                                               SLN = z.SLN,
                                               //BOOKING_GATEWAY = z.BOOKING_GATEWAY,
                                               TRN_ID = z.TRAN_ID,
@@ -2017,8 +2026,9 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                               MERCHANT_NAME = y.MEM_UNIQUE_ID,
                                               COMPANY_NAME = y.COMPANY,
                                               COMPANY_GST = y.COMPANY_GST_NO,
-                                          }).AsEnumerable().Select(z => new TBL_FINAL_CANCELLATION
+                                          }).AsEnumerable().Select((z, index) => new TBL_FINAL_CANCELLATION
                                           {
+                                              SerialNo=index+1,
                                               SLN = z.SLN,
                                               //BOOKING_GATEWAY = z.BOOKING_GATEWAY,
                                               TRN_ID = z.TRAN_ID,
@@ -2337,8 +2347,9 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                               MERCHANT_NAME = y.MEM_UNIQUE_ID,
                                               COMPANY_NAME = y.COMPANY,
                                               COMPANY_GST = y.COMPANY_GST_NO,
-                                          }).AsEnumerable().Select(z => new TBL_FINAL_RDS_BOOKING
+                                          }).AsEnumerable().Select((z, index) => new TBL_FINAL_RDS_BOOKING
                                           {
+                                              SerialNo=index+1,
                                               SLN = z.SLN,
                                               BOOKING_GATEWAY = z.BOOKING_GATEWAY,
                                               TRAN_ID = z.TRAN_ID,
@@ -2439,8 +2450,9 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                               MERCHANT_NAME = y.MEM_UNIQUE_ID,
                                               COMPANY_NAME = y.COMPANY,
                                               COMPANY_GST = y.COMPANY_GST_NO,
-                                          }).AsEnumerable().Select(z => new TBL_FINAL_RDS_BOOKING
+                                          }).AsEnumerable().Select((z, index) => new TBL_FINAL_RDS_BOOKING
                                           {
+                                              SerialNo=index+1,
                                               SLN = z.SLN,
                                               BOOKING_GATEWAY = z.BOOKING_GATEWAY,
                                               TRAN_ID = z.TRAN_ID,
@@ -2487,15 +2499,6 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 }
                 else if (MerchantUser != "" && DateFrom == "" && Date_To == "")
                 {
-
-                    string FromDATE = string.Empty;
-                    string TO_DATE = string.Empty;
-                    FromDATE = DateTime.Parse(DateFrom.ToString()).ToString("yyyy-MM-dd");
-                    DateTime Date_From_Val = Convert.ToDateTime(FromDATE);
-                    string From_TO = string.Empty;
-                    TO_DATE = DateTime.Parse(Date_To.ToString()).ToString("yyyy-MM-dd");
-                    DateTime Date_To_Val = Convert.ToDateTime(TO_DATE);
-
                     var RDSbookinglist = (from x in dbcontext.TBL_FINAL_RDS_BOOKING
                                           join y in dbcontext.TBL_MASTER_MEMBER on x.MER_ID equals y.MEM_ID
                                           where (y.UName.StartsWith(MerchantUser) || y.MEMBER_MOBILE.StartsWith(MerchantUser) || y.MEMBER_NAME.StartsWith(MerchantUser) || y.COMPANY.StartsWith(MerchantUser) || y.COMPANY_GST_NO.StartsWith(MerchantUser) || y.ADDRESS.StartsWith(MerchantUser) || y.CITY.StartsWith(MerchantUser) || y.PIN.StartsWith(MerchantUser) || y.EMAIL_ID.StartsWith(MerchantUser) || y.AADHAAR_NO.StartsWith(MerchantUser) || y.PAN_NO.StartsWith(MerchantUser) || y.RAIL_ID.StartsWith(MerchantUser) || y.MEM_UNIQUE_ID.StartsWith(MerchantUser) || x.BOOKING_AMT.ToString().StartsWith(MerchantUser)) && x.TRAN_STATUS == "Failed"
@@ -2542,8 +2545,9 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                               MERCHANT_NAME = y.MEM_UNIQUE_ID,
                                               COMPANY_NAME = y.COMPANY,
                                               COMPANY_GST = y.COMPANY_GST_NO,
-                                          }).AsEnumerable().Select(z => new TBL_FINAL_RDS_BOOKING
+                                          }).AsEnumerable().Select((z, index) => new TBL_FINAL_RDS_BOOKING
                                           {
+                                              SerialNo=index+1,
                                               SLN = z.SLN,
                                               BOOKING_GATEWAY = z.BOOKING_GATEWAY,
                                               TRAN_ID = z.TRAN_ID,
@@ -2636,8 +2640,9 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                               MERCHANT_NAME = y.MEM_UNIQUE_ID,
                                               COMPANY_NAME = y.COMPANY,
                                               COMPANY_GST = y.COMPANY_GST_NO,
-                                          }).AsEnumerable().Select(z => new TBL_FINAL_RDS_BOOKING
+                                          }).AsEnumerable().Select((z, index) => new TBL_FINAL_RDS_BOOKING
                                           {
+                                              SerialNo=index+1,
                                               SLN = z.SLN,
                                               BOOKING_GATEWAY = z.BOOKING_GATEWAY,
                                               TRAN_ID = z.TRAN_ID,

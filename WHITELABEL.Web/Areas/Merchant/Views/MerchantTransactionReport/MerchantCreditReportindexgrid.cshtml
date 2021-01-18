@@ -22,6 +22,7 @@
                                                                 columns.Add(model => model.CREDIT_DATE).Titled("Credit Date").MultiFilterable(true).Sortable(true).Formatted("{0:MM/dd/yyyy}");
                                                                 columns.Add(model => model.CREDIT_DATE).Titled("Credit Time").Filterable(false).Sortable(false).Formatted("{0:T}");
                                                                 columns.Add(model => model.CREDIT_NOTE_DESCRIPTION).Titled("Credit Note").Filterable(true).Sortable(true);
+                                                                columns.Add(model => model.STATUS).Titled("Credit Status").Filterable(true).Sortable(true);
 
                                                             })
                                                              .Css("css-classes")
@@ -36,15 +37,6 @@
                                                             .Filterable()
                                                             .Sortable()
 )
-<table class="divFooterTotalComm" style="width:100%">
-    <tr>
-        <td style="width:25%;">Total Credit opening Amt:- <b>@Model.Sum(z => z.CREDIT_OPENING)</b></td>
-        <td style="width:25%;">Total Credit Amt:- <b>@Model.Where(z => z.CREDIT_TRN_TYPE == "CR").Sum(z => z.CREDIT_AMOUNT)</b></td>
-        <td style="width:25%;">Total Debit Amt:- <b>@Model.Where(z => z.CREDIT_TRN_TYPE == "DR").Sum(z => z.CREDIT_AMOUNT)</b></td>
-        <td style="width:25%;">Total Credit closing Amt:- <b>@Model.Sum(z => z.CREDITCLOSING)</b></td>
-        <td></td>
-    </tr>
-</table>
 
 
 

@@ -23,7 +23,7 @@
                     {
                         @Html.AntiForgeryToken()
                         <div class="col-md-12 row">
-                            <h3>Total Unsuccessful Updation</h3>
+                            <h3>Total Unsuccessful Booking Updation</h3>
                             @Html.AjaxGrid(Url.Action("RdsBookNONBookingLilst", "MemberRDSFileProcessing",new {area="Admin" }))
                         </div>
                     }
@@ -32,7 +32,7 @@
             <div class="card">
                 <div class="card-body" style="margin-bottom:20px;">
                     <div class="col-md-12 row">
-                        <h3>  Total Successful Updation</h3>
+                        <h3>Total Successful Booking Updation</h3>
                         @Html.AjaxGrid(Url.Action("RdsBookBookingDetailsInfo", "MemberRDSFileProcessing", new { area = "Admin" }))
                     </div>
                 </div>

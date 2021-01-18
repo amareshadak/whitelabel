@@ -505,7 +505,7 @@
                 //}
             } catch (e) {
                 bootbox.alert({
-                    message: "Please check all the information and submit again.",
+                    message: msgval,
                     callback: function () {
                         //var URL = "/Merchant/MerchantFlightDetails/FlightBookingDetails";
                         //$window.location.href = URL;

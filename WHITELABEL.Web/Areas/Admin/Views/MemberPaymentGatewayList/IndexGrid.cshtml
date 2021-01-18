@@ -1,0 +1,40 @@
+﻿@using NonFactors.Mvc.Grid;
+@using WHITELABEL.Web.Helper;
+@model IEnumerable<WHITELABEL.Data.Models.TBL_PAYMENT_GATEWAY_RESPONSE>
+
+@{
+    ViewBag.Title = "IndexGrid";
+    Layout = null;
+}
+@(Html
+                                    .Grid(Model)
+                                    .Build(columns =>
+                                    {
+                                        columns.Add(model => model.Serial_No).Titled("Sln").Filterable(true).Sortable(true);
+                                        columns.Add(model => model.Member_Name).Titled("Member ID").Filterable(true).Sortable(true);
+                                        columns.Add(model => model.EMAIL_ID).Titled("Email").Filterable(true).Sortable(true);
+                                        columns.Add(model => model.MOBILE_No).Titled("Mobile").Filterable(true).Sortable(true);
+                                        columns.Add(model => model.PAY_REF_NO).Titled("Ref Code").Filterable(true).Sortable(true);
+                                        columns.Add(model => model.CORELATION_ID).Titled("Corelation Id").Filterable(true).Sortable(true);
+                                        columns.Add(model => model.RES_STATUS).Titled("Status").Filterable(true).Sortable(true);
+                                        columns.Add(model => model.RES_DATE).Titled("Date").Filterable(true).Sortable(true);
+                                        //columns.Add(model => model.RES_MSG).Titled("Msg").Filterable(true).Sortable(true);
+                                        columns.Add(model => model.TRANSACTION_AMOUNT).Titled("Amount").Filterable(true).Sortable(true);
+                                        //columns.Add(model => model.RES_CODE).Titled("Res Code").Filterable(true).Sortable(true);
+                                        columns.Add(model => model.TRANSACTION_DETAILS).Titled("Transaction Details").Filterable(true).Sortable(true);
+                                        columns.Add(model => model.AMOUNT_WITH_GST).Titled("Amount With Gst").Filterable(true).Sortable(true);
+                                        columns.Add(model => model.SLN).Titled("").Encoded(false).Filterable(false).Sortable(false).Titled("Action")
+                                 .RenderedAs(model =>model.STATUS==0?"<div style='text-align:center'><a class='btn btn-primary btn-xs' data-toggle='modal' data-target='.PaymentGatewayValue' id='divgetPaymentGatewayValue' data-id=" + model.SLN + " onclick='getPaymentGatewayvalue(" + model.SLN + ");' style='color:white'>Process</a></div>":"");
+                                    })
+                                    .Css("css-classes")
+                                    .AppendCss("table table-striped")
+                                    .Empty("No data found")
+                                    .Id("my-ajax-grid")
+                                    .Pageable(pager =>
+                                    {
+                                        pager.PagesToDisplay = 10;
+                                        pager.RowsPerPage = 10;
+                                    })
+                                    .Filterable()
+                                    .Sortable()
+)

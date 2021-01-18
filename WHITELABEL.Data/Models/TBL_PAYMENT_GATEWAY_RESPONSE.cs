@@ -20,6 +20,8 @@
         public decimal? TRANSACTION_AMOUNT { get; set; }
         public string RES_CODE { get; set; }
         public string TRANSACTION_DETAILS { get; set; }
+        public decimal? AMOUNT_WITH_GST { get; set; }
+        public int? STATUS { get; set; }
         [NotMapped]
         public string TrnDate { get; set; }
         [NotMapped]
@@ -30,5 +32,8 @@
         public string Member_Company_Name { get; set; }
         [NotMapped]
         public long Serial_No { get; set; }
+        [NotMapped]
+        public string FromUser { get; set; }
+        
     }
 }

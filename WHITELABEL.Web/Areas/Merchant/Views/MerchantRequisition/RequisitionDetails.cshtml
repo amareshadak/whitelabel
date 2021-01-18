@@ -402,16 +402,58 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <div class="col-md-3"></div>
+                                    <div class="col-md-3">Recharge Type </div>
+                                    <div class="col-md-3">
+                                        <div class="inputer">
+                                            <div class="input-wrapper">
+                                                @Html.DropDownListFor(m => m.PAYMENT_METHOD, new List<SelectListItem>
+                                                                        { new SelectListItem{Text="Debit Card", Value="DC"},
+                                                                            new SelectListItem{Text="Credit Card", Value="CC"},
+                                                                            new SelectListItem{Text="Netbanking", Value="NB"},
+                                                                            new SelectListItem{Text="UPI", Value="UPI"},
+                                                                            new SelectListItem{Text="Mobile Wallet", Value="MW"},
+                                                                            new SelectListItem{Text="Ola Money", Value="OM"},
+                                                                            new SelectListItem{Text="EMI", Value="EMI"}},
+                                                                            "Select Payment Method", new { id = "ddlPaymentgatewayType", @class = "form-control" })
+                                            </div>
+                                            <span><small>@Html.ValidationMessageFor(model => model.PAYMENT_METHOD, "", new { @class = "text-danger" })</small></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="col-md-3"></div>
                                     <div class="col-md-3">Recharge Amount </div>
                                     <div class="col-md-3">
                                         <div class="inputer">
                                             <div class="input-wrapper">
-                                                @Html.EditorFor(model => model.AMOUNT, new { htmlAttributes = new { @class = "form-control", @placeholder = "XXXXX.XX" } })
+                                                @Html.EditorFor(model => model.AMOUNT, new { htmlAttributes = new { @class = "form-control", @placeholder = "XXXXX.XX",id= "txtPaymentGatewayAmount" } })
+                                                @Html.HiddenFor(model => model.BANK_CHARGES, new { id = "hdnGrossAmount" })
                                             </div>
                                             <span><small>@Html.ValidationMessageFor(model => model.AMOUNT, "", new { @class = "text-danger" })</small></span>
                                         </div>
                                     </div>
                                     <div class="col-md-3"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-12" id="divtotalamount">
+                                <div class="form-group" style="margin-left:16px;">
+                                    <table>
+                                        <tr>
+                                            <td>Transaction Charge :</td>
+                                            <td><label id="lblNetAmount"></label></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Transaction Charge GST :</td>
+                                            <td><label id="lblGSTAmount"></label></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Net Amount :</b></td>
+                                            <td><b><label id="lblGrossAmount"></label></b></td>
+                                        </tr>
+                                    </table>
                                 </div>
                             </div>
                             <div class="col-md-12">
@@ -509,6 +551,7 @@
 
 <script>
     $(document).ready(function () {
+        $('#divtotalamount').hide();
 	            const reqType = "Distributor";
             $('#hdnRequisitionSendto').val(reqType);
         $('#Paymentgateway').hide();
@@ -549,14 +592,6 @@
     //        $('#div_DIstributor').hide();
     //        $('#div_WhiteLabel').show();
 
-    //    }
-    //    else {
-
-    //    }
-    //}
-   
-
-
     $("#BankID").change(function () {
         debugger;
         const bankname = $('#BankID').val();
@@ -590,4 +625,64 @@
         }
     })
 
+    $('#txtPaymentGatewayAmount').on('input blur change keyup', function () {
+        const PaymentMode = $('#ddlPaymentgatewayType').val();
+        var token = $(':input[name="__RequestVerificationToken"]').val();
+        $.ajax({
+            url: "/MerchantRequisition/CheckTotalTransactionAmount?area=Merchant",
+
+            data: {
+                __RequestVerificationToken: token,
+                PaymentMode: PaymentMode,
+                transactionAmount: $(this).val()
+            },
+            cache: false,
+            type: "POST",
+            success: function (data) {                
+                $('#divtotalamount').show();
+                const TotalAmount = data;
+                const NetAmount = data.NetAmount;
+                const GSTAmount = data.GST;
+                const GrossAmount = data.GrossAmount;
+                $('#lblNetAmount').html(NetAmount);
+                $('#lblGSTAmount').html(GSTAmount);
+                $('#lblGrossAmount').html(GrossAmount);
+                $('#hdnGrossAmount').val(GrossAmount);
+            },
+            error: function (xhr, status, error) {
+                console.log(xhr.responseText);
+                alert("message : \n" + "An error occurred" + "\n status : \n" + status + " \n error : \n" + error);
+            }
+        });
+    });
+    $("#ddlPaymentgatewayType").change(function () {
+        const TransactionAmount = $('#txtPaymentGatewayAmount').val();
+        var token = $(':input[name="__RequestVerificationToken"]').val();
+        $.ajax({
+            url: "/MerchantRequisition/CheckTotalTransactionAmount?area=Merchant",
+
+            data: {
+                __RequestVerificationToken: token,
+                PaymentMode: $(this).val(),
+                transactionAmount: TransactionAmount
+            },
+            cache: false,
+            type: "POST",
+            success: function (data) {                
+                $('#divtotalamount').show();
+                const TotalAmount = data;
+                const NetAmount = data.NetAmount;
+                const GSTAmount = data.GST;
+                const GrossAmount = data.GrossAmount;
+                $('#lblNetAmount').html(NetAmount);
+                $('#lblGSTAmount').html(GSTAmount);
+                $('#lblGrossAmount').html(GrossAmount);
+                $('#hdnGrossAmount').val(GrossAmount);
+            },
+            error: function (xhr, status, error) {
+                console.log(xhr.responseText);
+                alert("message : \n" + "An error occurred" + "\n status : \n" + status + " \n error : \n" + error);
+            }
+        });
+    });
 </script>

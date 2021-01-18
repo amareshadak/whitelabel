@@ -24,9 +24,10 @@
                                                 columns.Add(model => model.CREDIT_DATE).Titled("Credit Balance Date").MultiFilterable(true).Sortable(true).Formatted("{0:MM/dd/yyyy}");
                                                 columns.Add(model => model.CREDIT_DATE).Titled("Credit Balance Time").Filterable(false).Sortable(false).Formatted("{0:T}");
                                                 columns.Add(model => model.CREDIT_NOTE_DESCRIPTION).Titled("Credit Balance Note").Filterable(true).Sortable(true);
-                                                columns.Add(model => model.CREDIT_STATUS == true ? "Approved" : "Pending").Titled("Credit Balance Note").Filterable(true).Sortable(true);
+                                                //columns.Add(model => model.CREDIT_STATUS == true ? "Approved" : "Pending").Titled("Credit Balance Note").Filterable(true).Sortable(true);
+                                                columns.Add(model => model.STATUS).Titled("Credit Status").Filterable(true).Sortable(true);
                                                 columns.Add(model => model.SLN).Titled("Action").Encoded(false).Filterable(false).Sortable(false)
-                        .RenderedAs(model => "<a class='btn btn-primary btn-xs' data-toggle='modal' data-target='.CreditRequisitiontransd' id='CreditRequisitionid' data-id=" + model.SLN + " onclick='getCreditRequisitionvalue(" + model.SLN + ");'>Approve</a>");
+                        .RenderedAs(model => "<a class='btn btn-primary btn-xs' data-toggle='modal' data-target='.CreditRequisitiontransd' id='CreditRequisitionid' data-id=" + model.SLN + " onclick='getCreditRequisitionvalue(" + model.SLN + ");' style='color: white; '>Approve</a>");
                                             })
                                 .Css("css-classes")
                                 .AppendCss("table table-striped")

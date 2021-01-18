@@ -16,10 +16,10 @@
             {
                 SmtpClient client = new SmtpClient();
 
-                client.Host = "103.240.91.147";
+                client.Host = "103.240.91.157";
                 client.Port = 25;
                 client.UseDefaultCredentials = false;
-                client.Credentials = new NetworkCredential("connect@devconedutechservices.com", "basir12345@");
+                client.Credentials = new NetworkCredential("noreply@boomtravels.com", "dilsh@#123456");
                 //MailMessage message = CreateMailMessage(ToEmail, Subject, Message);
                 MailMessage usermessage = CreateUserMailMessage(ToEmail, Subject, Message);
                 //client.Send(message);
@@ -55,8 +55,8 @@
             //mailMessage.To.Add("atanucomp@gmail.com");
             //mailMessage.Body = "Test";
             //mailMessage.Subject = "TEst VAl";
-            mailMessage.From = new MailAddress("connect@devconedutechservices.com");
-            mailMessage.To.Add("connect@devconedutechservices.com");
+            mailMessage.From = new MailAddress("noreply@boomtravels.com");
+            mailMessage.To.Add("noreply@boomtravels.com");
             mailMessage.Body = msgbody.ToString();
             mailMessage.Subject = sub.ToString();
             return mailMessage;
@@ -71,7 +71,7 @@
             //mailMessage.To.Add("atanucomp@gmail.com");
             //mailMessage.Body = "Test";
             //mailMessage.Subject = "TEst VAl";
-            mailMessage.From = new MailAddress("connect@devconedutechservices.com");
+            mailMessage.From = new MailAddress("noreply@boomtravels.com");
             mailMessage.To.Add(email.ToString().Trim());
             mailMessage.Body = usermsgbody.ToString();
             mailMessage.Subject = usersub.ToString();

@@ -1,0 +1,202 @@
+﻿@using NonFactors.Mvc.Grid;
+@model WHITELABEL.Data.Models.TBL_COMPLAIN_DETAILS
+@{
+    ViewBag.Title = "Complain Register";
+    Layout = "~/Areas/Merchant/Views/Shared/_RetailerLayout.cshtml";
+}
+<script src="~/Areas/Merchant/MerchantHelperJS/Complain/Index.js"></script>
+<div class="form-horizontal padding-top-20">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-12 row headcolor">
+                <div class="col-md-4" style="text-align:left; padding-top:3px;"><i class="fa fa-wallet  fa-3x"></i> </div>
+
+                <div class="col-md-8" style="text-align:right; padding-top:10px;">
+                    <h3>
+                        Complain List
+                    </h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-heading" style="padding-bottom:10px;">
+                        <div class="row" align="right">
+                            <div class="col-md-6 text-right">                                
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <a class='btn btn-primary btn-xs' data-toggle='modal' data-target='.ComplainRegister' id='ComplainRegisterID' data-id='complainId' style="color:white;"><span class="ion-plus"></span> New Complain</a>
+                            </div>
+                        </div>
+                    </div><!--.panel-heading-->
+                    <div class="card-body">
+                        <div class="row example-row" style="margin-bottom:10px;">
+                            <div class="col-md-5">
+                                <div class="form-group row">
+                                    <label class="control-label col-md-3">Date From</label>
+                                    <div class="col-md-9">
+                                        <div class="inputer">
+                                            <div class="input-wrapper">
+                                                @Html.EditorFor(model => model.FROM_DATE, "{0:yyyy-MM-dd}", new { htmlAttributes = new { @class = "form-control date", id = "txtFromDate", @onkeydown = "return false;", @placeholder = "yyyy-MM-dd" } })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="form-group row">
+                                    <label class="control-label col-md-3">Date From</label>
+                                    <div class="col-md-9">
+                                        <div class="inputer">
+                                            <div class="input-wrapper">
+                                                @Html.EditorFor(model => model.TO_DATE, "{0:yyyy-MM-dd}", new { htmlAttributes = new { @class = "form-control date", id = "txtToDate", @onkeydown = "return false;", @placeholder = "yyyy-MM-dd" } })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="inputer">
+                                    <div class="input-wrapper">
+                                        <a href="#" class="btn btn-primary" id="btnSearchDAteWise">Search Date Wise</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row example-row">
+
+                            @Html.AjaxGrid(Url.Action("IndexGrid", "MerchantComplainRegister", new { area = "Merchant" }))
+                        </div><!--.row-->
+                    </div><!--.panel-body-->
+                    @*<div class="panel-footer text-right">
+                            <a href="@(Url.Action("GridExportIndex","MerchantRequisition",new { area="Merchant"}) + ViewContext.HttpContext.Request.QueryString)" class="btn btn-info btn-xs"><span class="ion-forward"></span>Export</a>
+                        </div>*@
+                </div>
+            </div><!--.panel-->
+        </div><!--.col-md-12-->
+    </div><!--.row-->
+</div>
+
+<div id="ComplainRegisterID" class="modal scale fade ComplainRegister" tabindex="-1" role="dialog" aria-hidden="true" style="padding-top:100px;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Complain Register</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-12 row" style="margin-bottom:2px;">
+                    <div class="col-md-4" style="padding-top:10px;">Complain Type : </div>
+                    <div class="col-md-8">
+                        <div class="">
+                            <div class="input-wrapper">
+                                <select id="COmplainType" class="form-control" ng-model="compainType">
+                                    <option value="Query" selected>Raise Query</option>
+                                    <option value="Complain">Raise Complain</option>                                    
+                                    <option value="Others">Others</option>
+                                </select>
+                                <input type="hidden" id="lblsln" ng-model="txnValue" />
+                            </div>
+                        </div>
+                    </div>
+                </div>                
+                <div class="col-md-12 row" style="margin-bottom:2px;">
+                    <div class="col-md-4" style="padding-top:10px;">Complain Details : </div>
+                    <div class="col-md-8">
+                        <div class="">
+                            <div class="input-wrapper">                                
+                                <textarea name="textarea" id="txtCompainTransactioId" style="width:250px;height:150px;"></textarea>
+                                @*<input type="text" id="txtCompainTransactioId" name="Transaction Id" class="form-control" ng-model="compainDetails" />*@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer text-center">
+                <span style="text-align:center">
+                    <a href="javascript:void(0);" class="btn btn-primary" onclick="PostComplainData($('#COmplainType').val(), $('#txtCompainTransactioId').val(), $('#lblsln').val())">Register Complain</a>
+                </span>
+            </div>
+        </div><!--.modal-content-->
+    </div><!--.modal-dialog-->
+</div>
+
+<script type="text/javascript">
+    const currentYear = (new Date).getFullYear();
+    const currentMonth = (new Date).getMonth();
+    const currentDay = (new Date).getDate();
+    $(document).ready(function () {
+        $('#txtFromDate').datepicker({
+            dateFormat: "yy-mm-dd",
+            maxDate: new Date(currentYear, currentMonth, currentDay),
+            uiLibrary: 'bootstrap4'
+        });
+        $('#txtToDate').datepicker({
+            dateFormat: "yy-mm-dd",
+            maxDate: new Date(currentYear, currentMonth, currentDay),
+            uiLibrary: 'bootstrap4'
+        });
+    }); 
+    $("#btnSearchDAteWise").on("click", function () {
+        var Date_From = $('#txtFromDate').val();
+        var Date_TO = $('#txtToDate').val();
+        $('.mvc-grid').mvcgrid({
+            query: 'DateFrom=' + Date_From + '&Date_To=' + Date_TO,
+            reload: true,
+            reloadStarted: function () {
+                $(".divFooterTotalComm").remove();
+            },
+        });
+    });
+
+    //PostComplainData = function (compainType,compainDetails) {
+    //    debugger;
+    //    if (compainType == null && compainDetails == null) {
+    //        bootbox.alert({
+    //            size: "small",
+    //            message: "Please Fill the Complain Type and Complain Details",
+    //            backdrop: true
+    //        });
+    //        return false;
+    //    }
+    //    $.ajax({
+    //        url: '/MerchantComplainRegister/PostComplainRegister?area=Merchant',
+    //        method: "POST",
+    //        data: { 'ComplainType': compainType, 'ComplainDetails': compainDetails }
+    //    }).then(function (response) {
+    //        var msgdetails = response;
+    //        if (msgdetails == "Complain send to admin") {
+    //            bootbox.alert({
+    //                size: "small",
+    //                message: msgdetails,
+    //                backdrop: true
+    //            });
+    //            $("#ComplainRegisterID").modal('hide');
+    //            $(".ComplainRegister").modal('hide');
+    //        }
+    //        else {
+    //            bootbox.alert({
+    //                size: "small",
+    //                message: "Please tray again later",
+    //                backdrop: true
+    //            });
+    //            $("#ComplainRegisterID").modal('show');
+    //            $(".ComplainRegister").modal('hide');
+    //        }
+
+    //        console.log(response.data);
+    //    },
+    //        function (response) {
+    //            bootbox.alert({
+    //                size: "small",
+    //                message: "Please tray again later",
+    //                backdrop: true
+    //            });
+    //            console.log(response.data);
+    //        });
+    //};
+
+</script>

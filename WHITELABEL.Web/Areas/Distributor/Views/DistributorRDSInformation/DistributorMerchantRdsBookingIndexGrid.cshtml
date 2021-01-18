@@ -11,9 +11,11 @@
                                                         .Grid(Model)
                                                         .Build(columns =>
                                                         {
-                                                            columns.Add(model => model.SLN).Titled("Sln").Filterable(true).Sortable(true);
+                                                            columns.Add(model => model.SerialNo).Titled("Sln").Filterable(true).Sortable(true);
+                                                            columns.Add(model => model.MER_RAIL_ID).Titled("Rail Id").Filterable(true).Sortable(true);
                                                             columns.Add(model => model.MERCHANT_NAME).Titled("User Name").Filterable(true).Sortable(true);
                                                             columns.Add(model => model.BOOKING_GATEWAY).Titled("RDS Booking Gateway").Filterable(true).Sortable(true);
+                                                            columns.Add(model => model.CORRELATION_ID).Titled("Corelation Id").Filterable(true).Sortable(true);
                                                             columns.Add(model => model.TRAN_ID).Titled("Txn Id").Filterable(true).Sortable(true);
                                                             columns.Add(model => model.PNR).Titled("Pnr").Filterable(true).Sortable(true);
                                                             columns.Add(model => model.OPR_ID).Titled("Opr Id").Filterable(true).Sortable(true);
@@ -34,8 +36,8 @@
                                                         .Id("my-ajax-grid")
                                                         .Pageable(pager =>
                                                         {
-                                                            pager.PagesToDisplay = 15;
-                                                            pager.RowsPerPage = 15;
+                                                            pager.PagesToDisplay = 10;
+                                                            pager.RowsPerPage = 10;
                                                         })
                                                         .Filterable()
                                                         .Sortable()

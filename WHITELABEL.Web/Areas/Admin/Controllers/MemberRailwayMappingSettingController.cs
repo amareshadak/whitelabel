@@ -166,7 +166,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                       SECURITY_PIN_MD5 = z.SECURITY_PIN_MD5,
                                       ACTIVE_MEMBER = z.ACTIVE_MEMBER,
                                       MEM_ID = z.MEM_ID
-                                  }).Take(5).ToList();
+                                  }).ToList();
                 return PartialView("MerchantIndexgrid", memberinfo);
             }
             else
@@ -202,7 +202,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                        SECURITY_PIN_MD5 = z.SECURITY_PIN_MD5,
                                        ACTIVE_MEMBER = z.ACTIVE_MEMBER,
                                        MEM_ID = z.MEM_ID
-                                   }).Take(5).ToList();
+                                   }).ToList();
                 //                var memberinfo1 = (from e in dbcontext.TBL_RAIL_AGENT_INFORMATION
                 //                                   join d in dbcontext.TBL_MASTER_MEMBER
                 //on e.MEM_ID equals d.MEM_ID into emp
@@ -881,7 +881,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                     if (changepass != null)
                     {
                         var userpass = value.User_pwd;
-                        changepass.User_pwd = userpass;
+                        changepass.RAIL_PWD = userpass;
                         db.Entry(changepass).State = System.Data.Entity.EntityState.Modified;
                         await db.SaveChangesAsync();
                         //throw new Exception();

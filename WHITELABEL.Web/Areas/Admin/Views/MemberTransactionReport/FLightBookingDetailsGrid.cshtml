@@ -12,10 +12,12 @@
                             .Build(columns =>
                             {
                                 //columns.Add(model => model.ACC_NO).Titled("Sln");
+                                columns.Add(model => (model.MEM_UNIQUE_ID+"-"+model.MEMBER_NAME)).Titled("Member Name");
+                                columns.Add(model => model.COMPANY).Titled("Company");
                                 columns.Add(model => model.REF_NO).Titled("Ref No");
                                 columns.Add(model => model.PNR).Titled("PNR");
-                                columns.Add(model => model.BOOKING_DATE).Titled("Trans Date").MultiFilterable(true).Sortable(true).Formatted("{0:MM/dd/yyyy}");
-                                columns.Add(model => model.BOOKING_DATE).Titled("Trans Time").Filterable(false).Formatted("{0:T}"); ;
+                                //columns.Add(model => model.BOOKING_DATE).Titled("Trans Date").MultiFilterable(true).Sortable(true).Formatted("{0:MM/dd/yyyy}");
+                                //columns.Add(model => model.BOOKING_DATE).Titled("Trans Time").Filterable(false).Formatted("{0:T}"); ;
                                 columns.Add(model => model.FLIGHT_NO + "-"+ model.AIRLINE_CODE).Titled("Airline Code");
                                 columns.Add(model => model.FROM_AIRPORT+"-"+ model.TO_AIRPORT).Titled("Trip");
                                 columns.Add(model => (model.MAIN_CLASS == "Y" ? "Economy" : model.MAIN_CLASS == "C"? "Business": model.MAIN_CLASS == "F" ? "First Class" : "Premium Economy")).Titled("Flight Class");

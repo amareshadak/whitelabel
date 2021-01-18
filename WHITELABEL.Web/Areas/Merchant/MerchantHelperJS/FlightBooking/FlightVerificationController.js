@@ -336,7 +336,7 @@
         service.then(function (response) {            
             try {
                 $('#progressBookingOneway').hide();
-
+                debugger;
                 let data = JSON.parse(response.data);
                 if (data.BookTicketResponses.BookTicketResponse.length > 0) {
                     //$('#modelTicketConfirmed').modal('show');
@@ -374,7 +374,7 @@
                 }
                 else {
                     bootbox.alert({
-                        message: "Please check all the information and submit again.",
+                        message: msgval,
                         callback: function () {
                             //var URL = "/Merchant/MerchantFlightDetails/FlightBookingDetails";
                             //$window.location.href = URL;
@@ -477,7 +477,7 @@
                 }
                 else {
                     bootbox.alert({
-                        message: "Please check all the information and submit again.",
+                        message: msgval,
                         callback: function () {
                             //var URL = "/Merchant/MerchantFlightDetails/FlightBookingDetails";
                             //$window.location.href = URL;

@@ -146,8 +146,9 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                               CORRELATION_ID = x.CORRELATION_ID,
                                               GST_RATE = x.GST_RATE,
                                               MERCHANT_NAME = y.MEM_UNIQUE_ID,
-                                          }).AsEnumerable().Select(z => new TBL_FINAL_RDS_BOOKING
+                                          }).AsEnumerable().Select((z, index) => new TBL_FINAL_RDS_BOOKING
                                           {
+                                              SerialNo=index+1,
                                               SLN = z.SLN,
                                               BOOKING_GATEWAY = z.BOOKING_GATEWAY,
                                               TRAN_ID = z.TRAN_ID,
@@ -244,8 +245,9 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                               CORRELATION_ID = x.CORRELATION_ID,
                                               GST_RATE = x.GST_RATE,
                                               MERCHANT_NAME = y.MEM_UNIQUE_ID,
-                                          }).AsEnumerable().Select(z => new TBL_FINAL_RDS_BOOKING
+                                          }).AsEnumerable().Select((z, index) => new TBL_FINAL_RDS_BOOKING
                                           {
+                                              SerialNo=index+1,
                                               SLN = z.SLN,
                                               BOOKING_GATEWAY = z.BOOKING_GATEWAY,
                                               TRAN_ID = z.TRAN_ID,
@@ -342,8 +344,9 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                               CORRELATION_ID = x.CORRELATION_ID,
                                               GST_RATE = x.GST_RATE,
                                               MERCHANT_NAME = y.MEM_UNIQUE_ID,
-                                          }).AsEnumerable().Select(z => new TBL_FINAL_RDS_BOOKING
+                                          }).AsEnumerable().Select((z, index) => new TBL_FINAL_RDS_BOOKING
                                           {
+                                              SerialNo=index+1,
                                               SLN = z.SLN,
                                               BOOKING_GATEWAY = z.BOOKING_GATEWAY,
                                               TRAN_ID = z.TRAN_ID,
@@ -433,8 +436,9 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                               CORRELATION_ID = x.CORRELATION_ID,
                                               GST_RATE = x.GST_RATE,
                                               MERCHANT_NAME = y.MEM_UNIQUE_ID,
-                                          }).AsEnumerable().Select(z => new TBL_FINAL_RDS_BOOKING
+                                          }).AsEnumerable().Select((z, index) => new TBL_FINAL_RDS_BOOKING
                                           {
+                                              SerialNo=index+1,
                                               SLN = z.SLN,
                                               BOOKING_GATEWAY = z.BOOKING_GATEWAY,
                                               TRAN_ID = z.TRAN_ID,
@@ -1387,8 +1391,9 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                               CORRELATION_ID = x.CORRELATION_ID,
                                               GST_RATE = x.GST_RATE,
                                               MERCHANT_NAME = y.MEM_UNIQUE_ID,
-                                          }).AsEnumerable().Select(z => new TBL_FINAL_CANCELLATION
+                                          }).AsEnumerable().Select((z, index) => new TBL_FINAL_CANCELLATION
                                           {
+                                              SerialNo=index+1,
                                               SLN = z.SLN,
                                               //BOOKING_GATEWAY = z.BOOKING_GATEWAY,
                                               TRN_ID = z.TRAN_ID,
@@ -1490,8 +1495,9 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                               CORRELATION_ID = x.CORRELATION_ID,
                                               GST_RATE = x.GST_RATE,
                                               MERCHANT_NAME = y.MEM_UNIQUE_ID,
-                                          }).AsEnumerable().Select(z => new TBL_FINAL_CANCELLATION
+                                          }).AsEnumerable().Select((z, index) => new TBL_FINAL_CANCELLATION
                                           {
+                                              SerialNo=index+1,
                                               SLN = z.SLN,
                                               //BOOKING_GATEWAY = z.BOOKING_GATEWAY,
                                               TRN_ID = z.TRAN_ID,
@@ -1587,8 +1593,9 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                               CORRELATION_ID = x.CORRELATION_ID,
                                               GST_RATE = x.GST_RATE,
                                               MERCHANT_NAME = y.MEM_UNIQUE_ID,
-                                          }).AsEnumerable().Select(z => new TBL_FINAL_CANCELLATION
+                                          }).AsEnumerable().Select((z, index) => new TBL_FINAL_CANCELLATION
                                           {
+                                              SerialNo=index+1,
                                               SLN = z.SLN,
                                               //BOOKING_GATEWAY = z.BOOKING_GATEWAY,
                                               TRN_ID = z.TRAN_ID,
@@ -1683,8 +1690,9 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                               CORRELATION_ID = x.CORRELATION_ID,
                                               GST_RATE = x.GST_RATE,
                                               MERCHANT_NAME = y.MEM_UNIQUE_ID,
-                                          }).AsEnumerable().Select(z => new TBL_FINAL_CANCELLATION
+                                          }).AsEnumerable().Select((z, index) => new TBL_FINAL_CANCELLATION
                                           {
+                                              SerialNo=index+1,
                                               SLN = z.SLN,
                                               //BOOKING_GATEWAY = z.BOOKING_GATEWAY,
                                               TRN_ID = z.TRAN_ID,
@@ -2544,8 +2552,9 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                               CORRELATION_ID = x.CORRELATION_ID,
                                               GST_RATE = x.GST_RATE,
                                               MERCHANT_NAME = y.MEM_UNIQUE_ID,
-                                          }).AsEnumerable().Select(z => new TBL_FINAL_RDS_BOOKING
+                                          }).AsEnumerable().Select((z, index) => new TBL_FINAL_RDS_BOOKING
                                           {
+                                              SerialNo=index+1,
                                               SLN = z.SLN,
                                               BOOKING_GATEWAY = z.BOOKING_GATEWAY,
                                               TRAN_ID = z.TRAN_ID,
@@ -2642,8 +2651,10 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                               CORRELATION_ID = x.CORRELATION_ID,
                                               GST_RATE = x.GST_RATE,
                                               MERCHANT_NAME = y.MEM_UNIQUE_ID,
-                                          }).AsEnumerable().Select(z => new TBL_FINAL_RDS_BOOKING
+                                          }).AsEnumerable().Select((z, index) => new TBL_FINAL_RDS_BOOKING
                                           {
+                                              SerialNo=index+1,
+
                                               SLN = z.SLN,
                                               BOOKING_GATEWAY = z.BOOKING_GATEWAY,
                                               TRAN_ID = z.TRAN_ID,
@@ -2735,8 +2746,9 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                               CORRELATION_ID = x.CORRELATION_ID,
                                               GST_RATE = x.GST_RATE,
                                               MERCHANT_NAME = y.MEM_UNIQUE_ID,
-                                          }).AsEnumerable().Select(z => new TBL_FINAL_RDS_BOOKING
+                                          }).AsEnumerable().Select((z, index) => new TBL_FINAL_RDS_BOOKING
                                           {
+                                              SerialNo=index+1,
                                               SLN = z.SLN,
                                               BOOKING_GATEWAY = z.BOOKING_GATEWAY,
                                               TRAN_ID = z.TRAN_ID,
@@ -2824,8 +2836,9 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                               CORRELATION_ID = x.CORRELATION_ID,
                                               GST_RATE = x.GST_RATE,
                                               MERCHANT_NAME = y.MEM_UNIQUE_ID,
-                                          }).AsEnumerable().Select(z => new TBL_FINAL_RDS_BOOKING
+                                          }).AsEnumerable().Select((z, index) => new TBL_FINAL_RDS_BOOKING
                                           {
+                                              SerialNo=index+1,
                                               SLN = z.SLN,
                                               BOOKING_GATEWAY = z.BOOKING_GATEWAY,
                                               TRAN_ID = z.TRAN_ID,
@@ -3658,8 +3671,9 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                               CORRELATION_ID = x.CORRELATION_ID,
                                               GST_RATE = x.GST_RATE,
                                               MERCHANT_NAME = y.MEM_UNIQUE_ID,
-                                          }).AsEnumerable().Select(z => new TBL_FINAL_CANCELLATION
+                                          }).AsEnumerable().Select((z, index) => new TBL_FINAL_CANCELLATION
                                           {
+                                              SerialNo=index+1,
                                               SLN = z.SLN,
                                               //BOOKING_GATEWAY = z.BOOKING_GATEWAY,
                                               TRN_ID = z.TRAN_ID,
@@ -3760,8 +3774,9 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                               CORRELATION_ID = x.CORRELATION_ID,
                                               GST_RATE = x.GST_RATE,
                                               MERCHANT_NAME = y.MEM_UNIQUE_ID,
-                                          }).AsEnumerable().Select(z => new TBL_FINAL_CANCELLATION
+                                          }).AsEnumerable().Select((z, index) => new TBL_FINAL_CANCELLATION
                                           {
+                                              SerialNo=index+1,
                                               SLN = z.SLN,
                                               //BOOKING_GATEWAY = z.BOOKING_GATEWAY,
                                               TRN_ID = z.TRAN_ID,
@@ -3860,8 +3875,8 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                               CORRELATION_ID = x.CORRELATION_ID,
                                               GST_RATE = x.GST_RATE,
                                               MERCHANT_NAME = y.MEM_UNIQUE_ID,
-                                          }).AsEnumerable().Select(z => new TBL_FINAL_CANCELLATION
-                                          {
+                                          }).AsEnumerable().Select((z, index) => new TBL_FINAL_CANCELLATION
+                                          {SerialNo=index+1,
                                               SLN = z.SLN,
                                               //BOOKING_GATEWAY = z.BOOKING_GATEWAY,
                                               TRN_ID = z.TRAN_ID,
@@ -3954,8 +3969,9 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                               CORRELATION_ID = x.CORRELATION_ID,
                                               GST_RATE = x.GST_RATE,
                                               MERCHANT_NAME = y.MEM_UNIQUE_ID,
-                                          }).AsEnumerable().Select(z => new TBL_FINAL_CANCELLATION
+                                          }).AsEnumerable().Select((z, index) => new TBL_FINAL_CANCELLATION
                                           {
+                                              SerialNo=index+1,
                                               SLN = z.SLN,
                                               //BOOKING_GATEWAY = z.BOOKING_GATEWAY,
                                               TRN_ID = z.TRAN_ID,
@@ -4815,8 +4831,9 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                               CORRELATION_ID = x.CORRELATION_ID,
                                               GST_RATE = x.GST_RATE,
                                               MERCHANT_NAME = y.MEM_UNIQUE_ID,
-                                          }).AsEnumerable().Select(z => new TBL_FINAL_RDS_BOOKING
+                                          }).AsEnumerable().Select((z, index) => new TBL_FINAL_RDS_BOOKING
                                           {
+                                              SerialNo=index+1,
                                               SLN = z.SLN,
                                               BOOKING_GATEWAY = z.BOOKING_GATEWAY,
                                               TRAN_ID = z.TRAN_ID,
@@ -4913,8 +4930,9 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                               CORRELATION_ID = x.CORRELATION_ID,
                                               GST_RATE = x.GST_RATE,
                                               MERCHANT_NAME = y.MEM_UNIQUE_ID,
-                                          }).AsEnumerable().Select(z => new TBL_FINAL_RDS_BOOKING
+                                          }).AsEnumerable().Select((z, index) => new TBL_FINAL_RDS_BOOKING
                                           {
+                                              SerialNo=index+1,
                                               SLN = z.SLN,
                                               BOOKING_GATEWAY = z.BOOKING_GATEWAY,
                                               TRAN_ID = z.TRAN_ID,
@@ -5011,8 +5029,9 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                               CORRELATION_ID = x.CORRELATION_ID,
                                               GST_RATE = x.GST_RATE,
                                               MERCHANT_NAME = y.MEM_UNIQUE_ID,
-                                          }).AsEnumerable().Select(z => new TBL_FINAL_RDS_BOOKING
+                                          }).AsEnumerable().Select((z, index) => new TBL_FINAL_RDS_BOOKING
                                           {
+                                              SerialNo=index+1,
                                               SLN = z.SLN,
                                               BOOKING_GATEWAY = z.BOOKING_GATEWAY,
                                               TRAN_ID = z.TRAN_ID,
@@ -5102,8 +5121,9 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                               CORRELATION_ID = x.CORRELATION_ID,
                                               GST_RATE = x.GST_RATE,
                                               MERCHANT_NAME = y.MEM_UNIQUE_ID,
-                                          }).AsEnumerable().Select(z => new TBL_FINAL_RDS_BOOKING
+                                          }).AsEnumerable().Select((z, index) => new TBL_FINAL_RDS_BOOKING
                                           {
+                                              SerialNo=index+1,
                                               SLN = z.SLN,
                                               BOOKING_GATEWAY = z.BOOKING_GATEWAY,
                                               TRAN_ID = z.TRAN_ID,

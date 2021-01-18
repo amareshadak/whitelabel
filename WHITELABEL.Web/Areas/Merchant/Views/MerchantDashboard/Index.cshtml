@@ -6,7 +6,6 @@
 <div class="full-content margin-top-20">
     <div class="card-body">
         <div class="row example-row" style="box-shadow: 5px 10px #888888; border: 1px solid #888888; padding:20px;">
-
             <div class="col-md-12 row">
                 <div class="col-md-4 row">
                     <div class="col-md-3" style="text-align:center;"><i class="fa fa-user fa-4x"></i></div>
@@ -52,66 +51,93 @@
                         </div>
                     </div>
                 </div>
-              
                 <div class="col-md-12" style="text-align:center; padding-top:20px;">
-
                 </div>
             </div>
-
         </div>
     </div>
     <div class="row">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
-                        <div class="col-md-12 row">
-                            <div class="col-lg-3 col-md-6 col-sm-6">
-                                <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
-                                    <div class="card-body text-center">
-                                        <i class="fas fa-rupee-sign fa-4x"></i>
-                                        <div class="content" style="max-width:100%;">
-                                            <p class="text-muted mt-2 mb-0">Current Balance</p>
-                                            <p class="text-primary text-24 line-height-1 mb-2">@ViewBag.CurrentBalance</p>
-                                        </div>
+                    <div class="col-md-12 row">
+                        <div class="col-lg-3 col-md-6 col-sm-6">
+                            <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-rupee-sign fa-4x"></i>
+                                    <div class="content" style="max-width:100%;">
+                                        <p class="text-muted mt-2 mb-0">Current Balance</p>
+                                        <p class="text-primary text-24 line-height-1 mb-2">@ViewBag.CurrentBalance</p>
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="col-lg-3 col-md-6 col-sm-6">
-                                <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
-                                    <div class="card-body text-center">
-                                        <i class="fas fa-rupee-sign fa-4x"></i>
-                                        <div class="content" style="max-width:100%;">
-                                            <p class="text-muted mt-2 mb-0">Credit Balance</p>
-                                            <p class="text-primary text-24 line-height-1 mb-2">@ViewBag.CreditBalance</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-md-6 col-sm-6">
-                                <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
-                                    <div class="card-body text-center">
-                                        <i class="fas fa-rupee-sign fa-4x"></i>
-                                        <div class="content" style="max-width:100%;">
-                                            <p class="text-muted mt-2 mb-0">ladger Balance</p>
-                                            <p class="text-primary text-24 line-height-1 mb-2">@ViewBag.LeggerBalance</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-md-6 col-sm-6">
-                                <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
-                                    <div class="card-body text-center">
-                                        <i class="fas fa-rupee-sign fa-4x"></i>
-                                        <div class="content" style="max-width:100%;">
-                                            <p class="text-muted mt-2 mb-0">Block Balance</p>
-                                            <p class="text-primary text-24 line-height-1 mb-2">@ViewBag.BlockBalance</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                           
                         </div>
+
+                        <div class="col-lg-3 col-md-6 col-sm-6">
+                            <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-rupee-sign fa-4x"></i>
+                                    <div class="content" style="max-width:100%;">
+                                        <p class="text-muted mt-2 mb-0">Credit Balance</p>
+                                        <p class="text-primary text-24 line-height-1 mb-2">@ViewBag.CreditBalance</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-6">
+                            <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-rupee-sign fa-4x"></i>
+                                    <div class="content" style="max-width:100%;">
+                                        <p class="text-muted mt-2 mb-0">ladger Balance</p>
+                                        <p class="text-primary text-24 line-height-1 mb-2">@ViewBag.LeggerBalance</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-6">
+                            <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-rupee-sign fa-4x"></i>
+                                    <div class="content" style="max-width:100%;">
+                                        <p class="text-muted mt-2 mb-0">Block Balance</p>
+                                        <p class="text-primary text-24 line-height-1 mb-2">@ViewBag.BlockBalance</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 row">
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
+                                <div class="card-body text-center">                                    
+                                    <i class="fas fa-address-card fa-4x"></i>
+                                    <div class="content" style="max-width:100%;">
+                                        <p class="text-muted mt-2 mb-0"></p>
+                                        <p class="text-primary text-20 line-height-1 mb-2">
+                                            Boom Travels<br />
+                                            45 GF,K-556, Nizamuddin West,<br /> Near Oberoi Hotel, New Delhi - 110013
+                                            
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
+                                <div class="card-body text-left">                                    
+                                    <i class="fas fa-phone-volume fa-4x"></i>
+                                    <div class="content" style="max-width:100%;">
+                                        <p class="text-muted mt-2 mb-0"></p>
+                                        <p class="text-primary text-20 line-height-1 mb-2">                                            
+                                            <i class="fa fa-tty"></i>: +91 11 41666554 | +91 11 41827860 <br /><br />
+                                            <i class="fa fa-mobile"></i> : +91-9716558868
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

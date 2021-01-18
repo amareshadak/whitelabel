@@ -24,6 +24,7 @@
                                                             columns.Add(model => model.CREDIT_DATE).Formatted("{0:MM/dd/yyyy}").Titled("Credit Date").Filterable(true).Sortable(true);
                                                             columns.Add(model => model.CREDIT_DATE).Formatted("{0:T}").Titled("Credit Time").Filterable(true).Sortable(true);
                                                             columns.Add(model => model.CREDIT_NOTE_DESCRIPTION).Titled("Credit Note").Filterable(true).Sortable(true);
+                                                            columns.Add(model => model.STATUS).Titled("Credit Status").Filterable(true).Sortable(true);
                                                         })
                                                         .Css("css-classes")
                                                         .AppendCss("table table-striped")

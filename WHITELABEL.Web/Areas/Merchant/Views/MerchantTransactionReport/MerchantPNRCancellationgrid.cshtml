@@ -12,7 +12,9 @@
                                     .Build(columns =>
                                     {
                                         columns.Add(model => model.SLN).Titled("Sln");
+                                        columns.Add(model => model.MER_RAIL_ID).Titled("Rail Id");
                                         columns.Add(model => model.CANCELLATION_ID).Titled("Cancellation Id");
+                                        columns.Add(model => model.CORRELATION_ID).Titled("Corelation Id");
                                         columns.Add(model => model.TRN_ID).Titled("Tran Id");
                                         columns.Add(model => model.PNR_NO).Titled("Pnr No");
                                         columns.Add(model => model.OPR_ID).Titled("Opr ID");
@@ -27,17 +29,12 @@
                                     .Id("my-ajax-grid")
                                     .Pageable(pager =>
                                     {
-                                        pager.PagesToDisplay = 15;
-                                        pager.RowsPerPage = 15;
+                                        pager.PagesToDisplay = 10;
+                                        pager.RowsPerPage = 10;
                                     })
                                     .Filterable()
                                     .Sortable()
 
 )
-<table class="divFooterTotalComm" style="width:100%">
-    <tr>
-        <td style="width:25%;">Total Refund Amount:- <b>@Model.Sum(z => z.REFUND_AMT)</b></td>
-        <td></td>
-    </tr>
-</table>
+
 

@@ -103,28 +103,21 @@
             },
         });
     });
-
-    $(function () {
+    $(document).ready(function () {
+        const currentYear = (new Date).getFullYear();
+        const currentMonth = (new Date).getMonth();
+        const currentDay = (new Date).getDate();
         $('#txtFromDate').datepicker({
-            format: "yyyy-MM-dd",
-            language: "es",
-            autoclose: true,
-            todayHighlight: true,
-            changeMonth: true,
-            changeYear: true
+            dateFormat: "yy-mm-dd",
+            maxDate: new Date(currentYear, currentMonth, currentDay),
+            uiLibrary: 'bootstrap4'
         });
-    });
-    $(function () {
         $('#txtToDate').datepicker({
-            format: "yyyy-MM-dd",
-            language: "es",
-            autoclose: true,
-            todayHighlight: true,
-            changeMonth: true,
-            changeYear: true
+            dateFormat: "yy-mm-dd",
+            maxDate: new Date(currentYear, currentMonth, currentDay),
+            uiLibrary: 'bootstrap4'
         });
     });
-
     $("#btnSearchDAteWise").on("click", function () {
         //var MerId = $('#TransactionStatus').val();
         

@@ -16,12 +16,14 @@
                                 columns.Add(model => model.FromUser).Titled("From Member");
                                 columns.Add(model => model.CompanyName).Titled("Company");
                                 columns.Add(model => model.REFERENCE_NO).Titled("Reference No");
-                                columns.Add(model => model.REQUEST_TIME).Titled("Req Time").Formatted("{0:MM/dd/yyyy}").MultiFilterable(true).Sortable(true); 
-                                columns.Add(model => model.REQUEST_TIME).Titled("Req Time").Formatted("{0:T}").Filterable(false).Sortable(false); 
+                                columns.Add(model => model.REQUEST_DATE).Titled("Req Date").Formatted("{0:MM/dd/yyyy}").MultiFilterable(true).Sortable(true);
+                                columns.Add(model => model.REQUEST_TIME).Titled("Req Time").Formatted("{0:T}").Filterable(false).Sortable(false);
                                 columns.Add(model => model.AMOUNT).Titled("Amount");
                                 columns.Add(model => model.PAYMENT_METHOD).Titled("Pay Mode");
                                 columns.Add(model => model.BANK_ACCOUNT).Titled("Bank Account");
                                 columns.Add(model => model.TRANSACTION_DETAILS).Titled("Transaction Details");
+                                columns.Add(model => model.APPROVAL_DATE).Titled("Decline date").Formatted("{0:MM/dd/yyyy}").MultiFilterable(true).Sortable(true);
+                                columns.Add(model => model.APPROVAL_DATE).Titled("Decline Time").Formatted("{0:T}").Filterable(false).Sortable(false);
                                 columns.Add(model => model.SLN).Titled("").Encoded(false).Filterable(false).Sortable(false)
                                 .RenderedAs(model => "<button class='btn btn-primary btn-xs' data-id=" + model.SLN + " onclick='ActivateRequisition(" + model.SLN + ");'>Activate</button>");
                             })
@@ -38,9 +40,9 @@
                             .Filterable()
                             .Sortable()
 )
-<table class="divFooterTotalComm" style="width:100%">
+@*<table class="divFooterTotalComm" style="width:100%">
     <tr>
         <td style="width:25%;">Total Amount:- <b>@Model.Sum(z => z.AMOUNT)</b></td>
         <td></td>
     </tr>
-</table>
+</table>*@

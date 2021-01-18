@@ -24,7 +24,9 @@
                                                 columns.Add(model => model.BALANCE).Titled("Balance").Filterable(true).Sortable(true);
                                                 columns.Add(model => model.CREDIT_LIMIT).Titled("Credit Limit").Filterable(true).Sortable(true);
                                                 columns.Add(model => model.RESERVED_CREDIT_LIMIT).Titled("Reserved Credit Limit").Filterable(true).Sortable(true);
-                                                columns.Add(model => model.SECURITY_PIN_MD5).Titled("M Pin").Filterable(true).Sortable(true);
+                                                columns.Add(model => model.MEM_ID).Titled("").Encoded(false).Filterable(false).Sortable(false).Titled("Password")
+                                 .RenderedAs(model => "<div style='text-align:center'><a href='javascript:void(0)' onclick='SendMailToMember(" + model.MEM_ID + ");return 0;' title='Password'  style='margin-right:10px;'><i class='fa fa-key'></i></a> <a href='javascript:void(0);' onclick='GetPassword(" + model.MEM_ID + ");'><i class='fa fa-eye'></i></a> </div>");
+                                                //columns.Add(model => model.SECURITY_PIN_MD5).Titled("M Pin").Filterable(true).Sortable(true);
                                                 columns.Add(model => model.MEM_ID).Encoded(false).Filterable(false).Sortable(false).Titled("Edit")
                                            .RenderedAs(model => "<div>&nbsp;<a href='" + @Url.Action("EditMerchant", "MemberAPILabel", new { area = "Admin", memid = Encrypt.EncryptMe(model.MEM_ID.ToString()) }) + "' Title='Edit' style='margin-right:10px;'><i class='fa fa-edit'></i></a></div>");
                                                 columns.Add(model => model.MEM_ID).Encoded(false).Filterable(false).Sortable(false).Titled("Action")

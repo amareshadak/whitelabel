@@ -87,6 +87,7 @@
         public DbSet<TBL_BOOKING_FILE_PATH> TBL_BOOKING_FILE_PATH { get; set; }
         public DbSet<TBL_BOOKING_TEMP> TBL_BOOKING_TEMP { get; set; }
         public DbSet<TBL_BOOKING_TR> TBL_BOOKING_TR { get; set; }
+        public DbSet<TBL_COMPLAIN_DETAILS> TBL_COMPLAIN_DETAILS { get; set; }
     }
     
 }

@@ -151,7 +151,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                 DateTime ToDateValue = Date_To_Val.AddDays(1);
                 var transactionlistvalue = (from x in db.TBL_ACCOUNTS
                                             join y in db.TBL_MASTER_MEMBER on x.MEM_ID equals y.MEM_ID
-                                            where y.MEM_ID == CurrentMerchant.MEM_ID && x.TRANSACTION_DATE >= Date_From_Val && x.TRANSACTION_DATE <= ToDateValue
+                                            where y.MEM_ID == CurrentMerchant.MEM_ID && x.TRANSACTION_TIME >= Date_From_Val && x.TRANSACTION_TIME <= ToDateValue && x.TRANSACTION_TYPE != "ADD MERCHANT"
                                             select new
                                             {
                                                 SLN = x.ACC_NO,
@@ -159,12 +159,15 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                                                 MemberType = x.MEMBER_TYPE,
                                                 Trans_Type = x.TRANSACTION_TYPE,
                                                 Trans_Date = x.TRANSACTION_DATE,
+                                                Trans_Time = x.TRANSACTION_TIME,
                                                 DR_CR = x.DR_CR,
                                                 Amount = x.AMOUNT,
                                                 Narration = x.NARRATION,
                                                 OpeningAmt = x.OPENING,
                                                 Closing = x.CLOSING,
-                                                CommissionAmt = x.COMM_AMT
+                                                CommissionAmt = x.COMM_AMT,
+                                                CORELATION_ID=x.CORELATIONID,
+                                                RAIL_ID=y.RAIL_ID
                                             }).AsEnumerable().Select((z, index) => new TBL_ACCOUNTS
                                             {
                                                 SerialNo = index + 1,
@@ -173,6 +176,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                                                 MEMBER_TYPE = z.MemberType,
                                                 TRANSACTION_TYPE = z.Trans_Type,
                                                 TRANSACTION_DATE = z.Trans_Date,
+                                                TRANSACTION_TIME=z.Trans_Time,
                                                 DR_CR = z.DR_CR,
                                                 AMOUNT = z.Amount,
                                                 NARRATION = z.Narration,
@@ -180,8 +184,10 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                                                 CR_Col = (z.DR_CR == "CR" ? z.Amount.ToString() : "0"),
                                                 DR_Col = (z.DR_CR == "DR" ? z.Amount.ToString() : "0"),
                                                 CLOSING = z.Closing,
-                                                COMM_AMT = z.CommissionAmt
-                                            }).OrderByDescending(a => a.TRANSACTION_DATE).ToList();
+                                                COMM_AMT = z.CommissionAmt,
+                                                CORELATIONID = z.CORELATION_ID,
+                                                RAIL_ID = z.RAIL_ID
+                                            }).OrderByDescending(a => a.ACC_NO).ToList();
                 //}).OrderBy(m => m.SerialNo).ThenByDescending(a => a.TRANSACTION_DATE).ToList();
                 //var transactionlistvalue = MerchantDailyTransactionClass.GetTransactionReport(search, CurrentMerchant.MEM_ID, DateFrom, Date_To);
                 return PartialView("IndexGrid", transactionlistvalue);
@@ -190,7 +196,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
             {
                 var transactionlistvalue = (from x in db.TBL_ACCOUNTS
                                             join y in db.TBL_MASTER_MEMBER on x.MEM_ID equals y.MEM_ID
-                                            where y.MEM_ID == CurrentMerchant.MEM_ID
+                                            where y.MEM_ID == CurrentMerchant.MEM_ID && x.TRANSACTION_TYPE != "ADD MERCHANT"
                                             select new
                                             {
                                                 SLN = x.ACC_NO,
@@ -198,12 +204,15 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                                                 MemberType = x.MEMBER_TYPE,
                                                 Trans_Type = x.TRANSACTION_TYPE,
                                                 Trans_Date = x.TRANSACTION_DATE,
+                                                Trans_Time = x.TRANSACTION_TIME,
                                                 DR_CR = x.DR_CR,
                                                 Amount = x.AMOUNT,
                                                 Narration = x.NARRATION,
                                                 OpeningAmt = x.OPENING,
                                                 Closing = x.CLOSING,
-                                                CommissionAmt = x.COMM_AMT
+                                                CommissionAmt = x.COMM_AMT,
+                                                CORELATION_ID = x.CORELATIONID,
+                                                RAIL_ID = y.RAIL_ID
                                             }).AsEnumerable().Select((z, index) => new TBL_ACCOUNTS
                                             {
                                                 SerialNo = index + 1,
@@ -212,6 +221,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                                                 MEMBER_TYPE = z.MemberType,
                                                 TRANSACTION_TYPE = z.Trans_Type,
                                                 TRANSACTION_DATE = z.Trans_Date,
+                                                TRANSACTION_TIME = z.Trans_Time,
                                                 DR_CR = z.DR_CR,
                                                 AMOUNT = z.Amount,
                                                 NARRATION = z.Narration,
@@ -219,8 +229,10 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                                                 CR_Col = (z.DR_CR == "CR" ? z.Amount.ToString() : "0"),
                                                 DR_Col = (z.DR_CR == "DR" ? z.Amount.ToString() : "0"),
                                                 CLOSING = z.Closing,
-                                                COMM_AMT = z.CommissionAmt
-                                            }).OrderByDescending(a => a.TRANSACTION_DATE).ToList();
+                                                COMM_AMT = z.CommissionAmt,
+                                                CORELATIONID = z.CORELATION_ID,
+                                                RAIL_ID = z.RAIL_ID
+                                            }).OrderByDescending(a => a.ACC_NO).ToList();
                 //}).OrderBy(m => m.SerialNo).ThenByDescending(a => a.TRANSACTION_DATE).ToList();
                 //var transactionlistvalue = MerchantDailyTransactionClass.GetTransactionReport(search, CurrentMerchant.MEM_ID, DateFrom, Date_To);
                 return PartialView("IndexGrid", transactionlistvalue);
@@ -274,7 +286,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                 DateTime ToDateValue = Date_To_Val.AddDays(1);
                 var transactionlistvalue = (from x in db.TBL_ACCOUNTS
                                             join y in db.TBL_MASTER_MEMBER on x.MEM_ID equals y.MEM_ID
-                                            where y.MEM_ID == CurrentMerchant.MEM_ID && x.TRANSACTION_DATE >= Date_From_Val && x.TRANSACTION_DATE <= ToDateValue
+                                            where y.MEM_ID == CurrentMerchant.MEM_ID && x.TRANSACTION_TIME >= Date_From_Val && x.TRANSACTION_TIME <= ToDateValue
                                             select new
                                             {
                                                 SLN = x.ACC_NO,
@@ -548,7 +560,8 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                                           creditStatus = tblcre.CREDIT_STATUS,
                                           OpeningAmt = tblcre.CREDIT_OPENING,
                                           Closingamt = tblcre.CREDITCLOSING,
-                                          creditType = tblcre.CREDIT_TRN_TYPE
+                                          creditType = tblcre.CREDIT_TRN_TYPE,
+                                          STATUS=tblcre.STATUS
                                       }).AsEnumerable().Select(z => new TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
                                       {
                                           SLN = z.sln,
@@ -562,7 +575,8 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                                           CR_Col = (z.creditType == "CR" ? z.CreditAmount.ToString() : "0"),
                                           DR_Col = (z.creditType == "DR" ? z.CreditAmount.ToString() : "0"),
                                           CREDIT_OPENING = z.OpeningAmt,
-                                          CREDIT_TRN_TYPE = z.creditType
+                                          CREDIT_TRN_TYPE = z.creditType,
+                                          STATUS=z.STATUS
                                       }).ToList();
                     return PartialView("MerchantCreditReportindexgrid", memberinfo);
                 }
@@ -588,7 +602,8 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                                           creditStatus = tblcre.CREDIT_STATUS,
                                           OpeningAmt = tblcre.CREDIT_OPENING,
                                           Closingamt = tblcre.CREDITCLOSING,
-                                          creditType = tblcre.CREDIT_TRN_TYPE
+                                          creditType = tblcre.CREDIT_TRN_TYPE,
+                                          STATUS = tblcre.STATUS
                                       }).AsEnumerable().Select(z => new TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
                                       {
                                           SLN = z.sln,
@@ -602,7 +617,8 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                                           CR_Col = (z.creditType == "CR" ? z.CreditAmount.ToString() : "0"),
                                           DR_Col = (z.creditType == "DR" ? z.CreditAmount.ToString() : "0"),
                                           CREDIT_OPENING = z.OpeningAmt,
-                                          CREDIT_TRN_TYPE = z.creditType
+                                          CREDIT_TRN_TYPE = z.creditType,
+                                          STATUS=z.STATUS
                                       }).ToList();
                     return PartialView("MerchantCreditReportindexgrid", memberinfo);
                 }

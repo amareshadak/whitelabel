@@ -20,6 +20,7 @@
                                                     columns.Add(model => model.CREDIT_DATE).Titled("Credit Time").Formatted("{0:T}").Sortable(false).Filterable(false);
 
                                                     columns.Add(model => model.CREDIT_NOTE_DESCRIPTION).Titled("Credit Note").Filterable(true).Sortable(true);
+                                                    columns.Add(model => model.STATUS).Titled("Credit Status").Filterable(true).Sortable(true);
 
                                                 })
                                                 .Css("css-classes")

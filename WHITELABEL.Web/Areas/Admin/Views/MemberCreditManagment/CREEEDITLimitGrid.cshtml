@@ -23,7 +23,7 @@
                                                 columns.Add(model => model.CREDIT_DATE).Titled("Credit Balance Date").Formatted("{0:MM/dd/yyyy}").MultiFilterable(true).Sortable(true);
                                                 columns.Add(model => model.CREDIT_DATE).Titled("Credit Balance Time").Formatted("{0:T}").Filterable(false).Sortable(false);
                                                 columns.Add(model => model.CREDIT_NOTE_DESCRIPTION).Titled("Credit Balance Note").Filterable(true).Sortable(true);
-
+                                                columns.Add(model => model.STATUS).Titled("Credit Status").Filterable(true).Sortable(true);
                                             })
                                 .Css("css-classes")
                                 .AppendCss("table table-striped")

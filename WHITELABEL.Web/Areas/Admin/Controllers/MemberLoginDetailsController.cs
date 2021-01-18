@@ -186,10 +186,25 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 //var GetMember = await db.TBL_MASTER_MEMBER.SingleOrDefaultAsync(x => x.MEM_UNIQUE_ID == User.Email && x.User_pwd == User.Password && x.ACTIVE_MEMBER == true);
                 if (GetMember != null)
                 {
+                    var FlightMarkup = db.TBL_FLIGHT_MARKUP.FirstOrDefault(x => x.MEM_ID == GetMember.MEM_ID);
+                    if (FlightMarkup != null)
+                    {
+                        Session["AIRADDITIONALAMOUNT"] = FlightMarkup.DOMESTIC_MARKUP;
+                        Session["INTERAIRADDITIONALAMOUNT"] = FlightMarkup.INTERNATIONAL_MARKUP;
+                    }
+                    else
+                    {
+                        Session["AIRADDITIONALAMOUNT"] = "0";
+                        Session["INTERAIRADDITIONALAMOUNT"] = "0";
+                    }
+
                     Session["MerchantUserId"] = GetMember.MEM_ID;
                     Session["MerchantUserName"] = GetMember.UName;
+                    Session["MerchantRailID"] = GetMember.RAIL_ID_QUANTITY;
                     Session["MERCHANTCompanyName"] = GetMember.COMPANY;
                     Session["UserType"] = "Merchant";
+                    Session["CreditLimitAmt"] = GetMember.CREDIT_LIMIT.ToString().Replace(".00", "").Trim();
+                    Session["ReservedCreditLimitAmt"] = GetMember.RESERVED_CREDIT_LIMIT.ToString().ToString().Replace(".00", "").Trim();
 
                     HttpCookie AuthCookie;
                     System.Web.Security.FormsAuthentication.SetAuthCookie(GetMember.UName + "||" + Encrypt.EncryptMe(GetMember.MEM_ID.ToString()), true);

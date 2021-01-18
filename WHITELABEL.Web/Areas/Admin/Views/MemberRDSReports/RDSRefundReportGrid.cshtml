@@ -12,10 +12,13 @@
                                     .Grid(Model)
                                     .Build(columns =>
                                     {
-                                        columns.Add(model => model.SLN).Titled("Sln").Filterable(true).Sortable(true);
+                                        //columns.Add(model => model.SLN).Titled("Sln").Filterable(true).Sortable(true);
+                                        columns.Add(model => model.SerialNo).Titled("Sln").Filterable(true).Sortable(true);
                                         columns.Add(model => model.Company_Name).Titled("Company").Filterable(true).Sortable(true);
+                                        columns.Add(model => model.MER_RAIL_ID).Titled("Rail ID").Filterable(true).Sortable(true);
                                         columns.Add(model => model.MERCHANT_NAME).Titled("User Name").Filterable(true).Sortable(true);
                                         columns.Add(model => model.BOOKING_GATEWAY).Titled("RDS Booking Gateway").Filterable(true).Sortable(true);
+                                        columns.Add(model => model.CORRELATION_ID).Titled("Corelation Id").Filterable(true).Sortable(true);
                                         columns.Add(model => model.TRAN_ID).Titled("Txn Id").Filterable(true).Sortable(true);
                                         columns.Add(model => model.PNR).Titled("Pnr").Filterable(true).Sortable(true);
                                         columns.Add(model => model.OPR_ID).Titled("Opr Id").Filterable(true).Sortable(true);
@@ -26,7 +29,7 @@
                                         columns.Add(model => model.APP_CODE).Titled("App Code ").Filterable(true).Sortable(true);
                                         columns.Add(model => model.PAYMODE).Titled("Pay Mode ").Filterable(true).Sortable(true);
                                         columns.Add(model => model.PG_CHARGE).Titled("PG Charges").Filterable(true).Sortable(true);
-                                        columns.Add(model => model.ADDN_CHARGE_MAX_VAL).Titled("Addn. Charges Apply").Filterable(true).Sortable(true);
+                                        columns.Add(model => model.ADDN_CHARGE_AC).Titled("Addn. Charges Apply").Filterable(true).Sortable(true);
                                         columns.Add(model => model.TOTAL_NET_PAYBLE_WITHOUT_GST).Titled("Total Netamt Without GST ").Filterable(true).Sortable(true);
                                         columns.Add(model => model.TOTAL_NET_PAYBLE_GST).Titled("Total Netamt With GST ").Filterable(true).Sortable(true);
                                         columns.Add(model => model.TOTAL_NET_PAYBLE).Titled("Total Netamt").Filterable(true).Sortable(true);
@@ -37,8 +40,8 @@
                                     .Id("my-ajax-grid")
                                     .Pageable(pager =>
                                     {
-                                        pager.PagesToDisplay = 35;
-                                        pager.RowsPerPage = 35;
+                                        pager.PagesToDisplay = 10;
+                                        pager.RowsPerPage = 10;
                                     })
                                     .Filterable()
                                     .Sortable()

@@ -60,6 +60,8 @@
             const CompEmail = response.data.CompEmail;
             const CompContact = response.data.CompContact;
             const CompGSTNo = response.data.CompGSTNo;
+            const FeeAndTaxes = response.data.FeeAndTaxes;
+            const TotalFlightFare = response.data.Total_Amount;
             const FlightResponse = JSON.parse(data);
             $scope.FlightInvoicePrint = FlightResponse;
             $scope.AdditionalCharge = AddnlCharge;
@@ -69,6 +71,8 @@
             $scope.CompanyEmail = CompEmail;
             $scope.CompanyContact = CompContact;
             $scope.CompanyGSTNo = CompGSTNo;
+            $scope.FlightFeeandTaxes = FeeAndTaxes;
+            $scope.FlightTotalFare = TotalFlightFare;
             console.log($scope.FlightInvoicePrint);
         });
     };
@@ -389,7 +393,7 @@
     }
 
     $scope.calculateDateTime = function (DeptDate, DeptTime) {
-        debugger;
+        
         var checkStatus = "";
 
         const CompDate = DeptDate;
@@ -434,6 +438,21 @@
 
     }
    
-
+    $scope.RefundBookingAmount = function (refid, corelation,sln) {
+        const data = { refId: refid, corelation: corelation,SLN_Val:sln };
+        const service = FlightServices.RefundBookingAmountProcess(data);
+        service.then(function (response) {            
+            const Msg = response.data;
+            bootbox.alert({
+                message:Msg,
+                callback: function () {
+                    var URL = "/Merchant/MerchantFlightDetails/BookedFlightInformaiton";
+                    $window.location.href = URL;
+                    //console.log('This was logged in the callback!');
+                }
+            });
+            console.log($scope.FlightInvoicePrint);
+        });
+    };
 
 }])

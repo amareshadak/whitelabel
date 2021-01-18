@@ -246,6 +246,7 @@
     <Compile Include="Areas\Admin\Controllers\MemberCommDisburseSettingController.cs" />
     <Compile Include="Areas\Admin\Controllers\MemberCommissionSlabController.cs" />
     <Compile Include="Areas\Admin\Controllers\MemberCommissiontagController.cs" />
+    <Compile Include="Areas\Admin\Controllers\MemberComplainListController.cs" />
     <Compile Include="Areas\Admin\Controllers\MemberCreditManagmentController.cs" />
     <Compile Include="Areas\Admin\Controllers\MemberDebitCreditRequestController.cs" />
     <Compile Include="Areas\Admin\Controllers\MemberDMRTransactionListController.cs" />
@@ -256,6 +257,7 @@
     <Compile Include="Areas\Admin\Controllers\MemberIssueDebitCreditNoteController.cs" />
     <Compile Include="Areas\Admin\Controllers\MemberKYCVerificationController.cs" />
     <Compile Include="Areas\Admin\Controllers\MemberLoginDetailsController.cs" />
+    <Compile Include="Areas\Admin\Controllers\MemberPaymentGatewayListController.cs" />
     <Compile Include="Areas\Admin\Controllers\MemberProfileUpdateController.cs" />
     <Compile Include="Areas\Admin\Controllers\MemberRailAgentInformationController.cs" />
     <Compile Include="Areas\Admin\Controllers\MemberRailIdApplicationController.cs" />
@@ -320,6 +322,7 @@
     <Compile Include="Areas\Merchant\Controllers\MerchantBusBookingController.cs" />
     <Compile Include="Areas\Merchant\Controllers\MerchantCallBackURLController.cs" />
     <Compile Include="Areas\Merchant\Controllers\MerchantCommissionListController.cs" />
+    <Compile Include="Areas\Merchant\Controllers\MerchantComplainRegisterController.cs" />
     <Compile Include="Areas\Merchant\Controllers\MerchantDashboardController.cs" />
     <Compile Include="Areas\Merchant\Controllers\MerchantDMRBankListController.cs" />
     <Compile Include="Areas\Merchant\Controllers\MerchantDMRDashboardController.cs" />
@@ -458,6 +461,7 @@
     <Compile Include="DTO\FlightApi\AuthenticateDTO.cs" />
     <Compile Include="DTO\FlightApi\BookedTicketCancellationDTO.cs" />
     <Compile Include="DTO\FlightApi\BookTicketResponsesDTO.cs" />
+    <Compile Include="DTO\FlightApi\ErrorOnBookingTimeDTO.cs" />
     <Compile Include="DTO\FlightApi\FlightBookingDTO.cs" />
     <Compile Include="DTO\FlightApi\FlightCancellationHistoryResponseDTO.cs" />
     <Compile Include="DTO\FlightApi\FlightCancellationRequestDTO.cs" />
@@ -503,6 +507,7 @@
     <Content Include="Areas\Admin\AdminHelperJS\MemberApilevel\AutoSuggestion.js" />
     <Content Include="Areas\Admin\AdminHelperJS\MemberApilevel\ChannelLinkJs.js" />
     <Content Include="Areas\Admin\AdminHelperJS\MemberApilevel\ChannelMemberEmailCheck.js" />
+    <Content Include="Areas\Admin\AdminHelperJS\MemberApilevel\ComplainReply.js" />
     <Content Include="Areas\Admin\AdminHelperJS\MemberApilevel\GSTCalculation.js" />
     <Content Include="Areas\Admin\AdminHelperJS\MemberApilevel\Index.js" />
     <Content Include="Areas\Admin\AdminHelperJS\MemberApilevel\MonthlyGSTInvoice.js" />
@@ -541,6 +546,7 @@
     <Content Include="Areas\Merchant\MerchantHelperJS\AEPSJs\Index.js" />
     <Content Include="Areas\Merchant\MerchantHelperJS\AvailableBalance\Index.js" />
     <Content Include="Areas\Merchant\MerchantHelperJS\BroadbandRecharge\Index.js" />
+    <Content Include="Areas\Merchant\MerchantHelperJS\Complain\Index.js" />
     <Content Include="Areas\Merchant\MerchantHelperJS\DeleteBeneficiary\Index.js" />
     <Content Include="Areas\Merchant\MerchantHelperJS\DeleteBeneficiary\VerifyBeneficiaryAccount.js" />
     <Content Include="Areas\Merchant\MerchantHelperJS\DTHRecharge\Index.js" />
@@ -2918,6 +2924,15 @@
     <Content Include="Areas\Admin\Views\MemberCreditManagment\CreditBalanceSettlement.cshtml" />
     <Content Include="Areas\Distributor\Views\DistributorTransactionReport\MemberAccountsReport.cshtml" />
     <Content Include="Areas\Distributor\Views\DistributorTransactionReport\MemberAccountsReportGrid.cshtml" />
+    <Content Include="Areas\Merchant\Views\MerchantComplainRegister\Index.cshtml" />
+    <Content Include="Areas\Merchant\Views\MerchantComplainRegister\IndexGrid.cshtml" />
+    <Content Include="Areas\Admin\Views\MemberComplainList\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\MemberComplainList\IndexGrid.cshtml" />
+    <Content Include="Areas\Merchant\Views\MerchantFlightDetails\FlightComingSoon.cshtml" />
+    <Content Include="Areas\Admin\Views\MemberCreditManagment\CreditCallingList.cshtml" />
+    <Content Include="Areas\Admin\Views\MemberCreditManagment\AllMerchantCreditCallingGrid.cshtml" />
+    <Content Include="Areas\Admin\Views\MemberPaymentGatewayList\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\MemberPaymentGatewayList\IndexGrid.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\dirPagination.js" />

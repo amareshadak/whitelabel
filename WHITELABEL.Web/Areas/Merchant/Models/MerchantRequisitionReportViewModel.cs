@@ -41,9 +41,10 @@
                                                 TRANSACTION_DETAILS = x.TRANSACTION_DETAILS,
                                                 STATUS = x.STATUS,
                                                 APPROVED_BY = x.APPROVED_BY,
-                                                APPROVAL_DATE = x.APPROVAL_DATE,
+                                                //APPROVAL_DATE = x.APPROVAL_DATE,
                                                 SLN = x.SLN,
-                                                PAYMENT_MODE = x.PAYMENT_METHOD
+                                                PAYMENT_MODE = x.PAYMENT_METHOD,
+                                                APPROVAL_DATE = (status=="Pending"?null:x.APPROVAL_DATE)
                                             }).AsEnumerable().Select((z, index) => new TBL_BALANCE_TRANSFER_LOGS
                                             {
                                                 Serial_No = index + 1,
@@ -182,7 +183,7 @@
                                                 TRANSACTION_DETAILS = x.TRANSACTION_DETAILS,
                                                 STATUS = x.STATUS,
                                                 APPROVED_BY = x.APPROVED_BY,
-                                                APPROVAL_DATE = x.APPROVAL_DATE,
+                                                APPROVAL_DATE = (status == "Pending" ? null : x.APPROVAL_DATE),
                                                 SLN = x.SLN,
                                                 PAYMENT_MODE = x.PAYMENT_METHOD
                                             }).AsEnumerable().Select((z, index) => new TBL_BALANCE_TRANSFER_LOGS
@@ -229,7 +230,7 @@
                                                 TRANSACTION_DETAILS = x.TRANSACTION_DETAILS,
                                                 STATUS = x.STATUS,
                                                 APPROVED_BY = x.APPROVED_BY,
-                                                APPROVAL_DATE = x.APPROVAL_DATE,
+                                                APPROVAL_DATE = (status == "Pending" ? null : x.APPROVAL_DATE),
                                                 SLN = x.SLN,
                                                 PAYMENT_MODE = x.PAYMENT_METHOD
                                             }).AsEnumerable().Select((z, index) => new TBL_BALANCE_TRANSFER_LOGS
@@ -270,7 +271,7 @@
                                                 TRANSACTION_DETAILS = x.TRANSACTION_DETAILS,
                                                 STATUS = x.STATUS,
                                                 APPROVED_BY = x.APPROVED_BY,
-                                                APPROVAL_DATE = x.APPROVAL_DATE,
+                                                APPROVAL_DATE = (status == "Pending" ? null : x.APPROVAL_DATE),
                                                 SLN = x.SLN,
                                                 PAYMENT_MODE=x.PAYMENT_METHOD
                                             }).AsEnumerable().Select((z, index) => new TBL_BALANCE_TRANSFER_LOGS

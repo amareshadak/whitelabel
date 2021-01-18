@@ -1,0 +1,39 @@
+﻿@using NonFactors.Mvc.Grid;
+@using WHITELABEL.Web.Helper;
+@model IEnumerable<WHITELABEL.Data.Models.TBL_COMPLAIN_DETAILS>
+@{
+    ViewBag.Title = "IndexGrid";
+    Layout = null;
+}
+@(Html
+                                    .Grid(Model)
+                                    .Build(columns =>
+                                    {
+                                    columns.Add(model => model.SLN).Titled("ID").Filterable(true).Sortable(true);
+                                    columns.Add(model => model.Member_Name).Titled("Member Name").Filterable(true).Sortable(true);
+                                    columns.Add(model => model.Member_Company).Titled("Company Name").Filterable(true).Sortable(true);
+                                    columns.Add(model => model.COMPLAIN_TYPE).Titled("Complain Type").Filterable(true).Sortable(true);
+                                    columns.Add(model => model.COMPLAIN_DETAILS).Titled("Complain Details").Filterable(true).Sortable(true);
+                                    columns.Add(model => model.COMPLAIN_DATE).Titled("Date").Filterable(true).Sortable(true);
+                                    columns.Add(model => model.MEM_ID).Titled("").Encoded(false).Filterable(false).Sortable(false).Titled("Reply")
+                             .RenderedAs(model => "<a data-toggle='modal' data-target='.AdminComplainRegister' id='AdminComplainRegisterID' data-id='complainId' style='color: red; ' onclick='ReplyonComplain(" + model.SLN + ");'><i class='fas fa-user-cog'></i></a> </div>");
+                                    columns.Add(model => model.COMPLAIN_STATUS == true ? "Active" : "Deactive").Titled("Complain Status").Filterable(true).Sortable(true);
+    })
+                                    .Css("css-classes")
+                                    .AppendCss("table table-striped")
+                                    .Empty("No data found")
+                                    .Id("my-ajax-grid")
+                                    .Pageable(pager =>
+                                    {
+        pager.PagesToDisplay = 15;
+        pager.RowsPerPage = 15;
+    })
+                                    .Filterable()
+                                    .Sortable()
+)
+
+<style>
+    .RowColorchange {
+        background-color: sandybrown;
+    }
+</style>

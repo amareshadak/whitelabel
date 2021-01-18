@@ -63,9 +63,10 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
             initpage();
             if (Session["MerchantUserId"] != null)
             {
-                var db = new DBContext();
-              
-                return View();
+                
+                    initpage();
+                    return View();
+                
             }
             else
             {

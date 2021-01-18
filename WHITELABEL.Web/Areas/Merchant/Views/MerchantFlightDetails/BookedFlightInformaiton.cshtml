@@ -73,10 +73,11 @@
                                             <td>Cancel ticket</td>                                            
                                             <td>Check Cancellation Status</td>
                                             <td>Reshedule Process</td>
-                                            <td>Print Invoice</td>
+                                            <td>Customer Invoice</td>
                                             <td>Gross Invoice</td>
                                             <td>Net Invoice</td>
                                             <td>With Out fare Invoice</td>
+                                            <td>Refund Amount</td>
                                         </tr>
                                     </thead>
                                     <tbody ng-repeat="m in GetTicketList.slice(((currentPage-1)*itemsPerPage), ((currentPage)*itemsPerPage))">
@@ -105,8 +106,10 @@
                                             <span class="badge badge-{{m.IS_HOLD=='1'?'warning':'success'}}" style="color:white;font-size:small;width:106px">{{m.BOOKING_STATUS}}</span>
                                            </td>
                                             <td>
-                                                <div ng-show="m.BOOKING_STATUS=='Acknowledged'">
-                                                <a class='btn btn-primary btn-xs btn-block' style="color:white;" data-toggle="modal" data-target="#GetCheckBookingTicketInformation" id='Fetchtransactionvalueid' data-id="{{m.REF_NO}}" ng-click="BookedTicketInformationFetch(m.REF_NO,m.CORELATION_ID)">Check Details</a></div>
+                                                @*<div ng-show="m.BOOKING_STATUS=='Acknowledged'">*@
+                                                <div>
+                                                    <a class='btn btn-primary btn-xs btn-block' style="color:white;" data-toggle="modal" data-target="#GetCheckBookingTicketInformation" id='Fetchtransactionvalueid' data-id="{{m.REF_NO}}" ng-click="BookedTicketInformationFetch(m.REF_NO,m.CORELATION_ID)">Check Details</a>
+                                                </div>
                                             </td>
                                             <td>
                                                 <div ng-show="calculateDateTime(m.DEPT_DATE,m.DEPT_TIME)=='0' && m.BOOKING_STATUS=='Completed'">                                                    
@@ -126,7 +129,7 @@
                                             <td>
                                                 <div ng-show="m.IS_HOLD=='0'">
                                                     <div ng-show="m.BOOKING_STATUS=='Completed'">
-                                                        <a class='btn btn-primary btn-xs btn-block btn-print-ticket' style="color:white;" data-toggle="modal" data-target="#exampleModalCenter" id='PrinttransactionvalueAdminid' data-id="{{m.REF_NO}}" ng-click="PrintInvoice(m.REF_NO,m.PNR)">Print Ticket</a>
+                                                        <a class='btn btn-primary btn-xs btn-block btn-print-ticket' style="color:white;" data-toggle="modal" data-target="#exampleModalCenter" id='PrinttransactionvalueAdminid' data-id="{{m.REF_NO}}" ng-click="PrintInvoice(m.REF_NO,m.PNR)">Print</a>
                                                     </div>
                                                 </div>
                                                 <div ng-show="m.IS_HOLD=='1'">
@@ -136,17 +139,26 @@
                                             </td>
                                            <td>
                                                <div ng-show="m.BOOKING_STATUS=='Completed'">
-                                                   <a class='btn btn-primary btn-xs btn-block btn-print-ticket' style="color:white;" data-toggle="modal" data-target="#PrintPublishFareFlightBooking" id='PrintPublishFareFlightBookingid' data-id="{{m.REF_NO}}" ng-click="PublishFareInvoice(m.REF_NO,m.PNR)">Gross Invoice</a>
+                                                   @*<a class='btn btn-primary btn-xs btn-block btn-print-ticket' disabled style="color:white;" data-toggle="modal" data-target="#PrintPublishFareFlightBooking" id='PrintPublishFareFlightBookingid' data-id="{{m.REF_NO}}" ng-click="PublishFareInvoice(m.REF_NO,m.PNR)">Gross Invoice</a>*@
+                                                   <a class='btn btn-primary btn-xs btn-block btn-print-ticket disabled' style="color:white;">Gross Invoice</a>
                                                </div>
                                             </td>
                                             <td>
                                                 <div ng-show="m.BOOKING_STATUS=='Completed'">
-                                                    <a class='btn btn-primary btn-xs btn-block btn-print-ticket' style="color:white;" data-toggle="modal" data-target="#PrintNetFareFlightBooking" id='PrinttransactionvalueAdminid' data-id="{{m.REF_NO}}" ng-click="NetFareInvoice(m.REF_NO,m.PNR)">Net Invoice</a>
+                                                    @*<a class='btn btn-primary btn-xs btn-block btn-print-ticket' disabled style="color:white;" data-toggle="modal" data-target="#PrintNetFareFlightBooking" id='PrinttransactionvalueAdminid' data-id="{{m.REF_NO}}" ng-click="NetFareInvoice(m.REF_NO,m.PNR)">Net Invoice</a>*@
+                                                    <a class='btn btn-primary btn-xs btn-block btn-print-ticket disabled' style="color:white;">Net Invoice</a>
                                                 </div>
                                             </td>
                                             <td>
                                                 <div ng-show="m.BOOKING_STATUS=='Completed'">
-                                                    <a class='btn btn-primary btn-xs btn-block btn-print-ticket' style="color:white;" data-toggle="modal" data-target="#PrintWithOutInvoiceMerchant" id='PrintWithOutInvoiceAdminid' data-id="{{m.REF_NO}}" ng-click="WithoutFareInvoice(m.REF_NO,m.PNR)">Without fare Invoice</a>
+                                                    @*<a class='btn btn-primary btn-xs btn-block btn-print-ticket' disabled style="color:white;" data-toggle="modal" data-target="#PrintWithOutInvoiceMerchant" id='PrintWithOutInvoiceAdminid' data-id="{{m.REF_NO}}" ng-click="WithoutFareInvoice(m.REF_NO,m.PNR)">Without fare Invoice</a>*@
+                                                    <a class='btn btn-primary btn-xs btn-block btn-print-ticket disabled' style="color:white;" >Without fare Invoice</a>
+
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div ng-show="m.BOOKING_STATUS=='PENDING'">                                          
+                                                    <a class='btn btn-danger btn-xs btn-block' style="color:white;" id='RefundBookingAmount'ng-click="RefundBookingAmount(m.REF_NO,m.CORELATION_ID,m.SLN)">Refund Booking Amount</a>
                                                 </div>
                                             </td>
                                         </tr>
@@ -280,45 +292,29 @@
                                         <div class="col-md-6" style="width:50%; float:left;">
                                             <div class="col-md-12" style="width:100%; float:left;" ><h1>Price Summary</h1></div>
                                             <div class="row col-md-12" style="width:100%; float:left;">
-                                                <div class="col-md-6" style="text-align:left; width:50%; margin-top: 0; margin-bottom: 1rem; float:left;">Airfare Charges </div>
-                                                <div class="col-md-6" style="text-align:right; width:50%; margin-top: 0; margin-bottom: 1rem; float:left;">{{FlightInvoicePrint.PNRDetailsResponse.TicketDetails[0].TotalBaseFare}} INR</div>
+                                                <div class="col-md-6" style="text-align:left; width:50%; margin-top: 0; margin-bottom: 1rem; float:left;">Base Fare</div>
+                                                <div class="col-md-6" style="text-align:right; width:50%; margin-top: 0; margin-bottom: 1rem; float:left;">{{FlightInvoicePrint.PNRDetailsResponse.TicketDetails[0].TotalBaseFare}}  INR</div>
                                             </div>
-                                            <div class="row col-md-12"style="width:100%; float:left;" >
-                                                <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem; float:left;">Tax Fee </div>
-                                                <div class="col-md-4" style="text-align:right; width:25%; margin-top: 0; margin-bottom: 1rem; float:left;">{{FlightInvoicePrint.PNRDetailsResponse.TicketDetails[0].TotalTax}} INR</div>
+                                            <div class="row col-md-12" style="width:100%; float:left;">
+                                                <div class="col-md-6" style="text-align:left; width:50%; margin-top: 0; margin-bottom: 1rem; float:left;">Fees and Taxes</div>
+                                                <div class="col-md-6" style="text-align:right; width:50%; margin-top: 0; margin-bottom: 1rem; float:left;">@*{{FlightInvoicePrint.PNRDetailsResponse.TicketDetails[0].TotalBaseFare}}*@  {{FlightFeeandTaxes}} INR</div>
                                             </div>
+                                         
                                             <div class="row col-md-12"style="width:100%; float:left;" >
-                                                <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem; float:left;">Passenger Service Fee </div>
-                                                <div class="col-md-4" style="text-align:right; width:25%; margin-top: 0; margin-bottom: 1rem; float:left;">{{FlightInvoicePrint.PNRDetailsResponse.TicketDetails[0].TotalPassengerTax}} INR</div>
+                                                <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem; float:left;">Total SuppSGST </div>
+                                                <div class="col-md-4" style="text-align:right; width:25%; margin-top: 0; margin-bottom: 1rem; float:left;">{{FlightInvoicePrint.PNRDetailsResponse.TicketDetails[0].TotalSuppSGST}} INR</div>
                                             </div>
-                                            <div class="row col-md-12"style="width:100%; float:left;" >
-                                                <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem; float:left;">Additional Charges </div>
-                                                <div class="col-md-4" style="text-align:right; width:25%; margin-top: 0; margin-bottom: 1rem; float:left;">{{FlightInvoicePrint.PNRDetailsResponse.TicketDetails[0].TotalAdditionalCharges}} INR</div>
-                                            </div>
-                                            <div class="row col-md-12"style="width:100%; float:left;" >
-                                                <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem;" float:left;>Cute Fee</div>
-                                                <div class="col-md-4" style="text-align:right; width:25%; margin-top: 0; margin-bottom: 1rem; float:left;">{{FlightInvoicePrint.PNRDetailsResponse.TicketDetails[0].TotalCuteFee}} INR</div>
-                                            </div>
-                                            <div class="row col-md-12"style="width:100%; float:left;" >
-                                                <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem; float:left;">Transactional Charge</div>
-                                                <div class="col-md-4" style="text-align:right; width:25%; margin-top: 0; margin-bottom: 1rem; float:left;">{{AdditionalCharge}} INR</div>
-                                            </div>
-                                            <div class="row col-md-12"style="width:100%; float:left;" >
-                                                <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem; float:left;">Processing Charges</div>
-                                                <div class="col-md-4" style="text-align:right; width:25%; margin-top: 0; margin-bottom: 1rem; float:left;">{{ProcessingCharge}} INR</div>
-                                            </div>
-
-                                            <div class="row col-md-12"style="width:100%; float:left;" >
-                                                <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem; float:left;">CGST For West Bengal  </div>
+                                            <div class="row col-md-12" style="width:100%; float:left;">
+                                                <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem; float:left;">Total SuppCGST  </div>
                                                 <div class="col-md-4" style="text-align:right; width:25%; margin-top: 0; margin-bottom: 1rem; float:left;">{{FlightInvoicePrint.PNRDetailsResponse.TicketDetails[0].TotalSuppCGST}} INR</div>
                                             </div>
-                                            <div class="row col-md-12"style="width:100%; float:left;" >
-                                                <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem; float:left;">SGST For West Bengal </div>
-                                                <div class="col-md-4" style="text-align:right; width:25%; margin-top: 0; margin-bottom: 1rem; float:left;">{{FlightInvoicePrint.PNRDetailsResponse.TicketDetails[0].TotalSuppSGST}} INR</div>
+                                            <div class="row col-md-12" style="width:100%; float:left;">
+                                                <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem; float:left;">Total SuppIGST  </div>
+                                                <div class="col-md-4" style="text-align:right; width:25%; margin-top: 0; margin-bottom: 1rem; float:left;">{{FlightInvoicePrint.PNRDetailsResponse.TicketDetails[0].TotalSuppIGST}} INR</div>
                                             </div>
                                             <div class="row col-md-12" style="border-bottom:1px solid #ccc; border-top:1px solid #ccc; padding:20px 0; margin-top:10px; float:left; width:100%;">
                                                 <div class="col-md-6" style="text-align:left; width:50%; margin-top: 0; margin-bottom: 1rem; float:left;"><strong>Total</strong> </div>
-                                                <div class="col-md-6" style="text-align:right; width:50%; margin-top: 0; margin-bottom: 1rem; float:left;"><strong>{{FlightInvoicePrint.PNRDetailsResponse.TicketDetails[0].TotalAmount}} INR</strong></div>
+                                                <div class="col-md-6" style="text-align:right; width:50%; margin-top: 0; margin-bottom: 1rem; float:left;"><strong>@*{{FlightInvoicePrint.PNRDetailsResponse.TicketDetails[0].TotalAmount}}*@{{FlightTotalFare}} INR</strong></div>
                                             </div>
                                         </div>
                                         <div class="col-md-6" style="width:47%; float:left; padding-left:15px;" >
@@ -496,8 +492,8 @@
                                         <h1 class="col-md-12" style="width:100%;">
                                             GST Information
                                         </h1>
-                                        <p class="col-md-12" style="width:100%; margin-top: 0; margin-bottom: 1rem;">GST Company Name : <strong>ENCOREDIGITECHPVTLTD</strong></p>
-                                        <p class="col-md-12" style="width:100%; margin-top: 0; margin-bottom: 1rem;">GST Number :<strong>19AACCT7467P1ZE</strong></p>
+                                        <p class="col-md-12" style="width:100%; margin-top: 0; margin-bottom: 1rem;">GST Company Name : <strong>{{CompanyName}}</strong></p>
+                                        <p class="col-md-12" style="width:100%; margin-top: 0; margin-bottom: 1rem;">GST Number :<strong>{{CompanyGSTNo}}</strong></p>
                                     </div>
                                     <div class="row col-md-12" style="width:100%;">
                                         <div class="col-md-6" style="width:50%;">
@@ -508,12 +504,8 @@
                                                 <div class="col-md-4" style="text-align:right; width:25%; margin-top: 0; margin-bottom: 1rem;">{{FlightInvoicePrint.PNRDetailsResponse.TicketDetails[0].TotalBaseFare}} INR</div>
                                             </div>
                                             <div class="row col-md-12">
-                                                <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem;">Tax Fee </div>
-                                                <div class="col-md-4" style="text-align:right; width:25%; margin-top: 0; margin-bottom: 1rem;">{{FlightInvoicePrint.PNRDetailsResponse.TicketDetails[0].TotalTax}} INR</div>
-                                            </div>
-                                            <div class="row col-md-12">
-                                                <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem;">Passenger Service Fee </div>
-                                                <div class="col-md-4" style="text-align:right; width:25%; margin-top: 0; margin-bottom: 1rem;">{{FlightInvoicePrint.PNRDetailsResponse.TicketDetails[0].TotalPassengerTax}} INR</div>
+                                                <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem;">Airport Fee </div>
+                                                <div class="col-md-4" style="text-align:right; width:25%; margin-top: 0; margin-bottom: 1rem;">{{FlightInvoicePrint.PNRDetailsResponse.TicketDetails[0].TotalAirPortFee}} INR</div>
                                             </div>
                                             <div class="row col-md-12">
                                                 <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem;">Additional Charges </div>
@@ -531,19 +523,18 @@
                                                 <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem;">Processing Charges</div>
                                                 <div class="col-md-4" style="text-align:right; width:25%; margin-top: 0; margin-bottom: 1rem;">{{ProcessingCharge}} INR</div>
                                             </div>
-
                                             <div class="row col-md-12">
-                                                <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem;">CGST For West Bengal  </div>
-                                                <div class="col-md-4" style="text-align:right; width:25%; margin-top: 0; margin-bottom: 1rem;">{{FlightInvoicePrint.PNRDetailsResponse.TicketDetails[0].TotalSuppCGST}} INR</div>
-
-                                            </div>
-
-                                            <div class="row col-md-12">
-                                                <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem;">SGST For West Bengal </div>
+                                                <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem;">S-GST </div>
                                                 <div class="col-md-4" style="text-align:right; width:25%; margin-top: 0; margin-bottom: 1rem;">{{FlightInvoicePrint.PNRDetailsResponse.TicketDetails[0].TotalSuppSGST}} INR</div>
-
                                             </div>
-
+                                            <div class="row col-md-12">
+                                                <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem;">C-GST </div>
+                                                <div class="col-md-4" style="text-align:right; width:25%; margin-top: 0; margin-bottom: 1rem;">{{FlightInvoicePrint.PNRDetailsResponse.TicketDetails[0].TotalSuppCGST}} INR</div>
+                                            </div>
+                                            <div class="row col-md-12">
+                                                <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem;">I-GST </div>
+                                                <div class="col-md-4" style="text-align:right; width:25%; margin-top: 0; margin-bottom: 1rem;">{{FlightInvoicePrint.PNRDetailsResponse.TicketDetails[0].TotalSuppIGST}} INR</div>
+                                            </div>
                                             <div class="row col-md-12" style="border-bottom:1px solid #ccc; border-top:1px solid #ccc; padding:20px 0; margin-top:10px;">
                                                 <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem;"><strong>Total</strong> </div>
                                                 <div class="col-md-4" style="text-align:right; width:25%; margin-top: 0; margin-bottom: 1rem;"><strong>{{FlightInvoicePrint.PNRDetailsResponse.TicketDetails[0].TotalAmount}} INR</strong></div>
@@ -1211,12 +1202,9 @@
                                             </p>
                                         </div>
                                     </div>
-
                                     <div class="row col-md-12" style="margin-top:20px; width:100%; float:left;">
                                         <h1 style="color: #fe6601; font-size: 2.0325rem;">{{FlightInvoicePrint.PNRDetailsResponse.TicketDetails[0].FlightFareDetails[0].AirlineName}} Passengers</h1>
                                     </div>
-
-
                                     <div class="row col-md-12" style="margin-top:20px; width:100%; float:left;" ng-repeat="objpssng in FlightInvoicePrint.PNRDetailsResponse.TicketDetails[0].PassengerDetails">
                                         <p class="col-md-12" style="margin-top: 0; margin-bottom: 1rem; width:100%;">Passenger {{$index +1}}</p>
                                         <h5 class="col-md-12" style="font-size: 1.01625rem;color: #fe6601; width:100%;">{{$index +1}}) {{objpssng.Title}} {{objpssng.FirstName}} {{objpssng.LastName}}</h5>
@@ -1268,18 +1256,13 @@
                                     <div class="row col-md-12" style="width:100%; float:left;">
                                         <div class="col-md-6" style="width:50%; float:left;">
                                             <div class="col-md-12" style="width:100%; float:left;"><h1>Price Summary</h1></div>
-
                                             <div class="row col-md-12" style="width:100%; float:left;">
                                                 <div class="col-md-6" style="text-align:left; width:50%; margin-top: 0; margin-bottom: 1rem; float:left;">Airfare Charges </div>
                                                 <div class="col-md-6" style="text-align:right; width:50%; margin-top: 0; margin-bottom: 1rem; float:left;">{{FlightInvoicePrint.PNRDetailsResponse.TicketDetails[0].TotalBaseFare}} INR</div>
                                             </div>
                                             <div class="row col-md-12" style="width:100%; float:left;">
-                                                <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem; float:left;">Tax Fee </div>
-                                                <div class="col-md-4" style="text-align:right; width:25%; margin-top: 0; margin-bottom: 1rem; float:left;">{{FlightInvoicePrint.PNRDetailsResponse.TicketDetails[0].TotalTax}} INR</div>
-                                            </div>
-                                            <div class="row col-md-12" style="width:100%; float:left;">
-                                                <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem; float:left;">Passenger Service Fee </div>
-                                                <div class="col-md-4" style="text-align:right; width:25%; margin-top: 0; margin-bottom: 1rem; float:left;">{{FlightInvoicePrint.PNRDetailsResponse.TicketDetails[0].TotalPassengerTax}} INR</div>
+                                                <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem; float:left;">Airport Fee </div>
+                                                <div class="col-md-4" style="text-align:right; width:25%; margin-top: 0; margin-bottom: 1rem; float:left;">{{FlightInvoicePrint.PNRDetailsResponse.TicketDetails[0].TotalAirPortFee}} INR</div>
                                             </div>
                                             <div class="row col-md-12" style="width:100%; float:left;">
                                                 <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem; float:left;">Additional Charges </div>
@@ -1297,19 +1280,18 @@
                                                 <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem; float:left;">Processing Charges</div>
                                                 <div class="col-md-4" style="text-align:right; width:25%; margin-top: 0; margin-bottom: 1rem; float:left;">{{ProcessingCharge}} INR</div>
                                             </div>
-
                                             <div class="row col-md-12" style="width:100%; float:left;">
-                                                <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem; float:left;">CGST For West Bengal  </div>
-                                                <div class="col-md-4" style="text-align:right; width:25%; margin-top: 0; margin-bottom: 1rem; float:left;">{{FlightInvoicePrint.PNRDetailsResponse.TicketDetails[0].TotalSuppCGST}} INR</div>
-
-                                            </div>
-
-                                            <div class="row col-md-12" style="width:100%; float:left;">
-                                                <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem; float:left;">SGST For West Bengal </div>
+                                                <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem; float:left;">S-GST </div>
                                                 <div class="col-md-4" style="text-align:right; width:25%; margin-top: 0; margin-bottom: 1rem; float:left;">{{FlightInvoicePrint.PNRDetailsResponse.TicketDetails[0].TotalSuppSGST}} INR</div>
-
                                             </div>
-
+                                            <div class="row col-md-12" style="width:100%; float:left;">
+                                                <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem; float:left;">C-GST  </div>
+                                                <div class="col-md-4" style="text-align:right; width:25%; margin-top: 0; margin-bottom: 1rem; float:left;">{{FlightInvoicePrint.PNRDetailsResponse.TicketDetails[0].TotalSuppCGST}} INR</div>
+                                            </div>
+                                            <div class="row col-md-12" style="width:100%; float:left;">
+                                                <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem; float:left;">I-GST  </div>
+                                                <div class="col-md-4" style="text-align:right; width:25%; margin-top: 0; margin-bottom: 1rem; float:left;">{{FlightInvoicePrint.PNRDetailsResponse.TicketDetails[0].TotalSuppIGST}} INR</div>
+                                            </div>
                                             <div class="row col-md-12" style="border-bottom:1px solid #ccc; border-top:1px solid #ccc; padding:20px 0; margin-top:10px; float:left; width:100%;">
                                                 <div class="col-md-6" style="text-align:left; width:50%; margin-top: 0; margin-bottom: 1rem; float:left;"><strong>Total</strong> </div>
                                                 <div class="col-md-6" style="text-align:right; width:50%; margin-top: 0; margin-bottom: 1rem; float:left;"><strong>{{FlightInvoicePrint.PNRDetailsResponse.TicketDetails[0].TotalAmount}} INR</strong></div>
@@ -1502,12 +1484,8 @@
                                                 <div class="col-md-6" style="text-align:right; width:50%; margin-top: 0; margin-bottom: 1rem; float:left;">{{FlightInvoicePrint.PNRDetailsResponse.TicketDetails[0].TotalBaseFare}} INR</div>
                                             </div>
                                             <div class="row col-md-12" style="width:100%; float:left;">
-                                                <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem; float:left;">Tax Fee </div>
-                                                <div class="col-md-4" style="text-align:right; width:25%; margin-top: 0; margin-bottom: 1rem; float:left;">{{FlightInvoicePrint.PNRDetailsResponse.TicketDetails[0].TotalTax}} INR</div>
-                                            </div>
-                                            <div class="row col-md-12" style="width:100%; float:left;">
-                                                <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem; float:left;">Passenger Service Fee </div>
-                                                <div class="col-md-4" style="text-align:right; width:25%; margin-top: 0; margin-bottom: 1rem; float:left;">{{FlightInvoicePrint.PNRDetailsResponse.TicketDetails[0].TotalPassengerTax}} INR</div>
+                                                <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem; float:left;">Airport Fee </div>
+                                                <div class="col-md-4" style="text-align:right; width:25%; margin-top: 0; margin-bottom: 1rem; float:left;">{{FlightInvoicePrint.PNRDetailsResponse.TicketDetails[0].TotalAirPortFee}} INR</div>
                                             </div>
                                             <div class="row col-md-12" style="width:100%; float:left;">
                                                 <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem; float:left;">Additional Charges </div>
@@ -1517,27 +1495,18 @@
                                                 <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem;" float:left;>Cute Fee</div>
                                                 <div class="col-md-4" style="text-align:right; width:25%; margin-top: 0; margin-bottom: 1rem; float:left;">{{FlightInvoicePrint.PNRDetailsResponse.TicketDetails[0].TotalCuteFee}} INR</div>
                                             </div>
-                                            @*<div class="row col-md-12" style="width:100%; float:left;">
-                                                <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem; float:left;">Transactional Charge</div>
-                                                <div class="col-md-4" style="text-align:right; width:25%; margin-top: 0; margin-bottom: 1rem; float:left;">{{AdditionalCharge}} INR</div>
-                                            </div>
                                             <div class="row col-md-12" style="width:100%; float:left;">
-                                                <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem; float:left;">Processing Charges</div>
-                                                <div class="col-md-4" style="text-align:right; width:25%; margin-top: 0; margin-bottom: 1rem; float:left;">{{ProcessingCharge}} INR</div>
-                                            </div>*@
-
-                                            <div class="row col-md-12" style="width:100%; float:left;">
-                                                <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem; float:left;">CGST For West Bengal  </div>
-                                                <div class="col-md-4" style="text-align:right; width:25%; margin-top: 0; margin-bottom: 1rem; float:left;">{{FlightInvoicePrint.PNRDetailsResponse.TicketDetails[0].TotalSuppCGST}} INR</div>
-
-                                            </div>
-
-                                            <div class="row col-md-12" style="width:100%; float:left;">
-                                                <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem; float:left;">SGST For West Bengal </div>
+                                                <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem; float:left;">S-GST </div>
                                                 <div class="col-md-4" style="text-align:right; width:25%; margin-top: 0; margin-bottom: 1rem; float:left;">{{FlightInvoicePrint.PNRDetailsResponse.TicketDetails[0].TotalSuppSGST}} INR</div>
-
                                             </div>
-
+                                            <div class="row col-md-12" style="width:100%; float:left;">
+                                                <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem; float:left;">C-GST  </div>
+                                                <div class="col-md-4" style="text-align:right; width:25%; margin-top: 0; margin-bottom: 1rem; float:left;">{{FlightInvoicePrint.PNRDetailsResponse.TicketDetails[0].TotalSuppCGST}} INR</div>
+                                            </div>
+                                            <div class="row col-md-12" style="width:100%; float:left;">
+                                                <div class="col-md-8" style="text-align:left; width:75%; margin-top: 0; margin-bottom: 1rem; float:left;">I-GST  </div>
+                                                <div class="col-md-4" style="text-align:right; width:25%; margin-top: 0; margin-bottom: 1rem; float:left;">{{FlightInvoicePrint.PNRDetailsResponse.TicketDetails[0].TotalSuppIGST}} INR</div>
+                                            </div>
                                             <div class="row col-md-12" style="border-bottom:1px solid #ccc; border-top:1px solid #ccc; padding:20px 0; margin-top:10px; float:left; width:100%;">
                                                 <div class="col-md-6" style="text-align:left; width:50%; margin-top: 0; margin-bottom: 1rem; float:left;"><strong>Total</strong> </div>
                                                 <div class="col-md-6" style="text-align:right; width:50%; margin-top: 0; margin-bottom: 1rem; float:left;"><strong>{{FlightInvoicePrint.PNRDetailsResponse.TicketDetails[0].TotalAmount}} INR</strong></div>

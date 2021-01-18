@@ -391,7 +391,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                             ASSIGN_DATE = DateTime.Now,
                             STATUS = 0,
                             ASSIGN_TYPE = "MARK UP ASSIGN",
-                            DIST_ID= MemberCurrentUser.MEM_ID
+                            DIST_ID= MemberCurrentUser.MEM_ID,
+                            GST_APPLY="NO"
                     };
                         db.TBL_FLIGHT_MARKUP.Add(objflight);
                         
@@ -402,7 +403,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
 
                         string name = value.MEMBER_NAME;
                         string sub = "Welcome to Boom Travels.";
-                        string usermsgdesc = "Dear <b>" + value.MEMBER_NAME + "</b> You have successfully joined in Boom Travels.<br /><p>Your User Id:- " + UniqId + " <br/>Password:- " + value.User_pwd + " </p> "+"<br /> Regards, <br/>< br />BOOM Travels";
+                        string usermsgdesc = "Dear <b>" + value.MEMBER_NAME + "</b> You have successfully joined in Boom Travels.<br /><p>Your User Id:- " + UniqId + " <br/>Password:- " + value.User_pwd + " </p> "+"<br /> Regards, <br/><br />BOOM Travels";
                         EmailHelper emailhelper = new EmailHelper();
                         string usermsgbody = emailhelper.GetEmailTemplate(name, usermsgdesc, "UserEmailTemplate.html");
                         emailhelper.SendUserEmail(value.EMAIL_ID, sub, usermsgbody);
@@ -727,7 +728,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                     #region Email Code done by sayan at 13-10-2020
                     string name = meminfo.MEMBER_NAME;
                     string password = meminfo.User_pwd;
-                    string Regmsg = "Hi <b>" + meminfo.UName + " " + "(" + meminfo.MEMBER_NAME + ")" + "</b>. Your Admin has been sent your login credentials. Your Boom Travels Login USER ID:- <b>" + meminfo.MEM_UNIQUE_ID + "</b> and  PASSWORD is:- <b>" + password + "</b>.<br /><br/> Regards, <br/><br/>Boom Travels.";
+                    string Regmsg = "Hi <b>" + meminfo.UName + " " + "(" + meminfo.MEMBER_NAME + ")" + "</b>. Your Admin has sent your login credentials. Your Boom Travels Login USER ID:- <b>" + meminfo.MEM_UNIQUE_ID + "</b> and  PASSWORD is:- <b>" + password + "</b>.<br />Your Rail Id:- <b>" + (meminfo.RAIL_ID==null?"Not Tagged": meminfo.RAIL_ID) + "</b><br/><br/> Regards, <br/><br/>Boom Travels.";
                     EmailHelper emailhelper = new EmailHelper();
                     string usermsgbody = emailhelper.GetEmailTemplate(name, Regmsg, "UserEmailTemplate.html");
                     emailhelper.SendUserEmail(meminfo.EMAIL_ID.Trim(), "You Have Received Your Boom Travels User Id & Password!", usermsgbody);
@@ -1335,5 +1336,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
             }
             
         }
+
+     
     }
 }

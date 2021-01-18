@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>White Label</title>
+    <title>Admin</title>
     <link href="https://fonts.googleapis.com/css?family=Nunito:300,400,400i,600,700,800,900" rel="stylesheet">
     @*<link href="~/newpanel/assets/styles/css/themes/admin_lite_purple_min.css" rel="stylesheet" />*@
     <link href="~/newpanel/assets/styles/css/themes/lite-purple.min.css" rel="stylesheet" />
@@ -167,6 +167,13 @@
                         <div class="triangle"></div>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-item-hold" href="@Url.Action("Index","MemberComplainList", new {area="Admin" })">
+                            <i class="fas fa-user-cog nav-icon"></i>
+                            <span class="nav-text">Complain List</span>
+                        </a>
+                        <div class="triangle"></div>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-item-hold" href="@Url.Action("Index","MemberBankDetails", new {area="Admin" })">
                             <i class="fa fa-university nav-icon"></i>
                             <span class="nav-text">Bank Details</span>
@@ -220,13 +227,13 @@
                     <li class="nav-item">
                         <a href="@Url.Action("GetAllRDSBookingList","MemberRDSFileProcessing", new {area= "Admin" })">
                             <i class="fa fa-location-arrow nav-icon"></i>
-                            <span class="item-name">Book File List</span>
+                            <span class="item-name">Uploaded Booking List</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="@Url.Action("AllRDSBookingList","MemberRDSFileProcessing", new {area= "Admin" })">
                             <i class="fa fa-location-arrow nav-icon"></i>
-                            <span class="item-name">Booked Trigger Result</span>
+                            <span class="item-name">Booked Trigger Results</span>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -244,13 +251,13 @@
                     <li class="nav-item">
                         <a href="@Url.Action("GetAllRDSCancellationList","MemberRDSFileProcessing", new {area= "Admin" })">
                             <i class="fa fa-location-arrow nav-icon"></i>
-                            <span class="item-name">Cancellation File List</span>
+                            <span class="item-name">Uploaded Cancellation List</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="@Url.Action("AllRDSBookingList","MemberRDSFileProcessing", new {area= "Admin" })">
+                        <a href="@Url.Action("AllRDSCancellationTRList","MemberRDSFileProcessing", new {area= "Admin" })">
                             <i class="fa fa-location-arrow nav-icon"></i>
-                            <span class="item-name">Booked or Non Booked PNR</span>
+                            <span class="item-name">Cancelled Trigger Results</span>
                         </a>
                     </li>
                 </ul>
@@ -294,6 +301,12 @@
                             <span class="item-name">Credit Limit Report</span>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("CreditCallingList","MemberCreditManagment", new {area="Admin" })">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name">Credit Calling List</span>
+                        </a>
+                    </li>
                 </ul>
 
                 <ul class="childNav" data-parent="Wallets">
@@ -325,6 +338,12 @@
                         <a href="@Url.Action("AllMerchantCreditRequisitionReport", "MemberRequisition", new {area="Admin" })">
                             <i class="fa fa-location-arrow nav-icon"></i>
                             <span class="item-name">Approved Credit Requisition</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("Index", "MemberPaymentGatewayList", new {area="Admin" })">
+                            <i class="fa fa-location-arrow nav-icon"></i>
+                            <span class="item-name">Pending Payment Gateway List</span>
                         </a>
                     </li>
                     <li class="nav-item">

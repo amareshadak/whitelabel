@@ -545,7 +545,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                             string Regmsg = "Hi " + whiteleveluser.MEM_UNIQUE_ID + "(" + whiteleveluser.MEMBER_NAME + ")." + " You have successfully updated requisition of amount:- " + objval.AMOUNT + " to " + getsuperior.MEM_UNIQUE_ID + ".<br /> Regards, <br/><br/>BOOM Travels";
                             EmailHelper emailhelper = new EmailHelper();
                             string msgbody = emailhelper.GetEmailTemplate(name, Regmsg, "UserEmailTemplate.html");
-                            emailhelper.SendUserEmail(whiteleveluser.EMAIL_ID.Trim(), "Your requisition has been updated successfully!", msgbody);
+                            emailhelper.SendUserEmail(whiteleveluser.EMAIL_ID.Trim(), "Requisition has been updated successfully!", msgbody);
                             #endregion
 
                             //EmailHelper objsms = new EmailHelper();
@@ -593,11 +593,21 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                             await db.SaveChangesAsync();
 
                             #region Email Code done by Sayan at 11-10-2020
-                            string name = whiteleveluser.MEMBER_NAME;
+                                string name = whiteleveluser.MEMBER_NAME;
                             string Regmsg = "Hi " + whiteleveluser.MEM_UNIQUE_ID + "(" + whiteleveluser.MEMBER_NAME + ")." + " You have successfully updated requisition of amount:- " + objval.AMOUNT + " to " + getsuperior.MEM_UNIQUE_ID + ".<br /> Regards, <br/><br/>BOOM Travels";
                             EmailHelper emailhelper = new EmailHelper();
                             string msgbody = emailhelper.GetEmailTemplate(name, Regmsg, "UserEmailTemplate.html");
                             emailhelper.SendUserEmail(whiteleveluser.EMAIL_ID.Trim(), "Your requisition has been updated successfully!", msgbody);
+                            if (objval.RequisitionSendTO != "Distributor")
+                            {
+                                var GetWLP = db.TBL_MASTER_MEMBER.FirstOrDefault(x=>x.MEM_ID== whiteleveluser.UNDER_WHITE_LEVEL);
+                                string WLPname = GetWLP.MEMBER_NAME;
+                                string SUb_val= whiteleveluser.MEM_UNIQUE_ID+" ("+ whiteleveluser.MEMBER_NAME+")"+" send a requisition.";
+                                string WLPRegmsg = "Hi " + GetWLP.MEM_UNIQUE_ID + " (" + GetWLP.MEMBER_NAME + ").<br />" + whiteleveluser.MEM_UNIQUE_ID +" ("+ whiteleveluser.MEMBER_NAME +"), send a requisition of amount:- " + objval.AMOUNT + " Rs.<br /> Regards, <br/><br/>BOOM Travels";
+                                
+                                string WLP_msgbody = emailhelper.GetEmailTemplate(WLPname, WLPRegmsg, "UserEmailTemplate.html");
+                                emailhelper.SendUserEmail("payments.requisition@gmail.com", SUb_val, WLP_msgbody);
+                            }
                             #endregion
 
                             //EmailHelper objsms = new EmailHelper();
@@ -626,36 +636,68 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
             if (Session["MerchantUserId"] != null)
             {
                 var db = new DBContext();
-                string COrelationID = Settings.GetUniqueKey(CurrentMerchant.MEM_ID.ToString());
-                string amount = objval.AMOUNT.ToString();
-                //string UpdateAccount = AccountBalance(amount);
-                string salt = System.Configuration.ConfigurationSettings.AppSettings["EaseBuzzSaltKey"];
-                string Key = System.Configuration.ConfigurationSettings.AppSettings["EaseBuzzKey"];
-                string env = System.Configuration.ConfigurationSettings.AppSettings["EaseBuzzEnviroment"];
-                //string salt = "4NGY1NYJJP";
-                // string Key = "W8A3NHRAWY";
-                //string env = "test";
-                var memberinfo = db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == CurrentMerchant.MEM_ID);
-                //Session["MerchantUserId"] = memberinfo.MEM_ID;
-                //Session["MerchantPassword"] = memberinfo.SECURITY_PIN_MD5;
-                string firstname = memberinfo.MEMBER_NAME.Trim();
-                string email = memberinfo.EMAIL_ID.Trim();
-                string phone = memberinfo.MEMBER_MOBILE.Trim();
-                string productinfo = "Easebuzz payment integration text";
-                //string surl = "http://b2b.boomtravels.com/Merchant/MerchantRequisition/EasepaySuccess";
-                //string furl = "http://b2b.boomtravels.com/Merchant/MerchantRequisition/EasepaySuccess";
-                string surl = "http://localhost:56049/Merchant/MerchantPaymentgateway/EasepaySuccess";
-                string furl = "http://localhost:56049/Merchant/MerchantPaymentgateway/EasepaySuccess";
-                string Txnid = COrelationID.Trim();
-                string UDF1 = memberinfo.MEM_ID.ToString();
-                string UDF2 = memberinfo.User_pwd.ToString();
-                string UDF3 = "";
-                string UDF4 = "";
-                string UDF5 = "";
-                string Show_payment_mode = "";
-                Easebuzz t = new Easebuzz(salt, Key, env);
-                string strForm = t.initiatePaymentAPI(amount, firstname, email, phone, productinfo, surl, furl, Txnid, UDF1, UDF2, UDF3, UDF4, UDF5, Show_payment_mode);
-                return Content(strForm, System.Net.Mime.MediaTypeNames.Text.Html);
+                using (System.Data.Entity.DbContextTransaction ContextTransaction = db.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        string COrelationID = Settings.GetUniqueKey(CurrentMerchant.MEM_ID.ToString());
+                        //string amount = objval.AMOUNT.ToString();
+                        string amount = objval.BANK_CHARGES.ToString();
+                        string WalletAmount = objval.AMOUNT.ToString();
+                        string salt = System.Configuration.ConfigurationSettings.AppSettings["EaseBuzzSaltKey"];
+                        string Key = System.Configuration.ConfigurationSettings.AppSettings["EaseBuzzKey"];
+                        string env = System.Configuration.ConfigurationSettings.AppSettings["EaseBuzzEnviroment"];
+                        //string salt = "4NGY1NYJJP";
+                        // string Key = "W8A3NHRAWY";
+                        //string env = "test";
+                        var memberinfo = db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == CurrentMerchant.MEM_ID);
+                        //Session["MerchantUserId"] = memberinfo.MEM_ID;
+                        //Session["MerchantPassword"] = memberinfo.SECURITY_PIN_MD5;
+                        string firstname = memberinfo.MEMBER_NAME.Trim();
+                        string email = memberinfo.EMAIL_ID.Trim();
+                        string phone = memberinfo.MEMBER_MOBILE.Trim();
+                        string productinfo = "Easebuzz payment integration text";
+                        string surl = "http://boomtravels.com/Merchant/MerchantPaymentgateway/EasepaySuccess";
+                        string furl = "http://boomtravels.com/Merchant/MerchantPaymentgateway/EasepaySuccess";
+                        //string surl = "http://localhost:56049/Merchant/MerchantPaymentgateway/EasepaySuccess";
+                        //string furl = "http://localhost:56049/Merchant/MerchantPaymentgateway/EasepaySuccess";
+                        string Txnid = COrelationID.Trim();
+                        string UDF1 = memberinfo.MEM_ID.ToString();
+                        string UDF2 = memberinfo.User_pwd.ToString();
+                        string UDF3 = WalletAmount;
+                        string UDF4 = "";
+                        string UDF5 = "";
+                        string Show_payment_mode = objval.PAYMENT_METHOD;
+                        TBL_PAYMENT_GATEWAY_RESPONSE objres = new TBL_PAYMENT_GATEWAY_RESPONSE()
+                        {
+                            MEM_ID = CurrentMerchant.MEM_ID,
+                            RES_MSG = "",
+                            RES_DATE = DateTime.Now,
+                            RES_STATUS = "Pening",
+                            PAY_REF_NO = "",
+                            CORELATION_ID = Txnid,
+                            EMAIL_ID = CurrentMerchant.EMAIL_ID,
+                            MOBILE_No = CurrentMerchant.MEMBER_MOBILE,
+                            TRANSACTION_AMOUNT = objval.AMOUNT,
+                            RES_CODE = "",
+                            TRANSACTION_DETAILS = "Process Pending",
+                            AMOUNT_WITH_GST = objval.BANK_CHARGES,
+                            STATUS = 0
+                        };
+                        db.TBL_PAYMENT_GATEWAY_RESPONSE.Add(objres);
+                        db.SaveChanges();
+                        ContextTransaction.Commit();
+                        Easebuzz t = new Easebuzz(salt, Key, env);
+                        //string strForm = t.initiatePaymentAPI(amount, firstname, email, phone, productinfo, surl, furl, Txnid, UDF1, UDF2, UDF3, UDF4, UDF5, Show_payment_mode);
+                        string strForm = t.initiatePaymentAPI(amount, firstname, email, phone, productinfo, surl, furl, Txnid, UDF1, UDF2, UDF3, UDF4, UDF5, Show_payment_mode);
+                        return Content(strForm, System.Net.Mime.MediaTypeNames.Text.Html);
+                    }
+                    catch (Exception ex)
+                    {
+                        ContextTransaction.Rollback();
+                        throw ex;
+                    }
+                }
             }
             else
             {
@@ -669,7 +711,7 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
             }
 
 
-            
+
         }
 
         [HttpPost]
@@ -725,11 +767,20 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                         CREDIT_OPENING = CR_Closinging,
                         CREDITCLOSING = ADD_CR_Closinging,
                         CREDIT_TRN_TYPE = "CR",
-                        CORELATIONID = COrelationID
+                        CORELATIONID = COrelationID,
+                        STATUS="PENDING"
                     };
                     db.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION.Add(objLimit);
                     db.SaveChanges();
                     ContextTransaction.Commit();
+                    EmailHelper emailhelper = new EmailHelper();
+                    var GetWLP = db.TBL_MASTER_MEMBER.FirstOrDefault(x => x.MEM_ID == CurrentMerchant.UNDER_WHITE_LEVEL);
+                    string WLPname = GetWLP.MEMBER_NAME;
+                    string SUb_val = CurrentMerchant.MEM_UNIQUE_ID + " (" + CurrentMerchant.MEMBER_NAME + ")" + " send a credit requisition.";
+                    string WLPRegmsg = "Hi " + GetWLP.MEM_UNIQUE_ID + " (" + GetWLP.MEMBER_NAME + ").<br />" + CurrentMerchant.MEM_UNIQUE_ID + " (" + CurrentMerchant.MEMBER_NAME + "), send a credit requisition of amount:- " + objCredit.AMOUNT + " Rs.<br /> Regards, <br/><br/>BOOM Travels";
+
+                    string WLP_msgbody = emailhelper.GetEmailTemplate(WLPname, WLPRegmsg, "UserEmailTemplate.html");
+                    emailhelper.SendUserEmail("payments.requisition@gmail.com", SUb_val, WLP_msgbody);
                     return RedirectToAction("CreditRequisitionList");
                 }
                 catch (Exception ex)
@@ -1201,7 +1252,8 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                                           OpeningAmt = tblcre.CREDIT_OPENING,
                                           DR_CR = tblcre.CREDIT_AMOUNT,
                                           Closingamt = tblcre.CREDITCLOSING,
-                                          creditType = tblcre.CREDIT_TRN_TYPE
+                                          creditType = tblcre.CREDIT_TRN_TYPE,
+                                          STATUS=tblcre.STATUS
                                       }).AsEnumerable().Select(z => new TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
                                       {
                                           SLN = z.sln,
@@ -1216,7 +1268,8 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                                           CR_Col = (z.creditType == "CR" ? z.CreditAmount.ToString() : "0"),
                                           DR_Col = (z.creditType == "DR" ? z.CreditAmount.ToString() : "0"),
                                           CREDIT_OPENING = z.OpeningAmt,
-                                          CREDIT_TRN_TYPE = z.creditType
+                                          CREDIT_TRN_TYPE = z.creditType,
+                                          STATUS=z.STATUS
                                       }).ToList().OrderByDescending(a => a.CREDIT_DATE); ;
                     return PartialView("CreditRequisitionIndexGrid", memberinfo);
                 }
@@ -1238,7 +1291,8 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                                           OpeningAmt = tblcre.CREDIT_OPENING,
                                           DR_CR = tblcre.CREDIT_AMOUNT,
                                           Closingamt = tblcre.CREDITCLOSING,
-                                          creditType = tblcre.CREDIT_TRN_TYPE
+                                          creditType = tblcre.CREDIT_TRN_TYPE,
+                                          STATUS=tblcre.STATUS
                                       }).AsEnumerable().Select(z => new TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
                                       {
                                           SLN = z.sln,
@@ -1253,7 +1307,8 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
                                           CR_Col = (z.creditType == "CR" ? z.CreditAmount.ToString() : "0"),
                                           DR_Col = (z.creditType == "DR" ? z.CreditAmount.ToString() : "0"),
                                           CREDIT_OPENING = z.OpeningAmt,
-                                          CREDIT_TRN_TYPE = z.creditType
+                                          CREDIT_TRN_TYPE = z.creditType,
+                                          STATUS=z.STATUS
                                       }).ToList().OrderByDescending(a => a.CREDIT_DATE); ;
                     return PartialView("CreditRequisitionIndexGrid", memberinfo);
                 }
@@ -1261,6 +1316,105 @@ namespace WHITELABEL.Web.Areas.Merchant.Controllers
             }
             catch (Exception ex)
             {
+                throw ex;
+            }
+
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> CheckTotalTransactionAmount(string PaymentMode, string transactionAmount)
+        {
+            //initpage();////
+            try
+            {
+                var context = new DBContext();
+                string DebitCardLess = System.Configuration.ConfigurationSettings.AppSettings["EaseBuzzDebitCardLess"];
+                string DebitCardgreater = System.Configuration.ConfigurationSettings.AppSettings["EaseBuzzDebitCardGreater"];
+                string CreditCard = System.Configuration.ConfigurationSettings.AppSettings["EaseBuzzCreditCard"];
+                string NetBanking = System.Configuration.ConfigurationSettings.AppSettings["EaseBuzzNetBanking"];
+                string UPI = System.Configuration.ConfigurationSettings.AppSettings["EaseBuzzUPI"];
+                string MobileWallet = System.Configuration.ConfigurationSettings.AppSettings["EaseBuzzMobileWallet"];
+                string EMI = System.Configuration.ConfigurationSettings.AppSettings["EaseBuzzEMI"];
+                string OlaMoney = System.Configuration.ConfigurationSettings.AppSettings["EaseBuzzOlaMoney"];
+                decimal DebitCard_LessValue = 0;
+                decimal.TryParse(DebitCardLess,out DebitCard_LessValue);
+                decimal DebitCard_GreterValue = 0;
+                decimal.TryParse(DebitCardgreater, out DebitCard_GreterValue);
+                decimal CreditCard_Value = 0;
+                decimal.TryParse(CreditCard, out CreditCard_Value);
+                decimal NetBanking_Value = 0;
+                decimal.TryParse(NetBanking, out NetBanking_Value);
+                decimal UPI_Value = 0;
+                decimal.TryParse(UPI, out UPI_Value);
+                decimal MobileWallet_Value = 0;
+                decimal.TryParse(MobileWallet, out MobileWallet_Value);
+                decimal EMI_Value = 0;
+                decimal.TryParse(EMI, out EMI_Value);
+                decimal OlaMoney_Value = 0;
+                decimal.TryParse(OlaMoney, out OlaMoney_Value);
+                decimal Transaction_AMount = 0;
+                decimal.TryParse(transactionAmount, out Transaction_AMount);
+                decimal CalculateAmount = 0;
+                decimal GSTAmount = 0;
+                decimal GrossAmount = 0;
+                if (PaymentMode == "DC")
+                {
+                    if (Transaction_AMount < 2000)
+                    {
+                        CalculateAmount= ((Transaction_AMount* DebitCard_LessValue)/100);
+                        GSTAmount = ((CalculateAmount * 18) / 100);
+                        GrossAmount = Transaction_AMount + CalculateAmount + GSTAmount;
+                    }
+                    else
+                    {
+                        CalculateAmount = ((Transaction_AMount * DebitCard_GreterValue) / 100);
+                        GSTAmount = ((CalculateAmount * 18) / 100);
+                        GrossAmount = Transaction_AMount + CalculateAmount + GSTAmount;
+                    }
+                }
+                else if (PaymentMode == "CC") {
+                    CalculateAmount = ((Transaction_AMount * CreditCard_Value) / 100);
+                    GSTAmount = ((CalculateAmount * 18) / 100);
+                    GrossAmount = Transaction_AMount + CalculateAmount + GSTAmount;
+                }
+                else if (PaymentMode == "NB") {
+                    CalculateAmount = (NetBanking_Value);
+                    GSTAmount = ((CalculateAmount * 18) / 100);
+                    GrossAmount = Transaction_AMount + CalculateAmount + GSTAmount;
+                }
+                else if (PaymentMode == "UPI")
+                {
+                    CalculateAmount = (UPI_Value);
+                    GSTAmount = ((CalculateAmount * 18) / 100);
+                    GrossAmount = Transaction_AMount + CalculateAmount + GSTAmount;
+                }
+                else if (PaymentMode == "MW") {
+                    CalculateAmount = ((Transaction_AMount * MobileWallet_Value) / 100);
+                    GSTAmount = ((CalculateAmount * 18) / 100);
+                    GrossAmount = Transaction_AMount + CalculateAmount + GSTAmount;
+                }
+                else if (PaymentMode == "OM")
+                {
+                    CalculateAmount = ((Transaction_AMount * OlaMoney_Value) / 100);
+                    GSTAmount = ((CalculateAmount * 18) / 100);
+                    GrossAmount = Transaction_AMount + CalculateAmount + GSTAmount;
+                }
+                else if (PaymentMode == "EMI")
+                {
+                    CalculateAmount = ((Transaction_AMount * EMI_Value) / 100);
+                    GSTAmount = ((CalculateAmount * 18) / 100);
+                    GrossAmount = Transaction_AMount + CalculateAmount + GSTAmount;
+                }
+                else {
+                    CalculateAmount = 0;
+                    GSTAmount = 0;
+                    GrossAmount = Transaction_AMount + CalculateAmount + GSTAmount;
+                }
+                return Json(new { GrossAmount= GrossAmount,GST= GSTAmount,NetAmount= CalculateAmount }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+
                 throw ex;
             }
 

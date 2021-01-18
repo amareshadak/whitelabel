@@ -1442,7 +1442,8 @@ namespace WHITELABEL.Web.Controllers
                             ASSIGN_DATE=DateTime.Now,
                             STATUS=0,
                             ASSIGN_TYPE="MARK UP ASSIGN",
-                            DIST_ID = 0
+                            DIST_ID = 0,
+                            GST_APPLY = "NO"
                         };
                         db.TBL_FLIGHT_MARKUP.Add(objflight);
                         await db.SaveChangesAsync();

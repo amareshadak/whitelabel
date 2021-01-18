@@ -87,5 +87,7 @@
         public string COMPANY_NAME { get; set; }
         [NotMapped]
         public string COMPANY_GST { get; set; }
+        [NotMapped]
+        public string RAIL_ID { get; set; }
     }
 }

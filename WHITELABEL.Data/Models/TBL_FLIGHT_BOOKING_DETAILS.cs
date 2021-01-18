@@ -101,5 +101,13 @@
         public string FROM_DATE { get; set; }
         [NotMapped]
         public string TO_DATE { get; set; }
+        [NotMapped]
+        public string MEMBER_NAME { get; set; }
+        [NotMapped]
+        public string MEM_UNIQUE_ID { get; set; }
+        [NotMapped]
+        public string COMPANY { get; set; }
+        [NotMapped]
+        public string COMP_GST_NO { get; set; }
     }
 }

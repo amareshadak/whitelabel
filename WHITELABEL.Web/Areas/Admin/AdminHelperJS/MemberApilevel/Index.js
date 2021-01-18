@@ -642,3 +642,100 @@ function getParameterByName(name) {
     var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
     return match && decodeURIComponent(match[1]);
 }
+
+function formatDate(inputDate) {
+    var value = new Date(parseInt(inputDate.replace(/(^.*\()|([+-].*$)/g, '')));
+    var formattedDate = value.getMonth() + 1 + "/" + value.getDate() + "/" + value.getFullYear();
+    return formattedDate;
+}
+
+function getPaymentGatewayvalue(transid) {
+    var idval = transid;
+    $.ajax({
+        url: "/MemberPaymentGatewayList/MemberPaymentGatewayList?area=Admin",        
+        data: {
+            slnValue: transid
+        },
+        cache: false,
+        type: "POST",
+        dataType: "json",
+        beforeSend: function () {
+        },
+        success: function (data) {
+                var traninfo = data;
+                //var dateval = new Date(traninfo.data.REQUEST_DATE)
+                $('#txtusername').val(traninfo.Member_Name);
+                $('#txttransactionDate').val(formatDate(traninfo.RES_DATE));
+                $('#hdnPaysln').val(traninfo.SLN);
+                $("#txtRefNo").val(traninfo.PAY_REF_NO);
+                $("#txtAmount").val(traninfo.TRANSACTION_AMOUNT);
+                $("#txncorelationID").val(traninfo.CORELATION_ID);
+                //document.getElementById("username").innerHTML = traninfo.data.AMOUNT;
+            
+        },
+        error: function (xhr, status, error) {
+            console.log(status);
+        }
+    });
+}
+
+function RequeryTransaction(transid, PaymentTrnDetails,RefNo) {
+    bootbox.confirm({        
+        message: "Do you want to Requery Transaction",
+        buttons: {
+            confirm: {
+                label: 'Confirm',
+                className: 'btn-success btn-sm'
+            },
+            cancel: {
+                label: 'Cancel',
+                className: 'btn-danger btn-sm'
+            }
+        },
+        callback: function (result) {
+            if (result) {
+                $('#processPaymentGateway').show();
+                var slnval = transid;
+                var PaymentTrnId = PaymentTrnDetails;
+                var token = $(':input[name="__RequestVerificationToken"]').val();
+                $.ajax({
+                    url: "/MemberPaymentGatewayList/PostRequeryTransactionDetails?area=Admin",
+                    data: {
+                        __RequestVerificationToken: token,
+                        slnval: slnval,                        
+                        PaymentTrnId: PaymentTrnId,
+                        Ref_No: RefNo
+                    },
+                    cache: false,
+                    type: "POST",
+                    dataType: "json",
+                    beforeSend: function () {
+                    },
+                    success: function (data) {
+                        $('#processPaymentGateway').hide();
+                        var messageval = data;
+                        $('.mvc-grid').mvcgrid('reload');
+                        $(".overlaydiv").fadeOut("slow");
+                        bootbox.alert({
+                            size: "small",
+                            message: messageval,
+                            backdrop: true,
+                            callback: function () {
+                                $('#divgetPaymentGatewayValue').modal('hide');
+                                $('.PaymentGatewayValue').modal('hide');
+                                window.location.reload();
+                            }
+                        });
+                        $(".overlaydiv").fadeOut("slow");
+                     
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(status);
+                    }
+                });
+            }
+        }
+    });
+
+}
+

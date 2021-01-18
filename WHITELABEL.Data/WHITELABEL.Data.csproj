@@ -70,6 +70,7 @@
   <ItemGroup>
     <Compile Include="Attribute\ConditionalValidationAttribute.cs" />
     <Compile Include="DBContext.cs" />
+    <Compile Include="Models\TBL_COMPLAIN_DETAILS.cs" />
     <Compile Include="Models\TBL_ACCOUNT_VERIFICATION_TABLE.cs" />
     <Compile Include="Models\TBL_API_CALLBACK_LOGS.cs" />
     <Compile Include="Models\TBL_API_TOKEN.cs" />

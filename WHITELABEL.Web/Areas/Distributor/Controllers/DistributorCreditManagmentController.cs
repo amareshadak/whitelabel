@@ -525,7 +525,8 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                           DR_CR = tblcre.CREDIT_AMOUNT,
                                           OpeningAmt = tblcre.CREDIT_OPENING,
                                           Closingamt = tblcre.CREDITCLOSING,
-                                          creditType = tblcre.CREDIT_TRN_TYPE
+                                          creditType = tblcre.CREDIT_TRN_TYPE,
+                                          STATUS = tblcre.STATUS
                                       }).AsEnumerable().Select(z => new TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
                                       {
                                           SLN = z.sln,
@@ -539,7 +540,8 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                           CR_Col = (z.creditType == "CR" ? z.CreditAmount.ToString() : "0"),
                                           DR_Col = (z.creditType == "DR" ? z.CreditAmount.ToString() : "0"),
                                           CREDIT_OPENING = z.OpeningAmt,
-                                          CREDIT_TRN_TYPE = z.creditType
+                                          CREDIT_TRN_TYPE = z.creditType,
+                                          STATUS=z.STATUS
                                       }).ToList().OrderByDescending(a => a.CREDIT_DATE);
                     return PartialView("CREDITLimitIndexGrid", memberinfo);
                 }
@@ -564,7 +566,9 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                           DR_CR = tblcre.CREDIT_AMOUNT,
                                           OpeningAmt = tblcre.CREDIT_OPENING,
                                           Closingamt = tblcre.CREDITCLOSING,
-                                          creditType = tblcre.CREDIT_TRN_TYPE
+                                          creditType = tblcre.CREDIT_TRN_TYPE,
+                                          STATUS = tblcre.STATUS
+
                                       }).AsEnumerable().Select(z => new TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
                                       {
                                           SLN = z.sln,
@@ -578,7 +582,8 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                           CR_Col = (z.creditType == "CR" ? z.CreditAmount.ToString() : "0"),
                                           DR_Col = (z.creditType == "DR" ? z.CreditAmount.ToString() : "0"),
                                           CREDIT_OPENING = z.OpeningAmt,
-                                          CREDIT_TRN_TYPE = z.creditType
+                                          CREDIT_TRN_TYPE = z.creditType,
+                                          STATUS=z.STATUS
                                       }).ToList().OrderByDescending(a => a.CREDIT_DATE);
                     return PartialView("CREDITLimitIndexGrid", memberinfo);
                 }
@@ -822,7 +827,8 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                             CREDIT_OPENING = CR_Closinging,
                             CREDITCLOSING = ADD_CR_Closinging,
                             CREDIT_TRN_TYPE = "CR",
-                            CORELATIONID = COrelationID
+                            CORELATIONID = COrelationID,
+                            STATUS="APPROVE"
                         };
                         db.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION.Add(objMerLimit);
                         // db.SaveChanges();
@@ -1006,7 +1012,8 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                           creditStatus = tblcre.CREDIT_STATUS,
                                           OpeningAmt = tblcre.CREDIT_OPENING,
                                           Closingamt = tblcre.CREDITCLOSING,
-                                          creditType = tblcre.CREDIT_TRN_TYPE
+                                          creditType = tblcre.CREDIT_TRN_TYPE,
+                                          STATUS=tblcre.STATUS
                                       }).AsEnumerable().Select(z => new TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
                                       {
                                           SLN = z.sln,
@@ -1020,7 +1027,8 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                           CR_Col = (z.creditType == "CR" ? z.CreditAmount.ToString() : "0"),
                                           DR_Col = (z.creditType == "DR" ? z.CreditAmount.ToString() : "0"),
                                           CREDIT_OPENING = z.OpeningAmt,
-                                          CREDIT_TRN_TYPE = z.creditType
+                                          CREDIT_TRN_TYPE = z.creditType,
+                                          STATUS =z.STATUS
                                       }).ToList();
                     return PartialView("DistributorCreditindexgrid", memberinfo);
                 }
@@ -1046,7 +1054,8 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                           creditStatus = tblcre.CREDIT_STATUS,
                                           OpeningAmt = tblcre.CREDIT_OPENING,
                                           Closingamt = tblcre.CREDITCLOSING,
-                                          creditType = tblcre.CREDIT_TRN_TYPE
+                                          creditType = tblcre.CREDIT_TRN_TYPE,
+                                          STATUS = tblcre.STATUS
                                       }).AsEnumerable().Select(z => new TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
                                       {
                                           SLN = z.sln,
@@ -1060,7 +1069,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                           CR_Col = (z.creditType == "CR" ? z.CreditAmount.ToString() : "0"),
                                           DR_Col = (z.creditType == "DR" ? z.CreditAmount.ToString() : "0"),
                                           CREDIT_OPENING = z.OpeningAmt,
-                                          CREDIT_TRN_TYPE = z.creditType
+                                          CREDIT_TRN_TYPE = z.creditType,STATUS=z.STATUS
                                       }).ToList();
                     return PartialView("DistributorCreditindexgrid", memberinfo);
                 }
@@ -1127,7 +1136,8 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                           creditStatus = tblcre.CREDIT_STATUS,
                                           OpeningAmt = tblcre.CREDIT_OPENING,
                                           Closingamt = tblcre.CREDITCLOSING,
-                                          creditType = tblcre.CREDIT_TRN_TYPE
+                                          creditType = tblcre.CREDIT_TRN_TYPE,
+                                          STATUS =tblcre.STATUS
                                       }).AsEnumerable().Select(z => new TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
                                       {
                                           SLN = z.sln,
@@ -1141,7 +1151,8 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                           CR_Col = (z.creditType == "CR" ? z.CreditAmount.ToString() : "0"),
                                           DR_Col = (z.creditType == "DR" ? z.CreditAmount.ToString() : "0"),
                                           CREDIT_OPENING = z.OpeningAmt,
-                                          CREDIT_TRN_TYPE = z.creditType
+                                          CREDIT_TRN_TYPE = z.creditType,
+                                          STATUS = z.STATUS
                                       }).ToList();
                     return PartialView("DistributorCreditindexgrid", memberinfo);
                 }
@@ -1168,7 +1179,8 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                           creditStatus = tblcre.CREDIT_STATUS,
                                           OpeningAmt = tblcre.CREDIT_OPENING,
                                           Closingamt = tblcre.CREDITCLOSING,
-                                          creditType = tblcre.CREDIT_TRN_TYPE
+                                          creditType = tblcre.CREDIT_TRN_TYPE,
+                                          STATUS = tblcre.STATUS
                                       }).AsEnumerable().Select(z => new TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION
                                       {
                                           SLN = z.sln,
@@ -1182,7 +1194,8 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                           CR_Col = (z.creditType == "CR" ? z.CreditAmount.ToString() : "0"),
                                           DR_Col = (z.creditType == "DR" ? z.CreditAmount.ToString() : "0"),
                                           CREDIT_OPENING = z.OpeningAmt,
-                                          CREDIT_TRN_TYPE = z.creditType
+                                          CREDIT_TRN_TYPE = z.creditType,
+                                          STATUS=z.STATUS
                                       }).ToList();
                     return PartialView("DistributorCreditindexgrid", memberinfo);
                 }
@@ -1343,7 +1356,8 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                             CREDIT_OPENING = CR_Closinging,
                             CREDITCLOSING = ADD_CR_Closinging,
                             CREDIT_TRN_TYPE = "DR",
-                            CORELATIONID = COrelationID
+                            CORELATIONID = COrelationID,
+                            STATUS="APPROVE"
                         };
                         db.TBL_CREDIT_LIMIT_BALANCE_DISTRIBUTION.Add(objMerLimit);
                         // db.SaveChanges();

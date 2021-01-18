@@ -1,0 +1,194 @@
+﻿@using NonFactors.Mvc.Grid;
+@model WHITELABEL.Data.Models.TBL_COMPLAIN_DETAILS
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<script src="~/Areas/Admin/AdminHelperJS/MemberApilevel/ComplainReply.js"></script>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-12 row headcolor">
+                <div class="col-md-4" style="text-align:left; padding-top:3px;"><i class="fa fa-list fa-3x"></i></div>
+                <div class="col-md-4"></div>
+                <div class="col-md-4" style="text-align:right; padding-top:10px;">
+                    <h3>
+                        List of Complain
+                    </h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 padding-top-20">
+            <div class=" card">
+                <div class="card-body">
+                    <div class="panel-heading text-right">
+                     
+                        <div class="card-title row">
+                            @*<div class="col-md-6 text-left">
+                                
+                                <a href="@(Url.Action("ExportIndex","MemberAPILabel", new {area="Admin" }) + ViewContext.HttpContext.Request.QueryString)" class="btn btn-info btn-xs"><span class="ion-forward"></span> Export</a>
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <a href="@Url.Action("CreateMember", "MemberAPILabel",new {area="Admin" },null)" class="btn btn-info btn-xs text-color-white"><span class="ion-plus"></span> New Distributor</a>
+                            </div>*@
+
+                            <div class="clearfix"></div>
+                        </div>
+                    </div><!--.panel-heading-->
+                    <div class="panel-body">
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <div class="form-group row">
+                                    <label class="control-label col-md-3">Date From</label>
+                                    <div class="col-md-9">
+                                        <div class="inputer">
+                                            <div class="input-wrapper">
+                                                @Html.EditorFor(model => model.FROM_DATE, "{0:yyyy-MM-dd}", new { htmlAttributes = new { @class = "form-control date", id = "txtFromDate", @onkeydown = "return false;", @placeholder = "yyyy-MM-dd" } })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group row">
+                                    <label class="control-label col-md-3">Date From</label>
+                                    <div class="col-md-9">
+                                        <div class="inputer">
+                                            <div class="input-wrapper">
+                                                @Html.EditorFor(model => model.TO_DATE, "{0:yyyy-MM-dd}", new { htmlAttributes = new { @class = "form-control date", id = "txtToDate", @onkeydown = "return false;", @placeholder = "yyyy-MM-dd" } })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 row">
+                                <div class="col-md-4"><label style="text-align:left;">Enter Search Details</label></div>
+                                <div class="col-md-8">
+                                    <div class="inputer">
+                                        <div class="input-wrapper">
+                                            @Html.EditorFor(m => m.FromUser, new { htmlAttributes = new { @id = "txtMemberaNamedetails", style = " width:100%; padding:5px;", placeholder = "Enter Search Details", @class = "form-control" } })
+                                            @Html.HiddenFor(model => model.MEM_ID, new { id = "hdfmemberList" })
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <a href="#" class="btn btn-primary" id="btnSearchList">Search</a>
+                            </div>
+                        </div>
+                        <div class="row example-row" style="width:100%">
+
+                            @Html.AjaxGrid(Url.Action("IndexGrid", "MemberComplainList", new { area = "Admin" }))
+
+                        </div><!--.row-->
+                    </div><!--.panel-body-->
+                    
+                </div><!--.panel-->
+            </div>
+        </div><!--.col-md-12-->
+    </div><!--.row-->
+    <div id="AdminComplainRegisterID" class="modal scale fade AdminComplainRegister" tabindex="-1" role="dialog" aria-hidden="true" style="padding-top:100px;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Complain Register</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-12 row" style="margin-bottom:2px;">
+                        <div class="col-md-4" style="padding-top:10px;">Complain Type : </div>
+                        <div class="col-md-8">
+                            <div class="">
+                                <div class="input-wrapper">
+                                    @*<select id="COmplainType" class="form-control" ng-model="compainType">
+                                        <option value="Query" selected>Raise Query</option>
+                                        <option value="Complain">Raise Complain</option>
+                                        <option value="Others">Others</option>
+                                    </select>*@
+                                    <label id="lblComplainType" ></label>                                    
+                                    <input type="hidden" id="lblsln" ng-model="txnValue" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 row" style="margin-bottom:2px;">
+                        <div class="col-md-4" style="padding-top:10px;">Complain Details : </div>
+                        <div class="col-md-8">
+                            <div class="">
+                                <div class="input-wrapper">
+                                    <label id="lblCompainTransactioId"></label>                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 row" style="margin-bottom:2px;">
+                        <div class="col-md-4" style="padding-top:10px;">Reply on Complain : </div>
+                        <div class="col-md-8">
+                            <div class="">
+                                <div class="input-wrapper">
+                                    
+                                    <textarea name="textarea" id="txtReplyOnCompain" style="width:250px;height:150px;"></textarea>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer text-center">
+                    <span style="text-align:center">
+                        <a href="javascript:void(0);" class="btn btn-primary" onclick="PostReplyComplainData($('#lblsln').val(), $('#txtReplyOnCompain').val())">Reply On Complain</a>
+                    </span>
+                </div>
+            </div><!--.modal-content-->
+        </div><!--.modal-dialog-->
+    </div>
+
+
+
+    <script>
+        $(document).ready(function () {
+            window.setTimeout(function () {
+                $("#informationMessage").fadeOut('slow');
+            }, 2000);
+        });
+        const currentYear = (new Date).getFullYear();
+        const currentMonth = (new Date).getMonth();
+        const currentDay = (new Date).getDate();
+        $(document).ready(function () {
+            $('#txtFromDate').datepicker({
+                dateFormat: "yy-mm-dd",
+                maxDate: new Date(currentYear, currentMonth, currentDay),
+                uiLibrary: 'bootstrap4'
+            });
+            $('#txtToDate').datepicker({
+                dateFormat: "yy-mm-dd",
+                maxDate: new Date(currentYear, currentMonth, currentDay),
+                uiLibrary: 'bootstrap4'
+            });
+        });
+        $("#btnSearchList").on("click", function () {
+            const Member = $('#txtMemberaNamedetails').val();
+            const Date_From = $('#txtFromDate').val();
+            const Date_TO = $('#txtToDate').val();
+            $('.mvc-grid').mvcgrid({
+                query: 'MemberDetails=' + Member + '&DateFrom=' + Date_From + '&Date_To=' + Date_TO,
+                reload: true,
+                reloadStarted: function () {
+                    $(".divFooterTotalComm").remove();
+                },
+            });
+        });
+        $("#btnExportrecoard").click(function () {
+            debugger;
+             var MEm_Id = $("#txtMemberaNamedetails").val();
+            var url = '@(Url.Action("ExportIndex", "MemberAPILabel", new {area="Admin" }) + ViewContext.HttpContext.Request.QueryString)?Super=0&SearchVal=' + MEm_Id;
+        window.location.href = url;
+    })
+
+    </script>
+}

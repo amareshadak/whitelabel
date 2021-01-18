@@ -416,8 +416,9 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                             ASSIGN_DATE = DateTime.Now,
                             STATUS = 0,
                             ASSIGN_TYPE = "MARK UP ASSIGN",
-                            DIST_ID= MemberCurrentUser.MEM_ID
-                    };
+                            DIST_ID= MemberCurrentUser.MEM_ID,
+                            GST_APPLY = "NO"
+                        };
                         db.TBL_FLIGHT_MARKUP.Add(objflight);
                         await db.SaveChangesAsync();
                         ViewBag.savemsg = "Data Saved Successfully";
@@ -759,7 +760,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                     #region Email Code done by sayan at 13-10-2020
                     string name = meminfo.MEMBER_NAME;
                     string password = meminfo.User_pwd;
-                    string Regmsg = "Hi " + meminfo.UName + "(" + meminfo.MEMBER_NAME + ")" + " Your Distributer has been sent your login credentials. Your Login USER ID:- " + meminfo.MEM_UNIQUE_ID + " and  PASSWORD is:- " + password + ".<br /><br/> Regards, <br/><br/>Boom Travels.";
+                    string Regmsg = "Hi " + meminfo.UName + "(" + meminfo.MEMBER_NAME + ")" + " Your Distributer has sent your login credentials. Your Login USER ID:- " + meminfo.MEM_UNIQUE_ID + " and  PASSWORD is:- " + password + ".<br />Your Rail Id:- <b>" + (meminfo.RAIL_ID == null ? "Not Tagged" : meminfo.RAIL_ID) + "</b><br/><br/> Regards, <br/><br/>Boom Travels.";
                     EmailHelper emailhelper = new EmailHelper();
                     string usermsgbody = emailhelper.GetEmailTemplate(name, Regmsg, "UserEmailTemplate.html");
                     emailhelper.SendUserEmail(meminfo.EMAIL_ID.Trim(), "You Have Received Your Boom Travels User Id & Password!", usermsgbody);

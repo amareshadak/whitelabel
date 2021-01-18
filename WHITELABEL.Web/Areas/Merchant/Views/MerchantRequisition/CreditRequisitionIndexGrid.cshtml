@@ -23,8 +23,8 @@
                                                 columns.Add(model => model.CREDIT_DATE).Titled("Credit Balance Date").Formatted("{0:MM/dd/yyyy}").MultiFilterable(true).Sortable(true);
                                                 columns.Add(model => model.CREDIT_DATE).Titled("Credit Balance Time").Formatted("{0:T}").Filterable(false).Sortable(false);
                                                 columns.Add(model => model.CREDIT_NOTE_DESCRIPTION).Titled("Credit Balance Note").Filterable(true).Sortable(true);
-                                                columns.Add(model => model.CREDIT_STATUS==true?"Approved":"Pending").Titled("Credit Balance Note").Filterable(true).Sortable(true);
-
+                                                //columns.Add(model => model.CREDIT_STATUS==true?"Approved":"Pending").Titled("Credit Balance Note").Filterable(true).Sortable(true);
+                                                columns.Add(model => model.STATUS).Titled("Credit Balance Note").Filterable(true).Sortable(true);
                                             })
                                 .Css("css-classes")
                                 .AppendCss("table table-striped")
@@ -38,7 +38,7 @@
                                             .Filterable()
                                             .Sortable()
 )
-<table class="divFooterTotalComm" style="width:100%">
+@*<table class="divFooterTotalComm" style="width:100%">
     <tr>
         <td style="width:25%;">Total Credit opening Amt:- <b>@Model.Sum(z => z.CREDIT_OPENING)</b></td>
         <td style="width:25%;">Total Credit Amt:- <b>@Model.Where(z => z.CREDIT_TRN_TYPE == "CR").Sum(z => z.CREDIT_AMOUNT)</b></td>
@@ -46,7 +46,7 @@
         <td style="width:25%;">Total Credit closing Amt:- <b>@Model.Sum(z => z.CREDITCLOSING)</b></td>
         <td></td>
     </tr>
-</table>
+</table>*@
 
 
 

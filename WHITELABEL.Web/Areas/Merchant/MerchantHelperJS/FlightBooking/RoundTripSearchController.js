@@ -303,7 +303,7 @@
                 let createUniqueFlight = "";
                 for (let index = 0; index < x.length; index++) {
                     const element = x[index];
-                    createUniqueFlight = createUniqueFlight + element.FlightNo;
+                    createUniqueFlight = createUniqueFlight + element.AirlineCode + element.FlightNo;
                 }
                 let check = $scope.deptureFlightNumber.indexOf(createUniqueFlight);
                 if (check == -1) {
@@ -415,13 +415,13 @@
             let createUniqueFlight = "";
             for (let index = 0; index < flight.length; index++) {
                 const element = flight[index];
-                createUniqueFlight = createUniqueFlight + element.FlightNo;
+                createUniqueFlight = createUniqueFlight + element.AirlineCode + element.FlightNo;
             }
             let checkdataTrackNo = $scope.deptureFlightsearchResultTrackNo.filter(function (x) {
                 let createUniqueFlightItem = "";
                 for (let i = 0; i < x.length; i++) {
                     const element = x[i];
-                    createUniqueFlightItem = createUniqueFlightItem + element.FlightNo;
+                    createUniqueFlightItem = createUniqueFlightItem + element.AirlineCode + element.FlightNo;
                 }
                 return createUniqueFlight == createUniqueFlightItem;
             });
@@ -603,7 +603,7 @@
                 let createUniqueFlight = "";
                 for (let index = 0; index < x.length; index++) {
                     const element = x[index];
-                    createUniqueFlight = createUniqueFlight + element.FlightNo;
+                    createUniqueFlight = createUniqueFlight + element.AirlineCode + element.FlightNo;
                 }
                 let check = $scope.returnFlightNumber.indexOf(createUniqueFlight);
                 if (check == -1) {
@@ -715,13 +715,13 @@
             let createUniqueFlight = "";
             for (let index = 0; index < flight.length; index++) {
                 const element = flight[index];
-                createUniqueFlight = createUniqueFlight + element.FlightNo;
+                createUniqueFlight = createUniqueFlight + element.AirlineCode + element.FlightNo;
             }
             let checkdataTrackNo = $scope.returnFlightsearchResultTrackNo.filter(function (x) {
                 let createUniqueFlightItem = "";
                 for (let i = 0; i < x.length; i++) {
                     const element = x[i];
-                    createUniqueFlightItem = createUniqueFlightItem + element.FlightNo;
+                    createUniqueFlightItem = createUniqueFlightItem + element.AirlineCode + element.FlightNo;
                 }
                 return createUniqueFlight == createUniqueFlightItem;
             });

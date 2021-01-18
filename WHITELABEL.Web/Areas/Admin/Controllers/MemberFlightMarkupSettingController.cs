@@ -105,6 +105,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                            ASSIGN_BY = x.ASSIGN_BY,
                                            DIST_NAME=dbcontext.TBL_MASTER_MEMBER.FirstOrDefault(s=>s.MEM_ID==x.DIST_ID).MEMBER_NAME,
                                            DIST_MEM_ID = dbcontext.TBL_MASTER_MEMBER.FirstOrDefault(s => s.MEM_ID == x.DIST_ID).MEM_UNIQUE_ID,
+                                           GST_APPLY=x.GST_APPLY
                                        }).AsEnumerable().Select((z, index) => new TBL_FLIGHT_MARKUP
                                        {
                                            Serial_No = index + 1,
@@ -124,7 +125,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                            MODIFIED_DATE = z.MEM_MODIFIED_DATE,
                                            ASSIGN_BY = z.ASSIGN_BY,
                                            DIST_NAME=z.DIST_NAME,
-                                           DIST_MEM_ID=z.DIST_MEM_ID
+                                           DIST_MEM_ID=z.DIST_MEM_ID,
+                                           GST_APPLY=z.GST_APPLY
                                        }).ToList();
                     return PartialView("IndexGrid", Member_Info);
                 }
@@ -151,6 +153,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                            ASSIGN_BY = x.ASSIGN_BY,
                                            DIST_NAME = dbcontext.TBL_MASTER_MEMBER.FirstOrDefault(s => s.MEM_ID == x.DIST_ID).MEMBER_NAME,
                                            DIST_MEM_ID = dbcontext.TBL_MASTER_MEMBER.FirstOrDefault(s => s.MEM_ID == x.DIST_ID).MEM_UNIQUE_ID,
+                                           GST_APPLY=x.GST_APPLY
                                        }).AsEnumerable().Select((z, index) => new TBL_FLIGHT_MARKUP
                                        {
                                            Serial_No = index + 1,
@@ -170,7 +173,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                            MODIFIED_DATE = z.MEM_MODIFIED_DATE,
                                            ASSIGN_BY = z.ASSIGN_BY,
                                            DIST_NAME = z.DIST_NAME,
-                                           DIST_MEM_ID = z.DIST_MEM_ID
+                                           DIST_MEM_ID = z.DIST_MEM_ID,
+                                           GST_APPLY=z.GST_APPLY
                                        }).ToList();
                     return PartialView("IndexGrid", Member_Info);
                 }
@@ -262,6 +266,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                     {
                         getMArkup.DOMESTIC_MARKUP = objMarkup.DOMESTIC_MARKUP;
                         getMArkup.INTERNATIONAL_MARKUP = objMarkup.INTERNATIONAL_MARKUP;
+                        getMArkup.GST_APPLY = objMarkup.GST_APPLY;
                         getMArkup.MODIFIED_DATE = DateTime.Now;
                         db.Entry(getMArkup).State = System.Data.Entity.EntityState.Modified;
                         db.SaveChanges();
@@ -275,6 +280,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 }
                 catch (Exception ex)
                 {
+                    ContextTransaction.Rollback();
                     return Json("Please try again later", JsonRequestBehavior.AllowGet);
                     throw;
                 }

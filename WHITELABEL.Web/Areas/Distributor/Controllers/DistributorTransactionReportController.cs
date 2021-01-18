@@ -929,7 +929,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                 DateTime TO_DATE_Range = Date_To_Val.AddDays(1);
                 var transactionlistvalue = (from x in db.TBL_ACCOUNTS
                                             join y in db.TBL_MASTER_MEMBER on x.MEM_ID equals y.MEM_ID
-                                            where x.TRANSACTION_DATE >= Date_From_Val && x.TRANSACTION_DATE <= TO_DATE_Range && y.INTRODUCER==MemberCurrentUser.MEM_ID && (y.COMPANY.Contains(MemberInfo) || y.UName.Contains(MemberInfo) || y.MEMBER_MOBILE.Contains(MemberInfo) || y.MEMBER_MOBILE.Contains(MemberInfo) || y.EMAIL_ID.Contains(MemberInfo) || x.AMOUNT.ToString().Contains(MemberInfo) || x.CLOSING.ToString().Contains(MemberInfo) || x.OPENING.ToString().Contains(MemberInfo)) && (x.TRANSACTION_TYPE != "ADD DISTRIBUTOR" && x.TRANSACTION_TYPE != "ADD MERCHANT")
+                                            where x.TRANSACTION_DATE >= Date_From_Val && x.TRANSACTION_DATE <= TO_DATE_Range && y.INTRODUCER==MemberCurrentUser.MEM_ID && (y.COMPANY.Contains(MemberInfo) || y.UName.Contains(MemberInfo) || y.MEMBER_MOBILE.Contains(MemberInfo) || y.MEMBER_MOBILE.Contains(MemberInfo) || y.EMAIL_ID.Contains(MemberInfo) || y.RAIL_ID.Contains(MemberInfo) || x.AMOUNT.ToString().Contains(MemberInfo) || x.CLOSING.ToString().Contains(MemberInfo) || x.OPENING.ToString().Contains(MemberInfo)) && (x.TRANSACTION_TYPE != "ADD DISTRIBUTOR" && x.TRANSACTION_TYPE != "ADD MERCHANT")
                                             select new
                                             {
                                                 SLN = x.ACC_NO,
@@ -965,7 +965,8 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                                 CGST_RATE = x.CGST_RATE,
                                                 SGST_RATE = x.SGST_RATE,
                                                 IGST_RATE = x.IGST_RATE,
-                                                TOTAL_GST_RATE = x.TOTAL_GST_RATE
+                                                TOTAL_GST_RATE = x.TOTAL_GST_RATE,
+                                                RAILID=y.RAIL_ID
                                             }).AsEnumerable().Select((z, index) => new TBL_ACCOUNTS
                                             {
                                                 SerialNo = index + 1,
@@ -1004,7 +1005,8 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                                 CGST_RATE = z.CGST_RATE,
                                                 SGST_RATE = z.SGST_RATE,
                                                 IGST_RATE = z.IGST_RATE,
-                                                TOTAL_GST_RATE = z.TOTAL_GST_RATE
+                                                TOTAL_GST_RATE = z.TOTAL_GST_RATE,
+                                                RAIL_ID = z.RAILID
                                             }).OrderBy(m => m.SerialNo).ThenByDescending(a => a.TRANSACTION_DATE).ToList();
                 return PartialView("MemberAccountsReportGrid", transactionlistvalue);
             }
@@ -1056,7 +1058,8 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                                 CGST_RATE = x.CGST_RATE,
                                                 SGST_RATE = x.SGST_RATE,
                                                 IGST_RATE = x.IGST_RATE,
-                                                TOTAL_GST_RATE = x.TOTAL_GST_RATE
+                                                TOTAL_GST_RATE = x.TOTAL_GST_RATE,
+                                                RAIL_ID=y.RAIL_ID
                                             }).AsEnumerable().Select((z, index) => new TBL_ACCOUNTS
                                             {
                                                 SerialNo = index + 1,
@@ -1095,7 +1098,8 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                                 CGST_RATE = z.CGST_RATE,
                                                 SGST_RATE = z.SGST_RATE,
                                                 IGST_RATE = z.IGST_RATE,
-                                                TOTAL_GST_RATE = z.TOTAL_GST_RATE
+                                                TOTAL_GST_RATE = z.TOTAL_GST_RATE,
+                                                RAIL_ID = z.RAIL_ID
                                             }).OrderBy(m => m.SerialNo).ThenByDescending(a => a.TRANSACTION_DATE).ToList();
 
                 return PartialView("MemberAccountsReportGrid", transactionlistvalue);
@@ -1106,7 +1110,7 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                 string TO_DATE = string.Empty;
                 var transactionlistvalue = (from x in db.TBL_ACCOUNTS
                                             join y in db.TBL_MASTER_MEMBER on x.MEM_ID equals y.MEM_ID
-                                            where  y.INTRODUCER == MemberCurrentUser.MEM_ID && (y.COMPANY.Contains(MemberInfo) || y.UName.Contains(MemberInfo) || y.MEMBER_MOBILE.Contains(MemberInfo) || y.MEMBER_MOBILE.Contains(MemberInfo) || y.EMAIL_ID.Contains(MemberInfo) || x.AMOUNT.ToString().Contains(MemberInfo) || x.CLOSING.ToString().Contains(MemberInfo) || x.OPENING.ToString().Contains(MemberInfo)) && (x.TRANSACTION_TYPE != "ADD DISTRIBUTOR" && x.TRANSACTION_TYPE != "ADD MERCHANT")
+                                            where  y.INTRODUCER == MemberCurrentUser.MEM_ID && (y.COMPANY.Contains(MemberInfo) || y.UName.Contains(MemberInfo) || y.MEMBER_MOBILE.Contains(MemberInfo) || y.MEMBER_MOBILE.Contains(MemberInfo) || y.EMAIL_ID.Contains(MemberInfo) || y.RAIL_ID.Contains(MemberInfo) || x.AMOUNT.ToString().Contains(MemberInfo) || x.CLOSING.ToString().Contains(MemberInfo) || x.OPENING.ToString().Contains(MemberInfo)) && (x.TRANSACTION_TYPE != "ADD DISTRIBUTOR" && x.TRANSACTION_TYPE != "ADD MERCHANT")
                                             select new
                                             {
                                                 SLN = x.ACC_NO,
@@ -1142,7 +1146,8 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                                 CGST_RATE = x.CGST_RATE,
                                                 SGST_RATE = x.SGST_RATE,
                                                 IGST_RATE = x.IGST_RATE,
-                                                TOTAL_GST_RATE = x.TOTAL_GST_RATE
+                                                TOTAL_GST_RATE = x.TOTAL_GST_RATE,
+                                                RAIL_ID = y.RAIL_ID
                                             }).AsEnumerable().Select((z, index) => new TBL_ACCOUNTS
                                             {
                                                 SerialNo = index + 1,
@@ -1181,7 +1186,8 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                                 CGST_RATE = z.CGST_RATE,
                                                 SGST_RATE = z.SGST_RATE,
                                                 IGST_RATE = z.IGST_RATE,
-                                                TOTAL_GST_RATE = z.TOTAL_GST_RATE
+                                                TOTAL_GST_RATE = z.TOTAL_GST_RATE,
+                                                RAIL_ID = z.RAIL_ID
                                             }).OrderBy(m => m.SerialNo).ThenByDescending(a => a.TRANSACTION_DATE).ToList();
                 return PartialView("MemberAccountsReportGrid", transactionlistvalue);
             }
@@ -1224,7 +1230,8 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                                 CGST_RATE = x.CGST_RATE,
                                                 SGST_RATE = x.SGST_RATE,
                                                 IGST_RATE = x.IGST_RATE,
-                                                TOTAL_GST_RATE = x.TOTAL_GST_RATE
+                                                TOTAL_GST_RATE = x.TOTAL_GST_RATE,
+                                                RAIL_ID = y.RAIL_ID
                                             }).AsEnumerable().Select((z, index) => new TBL_ACCOUNTS
                                             {
                                                 SerialNo = index + 1,
@@ -1263,7 +1270,8 @@ namespace WHITELABEL.Web.Areas.Distributor.Controllers
                                                 CGST_RATE = z.CGST_RATE,
                                                 SGST_RATE = z.SGST_RATE,
                                                 IGST_RATE = z.IGST_RATE,
-                                                TOTAL_GST_RATE = z.TOTAL_GST_RATE
+                                                TOTAL_GST_RATE = z.TOTAL_GST_RATE,
+                                                RAIL_ID = z.RAIL_ID
                                             }).OrderBy(m => m.SerialNo).ThenByDescending(a => a.TRANSACTION_DATE).ToList();
 
                 return PartialView("MemberAccountsReportGrid", transactionlistvalue);

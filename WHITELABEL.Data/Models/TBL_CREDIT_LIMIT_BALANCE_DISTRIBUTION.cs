@@ -28,6 +28,7 @@
         public Decimal? CREDITCLOSING { get; set; }
         public string CREDIT_TRN_TYPE { get; set; }
         public string CORELATIONID { get; set; }
+        public string STATUS { get; set; }
         [NotMapped]
         public string FromUser { get; set; }
         [NotMapped]

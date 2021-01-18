@@ -154,6 +154,22 @@
                                         <div style="clear:both;"></div>
                                     </div>
                                 </div>
+                                <div style="width:100%; float:left;">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-5" style="width:40%; float:left;">GST Applied </label>
+                                        <div class="col-md-7" style="width:60%; float:right; border-bottom-color:black;">
+                                            <div class="">
+                                                <div class="">
+                                                    @Html.DropDownListFor(m => m.GST_APPLY, new List<SelectListItem>
+                                                    { new SelectListItem{Text="NO", Value="NO"},
+                                                    new SelectListItem{Text="YES", Value="YES"}},
+         new { id = "Paymentmode", @class = "form-control" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div style="clear:both;"></div>
+                                    </div>
+                                </div>
                                 
                                 <div style="clear:both;"></div>
                             </div>

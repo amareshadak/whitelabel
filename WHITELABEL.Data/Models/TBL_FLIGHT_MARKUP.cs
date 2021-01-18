@@ -24,6 +24,7 @@
         public int STATUS { get; set; }
         public string ASSIGN_TYPE { get; set; }
         public long DIST_ID { get; set; }
+        public string GST_APPLY { get; set; }
         [NotMapped]
         public string MEMBER_UNIQUE_ID { get; set; }
         [NotMapped]

@@ -25,7 +25,7 @@
         //        client.Port = 25;
 
         //        client.UseDefaultCredentials = false;
-        //        client.Credentials = new NetworkCredential("test@boomtravels.com", "India12345@");
+        //        client.Credentials = new NetworkCredential("noreply@boomtravels.com", "dilsh@#123456");
 
 
         //        MailMessage message = CreateMailMessage(ToEmail, Subject, Message);
@@ -82,12 +82,16 @@
             SmtpClient smtp = new SmtpClient();
             try
             {
-                SmtpClient client = new SmtpClient();
+                int PortNo = 0;
+                int.TryParse(SMTPPort,out PortNo);
 
+                SmtpClient client = new SmtpClient();
+                
                 client.Host = "103.240.91.157";
-                client.Port = 25;
+                client.Port = PortNo;
                 client.UseDefaultCredentials = false;
-                client.Credentials = new NetworkCredential("test@boomtravels.com", "India12345@");
+                //client.Credentials = new NetworkCredential("noreply@boomtravels.com", "dilsh@#123456");
+                client.Credentials = new NetworkCredential(EMAILID, Password);
                 //MailMessage message = CreateMailMessage(ToEmail, Subject, Message);
                 MailMessage usermessage = CreateUserMailMessage(ToEmail, Subject, Message);
                 //client.Send(message);
@@ -123,7 +127,8 @@
             //mailMessage.To.Add("atanucomp@gmail.com");
             //mailMessage.Body = "Test";
             //mailMessage.Subject = "TEst VAl";
-            mailMessage.From = new MailAddress("test@boomtravels.com");
+            mailMessage.From = new MailAddress(EMAILID);
+            //mailMessage.From = new MailAddress("noreply@boomtravels.com");
             mailMessage.To.Add(email.ToString().Trim());
             mailMessage.Body = usermsgbody.ToString();
             mailMessage.Subject = usersub.ToString();
@@ -133,7 +138,8 @@
         private MailMessage CreateMailMessage(string MAIL_TO, string Subject, string BODYVal)
         {
             MailMessage mailMessage = new MailMessage();
-            mailMessage.From = new MailAddress("test@boomtravels.com");
+            //mailMessage.From = new MailAddress("noreply@boomtravels.com");
+            mailMessage.From = new MailAddress(EMAILID);
             //mailMessage.To.Add(MAIL_TO);
             //mailMessage.Body = BODYVal;
             //mailMessage.Subject = Subject;

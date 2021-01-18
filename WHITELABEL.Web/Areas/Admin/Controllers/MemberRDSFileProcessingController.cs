@@ -75,6 +75,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 return RedirectToAction("AdminLogin", "Login", new { area = "" });
             }
         }
+
+        //Booking file Upload
         [HttpPost]
         public async Task<ActionResult> UploadRDSFile(HttpPostedFileBase file)
         {
@@ -133,8 +135,13 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                             DateTime tran_date = Convert.ToDateTime(dtCSV.Rows[i][7]);
                             string f_tran_date = tran_date.ToString("yyyy-MM-dd");
                             string user_id = dtCSV.Rows[i][8].ToString();
+                            string pg_name = dtCSV.Rows[i][5].ToString();
 
-                            if (bk_class != "1A" || bk_class != "2A" || bk_class != "3A" || bk_class != "CC" || bk_class != "3E" || bk_class != "EC" || bk_class != "EA" || bk_class != "SL" || bk_class != "2S")
+                            if (bk_class == "1A" || bk_class == "2A" || bk_class == "3A" || bk_class == "CC" || bk_class == "3E" || bk_class == "EC" || bk_class == "EA" || bk_class == "SL" || bk_class == "2S")
+                            {
+                                
+                            }
+                            else
                             {
                                 bk_class = string.Empty;
                             }
@@ -148,7 +155,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                     PNR_NO = pnr_no,
                                     CLIENT_TXN_ID = ClientRefId,
                                     BOOKING_AMT = Convert.ToDecimal(bk_amt),
-                                    PG_NAME = f_tran_date,
+                                    PG_NAME = pg_name,
                                     PNR_CLASS = bk_class,
                                     TRN_DATE = Convert.ToDateTime(f_tran_date),
                                     USER_ID = user_id,
@@ -229,6 +236,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                 return RedirectToAction("AdminLogin", "Login", new { area = "" });
             }
         }
+
+        //RDS Cancellation file upload
         [HttpPost]
         public async Task<ActionResult> RDSCancellationFileUpload(HttpPostedFileBase file)
         {
@@ -493,10 +502,10 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                             string BK_CLASS = lst.PNR_CLASS.ToString();
 
                             decimal bookigamt = 0;
-
                             decimal.TryParse(BK_AMT, out bookigamt);
                             DateTime TrnDateVal_1 = Convert.ToDateTime(TRAN_DATE);
                             DateTime dtFrom = DateTime.ParseExact(TRAN_DATE, "yyyy-mm-dd", CultureInfo.InvariantCulture);
+
                             var cmd_final_booking_pnr = await db.TBL_FINAL_RDS_BOOKING.Where(x => x.TRAN_DATE == TrnDateVal_1 && x.PNR == PNR_NO).FirstOrDefaultAsync();
                             //var cmd_final_booking_pnr = await db.TBL_FINAL_RDS_BOOKING.Where(x => x.PNR == PNR_NO && x.TRAN_DATE == Convert.ToDateTime(TRAN_DATE)).FirstOrDefaultAsync();
                             if (cmd_final_booking_pnr == null)
@@ -575,6 +584,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                         #region REFUND TRANSACTION PROCESS
                         DateTime TrnDateVal = Convert.ToDateTime(TRAN_DATE);
                         DateTime dtFromVal = DateTime.ParseExact(TRAN_DATE, "yyyy-mm-dd", CultureInfo.InvariantCulture);
+
                         var refund_booking_pnr = await db.TBL_FINAL_RDS_BOOKING.Where(x => x.PNR == "" && x.TRAN_DATE == TrnDateVal && x.TRAN_STATUS != "Failed").ToListAsync();
 
                         if (refund_booking_pnr.Count > 0)
@@ -585,7 +595,9 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                 long FR_USER_ID = Blst.MER_ID;
                                 string TRANID = Blst.TRAN_ID;
                                 string CORELATIONID = Blst.CORRELATION_ID;
+
                                 var MerInfo = await db.TBL_MASTER_MEMBER.FirstOrDefaultAsync(x => x.MEM_ID == FR_USER_ID);
+
                                 decimal RefundAmt = Convert.ToDecimal(Blst.TOTAL_NET_PAYBLE);
                                 //decimal PNR_COMM = Convert.ToDecimal(Blst.PG_CHARGE);
                                 decimal CR_AMT = RefundAmt;
@@ -623,39 +635,39 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                 };
                                 db.TBL_ACCOUNTS.Add(objAcnt);
 
-                                decimal Wlp_MainBal = 0;
-                                decimal Wlp_AddMainBal = 0;
-                                var WLPInfo = await db.TBL_MASTER_MEMBER.FirstOrDefaultAsync(x => x.MEM_ID == WLP_ID);
-                                decimal.TryParse(WLPInfo.BALANCE.ToString(), out Wlp_MainBal);
-                                Wlp_AddMainBal = Wlp_MainBal + RefundAmt;
-                                WLPInfo.BALANCE = Wlp_AddMainBal;
-                                db.Entry(WLPInfo).State = System.Data.Entity.EntityState.Modified;
-                                TBL_ACCOUNTS objWLPAcnt = new TBL_ACCOUNTS()
-                                {
-                                    API_ID = 0,
-                                    MEM_ID = WLP_ID,
-                                    MEMBER_TYPE = "WHITELABEL",
-                                    TRANSACTION_TYPE = "RDS REFUND",
-                                    TRANSACTION_DATE = Convert.ToDateTime(TRAN_DATE),
-                                    TRANSACTION_TIME = DateTime.Now,
-                                    DR_CR = "CR",
-                                    AMOUNT = RefundAmt,
-                                    NARRATION = "RDS REFUND",
-                                    OPENING = Wlp_MainBal,
-                                    CLOSING = Wlp_AddMainBal,
-                                    REC_NO = 0,
-                                    COMM_AMT = 0,
-                                    TDS = 0,
-                                    GST = 0,
-                                    IPAddress = "",
-                                    CORELATIONID = CORELATIONID,
-                                    SERVICE_ID = 7,
-                                    WHITELEVEL_ID = Blst.WLP_ID,
-                                    SUPER_ID = 0,
-                                    DISTRIBUTOR_ID = Blst.DIST_ID,
-                                    STATE_ID = 9
-                                };
-                                db.TBL_ACCOUNTS.Add(objWLPAcnt);
+                                //decimal Wlp_MainBal = 0;
+                                //decimal Wlp_AddMainBal = 0;
+                                //var WLPInfo = await db.TBL_MASTER_MEMBER.FirstOrDefaultAsync(x => x.MEM_ID == WLP_ID);
+                                //decimal.TryParse(WLPInfo.BALANCE.ToString(), out Wlp_MainBal);
+                                //Wlp_AddMainBal = Wlp_MainBal + RefundAmt;
+                                //WLPInfo.BALANCE = Wlp_AddMainBal;
+                                //db.Entry(WLPInfo).State = System.Data.Entity.EntityState.Modified;
+                                //TBL_ACCOUNTS objWLPAcnt = new TBL_ACCOUNTS()
+                                //{
+                                //    API_ID = 0,
+                                //    MEM_ID = WLP_ID,
+                                //    MEMBER_TYPE = "WHITELABEL",
+                                //    TRANSACTION_TYPE = "RDS REFUND",
+                                //    TRANSACTION_DATE = Convert.ToDateTime(TRAN_DATE),
+                                //    TRANSACTION_TIME = DateTime.Now,
+                                //    DR_CR = "CR",
+                                //    AMOUNT = RefundAmt,
+                                //    NARRATION = "RDS REFUND",
+                                //    OPENING = Wlp_MainBal,
+                                //    CLOSING = Wlp_AddMainBal,
+                                //    REC_NO = 0,
+                                //    COMM_AMT = 0,
+                                //    TDS = 0,
+                                //    GST = 0,
+                                //    IPAddress = "",
+                                //    CORELATIONID = CORELATIONID,
+                                //    SERVICE_ID = 7,
+                                //    WHITELEVEL_ID = Blst.WLP_ID,
+                                //    SUPER_ID = 0,
+                                //    DISTRIBUTOR_ID = Blst.DIST_ID,
+                                //    STATE_ID = 9
+                                //};
+                                //db.TBL_ACCOUNTS.Add(objWLPAcnt);
                                 await db.SaveChangesAsync();
                             }
                         }
@@ -745,7 +757,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
 
         }
 
-
+        //RDS Cancellation Trigger
         [HttpPost]
         //public async Task<ActionResult> TriggerBookingRDSFiles()
         public async Task<JsonResult> TriggerCancellationRDSFiles()
@@ -798,7 +810,7 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                 }
                                 if (Flag == 0)
                                 {
-                                    long WLP_ID = (long)CheckCalcellationMem_Id.UNDER_WHITE_LEVEL;
+                                    //long WLP_ID = (long)CheckCalcellationMem_Id.UNDER_WHITE_LEVEL;
                                     string CorelationId = string.Empty;
                                     CorelationId = GetUniqueKey(USER_ID);
                                     string CancelMerid = string.Empty;
@@ -824,26 +836,29 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                     string Notes = string.Empty;
                                     string IPAddressA = string.Empty;
                                     string CORE_ID = string.Empty;
-                                    var GetRailAgentCom = await db.TBL_RAIL_AGENTS_COMMISSION.FirstOrDefaultAsync(x => x.RAIL_AGENT_ID == USER_ID);
-                                    if (GetRailAgentCom != null)
-                                    {
-                                        PG_CHARGE_APPLY = GetRailAgentCom.PG_CHARGES_APPLY;
-                                        PG_CHARGE_MAX_VAL = GetRailAgentCom.PG_MAX_VALUE;
-                                        PG_CHARGE_LESS_THAN_2000 = GetRailAgentCom.PG_EQUAL_LESS_2000;
-                                        PG_CHARGE_GREATER_THAN_2000 = GetRailAgentCom.PG_EQUAL_GREATER_2000;
-                                        PG_CHARGE_GST_APPLY = GetRailAgentCom.PG_CHARGES_APPLY;
-                                        PG_CHARGE_GST_VAL = 0;
-                                        ADDN_CHARGE_APPLY = GetRailAgentCom.PG_CHARGES_APPLY;
-                                        ADDN_CHARGE_MAX_VAL = GetRailAgentCom.ADDITIONAL_CHARGE_MAX_VAL;
-                                        ADDN_CHARGE_AC = GetRailAgentCom.ADDITIONAL_CHARGE_AC;
-                                        ADDN_CHARGE_NON_AC = GetRailAgentCom.ADDITIONAL_CHARGE_NON_AC;
-                                        ADDN_CHARGE_GST_APPLY = (GetRailAgentCom.ADDITIONAL_GST_STATUS == "Yes" ? true : false); ;
-                                        ADDN_CHARGE_GST_VAL = 0;
-                                        TOTAL_NET_PAYBLE_WITHOUT_GST = Convert.ToDecimal(REF_AMT);
-                                        TOTAL_NET_PAYBLE_GST = 18M;
-                                        TOTAL_NET_PAYBLE = Convert.ToDecimal(REF_AMT);
-                                        GST_RATE = 18M;
-                                    }
+
+
+
+                                    //var GetRailAgentCom = await db.TBL_RAIL_AGENTS_COMMISSION.FirstOrDefaultAsync(x => x.RAIL_AGENT_ID == USER_ID);
+                                    //if (GetRailAgentCom != null)
+                                    //{
+                                    //    PG_CHARGE_APPLY = GetRailAgentCom.PG_CHARGES_APPLY;
+                                    //    PG_CHARGE_MAX_VAL = GetRailAgentCom.PG_MAX_VALUE;
+                                    //    PG_CHARGE_LESS_THAN_2000 = GetRailAgentCom.PG_EQUAL_LESS_2000;
+                                    //    PG_CHARGE_GREATER_THAN_2000 = GetRailAgentCom.PG_EQUAL_GREATER_2000;
+                                    //    PG_CHARGE_GST_APPLY = GetRailAgentCom.PG_CHARGES_APPLY;
+                                    //    PG_CHARGE_GST_VAL = 0;
+                                    //    ADDN_CHARGE_APPLY = GetRailAgentCom.PG_CHARGES_APPLY;
+                                    //    ADDN_CHARGE_MAX_VAL = GetRailAgentCom.ADDITIONAL_CHARGE_MAX_VAL;
+                                    //    ADDN_CHARGE_AC = GetRailAgentCom.ADDITIONAL_CHARGE_AC;
+                                    //    ADDN_CHARGE_NON_AC = GetRailAgentCom.ADDITIONAL_CHARGE_NON_AC;
+                                    //    ADDN_CHARGE_GST_APPLY = (GetRailAgentCom.ADDITIONAL_GST_STATUS == "Yes" ? true : false); ;
+                                    //    ADDN_CHARGE_GST_VAL = 0;
+                                    //    TOTAL_NET_PAYBLE_WITHOUT_GST = Convert.ToDecimal(REF_AMT);
+                                    //    TOTAL_NET_PAYBLE_GST = 18M;
+                                    //    TOTAL_NET_PAYBLE = Convert.ToDecimal(REF_AMT);
+                                    //    GST_RATE = 18M;
+                                    //}
 
                                     var GetFinalBookingRds = await db.TBL_FINAL_RDS_BOOKING.FirstOrDefaultAsync(x => x.TRAN_ID == TRAN_ID);
                                     if (GetFinalBookingRds != null)
@@ -865,6 +880,9 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                         CORE_ID = CorelationId;
                                         CancelMerid = USER_ID;
                                     }
+
+                                    var MEr_ID_VAl = await db.TBL_MASTER_MEMBER.FirstOrDefaultAsync(x => x.RAIL_ID == CancelMerid);
+
                                     TBL_FINAL_CANCELLATION ObjFinalCanc = new TBL_FINAL_CANCELLATION()
                                     {
                                         TRN_ID = TRAN_ID,
@@ -880,10 +898,13 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                         CANCELLATION_ID = CANCELLATION_ID,
                                         MER_RAIL_ID = USER_ID,
                                         CANCELLATION_AGST_MER_RAIL_ID = CancelMerid,
-                                        MER_ID = CheckCalcellationMem_Id.MEM_ID,
-                                        DIST_ID = (long)CheckCalcellationMem_Id.INTRODUCER,
+                                        //MER_ID = CheckCalcellationMem_Id.MEM_ID,
+                                        MER_ID = MEr_ID_VAl.MEM_ID,
+                                        //DIST_ID = (long)CheckCalcellationMem_Id.INTRODUCER,
+                                        DIST_ID = (long)MEr_ID_VAl.INTRODUCER,
                                         SUP_ID = 0,
-                                        WLP_ID = (long)CheckCalcellationMem_Id.UNDER_WHITE_LEVEL,
+                                        //WLP_ID = (long)CheckCalcellationMem_Id.UNDER_WHITE_LEVEL,
+                                        WLP_ID = (long)MEr_ID_VAl.UNDER_WHITE_LEVEL,
                                         PG_CHARGE_APPLY = PG_CHARGE_APPLY,
                                         PG_CHARGE_MAX_VAL = PG_CHARGE_MAX_VAL,
                                         PG_CHARGE_LESS_THAN_2000 = PG_CHARGE_LESS_THAN_2000,
@@ -899,7 +920,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                         TOTAL_NET_PAYBLE_WITHOUT_GST = TOTAL_NET_PAYBLE_WITHOUT_GST,
                                         TOTAL_NET_PAYBLE_GST = TOTAL_NET_PAYBLE_GST,
                                         TOTAL_NET_PAYBLE = TOTAL_NET_PAYBLE,
-                                        CORRELATION_ID = CorelationId,
+                                        //CORRELATION_ID = CorelationId,
+                                        CORRELATION_ID = CORE_ID,
                                         GST_RATE = GST_RATE,
                                         REMARKS = Remark,
                                         NOTES = Notes,
@@ -908,14 +930,14 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                     db.TBL_FINAL_CANCELLATION.Add(ObjFinalCanc);
 
                                     decimal REFUND_AMT = Convert.ToDecimal(REF_AMT);
-                                    var MEr_ID_VAl = await db.TBL_MASTER_MEMBER.FirstOrDefaultAsync(x => x.RAIL_ID == CancelMerid);
+                                    //var MEr_ID_VAl = await db.TBL_MASTER_MEMBER.FirstOrDefaultAsync(x => x.RAIL_ID == CancelMerid);
                                     decimal Mer_CURR_Bal = 0;
                                     decimal.TryParse(MEr_ID_VAl.BALANCE.ToString(), out Mer_CURR_Bal);
                                     decimal UPDATED_CURR_BAL = Mer_CURR_Bal + REFUND_AMT;
                                     MEr_ID_VAl.BALANCE = UPDATED_CURR_BAL;
                                     db.Entry(MEr_ID_VAl).State = System.Data.Entity.EntityState.Modified;
 
-                                    string UNUSED_VAL = "NOT APPLICABLE";
+                                    string UNUSED_VAL = "NA";
                                     string TRAN_TYPE = "CANCELLATION";
                                     string DR_CR = "CR";
                                     //string TR_THROUGH = "CURRENT BALANCE";
@@ -943,7 +965,8 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                         TDS = 0,
                                         GST = 0,
                                         IPAddress = "",
-                                        CORELATIONID = CorelationId,
+                                        //CORELATIONID = CorelationId,
+                                        CORELATIONID = CORE_ID,
                                         SERVICE_ID = 7,
                                         WHITELEVEL_ID = (long)MEr_ID_VAl.UNDER_WHITE_LEVEL,
                                         SUPER_ID = 0,
@@ -971,39 +994,39 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                     db.TBL_CANCEL_TR.Add(objCanTR);
 
 
-                                    decimal Wlp_MainBal = 0;
-                                    decimal Wlp_AddMainBal = 0;
-                                    var WLPInfo = await db.TBL_MASTER_MEMBER.FirstOrDefaultAsync(x => x.MEM_ID == WLP_ID);
-                                    decimal.TryParse(WLPInfo.BALANCE.ToString(), out Wlp_MainBal);
-                                    Wlp_AddMainBal = Wlp_MainBal + REFUND_AMT;
-                                    WLPInfo.BALANCE = Wlp_AddMainBal;
-                                    db.Entry(WLPInfo).State = System.Data.Entity.EntityState.Modified;
-                                    TBL_ACCOUNTS objWLPAcnt = new TBL_ACCOUNTS()
-                                    {
-                                        API_ID = 0,
-                                        MEM_ID = WLP_ID,
-                                        MEMBER_TYPE = "WHITELABEL",
-                                        TRANSACTION_TYPE = "RDS REFUND",
-                                        TRANSACTION_DATE = Convert.ToDateTime(TRAN_DATE),
-                                        TRANSACTION_TIME = DateTime.Now,
-                                        DR_CR = "CR",
-                                        AMOUNT = REFUND_AMT,
-                                        NARRATION = "RDS REFUND",
-                                        OPENING = Wlp_MainBal,
-                                        CLOSING = Wlp_AddMainBal,
-                                        REC_NO = 0,
-                                        COMM_AMT = 0,
-                                        TDS = 0,
-                                        GST = 0,
-                                        IPAddress = "",
-                                        CORELATIONID = CorelationId,
-                                        SERVICE_ID = 7,
-                                        WHITELEVEL_ID = WLP_ID,
-                                        SUPER_ID = 0,
-                                        DISTRIBUTOR_ID = (long)MEr_ID_VAl.INTRODUCER,
-                                        STATE_ID = 9
-                                    };
-                                    db.TBL_ACCOUNTS.Add(objWLPAcnt);
+                                    //decimal Wlp_MainBal = 0;
+                                    //decimal Wlp_AddMainBal = 0;
+                                    //var WLPInfo = await db.TBL_MASTER_MEMBER.FirstOrDefaultAsync(x => x.MEM_ID == WLP_ID);
+                                    //decimal.TryParse(WLPInfo.BALANCE.ToString(), out Wlp_MainBal);
+                                    //Wlp_AddMainBal = Wlp_MainBal + REFUND_AMT;
+                                    //WLPInfo.BALANCE = Wlp_AddMainBal;
+                                    //db.Entry(WLPInfo).State = System.Data.Entity.EntityState.Modified;
+                                    //TBL_ACCOUNTS objWLPAcnt = new TBL_ACCOUNTS()
+                                    //{
+                                    //    API_ID = 0,
+                                    //    MEM_ID = WLP_ID,
+                                    //    MEMBER_TYPE = "WHITELABEL",
+                                    //    TRANSACTION_TYPE = "RDS REFUND",
+                                    //    TRANSACTION_DATE = Convert.ToDateTime(TRAN_DATE),
+                                    //    TRANSACTION_TIME = DateTime.Now,
+                                    //    DR_CR = "CR",
+                                    //    AMOUNT = REFUND_AMT,
+                                    //    NARRATION = "RDS REFUND",
+                                    //    OPENING = Wlp_MainBal,
+                                    //    CLOSING = Wlp_AddMainBal,
+                                    //    REC_NO = 0,
+                                    //    COMM_AMT = 0,
+                                    //    TDS = 0,
+                                    //    GST = 0,
+                                    //    IPAddress = "",
+                                    //    CORELATIONID = CorelationId,
+                                    //    SERVICE_ID = 7,
+                                    //    WHITELEVEL_ID = WLP_ID,
+                                    //    SUPER_ID = 0,
+                                    //    DISTRIBUTOR_ID = (long)MEr_ID_VAl.INTRODUCER,
+                                    //    STATE_ID = 9
+                                    //};
+                                    //db.TBL_ACCOUNTS.Add(objWLPAcnt);
                                     await db.SaveChangesAsync();
                                     //ContextTransaction.Commit();
                                     //return Json("Triggered RDS Booking File is done successfully ", JsonRequestBehavior.AllowGet);
@@ -1056,32 +1079,32 @@ namespace WHITELABEL.Web.Areas.Admin.Controllers
                                 //return Json(REASON, JsonRequestBehavior.AllowGet);
                             }
                             //}
-                            if (count == 0)
-                            {
-                                string REASON = "USER ID NOT REGISTERED IN SYSTEM";
-                                TBL_CANCEL_TR objCanTR = new TBL_CANCEL_TR()
-                                {
-                                    id = TRAN_ID,
-                                    tran_id = TRAN_ID,
-                                    pnr_no = PNR_NO,
-                                    opr_id = OPR_ID,
-                                    pnr_class = TR_CLASS,
-                                    ref_amt = Convert.ToDecimal(REF_AMT),
-                                    wt_at_can = WT_AT_CAN,
-                                    tran_date = Convert.ToDateTime(TRAN_DATE),
-                                    tdr_can = TDR_CAN,
-                                    user_id = USER_ID,
-                                    cancelID = CANCELLATION_ID,
-                                    reason = REASON
-                                };
-                                db.TBL_CANCEL_TR.Add(objCanTR);
-                                await db.SaveChangesAsync();
-                                //ContextTransaction.Commit();
-                                //return Json(REASON, JsonRequestBehavior.AllowGet);
-                            }
+                            //if (count == 0)
+                            //{
+                            //    string REASON = "USER ID NOT REGISTERED IN SYSTEM";
+                            //    TBL_CANCEL_TR objCanTR = new TBL_CANCEL_TR()
+                            //    {
+                            //        id = TRAN_ID,
+                            //        tran_id = TRAN_ID,
+                            //        pnr_no = PNR_NO,
+                            //        opr_id = OPR_ID,
+                            //        pnr_class = TR_CLASS,
+                            //        ref_amt = Convert.ToDecimal(REF_AMT),
+                            //        wt_at_can = WT_AT_CAN,
+                            //        tran_date = Convert.ToDateTime(TRAN_DATE),
+                            //        tdr_can = TDR_CAN,
+                            //        user_id = USER_ID,
+                            //        cancelID = CANCELLATION_ID,
+                            //        reason = REASON
+                            //    };
+                            //    db.TBL_CANCEL_TR.Add(objCanTR);
+                            //    await db.SaveChangesAsync();
+                            //    //ContextTransaction.Commit();
+                            //    //return Json(REASON, JsonRequestBehavior.AllowGet);
+                            //}
                         }
                         ContextTransaction.Commit();
-                        return Json("Triggered RDS Booking File is done successfully ", JsonRequestBehavior.AllowGet);
+                        return Json("Triggered RDS Cancellation File is done successfully ", JsonRequestBehavior.AllowGet);
                     }
                     catch (Exception ex)
                     {
